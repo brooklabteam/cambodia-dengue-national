@@ -35,8 +35,10 @@ library(gridExtra)
 library(png)
 require("knitr")
 
+#set your home directory here
+homewd <- "/home/rstudio" #yimei version
+homewd <- "/Users/carabrook/Developer/cambodia-dengue-national" #cara version
 
-homewd <- "/home/rstudio"
 # setwd(homewd)
 
 
@@ -55,7 +57,7 @@ color_2019<-"tomato"
 
 
 
-load(file="data/sim.all.figa.RData")
+load(file=paste0(homewd,"/data/sim.all.figa.RData"))
 
 dat=sim.all
 dat$variable<-sub("data", "reported case",dat$variable) 
@@ -66,7 +68,7 @@ colz = c('reported case' = "black", 'TSIR fit' = my_blue, 'prediction TSIR' = my
 typez = c('reported case' = 2, 'TSIR fit' = 1, 'prediction TSIR' = 1)
 
 
-all.comp<-readRDS("data/all.comp.RDS")
+all.comp<-readRDS(paste0(homewd,"/data/all.comp.RDS"))
 
 dat=all.comp
 
@@ -357,7 +359,7 @@ pl_c<-ggplot(data=Sdatcombined) +
 
 #load data into tsir form
 
-homewd<-"/home/rstudio"
+#homewd<-"/home/rstudio"
 tsir.dat <- read.csv(paste0(homewd, "/data/tsir_data.csv"), header = T, stringsAsFactors = F)
 
 
@@ -1038,7 +1040,7 @@ pl<-plot_grid(pl_a, NULL, pl_b, pl_c, NULL, pl_d, ncol = 3, nrow = 2,align = "vh
 
 
 
-ggsave("fig2.jpg",
+ggsave(paste0(homewd, "/final-figures/fig1.jpg"),
        plot = pl,
        device = NULL,
        path = NULL,
