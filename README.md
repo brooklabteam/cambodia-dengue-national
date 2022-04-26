@@ -1,8 +1,9 @@
 # cambodia-dengue-national
 
-This repo contains directions and scripts for our Cambodia dengue paper, which can be accessed as a preprint at Brook et al. 2022. All final figures can be accessed in the "final-figures" folder, and all data used to generate them can be accessed in the "data" subfolder. Within the "figure-development" folder, you will additionally find subfolders corresponding to each figure in the manuscript which contain the scripts used to (a) generate any data included in the folder and (b) actually produce the figure itself.
+This repo contains directions and scripts for our Cambodia dengue paper, which can be accessed as a preprint at Brook et al. 2022. All final figures can be accessed in the "final-figures" folder, and all data used to generate them can be accessed in the "data" subfolder. Within the "figure-development" folder, you will additionally find subfolders corresponding to each figure ("Fig1", "Fig2", "Fig3", "Fig4", "Fig5") in the manuscript which contain the scripts used to (a) generate any data included in the folder and (b) actually produce the figure itself.
 
-Below, you will find detailed directions of the broad workflow used in the  preparation of our Bayesian timetrees in Figure . Specific analyes linked to generations of each figure are available in the "figures" folder and specific subfolders for "Fig1", "Fig2", "Fig3", and "Fig4." Note that the "Fig4" subfolder includes national-level dengue data used to parameterize our dynamic model.
+
+Below, you will find detailed directions of the broad workflow used in the  preparation of our Bayesian timetrees in Figure .
 
 ---
 
