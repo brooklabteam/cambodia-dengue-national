@@ -13,8 +13,8 @@ library(tidyr)
 
 rm(list=ls())
 
-homewd= "/Users/carabrook/Developer/cambodia-dengue-distribute/"
-setwd(paste0(homewd, "/figures/Fig3/"))
+homewd= "/Users/carabrook/Developer/cambodia-dengue-national/"
+setwd(homewd)
 
 #load the master list
 dat <- read.csv(file = paste0(homewd,"data/denv_seq_prior_infection.csv"), header=T, stringsAsFactors = F)
@@ -936,7 +936,7 @@ comp.nat <- comp.all.Nsero(lambda.guess=.02,
                            dat=dat.nat)
 
 #and plot lambda together
-comp.nat$data_source <- "national"
+comp.nat$data_source <- "National"
 comp.nat$AIC <- 2*(comp.nat$neg_llik) + 2*comp.nat$N_sero
 #comp.nat$stAIC<- comp.nat$AIC/mean(comp.nat$AIC)
 comp.nat$delta_AIC <- comp.nat$AIC-comp.nat$AIC[comp.nat$AIC==min(comp.nat$AIC)]
@@ -944,14 +944,14 @@ comp.nat$log_delta_AIC <- log(comp.nat$delta_AIC)
 comp.nat$log_delta_AIC[comp.nat$log_delta_AIC==-Inf] <- 0
 #comp.nat$delta_AIC <- comp.nat$stAIC-comp.nat$stAIC[comp.nat$stAIC==min(comp.nat$stAIC)]
 
-out.2019.cohort$data_source <- "cohort"
+out.2019.cohort$data_source <- "Kampong Speu"
 out.2019.cohort$AIC <- 2*(out.2019.cohort$neg_llik) + 2*out.2019.cohort$N_sero
 #out.2019.cohort$stAIC<- out.2019.cohort$AIC/min(out.2019.cohort$AIC)
 out.2019.cohort$delta_AIC <- out.2019.cohort$AIC-out.2019.cohort$AIC[out.2019.cohort$AIC==min(out.2019.cohort$AIC)]
 out.2019.cohort$log_delta_AIC <- log(out.2019.cohort$delta_AIC)
 out.2019.cohort$log_delta_AIC[out.2019.cohort$log_delta_AIC==-Inf] <- 0
 #out.2019.cohort$delta_AIC <- out.2019.cohort$stAIC-out.2019.cohort$stAIC[out.2019.cohort$stAIC==min(out.2019.cohort$stAIC)]
-out.2019.multi$data_source <- "cohort"
+out.2019.multi$data_source <- "Kampong Speu"
 out.2019.multi$AIC <- 2*(out.2019.multi$neg_llik) + 2*out.2019.multi$N_sero
 #out.2019.multi$stAIC<- out.2019.multi$AIC/min(out.2019.multi$AIC)
 #out.2019.multi$delta_AIC <- out.2019.multi$stAIC-out.2019.multi$stAIC[out.2019.multi$stAIC==min(out.2019.multi$stAIC)]
@@ -964,7 +964,7 @@ comp.lambda <- rbind(comp.nat, out.2019.multi)
 
 
 comp.lambda$N_sero <- as.factor(comp.lambda$N_sero)
-comp.lambda$facet <- "comparing cohort vs.\nnational force of infection"
+comp.lambda$facet <- "Kampong Speu vs.\nNational comparison"
 pC <- ggplot(data=comp.lambda) + 
       facet_grid(facet~.) +
       geom_linerange(aes(x=N_sero, ymin=lambda_lower, ymax=lambda_upper, group=data_source, color=N_sero), size=.7) +
@@ -972,8 +972,8 @@ pC <- ggplot(data=comp.lambda) +
       theme_bw() + 
       scale_color_manual(values=scales::hue_pal()(4), name="number of\nserotypes") +
       scale_fill_viridis_c(direction = -1, name="log\n(delta AIC)")+
-      scale_shape_manual(values = c(21,24), name="data source") +
-      theme(panel.grid = element_blank(),legend.position = c(.7,.7),
+      scale_shape_manual(values = c(24,21), name="data source") +
+      theme(panel.grid = element_blank(),legend.position = c(.65,.7),
             axis.title = element_text(size = 16),
             legend.box = "horizontal",
             legend.background = element_rect(color="black"),
@@ -991,7 +991,7 @@ pFig2 <- cowplot::plot_grid(ptop, pC, nrow = 2, ncol = 1, rel_heights = c(2,1.2)
 
 pFig2
 
-ggsave(file = paste0(homewd, "/figures/final-figures/Fig2_hold.png"),
+ggsave(file = paste0(homewd, "/final-figures/Fig3.jpeg"),
        units=c("mm"),  
        width=55, 
        height=85, 
