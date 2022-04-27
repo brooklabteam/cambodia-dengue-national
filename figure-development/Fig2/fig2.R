@@ -7,8 +7,9 @@ library(plyr)
 library(dplyr)
 library(lubridate)
 
-
-homewd= "/home/rstudio"
+#set your wd
+homewd= "/home/rstudio"#yimei
+homewd= "/Users/carabrook/Developer/cambodia-dengue-national"#cara
 setwd(homewd)
 
 #compare N serotype hypothesis across all years to cumulative case data
@@ -29,7 +30,6 @@ sum.yr <- function(df, age_vect){
   return(df.out)
   
 }
-
 
 
 
@@ -120,7 +120,7 @@ pS1
 
 
 
-ggsave(file = paste0(homewd, "/figures/final-figures/FigS1.png"),
+ggsave(file = paste0(homewd, "/final-figures/FigS1.jpeg"),
        plot=pS1,
        units=c("mm"),  
        width=65, 
@@ -748,7 +748,7 @@ out.df$N_sero <- as.factor(out.df$N_sero)
 pC <- ggplot(data=subset(out.df, delta_AIC==0)) + geom_point(aes(x=year, y=lambda_fit, color=N_sero), size=3) +
       geom_line(aes(x=year, y=lambda_fit)) +
       geom_ribbon(aes(x=year, ymin=lambda_lower, ymax=lambda_upper), alpha=.3)+
-      ylab("annual force of infection") +theme_bw()+
+      ylab(bquote('force of infection, '~lambda)) +
       theme(panel.grid = element_blank(),
             plot.margin = unit(c(.1,.1,.1,.9), "cm"),
             axis.text = element_text(size=14),
@@ -763,7 +763,8 @@ pC <- ggplot(data=out.df) +
   geom_point(aes(x=year, y=lambda_fit, fill=log_delta_AIC, color=N_sero), size=3, shape=21, stroke=1) +
   scale_color_manual(values=scales::hue_pal()(4), name="number of\nserotypes") +
   scale_fill_viridis_c(direction = -1, name="log\n(delta AIC)")+
-  ylab("annual force of infection") +theme_bw()+
+  theme_bw()+
+  ylab(bquote('annual force of infection, '~lambda)) +
   coord_cartesian(ylim=c(0,.25))+
   theme(panel.grid = element_blank(),
         legend.box = "horizontal",
@@ -785,15 +786,15 @@ top <- cowplot::plot_grid(pA,pB, nrow = 1, rel_widths = c(1,1), labels = c("A", 
 bottom <- cowplot::plot_grid(pC,pD, nrow = 1, rel_widths = c(1,1), labels = c("C", "D"), label_size = 22)
 
 pFig1 <- cowplot::plot_grid(top, bottom, ncol = 1, rel_heights = c(1,1.1))
-
-
-ggsave(file = paste0(homewd, "/figures/final-figures/Fig1-ori.png"),
-       plot=pFig1,
-       units=c("mm"),  
-       width=100, 
-       height=65, 
-       scale=3, 
-       dpi=300)
+# 
+# 
+# ggsave(file = paste0(homewd, "/final-figures/Fig2.jpeg"),
+#        plot=pFig1,
+#        units=c("mm"),  
+#        width=100, 
+#        height=65, 
+#        scale=3, 
+#        dpi=300)
 
 
 # now we want to make black background line on the subplot b and d 3 epi years
@@ -808,7 +809,7 @@ pFig1_blk_lines <- cowplot::plot_grid(top, bottom, ncol = 1, rel_heights = c(1,1
 
 
 
-ggsave(file = paste0(homewd, "/fig1.png"),
+ggsave(file = paste0(homewd, "/final-figures/fig2.png"),
        plot=pFig1_blk_lines,
        units=c("mm"),  
        width=100, 

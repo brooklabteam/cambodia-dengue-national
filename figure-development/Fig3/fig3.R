@@ -980,7 +980,7 @@ pC <- ggplot(data=comp.lambda) +
             strip.background = element_rect(fill="white"),
             strip.text = element_text(size = 16),
             axis.text = element_text(size = 14)) + xlab("number of serotypes") +
-      ylab(bquote('force of infection, '~lambda)) +
+      ylab(bquote('annual force of infection, '~lambda)) +
       geom_label(aes(x=.6,y=.25, label="c"), label.size = NA, size=9, fontface="bold") +
   coord_cartesian(ylim = c(0,.27)) + 
   guides( shape=guide_legend(order=1), color=guide_legend(order=2))
