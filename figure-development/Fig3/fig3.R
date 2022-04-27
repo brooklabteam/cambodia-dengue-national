@@ -991,7 +991,7 @@ pFig2 <- cowplot::plot_grid(ptop, pC, nrow = 2, ncol = 1, rel_heights = c(2,1.2)
 
 pFig2
 
-ggsave(file = paste0(homewd, "/final-figures/Fig3.jpeg"),
+ggsave(file = paste0(homewd, "/final-figures/fig3.png"),
        units=c("mm"),  
        width=55, 
        height=85, 
