@@ -22,7 +22,7 @@ The "tsir_data_birth_updated.csv" file is from the original birth data with adde
 - Increased beta (constant susceptible counts)
   - tsir-increased-beta.R
   - tsir-increased-beta.png
-- Fixed alpha and sbar, with beta returned 
+- Fixed alpha and sbar, with beta returned saved
   - beta-fixed-alpha-sbar.R
   - beta-fixed-alpha-sbar.png
 
