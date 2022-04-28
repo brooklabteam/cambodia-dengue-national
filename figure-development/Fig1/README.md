@@ -15,7 +15,7 @@ The following four input files are given and you can find them in the "data" fol
 
 The "tsir_data_birth_updated.csv" file is from the original birth data with added one column of births_per_1000 column for each year.
 
-# Other files for increased S, increased beta, increased S return beta:
+# Other files for increased S, increased beta, increased S return beta by fixing alpha and sbar:
 - Increased S, original figure 1a, the tsir model
   - fig1.R
   - fig1a-tsir-ori.png
