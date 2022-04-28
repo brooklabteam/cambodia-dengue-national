@@ -18,3 +18,10 @@ The "tsir_data_birth_updated.csv" file is from the original birth data with adde
 # Other files and figures for increased S, increased beta, increased S return beta:
 - Fixed alpha nd sbar, with beta returned 
   - beta-fixed-alpha-sbar.R
+  - beta-fixed-alpha-sbar.png
+- Increased beta (constant susceptible counts)
+  - tsir-increased-beta.R
+  - tsir-increased-beta.png
+- Increased S, original figure 1a, the tsir model
+  - fig1.R
+  - fig1a-tsir-ori.png
