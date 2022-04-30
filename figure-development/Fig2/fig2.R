@@ -906,7 +906,7 @@ run.plot(mod.dat=out.df,
          dat=dat, 
          age_vect = 1:37, 
          #N_sero=2,
-         filename = paste0(homewd, "/figures/final-figures/FigS2.png"))
+         filename = paste0(homewd, "/FigS2.png"))
 
 
 
