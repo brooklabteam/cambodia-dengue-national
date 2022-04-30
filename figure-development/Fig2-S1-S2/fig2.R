@@ -116,7 +116,7 @@ pS1 <- ggplot(data=dat.tot) + geom_point(aes(x=week, y=cases, color=year)) +
 
 
 
-ggsave(file = paste0(homewd, "/FigS1.png"),
+ggsave(file = paste0(homewd, "/figS1.png"),
        plot=pS1,
        units=c("mm"),
        width=65,
@@ -813,7 +813,7 @@ pFig1_blk_lines <- cowplot::plot_grid(top, bottom, ncol = 1, rel_heights = c(1,1
 
 
 
-ggsave(file = paste0(homewd, "/Fig1.png"),
+ggsave(file = paste0(homewd, "/fig1.png"),
        plot=pFig1_blk_lines,
        units=c("mm"),  
        width=100, 
@@ -906,7 +906,7 @@ run.plot(mod.dat=out.df,
          dat=dat, 
          age_vect = 1:37, 
          #N_sero=2,
-         filename = paste0(homewd, "/FigS2.png"))
+         filename = paste0(homewd, "/figS2.png"))
 
 
 
