@@ -1,6 +1,4 @@
 
-# aim: add clade labels for the tree, ori script from 1-figs3-rearrange.Rmd
-
 
 rm(list=ls())
 
@@ -63,8 +61,10 @@ coord_sf(xlim=c(95,170), expand = T)
 pA_new<-pSEA+
   theme(plot.margin = unit(c(0,4,0,-2), "cm"))
 
+
+
 #and get submap of kampong speu witht the points of cambodia sequences
-cam = sf::st_read(paste0(homewd, "/data/kampongspeu/provinces.shp"))
+cam = sf::st_read(paste0(homewd, "/figures/Fig1/kampongspeu/provinces.shp"))
 sub = subset(cam, name=="Kampong Speu")
 
 
@@ -173,6 +173,9 @@ pKPS <- ggplot(sub) + geom_sf(fill="#9590FF", color="black", size =.4) +
           shape=21, size=2.5, stroke=1, show.legend = F) +
   scale_size_continuous(range=c(3,20)) +
   guides(fill="none") + scale_fill_manual(values=colorz1)
+
+
+
 
 
 
@@ -315,6 +318,8 @@ pB1 <- ggtree(tree1, mrsd=mrsd.denv1, color="forestgreen")  +
 
 
 
+
+
 # #and collapse the clades with the sylvatic strains
 # node1 <- MRCA(tree2, "FJ467493_2008-07-31", "OL414763_109-0039_2019-08-02")
 # node2 <- MRCA(tree2, "KY923048_2015-07-31", "OL414763_109-0039_2019-08-02")
@@ -427,6 +432,9 @@ pA <- pB1 %<+% tree1merge +
 #scale_color_manual(values=colorz)#+
 
 
+
+
+
 tree1.tiplabel<-tree1@phylo[["tip.label"]]
 # tree1.tiplabel
 
@@ -436,7 +444,7 @@ tree1.tiplabel<-tree1@phylo[["tip.label"]]
 ######################################################################
 
 
-
+ 
 gen1_B_new <- MRCA(tree1, which(tree1@phylo$tip.label== "OL412678_109-0011_2019-07-25" ),which(tree1@phylo$tip.label == "GQ357692_2008-07-31"))
 
 pB1 <- ggtree(tree1, mrsd=mrsd.denv1, color="forestgreen") +geom_cladelabel(node=gen1_B_new, label="Genotype I", color="seagreen",offset =-27, angle=270, offset.text = 4,vjust=10)  +#coord_cartesian(xlim=c(1930,2021), ylim=c(0,230))+ 
@@ -492,17 +500,21 @@ pC_new<-pC2 %<+% tree2merge +
   #coord_cartesian(c(2000,2021)) +
   scale_shape_manual(values=shapez) +scale_fill_manual(values=colorz)
 
+
+
+ 
 pBC_new<-cowplot::plot_grid(pB_new,pC_new,nrow=2,ncol=1,labels=c("b", "c"),label_size=30)+
   theme(plot.margin = unit(c(0,4,0,0), "cm"))
 
 pALL_new <- cowplot::plot_grid(pA_new, pBC_new, nrow=2, ncol = 1, rel_widths = c(2,1), rel_heights = c(1,2),align = "w",labels=c("a"),label_size=30)
 
 pALL_new <- pALL_new + theme(plot.background = element_rect(fill ="white"))+ theme_classic()+  theme(axis.line=element_blank(),axis.text.x=element_blank(),
-          axis.text.y=element_blank(),axis.ticks=element_blank(),
-          axis.title.x=element_blank(),
-          axis.title.y=element_blank())
+                                                                                                     axis.text.y=element_blank(),axis.ticks=element_blank(),
+                                                                                                     axis.title.x=element_blank(),
+                                                                                                     axis.title.y=element_blank())
 
 
+ 
 ggsave(file = paste0(homewd, "/fig4.png"),
        plot= pALL_new,
        units="mm",  
