@@ -13,7 +13,7 @@ library(reshape2)
 
 #make national population and birth data
 
-homewd= "/Users/carabrook/Developer/cambodia-dengue-distribute/"
+homewd= "/Users/carabrook/Developer/cambodia-dengue-national/"
 setwd(homewd)
 
 #load data 
@@ -88,7 +88,7 @@ rownames(dat.population) <- c()
 
 #now add in the cases
 
-case.dat <- read.csv(paste0(homewd, "/data/case_data.csv"), header = T, stringsAsFactors = F)
+case.dat <- read.csv(paste0(homewd, "data/case_data.csv"), header = T, stringsAsFactors = F)
 dat = case.dat
 
 get.data.tsir <- function(dat, pop.dat){
@@ -158,19 +158,5 @@ tsir.dat <- get.data.tsir(dat=case.dat, pop.dat=dat.population)
 
 #and save this 
 write.csv(tsir.dat, file = paste0(homewd, "/data/tsir_data.csv"), row.names = F)
-
-#and the KP data
-#pop proportion is 0.0535205* total
-dat.pop.KP <- dat.population
-dat.pop.KP$births <- dat.pop.KP$births*0.0535205
-dat.pop.KP$pop <- dat.pop.KP$pop*0.0535205
-
-#and load
-
-case.dat.KP <- read.csv(paste0(homewd, "/data/case_data_KP.csv"), header = T, stringsAsFactors = F)
-tsir.dat.KP <- get.data.tsir(dat=case.dat.KP, pop.dat=dat.pop.KP)
-
-write.csv(tsir.dat.KP, file = paste0(homewd, "/data/tsir_data_KP.csv"), row.names = F)
-
 
 

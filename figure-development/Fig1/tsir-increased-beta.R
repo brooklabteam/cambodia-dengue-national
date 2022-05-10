@@ -16,8 +16,8 @@ require(plyr)
 
 #epidemic years 2007, 2012, 2019
 
-
-homewd = "/home/rstudio/"
+homewd = "/Users/carabrook/Developer/cambodia-dengue-national"
+#homewd = "/home/rstudio/"
 setwd(paste0(homewd))
 
 

@@ -17,7 +17,8 @@ require(plyr)
 #epidemic years 2007, 2012, 2019
 
 
-homewd = "/home/rstudio/"
+#homewd = "/home/rstudio/"
+homewd = "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(paste0(homewd))
 
 
@@ -520,7 +521,7 @@ plot.comp <- function(dat, filename){
 
 
 #load data into tsir form
-tsir.dat <- read.csv(paste0(homewd, "/tsir_data.csv"), header = T, stringsAsFactors = F)
+tsir.dat <- read.csv(paste0(homewd, "/data/tsir_data.csv"), header = T, stringsAsFactors = F)
 
 head(tsir.dat)
 
@@ -601,8 +602,8 @@ Sdatcombined$epiyr <- factor(Sdatcombined$epiyr)
 
 
 #and write data file
-write.csv(Sdatcombined, file = paste0(homewd, "/SdatCara.csv"), row.names = F)
-saveRDS(Sdatcombined,file = paste0(homewd, "/Sdatcombined.rds"))
+#write.csv(Sdatcombined, file = paste0(homewd, "/SdatCara.csv"), row.names = F)
+saveRDS(Sdatcombined,file = paste0(homewd, "/data/Sdatcombined.rds"))
 
 
 
@@ -611,48 +612,48 @@ colz = c('0'="black", '1'="red")
 
 
 
-
-#and plot these possible figures
-p1 <- ggplot(data=Sdatcombined) + 
-  geom_point(aes(x=births, y=sus_mean, 
-                 color=epiyr, shape=variable), size=5) +
-  scale_color_manual(values=colz) +
-  ggnewscale::new_scale_color() + theme_bw() +
-  theme(panel.grid = element_blank()) +
-  geom_point(aes(x=births, y=sus_mean, 
-                 color=year, shape=variable), size=3) +
-  facet_grid(~sim) + scale_y_log10() + scale_color_viridis_c()
-
-
-
-ggsave(file =paste0(homewd,"/figures/final-figures/SusFig-draft-births.png"),
-       plot=p1,
-       units=c("mm"),  
-       width=80, 
-       height=40, 
-       scale=3, 
-       dpi=300)
-
-
-
-
-p2 <- ggplot(data=Sdatcombined) + 
-  geom_point(aes(x=year, y=sus_mean, 
-                 color=epiyr, shape=variable), size=5) +
-  scale_color_manual(values=colz) +
-  ggnewscale::new_scale_color() + theme_bw() +
-  theme(panel.grid = element_blank()) +
-  geom_point(aes(x=year, y=sus_mean, 
-                 color=year, shape=variable), size=3) +
-  facet_grid(~sim) + scale_y_log10() + scale_color_viridis_c()
-
-
-ggsave(file =paste0(homewd,"/figures/final-figures/SusFig-draft-time.png"),
-       plot=p2,
-       units=c("mm"),  
-       width=80, 
-       height=40, 
-       scale=3, 
-       dpi=300)
+# 
+# #and plot these possible figures
+# p1 <- ggplot(data=Sdatcombined) + 
+#   geom_point(aes(x=births, y=sus_mean, 
+#                  color=epiyr, shape=variable), size=5) +
+#   scale_color_manual(values=colz) +
+#   ggnewscale::new_scale_color() + theme_bw() +
+#   theme(panel.grid = element_blank()) +
+#   geom_point(aes(x=births, y=sus_mean, 
+#                  color=year, shape=variable), size=3) +
+#   facet_grid(~sim) + scale_y_log10() + scale_color_viridis_c()
+# 
+# 
+# 
+# ggsave(file =paste0(homewd,"/figures/final-figures/SusFig-draft-births.png"),
+#        plot=p1,
+#        units=c("mm"),  
+#        width=80, 
+#        height=40, 
+#        scale=3, 
+#        dpi=300)
+# 
+# 
+# 
+# 
+# p2 <- ggplot(data=Sdatcombined) + 
+#   geom_point(aes(x=year, y=sus_mean, 
+#                  color=epiyr, shape=variable), size=5) +
+#   scale_color_manual(values=colz) +
+#   ggnewscale::new_scale_color() + theme_bw() +
+#   theme(panel.grid = element_blank()) +
+#   geom_point(aes(x=year, y=sus_mean, 
+#                  color=year, shape=variable), size=3) +
+#   facet_grid(~sim) + scale_y_log10() + scale_color_viridis_c()
+# 
+# 
+# ggsave(file =paste0(homewd,"/figures/final-figures/SusFig-draft-time.png"),
+#        plot=p2,
+#        units=c("mm"),  
+#        width=80, 
+#        height=40, 
+#        scale=3, 
+#        dpi=300)
 
 

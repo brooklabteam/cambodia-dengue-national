@@ -17,9 +17,9 @@ require(plyr)
 #epidemic years 2007, 2012, 2019
 
 
-homewd = "/home/rstudio/"
+#homewd = "/home/rstudio/"
+homewd = "/Users/carabrook/Developer/cambodia-dengue-national"
 # setwd(paste0(homewd))
-
 
 
 
@@ -46,8 +46,8 @@ sim.com.epi <- function(time.start, dat, epiyr, family, alpha_incS, sbar_incS){
     fittedpars <- estpars(data=subset(dat, time >= time.start & time<epiyr),
                           IP=2, alpha=alpha_incS, sbar=sbar_incS, xreg = "cumcases",
                           regtype='lm',family='gaussian')
-    save(fittedpars, file=paste0(homewd,"/", epiyr, "-beta-fittedpars-increaseS-gaussian.Rdata"))
-    saveRDS(fittedpars, file=paste0(homewd,"/", epiyr, "-beta-fittedpars-increaseS-gaussian.rds"))
+    save(fittedpars, file=paste0(homewd,"/data/", epiyr, "-beta-fittedpars-increaseS-gaussian.Rdata"))
+    saveRDS(fittedpars, file=paste0(homewd,"/data/", epiyr, "-beta-fittedpars-increaseS-gaussian.rds"))
     
     simfitted <- simulatetsir(data=subset(dat, time >= time.start & time<epiyr),
                               IP = 2,
