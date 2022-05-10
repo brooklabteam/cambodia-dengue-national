@@ -12,45 +12,34 @@ setwd(homewd)
 # here, we ask... is there a relationship between the saliva elisa 
 # titer (for mosquitoes) and testing postivie or negative for 
 # dengue infection?
-# we will just take the pos/neg of the dengue data and do a simple 
-# t-test on the saliva titers between the two groups... 
-# except that it is a mess and the PAGODAs day 0 for sick kids is missing
 
-#load data just from IDseq to start then
-dat <- read.csv(file = paste0(homewd, "/data/IDseq_ALL_metadata_through_2020.csv"), header = T, stringsAsFactors = F)
-head(dat)
-dat$date <- as.Date(dat$date, format = "%m/%d/%y" )
+# and we ask...are any other variables in our dataset associated with dengue positivity?
 
-#and the pagodas data
-pag.dat <- read.csv(file = paste0(homewd, "/data/PAGODAS_ALL_metadata_through_2020.csv"), header = T, stringsAsFactors = F)
-head(pag.dat)
-pag.dat$date <- as.Date(pag.dat$date, format = "%m/%d/%y")
-names(dat)
-names(pag.dat)
-unique(dat$work)
-dat <- dplyr::select(dat, -(work), -(num_children_houshold), -(car))
+# we use IDseq and PAGODAs data from the start of both studies through to the end of 2020
 
-#and here, look at binomial dengue result predicted by saliva and by some other predictors
-all.dat <- rbind(dat, pag.dat)
-
-#only select samples with dates through the end of 2020:
-all.dat$date
-max(all.dat$date)
+#load the combined metadata
+all.dat <- read.csv(file = paste0(homewd, "/data/IDseq_PAGODAS_ALL_metadata_through_2020.csv"), header = T, stringsAsFactors = F)
 head(all.dat)
+all.dat$date <- as.Date(all.dat$date)
 
-all.dat = subset(all.dat, date <= "2020-12-31") #lose 45 entries
+length(unique(all.dat$NIH.ID)) #697 unique in 760 entries, so 63 are duplicate entries
 
 all.dat$dengue_result[all.dat$dengue_result=="neg"] <- 0
 all.dat$dengue_result[all.dat$dengue_result=="pos"] <- 1
 all.dat$dengue_result <- as.numeric(all.dat$dengue_result)
-#all.dat$seq.ID <- as.factor(all.dat$seq.ID)
-#all.dat$sex[all.dat$sex=="mlae"] <- "male"
-all.dat$sex <- as.factor(all.dat$sex)
+sum(all.dat$dengue_result) #106 positives
 
-#all.dat$elisa <- as.numeric(all.dat$elisa)
+length(unique(all.dat$NIH.ID[all.dat$dengue_result==1])) #106 - no one tests positive twice
+dup.id <- cbind.data.frame(NIH.ID=unique(all.dat$NIH.ID[duplicated(all.dat$NIH.ID)]))  #46 repeats
+
+#and get the duplicated in case we want to examine -- they all have different dates
+dup.df <-merge(dup.id, all.dat, by="NIH.ID")
+
+all.dat$sex <- as.factor(all.dat$sex)
 all.dat$DENV.serotype[all.dat$DENV.serotype=="neg"] <- NA
 all.dat$DENV.serotype <- as.factor(all.dat$DENV.serotype)
 
+#don't need path data here
 all.dat<- dplyr::select(all.dat, -(WBC), -(platelets))
 
 #and we query impact on dengue results
@@ -75,7 +64,6 @@ all.dat <- merge(all.dat, elisa.dat, by =c("NIH.ID", "date"), all.x = T)
 head(all.dat)
 tail(all.dat)
 length(unique(all.dat$NIH.ID)) #697 - some people (5) reported fevers multiple times 
-all.dat$date
 all.dat$elisa <- as.numeric(all.dat$elisa) #lots of NAs currently
 
 #first, we ask, is higher mosquito biting (in elisas) associated with positive dengue infection?
