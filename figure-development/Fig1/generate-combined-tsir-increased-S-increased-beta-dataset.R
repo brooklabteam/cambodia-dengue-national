@@ -698,10 +698,10 @@ sim.return.S.incS <- function(fracincS,time.start, dat, epiyr, family){
   
   Sbegin=simfitted$sbar+simfitted$Z
   Sepi<-Sbegin[length(Sbegin)]
-  # SepiInc<-fracincS*Sepi
-  betabegin=simfitted$beta
-  betaepi<-betabegin[length(betabegin)]
-  betaepiInc<-fracincS*betaepi
+  SepiInc<-fracincS*Sepi
+  #betabegin=simfitted$beta
+  #betaepi<-betabegin[length(betabegin)]
+  #betaepiInc<-fracincS*betaepi
   
   #this is for no increased S
   dat.fit = subset(dat, time >= time.start & time<epiyr)
@@ -737,9 +737,9 @@ sim.return.S.incS <- function(fracincS,time.start, dat, epiyr, family){
   #and including an increase
   predict_epi_Inc <- predicttsir(times=dat.pred$time,
                                  births = dat.pred$births,
-                                 beta = betaepiInc,
+                                 beta = fittedpars$beta,
                                  alpha = fittedpars$alpha,
-                                 S0 = Sepi,
+                                 S0 = SepiInc,
                                  I0 = Ifinal,
                                  nsim=100,
                                  stochastic = T)
