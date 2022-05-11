@@ -1,0 +1,309 @@
+seq.ID,age,sex,date,elisa,dengue_result,DENV.serotype,housing,socio,net_use,insecticide_use,larvicide_use,mosquito_coil_use,study
+109-0001,5,male,7/23/19,0.109,pos,DENV-2,house,lower,all the time,no,no,no,IDseq
+109-0002,37,female,7/23/19,0.117,pos,DENV-1,house,lower,all the time,no,yes,no,IDseq
+109-0003,2,male,7/24/19,0.309,pos,DENV-2,house,middle,all the time,yes,no,yes,IDseq
+109-0004,5,female,7/24/19,0.158,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0005,4,female,7/24/19,0.177,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0006,3,male,7/24/19,0.142,neg,neg,house,lower,never,no,no,no,IDseq
+109-0007,14,male,7/24/19,0.216,pos,DENV-1,house,lower,never,no,no,no,IDseq
+109-0008,7,male,7/25/19,0.176,pos,DENV-2,house,lower,all the time,no,no,no,IDseq
+109-0009,8,male,7/25/19,0.254,neg,neg,house,lower,all the time,yes,yes,yes,IDseq
+109-0010,14,female,7/25/19,0.279,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0011,6,female,7/25/19,0.523,pos,DENV-1,house,lower,all the time,yes,no,yes,IDseq
+109-0012,40,female,7/25/19,0.179,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0013,8,male,7/25/19,0.008,neg,neg,house,middle,never,yes,no,yes,IDseq
+109-0014,10,male,7/25/19,0.155,pos,DENV-1,house,lower,all the time,yes,no,yes,IDseq
+109-0015,9,male,7/25/19,0.236,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0016,7,male,7/25/19,0.156,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0017,6,male,7/28/19,0.135,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0018,6,female,7/28/19,0.3,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0019,2,female,7/28/19,0.104,pos,DENV-2,house,lower,never,no,no,yes,IDseq
+109-0020,12,male,7/28/19,0.085,pos,DENV-2,house,lower,all the time,yes,no,no,IDseq
+109-0021,6,female,7/28/19,0.268,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0022,14,male,7/28/19,0.197,pos,DENV-1,house,lower,all the time,no,no,yes,IDseq
+109-0023,12,female,7/30/19,0.375,pos,DENV-2,house,lower,never,yes,no,yes,IDseq
+109-0024,1,male,7/30/19,0.165,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0025,25,male,7/30/19,0.155,neg,neg,temporary,middle,never,yes,no,yes,IDseq
+109-0026,6,female,7/30/19,0.16,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0027,49,female,7/30/19,0.19,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0028,4,male,7/30/19,0.203,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0029,11,male,7/30/19,0.166,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0030,4,female,7/30/19,0.135,pos,DENV-1,house,middle,all the time,no,no,yes,IDseq
+109-0031,2,female,7/31/19,0.283,neg,neg,house,lower,all the time,yes,no,no,IDseq
+109-0032,15,male,7/31/19,0.171,pos,DENV-1,house,lower,all the time,yes,no,yes,IDseq
+109-0033,29,female,7/31/19,0.131,neg,neg,temporary,middle,all the time,yes,no,no,IDseq
+109-0034,0.67,male,8/1/19,0.141,pos,DENV-1,house,lower,all the time,no,no,no,IDseq
+109-0035,20,male,8/1/19,0.1,neg,neg,house,lower,all the time,yes,yes,yes,IDseq
+109-0036,26,female,8/1/19,0.164,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0037,1,male,8/1/19,0.113,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0038,1,male,8/2/19,0.223,neg,neg,house,lower,never,no,no,no,IDseq
+109-0039,12,male,8/2/19,0.124,pos,DENV-2,house,lower,all the time,no,no,yes,IDseq
+109-0040,4,female,8/2/19,0.158,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0041,36,female,8/2/19,0.243,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0042,3,male,8/2/19,0.18,pos,DENV-1,house,lower,all the time,no,no,no,IDseq
+109-0043,4,female,8/2/19,0.473,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0044,15,male,8/7/19,0.136,neg,neg,temporary,lower,never,no,no,yes,IDseq
+109-0045,11,male,8/7/19,0.265,pos,DENV-2,house,lower,all the time,yes,no,no,IDseq
+109-0046,22,male,8/7/19,0.166,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0047,12,male,8/7/19,0.15,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0048,13,female,8/7/19,0.356,pos,DENV-1,house,lower,never,yes,no,no,IDseq
+109-0049,5,female,8/7/19,0.134,pos,DENV-2,house,lower,all the time,no,no,yes,IDseq
+109-0050,23,male,8/7/19,0.272,pos,DENV-1,house,lower,all the time,no,no,no,IDseq
+109-0051,8,female,8/7/19,0.224,pos,DENV-4,house,lower,never,no,no,yes,IDseq
+109-0052,7,female,8/7/19,0.286,pos,DENV-1,house,lower,all the time,no,no,no,IDseq
+109-0053,15,female,8/7/19,0.208,pos,DENV-2,house,lower,all the time,yes,no,yes,IDseq
+109-0054,14,male,8/8/19,0.223,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0055,14,female,8/8/19,0.194,pos,DENV-1,house,lower,all the time,no,no,yes,IDseq
+109-0056,4,male,8/8/19,0.051,pos,DENV-1,house,lower,all the time,yes,no,no,IDseq
+109-0057,6,male,8/8/19,0.201,pos,DENV-1,house,lower,all the time,no,no,yes,IDseq
+109-0058,11,male,8/8/19,0.384,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0059,13,male,8/9/19,0.225,pos,DENV-2,house,lower,all the time,no,no,yes,IDseq
+109-0060,2,female,8/9/19,0.366,pos,DENV-1,house,lower,all the time,yes,no,yes,IDseq
+109-0061,15,male,8/12/19,0.172,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0062,2,male,8/12/19,0.244,neg,neg,house,very poor,all the time,no,no,no,IDseq
+109-0063,3,male,8/12/19,0.192,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0065,5,female,8/13/19,0.223,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0066,16,male,8/13/19,0.144,neg,neg,other,lower,all the time,yes,no,yes,IDseq
+109-0067,7,male,8/13/19,0.103,pos,DENV-1,house,lower,all the time,yes,no,yes,IDseq
+109-0068,8,female,8/13/19,0.221,pos,DENV-1,house,lower,all the time,no,no,no,IDseq
+109-0069,12,male,8/13/19,0.172,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0070,7,female,8/14/19,0.234,neg,neg,house,lower,never,no,no,yes,IDseq
+109-0071,12,female,8/14/19,0.285,neg,neg,house,lower,all the time,yes,no,no,IDseq
+109-0072,12,male,8/14/19,0.358,neg,neg,other,lower,all the time,no,no,no,IDseq
+109-0073,7,male,8/14/19,0.198,pos,DENV-1,house,lower,all the time,yes,no,no,IDseq
+109-0074,5,male,8/15/19,0.213,pos,DENV-1,house,lower,all the time,no,no,yes,IDseq
+109-0075,0.58,male,8/16/19,0.201,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0076,4,female,8/16/19,0.24,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0077,9,female,8/16/19,0.298,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0078,5,female,8/16/19,0.103,pos,DENV-1,house,lower,rarely,no,no,yes,IDseq
+109-0079,46,female,8/19/19,0.261,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0080,14,female,8/19/19,0.177,pos,DENV-1,house,lower,all the time,yes,no,no,IDseq
+109-0081,8,female,8/19/19,0.205,pos,DENV-1,house,middle,rarely,no,no,yes,IDseq
+109-0082,43,female,8/19/19,0.143,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0083,7,female,8/20/19,0.253,neg,neg,house,lower,all the time,no,yes,yes,IDseq
+109-0084,33,male,8/20/19,0.242,neg,neg,house,lower,all the time,yes,no,no,IDseq
+109-0085,18,female,8/21/19,0.118,pos,DENV-1,house,lower,all the time,yes,no,yes,IDseq
+109-0086,4,male,8/21/19,0.197,pos,DENV-2,house,lower,all the time,yes,no,yes,IDseq
+109-0087,7,male,8/21/19,0.33,pos,DENV-2,house,lower,all the time,yes,no,yes,IDseq
+109-0088,10,male,8/21/19,0.241,neg,neg,temporary,very poor,all the time,no,no,yes,IDseq
+109-0089,7,male,8/21/19,0.494,neg,neg,temporary,very poor,all the time,no,no,yes,IDseq
+109-0090,30,female,8/22/19,0.208,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0091,1,female,8/22/19,0.188,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0092,2,male,8/22/19,0.111,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0093,9,female,8/22/19,0.176,pos,DENV-2,house,lower,all the time,no,no,no,IDseq
+109-0094,13,male,8/22/19,0.213,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0095,23,female,8/26/19,0.118,neg,neg,house,lower,all the time,yes,yes,no,IDseq
+109-0096,6,female,8/26/19,0.241,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0097,13,male,8/26/19,0.205,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0098,9,male,8/26/19,0.396,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0099,10,male,8/26/19,0.127,neg,neg,house,lower,all the time,no,yes,no,IDseq
+109-0101,4,female,8/27/19,0.256,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0102,1,male,8/27/19,0.209,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0103,15,male,8/27/19,0.108,neg,neg,other,lower,all the time,no,no,no,IDseq
+109-0104,1,female,8/28/19,0.354,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0105,14,female,8/29/19,0.413,neg,neg,house,middle,never,yes,no,no,IDseq
+109-0106,13,male,8/29/19,0.326,neg,neg,house,lower,regularly,no,no,no,IDseq
+109-0107,12,male,8/29/19,0.288,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0108,33,male,8/29/19,0.116,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0109,9,male,8/29/19,0.207,neg,neg,house,lower,never,yes,no,no,IDseq
+109-0110,13,male,8/30/19,0.186,neg,neg,house,lower,never,no,no,no,IDseq
+109-0111,1,female,8/30/19,0.168,neg,neg,house,lower,regularly,no,no,yes,IDseq
+109-0112,10,male,8/30/19,0.325,neg,neg,house,lower,all the time,no,yes,no,IDseq
+109-0114,11,female,9/2/19,0.237,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0115,4,male,9/2/19,0.18,neg,neg,house,middle,never,yes,no,yes,IDseq
+109-0117,29,female,9/3/19,0.292,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0118,4,male,9/4/19,0.202,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0119,10,female,9/4/19,0.405,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0120,13,female,9/4/19,0.121,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0121,14,female,9/4/19,0.272,neg,neg,house,lower,never,yes,no,no,IDseq
+109-0122,6,female,9/11/19,0.472,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0123,24,male,9/11/19,0.283,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0124,3,male,9/11/19,0.471,neg,neg,house,middle,never,yes,no,yes,IDseq
+109-0125,24,male,9/11/19,0.357,neg,neg,house,lower,never,no,no,yes,IDseq
+109-0126,25,female,9/12/19,0.168,neg,neg,house,lower,never,no,no,yes,IDseq
+109-0127,27,male,9/12/19,0.228,neg,neg,house,lower,all the time,no,yes,no,IDseq
+109-0128,14,male,9/13/19,0.151,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0129,12,female,9/13/19,0.267,neg,neg,house,lower,all the time,yes,no,no,IDseq
+109-0130,9,male,9/13/19,0.157,neg,neg,house,lower,rarely,no,no,yes,IDseq
+109-0131,14,male,10/7/19,0.227,neg,neg,house,very poor,rarely,yes,yes,no,IDseq
+109-0132,4,male,10/8/19,0.44,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0133,5,female,10/8/19,0.296,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0134,3,female,10/9/19,0.098,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0135,6,male,10/9/19,0.247,neg,neg,house,middle,never,yes,no,yes,IDseq
+109-0136,6,male,10/10/19,0.27,neg,neg,house,middle,all the time,yes,yes,yes,IDseq
+109-0138,1,female,10/10/19,0.161,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0139,6,male,10/17/19,0.192,neg,neg,house,very poor,all the time,no,no,yes,IDseq
+109-0140,5,male,10/17/19,0.166,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0141,1,male,10/17/19,0.204,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0142,14,male,10/17/19,0.169,neg,neg,house,middle,rarely,yes,no,yes,IDseq
+109-0143,13,male,10/22/19,0.126,neg,neg,house,middle,rarely,yes,no,yes,IDseq
+109-0144,20,male,10/24/19,0.174,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0145,14,male,10/30/19,0.172,neg,neg,temporary,lower,rarely,yes,no,yes,IDseq
+109-0146,12,female,10/30/19,0.112,neg,neg,house,middle,rarely,no,no,yes,IDseq
+109-0147,8,female,10/31/19,0.388,neg,neg,house,middle,rarely,no,no,yes,IDseq
+109-0148,8,male,11/4/19,0.068,neg,neg,house,middle,regularly,no,no,yes,IDseq
+109-0149,7,female,11/5/19,0.304,neg,neg,house,middle,regularly,no,no,yes,IDseq
+109-0150,14,female,11/5/19,0.094,neg,neg,house,middle,rarely,yes,no,yes,IDseq
+109-0151,1,female,11/6/19,0.122,neg,neg,house,middle,regularly,no,no,yes,IDseq
+109-0152,32,male,11/6/19,0.194,neg,neg,house,middle,regularly,no,no,no,IDseq
+109-0153,11,female,11/6/19,0.24,neg,neg,house,upper,regularly,yes,no,no,IDseq
+109-0154,3,female,11/8/19,0.401,neg,neg,house,lower,regularly,no,no,no,IDseq
+109-0155,3,male,11/8/19,0.34,neg,neg,house,middle,never,yes,no,no,IDseq
+109-0156,0.83,female,11/14/19,0.186,neg,neg,house,middle,regularly,no,no,no,IDseq
+109-0157,1,female,11/14/19,0.276,neg,neg,house,middle,regularly,yes,no,yes,IDseq
+109-0158,1,male,11/18/19,0.059,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0159,2,female,11/20/19,0.344,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0160,11,male,11/20/19,0.404,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0162,12,female,11/22/19,0.166,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0163,13,male,11/22/19,0.215,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0164,0.5,male,11/23/19,0.027,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0165,1,female,11/23/19,0.09,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0166,1,male,11/25/19,0.569,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0167,0.75,female,11/25/19,0.414,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0168,4,female,11/26/19,0.316,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0169,3,female,11/26/19,0.224,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0170,10,male,11/28/19,0.247,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0171,5,female,12/3/19,0.239,neg,neg,house,middle,rarely,yes,no,yes,IDseq
+109-0173,4,male,12/6/19,0.605,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0174,31,male,12/11/19,0.141,neg,neg,house,middle,rarely,yes,no,yes,IDseq
+109-0175,2,male,12/11/19,0.32,neg,neg,house,middle,all the time,yes,yes,yes,IDseq
+109-0176,3,male,12/12/19,0.065,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0177,1,male,12/12/19,0.114,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0178,7,male,12/12/19,0.274,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0179,10,male,12/16/19,0.276,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0180,12,female,12/16/19,0.179,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0181,8,male,12/17/19,0.203,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0182,2,male,12/17/19,0.191,neg,neg,house,middle,rarely,yes,no,yes,IDseq
+109-0183,0.75,male,12/17/19,0.092,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0185,4,male,12/20/19,0.31,neg,neg,house,lower,rarely,no,no,yes,IDseq
+109-0186,1,female,12/20/19,0.208,neg,neg,house,middle,never,yes,no,no,IDseq
+109-0187,8,female,12/20/19,0.274,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0188,1,male,12/20/19,0.467,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0189,2,male,12/23/19,0.068,neg,neg,house,middle,all the time,no,yes,no,IDseq
+109-0190,3,female,12/23/19,0.43,neg,neg,house,middle,never,yes,no,no,IDseq
+109-0191,3,male,12/23/19,0.106,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0192,1,male,12/23/19,0.385,neg,neg,house,middle,rarely,no,no,yes,IDseq
+109-0193,5,male,12/24/19,0.299,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0194,21,female,12/26/19,0.16,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0195,6,male,12/26/19,0.119,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0196,11,female,12/26/19,0.13,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0197,6,male,12/26/19,0.107,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0198,2,female,12/27/19,0.173,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0199,3,female,12/30/19,0.135,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0200,0.58,male,12/30/19,0.151,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0201,13,female,12/30/19,0.316,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0202,10,female,12/31/19,0.12,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0203,15,male,12/31/19,0.17,neg,neg,house,lower,rarely,no,no,no,IDseq
+109-0204,1,male,12/31/19,0.138,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0205,54,female,1/2/20,0.192,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0206,2,female,1/2/20,0.101,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0207,13,male,1/2/20,0.268,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0208,8,female,1/2/20,0.079,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0209,1,male,1/6/20,0.327,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0210,4,male,1/3/20,0.133,neg,neg,house,middle,all the time,no,yes,no,IDseq
+109-0211,11,female,1/6/20,0.259,pos,DENV-2,house,middle,all the time,no,no,yes,IDseq
+109-0212,11,female,1/6/20,0.247,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0213,1,female,1/6/20,0.548,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0214,9,female,1/8/20,0.438,neg,neg,house,very poor,all the time,no,no,yes,IDseq
+109-0215,3,female,1/9/20,0.289,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0216,7,female,1/10/20,0.115,neg,neg,house,very poor,all the time,yes,no,yes,IDseq
+109-0217,1,male,1/15/20,0.233,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0218,0.58,male,1/15/20,0.103,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0219,1,female,1/16/20,0.126,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0220,9,male,1/16/20,0.228,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0221,9,male,1/17/20,0.186,neg,neg,house,middle,rarely,no,no,yes,IDseq
+109-0222,7,male,1/17/20,0.288,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0223,10,female,1/17/20,0.415,neg,neg,house,middle,rarely,no,no,no,IDseq
+109-0224,9,female,1/20/20,0.188,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0225,5,male,1/22/20,0.141,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0226,1,male,1/22/20,0.242,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0227,3,male,1/23/20,0.179,neg,neg,house,middle,never,no,no,yes,IDseq
+109-0228,1,male,1/23/20,0.145,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0229,1,male,1/28/20,0.372,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0230,10,female,2/3/20,0.399,pos,DENV-1,house,middle,all the time,yes,yes,yes,IDseq
+109-0231,11,male,2/3/20,0.152,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0232,1,female,2/4/20,0.163,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0233,11,male,2/10/20,0.086,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0234,5,male,2/14/20,0.143,neg,neg,house,middle,all the time,no,yes,no,IDseq
+109-0235,37,male,2/17/20,0.185,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0236,4,male,2/18/20,0.124,pos,DENV-1,house,middle,all the time,no,no,no,IDseq
+109-0237,7,female,2/18/20,0.307,neg,neg,house,middle,all the time,no,yes,no,IDseq
+109-0238,14,female,2/18/20,0.159,neg,neg,house,middle,never,no,no,no,IDseq
+109-0239,33,female,2/19/20,0.133,neg,neg,house,middle,all the time,no,yes,yes,IDseq
+109-0240,3,female,2/21/20,0.321,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0241,1,male,2/28/20,0.12,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0242,8,male,2/28/20,0.159,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0243,7,female,3/2/20,0.267,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0244,7,male,3/2/20,0.24,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0245,12,male,3/4/20,0.175,pos,DENV-1,house,middle,all the time,yes,no,no,IDseq
+109-0246,19,male,3/5/20,0.181,neg,neg,house,middle,never,no,no,yes,IDseq
+109-0247,1,male,3/6/20,0.201,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0248,6,male,3/10/20,0.275,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0249,4,female,3/10/20,0.096,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0250,1,male,3/10/20,0.119,neg,neg,house,middle,all the time,yes,yes,yes,IDseq
+109-0251,2,male,3/12/20,0.34,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0252,19,female,3/18/20,0.094,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0253,1,female,3/20/20,0.198,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0254,20,male,3/24/20,0.102,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0255,37,male,3/25/20,0.242,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0256,15,male,3/25/20,0.093,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0257,16,female,3/27/20,0.15,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0258,19,female,3/31/20,0.279,neg,neg,house,middle,never,yes,no,no,IDseq
+109-0260,37,male,4/6/20,0.196,neg,neg,house,middle,all the time,yes,yes,no,IDseq
+109-0261,44,male,4/7/20,0.133,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0262,13,female,4/9/20,0.127,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0263,8,female,4/13/20,0.246,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0264,2,male,4/17/20,0.381,neg,neg,house,middle,rarely,no,no,no,IDseq
+109-0265,13,male,4/21/20,0.149,neg,neg,house,lower,all the time,yes,no,yes,IDseq
+109-0266,12,male,4/24/20,0.112,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0267,12,male,4/27/20,0.155,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0268,21,male,4/30/20,0.145,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0269,1,female,5/11/20,0.18,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0270,12,male,5/11/20,0.121,neg,neg,house,middle,all the time,no,yes,no,IDseq
+109-0271,7,male,5/13/20,0.137,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0272,12,female,5/13/20,0.211,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0273,23,male,5/21/20,0.196,neg,neg,house,middle,rarely,yes,no,yes,IDseq
+109-0274,22,male,5/21/20,0.102,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0275,7,male,5/23/20,0.35,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0276,8,male,5/25/20,0.208,neg,neg,house,middle,never,yes,no,no,IDseq
+109-0277,15,female,5/25/20,0.183,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0278,23,female,5/26/20,0.089,neg,neg,house,middle,all the time,no,yes,no,IDseq
+109-0279,1,male,5/27/20,0.446,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0280,1,female,5/27/20,0.139,neg,neg,house,middle,all the time,no,no,yes,IDseq
+109-0281,14,female,5/28/20,0.084,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0282,7,female,5/28/20,0.137,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0283,29,male,6/2/20,0.201,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0284,9,male,6/3/20,0.259,neg,neg,house,middle,all the time,yes,no,yes,IDseq
+109-0285,1,female,6/3/20,0.441,neg,neg,house,middle,never,yes,no,no,IDseq
+109-0286,33,female,6/4/20,0.19,neg,neg,house,middle,never,yes,no,no,IDseq
+109-0287,16,female,6/4/20,0.106,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0288,26,female,6/10/20,0.23,neg,neg,house,middle,all the time,yes,no,no,IDseq
+109-0289,39,male,6/10/20,0.179,neg,neg,house,middle,all the time,no,no,no,IDseq
+109-0290,0.58,male,6/12/20,0.19,neg,neg,house,middle,never,no,no,yes,IDseq
+109-0291,60,male,6/16/20,0.119,neg,neg,house,lower,all the time,no,no,yes,IDseq
+109-0292,11,female,6/16/20,0.365,pos,DENV-2,house,middle,all the time,no,no,yes,IDseq
+109-0293,13,male,6/17/20,0.147,pos,DENV-2,house,middle,all the time,yes,no,yes,IDseq
+109-0294,8,female,6/17/20,0.279,pos,DENV-2,house,middle,all the time,no,no,yes,IDseq
+109-0295,7,male,6/18/20,0.178,pos,DENV-2,house,lower,all the time,yes,no,no,IDseq
+109-0296,28,male,6/24/20,0.174,neg,neg,house,middle,rarely,yes,no,yes,IDseq
+109-0297,23,male,6/24/20,0.121,neg,neg,house,middle,rarely,no,no,yes,IDseq
+109-0298,10,female,6/30/20,0.169,pos,DENV-2,other,very poor,all the time,yes,no,yes,IDseq
+109-0299,18,male,6/30/20,0.182,neg,neg,other,very poor,all the time,yes,no,yes,IDseq
+109-0300,0.91,female,7/2/20,0.348,neg,neg,house,very poor,all the time,no,no,no,IDseq
+109-0301,14,male,7/3/20,0.259,neg,neg,temporary,middle,all the time,no,yes,no,IDseq
+109-0302,21,female,7/3/20,0.156,neg,neg,house,lower,regularly,yes,no,no,IDseq
+109-0303,12,male,7/6/20,0.372,neg,neg,house,lower,all the time,no,no,no,IDseq
+109-0304,10,male,7/6/20,0.185,pos,DENV-2,house,lower,never,no,no,no,IDseq
+109-0305,9,female,7/7/20,0.384,neg,neg,house,very poor,all the time,yes,no,yes,IDseq
+109-0306,32,female,7/7/20,0.148,neg,neg,house,middle,never,yes,no,no,IDseq
+109-0307,13,male,7/7/20,0.168,neg,neg,house,middle,regularly,yes,no,no,IDseq
+109-0308,0.75,male,7/8/20,0.143,neg,neg,house,lower,regularly,yes,no,no,IDseq
+109-0309,28,female,7/8/20,0.156,neg,neg,temporary,lower,never,yes,no,no,IDseq
+109-0310,13,male,7/8/20,0.184,neg,neg,house,lower,regularly,yes,no,no,IDseq
+109-0311,58,female,7/8/20,0.26,neg,neg,house,very poor,regularly,no,no,no,IDseq
+109-0312,0.5,female,7/9/20,0.193,neg,neg,other,lower,regularly,no,no,no,IDseq
+109-0313,22,female,7/10/20,0.61,neg,neg,house,middle,never,yes,no,no,IDseq
+109-0314,8,female,7/10/20,0.167,neg,neg,house,lower,regularly,no,yes,no,IDseq
+109-0315,36,female,7/11/20,0.241,neg,neg,house,lower,regularly,no,no,no,IDseq
+109-0316,34,male,7/13/20,0.107,pos,DENV-1,other,lower,all the time,yes,no,no,IDseq
+109-0317,17,male,7/13/20,0.287,neg,neg,house,middle,regularly,yes,no,yes,IDseq

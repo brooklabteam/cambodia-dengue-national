@@ -100,15 +100,3 @@ seq.ID,beast_name,CZB.ID,date,year,lat,long,age,sex,fever,DENV.serotype,DENV.sub
 100-0702,OK159938_100-0702_2019-07-08,RR031_165_SERa,7/8/19,2019,11.464324,104.543238,4,female,40,DENV-1,DENV-1,Cambodia,pagodas,pos,neg,neg,NA,11.5,307,NA,NA,igm-neg-igg-neg
 100-0734,OK159963_100-0734_2019-07-21,RR031_167_SERa,7/21/19,2019,11.474722,104.542176,6,male,39,DENV-1,DENV-1,Cambodia,pagodas,pos,neg,neg,NA,9.7,387,NA,NA,igm-neg-igg-neg
 100-0752,OK159935_100-0752_2019-08-19,RR031_270_SERa,8/19/19,2019,11.475518,104.545427,3,male,39.2,DENV-1,DENV-1,Cambodia,pagodas,pos,neg,neg,2,NA,NA,1,0,igm-neg-igg-neg
-100-0055,,,9/1/19,2019,,,6,female,,,,Cambodia,pagodas,pos,neg,neg,,,,,,
-100-0181,,,2/27/19,2019,,,6,male,,,,Cambodia,pagodas,pos,neg,neg,,,,,,
-100-0231,,,5/10/19,2019,,,7,male,,,,Cambodia,pagodas,pos,pos,pos,,,,,,
-100-0241,,,9/4/19,2019,,,4,male,,,,Cambodia,pagodas,pos,pos,neg,,,,,,
-100-0326,,,3/12/19,2019,,,6,female,,,,Cambodia,pagodas,pos,pos,neg,,,,,,
-100-0365,,,3/12/19,2019,,,?,female,,,,Cambodia,pagodas,pos,pos,neg,,,,,,
-100-0390,,,10/17/19,2019,,,9,female,,,,Cambodia,pagodas,neg,pos,pos,,,,,,
-100-0587,,,11/8/19,2019,,,6,male,,,,Cambodia,pagodas,pos,neg,neg,,,,,,
-100-0652,,,8/27/19,2019,,,9,male,,,,Cambodia,pagodas,pos,neg,neg,,,,,,
-100-0653,,,7/7/19,2019,,,9,female,,,,Cambodia,pagodas,pos,neg,neg,,,,,,
-100-0696,,,8/2/19,2019,,,4,male,,,,Cambodia,pagodas,pos,neg,neg,,,,,,
-100-0747,,,8/30/19,2019,,,6,male,,,,Cambodia,pagodas,pos,pos,neg,,,,,,

@@ -17,21 +17,40 @@ homewd= "/Users/carabrook/Developer/cambodia-dengue-national/"
 setwd(homewd)
 
 #load the master list
-dat <- read.csv(file = paste0(homewd,"data/denv_seq_prior_infection.csv"), header=T, stringsAsFactors = F)
+dat <- read.csv(file = paste0(homewd, "/data/IDseq_PAGODAS_ALL_metadata_through_2020_CLEAN.csv"), header=T, stringsAsFactors = F)
+dat$date <- as.Date(dat$date, format = "%m/%d/%y")
 head(dat)
+max(dat$date) #2020-12-31
+min(dat$date) # 2018-07-16
+#select the positives
+dat.pos = subset(dat, dengue_result==1) #106
+#there are 4 'positives' with no corresponding sequence: "109-0051" "109-0211" "109-0342" "100-0424"
+max(dat.pos$date) #"2020-09-23"
+min(dat.pos$date) # "2019-03-15"
 
-dat = subset(dat, year==2019)
-dat = subset(dat, !is.na(igg_res)) #removing two DENV-1 from pagodas with no rapidtest
 
-dat$igg_res[dat$igg_res=="pos"] <- 1
-dat$igg_res[dat$igg_res=="neg"] <- 0
+#there are three which are missing igg data - 
+subset(dat.pos, is.na(igg_res)) #100-0052, 100-0632, 109-0211
 
-dat$age <- as.numeric(dat$age)
+#for this analysis, we only care about age, infection status, and igg status
+dat.pos$age <- as.numeric(dat.pos$age)
+dat.pos$year <- year(dat.pos$date)
+dat.pos$igg_res[dat.pos$igg_res=="pos"] <- 1
+dat.pos$igg_res[dat.pos$igg_res=="neg"] <- 0
 
-dat = subset(dat, !is.na(age)) #85 cases in 2019
+
+#just 2019
+dat.2019 = subset(dat.pos, year==2019) #80
+dat.2020 = subset(dat.pos, year==2020) #26
+dat.2019 = subset(dat.2019, !is.na(igg_res)) #78. removing two DENV-1 pagodas: 100-0052 and 100-0632
+dat.2020 = subset(dat.2020, !is.na(igg_res)) #25. removing one denv 2 idseq: 109-0211
+
+
+dat.2019 = subset(dat.2019, !is.na(age)) #70. lost another 8.
+dat.2020 = subset(dat.2020, !is.na(age)) #25.
 
 #plot age-sero of naive vs. multi
-dat$age <- ceiling(dat$age)
+dat.2019$age <- ceiling(dat.2019$age)
 
 sum.dat <- function(dat, age_vect){
 df.sum <- ddply(dat, .(age, igg_res), summarise, Nage = length(age))
@@ -428,11 +447,19 @@ comp.all.NS.multi <- function(lambda.guess, age_vect, dat){
 
 out.2019.cohort <- comp.all.NS.both(lambda.guess = c(.01),
                                   age_vect = 1:37,
-                                  dat=dat)
+                                  dat=dat.2019)
+
+out.2020.cohort <- comp.all.NS.both(lambda.guess = c(.01),
+                                    age_vect = 1:37,
+                                    dat=dat.2020)
 
 out.2019.multi <- comp.all.NS.multi(lambda.guess = c(.01),
                                    age_vect = 1:37,
-                                   dat=dat)
+                                   dat=dat.2019)
+
+out.2020.multi <- comp.all.NS.multi(lambda.guess = c(.01),
+                                    age_vect = 1:37,
+                                    dat=dat.2020)
 
 
 #compare
@@ -612,8 +639,12 @@ run.plot.all <- function(mod.dat, dat, age_vect){
 
 
 ptop <- run.plot.all(mod.dat = out.2019.multi,
-                dat=dat,
+                dat=dat.2019,
                 age_vect = 1:37)
+
+ptop2020 <- run.plot.all(mod.dat = out.2020.multi,
+                     dat=dat.2020,
+                     age_vect = 1:37)
 
 
 #functions
@@ -637,6 +668,7 @@ dat.nat <- read.csv(file = paste0(homewd, "/data/DENV-Nat-Aged.csv") , header = 
 head(dat.nat)
 dat.nat <- arrange(dat.nat, date, age)
 dat.nat$age <- ceiling(dat.nat$age)
+dat.nat.2020 = subset(dat.nat, year==2020)
 dat.nat = subset(dat.nat, year==2019)
 
 #now calculate annual FOI, using the Cummings method
@@ -935,6 +967,10 @@ comp.nat <- comp.all.Nsero(lambda.guess=.02,
                            age_vect=1:37, 
                            dat=dat.nat)
 
+comp.nat.2020 <- comp.all.Nsero(lambda.guess=.02, 
+                           age_vect=1:37, 
+                           dat=dat.nat.2020)
+
 #and plot lambda together
 comp.nat$data_source <- "National"
 comp.nat$AIC <- 2*(comp.nat$neg_llik) + 2*comp.nat$N_sero
@@ -997,3 +1033,56 @@ ggsave(file = paste0(homewd, "/final-figures/fig3.png"),
        height=85, 
        scale=3, 
        dpi=300)
+
+
+#and 2020
+
+comp.nat.2020$data_source <- "National"
+comp.nat.2020$AIC <- 2*(comp.nat.2020$neg_llik) + 2*comp.nat.2020$N_sero
+comp.nat.2020$delta_AIC <- comp.nat.2020$AIC-comp.nat.2020$AIC[comp.nat.2020$AIC==min(comp.nat.2020$AIC)]
+comp.nat.2020$log_delta_AIC <- log(comp.nat.2020$delta_AIC)
+comp.nat.2020$log_delta_AIC[comp.nat.2020$log_delta_AIC==-Inf] <- 0
+
+
+out.2020.cohort$data_source <- "Kampong Speu"
+out.2020.cohort$AIC <- 2*(out.2020.cohort$neg_llik) + 2*out.2020.cohort$N_sero
+out.2020.cohort$delta_AIC <- out.2020.cohort$AIC-out.2020.cohort$AIC[out.2020.cohort$AIC==min(out.2020.cohort$AIC)]
+out.2020.cohort$log_delta_AIC <- log(out.2020.cohort$delta_AIC)
+out.2020.cohort$log_delta_AIC[out.2020.cohort$log_delta_AIC==-Inf] <- 0
+out.2020.multi$data_source <- "Kampong Speu"
+out.2020.multi$AIC <- 2*(out.2020.multi$neg_llik) + 2*out.2020.multi$N_sero
+out.2020.multi$delta_AIC <- out.2020.multi$AIC-out.2020.multi$AIC[out.2020.multi$AIC==min(out.2020.multi$AIC)]
+out.2020.multi$log_delta_AIC <- log(out.2020.multi$delta_AIC)
+out.2020.multi$log_delta_AIC[out.2020.multi$log_delta_AIC==-Inf] <- 0
+comp.lambda.2020 <- rbind(comp.nat.2020, out.2020.multi)
+
+
+
+comp.lambda.2020$N_sero <- as.factor(comp.lambda.2020$N_sero)
+comp.lambda.2020$facet <- "Kampong Speu vs.\nNational comparison"
+pC2020 <- ggplot(data=comp.lambda.2020) + 
+  facet_grid(facet~.) +
+  geom_linerange(aes(x=N_sero, ymin=lambda_lower, ymax=lambda_upper, group=data_source, color=N_sero), size=.7) +
+  geom_point(aes(x=N_sero, y=lambda_fit, shape=data_source, fill=log_delta_AIC, color=N_sero), size=3, stroke=1) +
+  theme_bw() + 
+  scale_color_manual(values=scales::hue_pal()(4), name="number of\nserotypes") +
+  scale_fill_viridis_c(direction = -1, name="log\n(delta AIC)")+
+  scale_shape_manual(values = c(24,21), name="data source") +
+  theme(panel.grid = element_blank(),legend.position = c(.65,.7),
+        axis.title = element_text(size = 16),
+        legend.box = "horizontal",
+        legend.background = element_rect(color="black"),
+        strip.background = element_rect(fill="white"),
+        strip.text = element_text(size = 16),
+        axis.text = element_text(size = 14)) + xlab("number of serotypes") +
+  ylab(bquote('annual force of infection, '~lambda)) +
+  geom_label(aes(x=.6,y=.25, label="c"), label.size = NA, size=9, fontface="bold") +
+  coord_cartesian(ylim = c(0,.27)) + 
+  guides( shape=guide_legend(order=1), color=guide_legend(order=2))
+
+
+
+
+pFig2extra <- cowplot::plot_grid(ptop2020, pC2020, nrow = 2, ncol = 1, rel_heights = c(2,1.2))
+
+pFig2extra # most support for two serotypes in local data... but so few datapoints

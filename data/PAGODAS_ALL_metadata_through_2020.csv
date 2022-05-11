@@ -1,0 +1,244 @@
+NIH.ID,date,age,sex,temp,dengue_result,DENV.serotype,school,housing,socio,num_water_containers,num_toilets_household,net_use,insecticide_use,larvicide_use,mosquito_coil_use,WBC,platelets,study
+100-0002,7/16/18,8,female,38,neg,neg,yes,house,lower,1,1,all the time,no,no,yes,3.8,199,PAGODAS
+100-0032,7/16/18,3,female,37.5,neg,neg,yes,house,middle,2,1,never,yes,yes,yes,NA,NA,PAGODAS
+100-0076,7/18/18,9,female,37.5,neg,neg,yes,house,middle,5,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0097,7/18/18,6,male,38.5,neg,neg,yes,house,middle,3,3,all the time,no,no,yes,NA,NA,PAGODAS
+100-0127,7/20/18,8,male,38.9,neg,neg,yes,house,lower,2,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0089,7/23/18,3,female,NA,neg,neg,1,house,lower,4,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0222,7/25/18,6,male,38.7,neg,neg,1,temporary,lower,2,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0200,8/1/18,4,male,38.8,neg,neg,1,house,middle,1,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0345,8/1/18,3,male,38.6,neg,neg,1,house,middle,1,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0363,8/1/18,4,male,37.7,neg,neg,1,house,middle,1,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0365,8/1/18,NA,female,37.5,neg,neg,yes,house,middle,1,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0443,8/7/18,4,female,38.1,neg,neg,1,house,lower,2,2,all the time,no,no,no,NA,NA,PAGODAS
+100-0464,8/7/18,2,female,38.4,neg,neg,1,house,middle,4,1,all the time,yes,no,no,NA,NA,PAGODAS
+100-0465,8/7/18,4,female,39.5,neg,neg,yes,house,middle,4,1,all the time,yes,no,no,NA,NA,PAGODAS
+100-0468,8/7/18,4,male,38.1,neg,neg,1,house,middle,6,1,all the time,yes,no,no,NA,NA,PAGODAS
+100-0235,8/8/18,6,male,38,neg,neg,yes,house,middle,4,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0236,8/8/18,7,male,39,neg,neg,yes,house,middle,4,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0259,8/8/18,7,male,38,neg,neg,1,house,middle,3,1,all the time,yes,no,no,NA,NA,PAGODAS
+100-0260,8/8/18,6,female,38,neg,neg,1,house,middle,3,1,all the time,yes,no,no,NA,NA,PAGODAS
+100-0754,8/22/18,7,male,38,neg,neg,yes,house,middle,2,0,all the time,no,yes,no,NA,NA,PAGODAS
+100-0563,8/23/18,6,female,37.7,neg,neg,yes,house,middle,1,1,all the time,no,no,no,12.3,363,PAGODAS
+100-0600,8/24/18,NA,female,37.5,neg,neg,yes,house,middle,9,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0384,9/3/18,7,female,39,neg,neg,yes,house,middle,3,2,all the time,yes,no,no,4.5,235,PAGODAS
+100-0758,9/3/18,3,female,38.5,neg,neg,1,house,middle,3,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0359,9/4/18,NA,male,38,neg,neg,1,house,middle,1,1,all the time,yes,no,yes,4.4,269,PAGODAS
+100-0133,9/8/18,5,male,37.5,neg,neg,1,house,middle,2,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0147,9/8/18,3,male,37.4,neg,neg,1,house,middle,2,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0590,9/18/18,8,male,38,neg,neg,yes,house,middle,3,1,all the time,yes,yes,yes,NA,NA,PAGODAS
+100-0174,9/24/18,9,male,38,neg,neg,yes,house,lower,2,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0314,10/2/18,6,female,38.5,neg,neg,yes,house,middle,2,1,all the time,no,yes,no,NA,NA,PAGODAS
+100-0702,10/12/18,4,female,39,neg,neg,1,house,lower,3,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0326,10/16/18,6,female,37.8,neg,neg,yes,house,middle,7,3,all the time,yes,no,no,NA,NA,PAGODAS
+100-0055,10/17/18,6,female,38.5,neg,neg,yes,house,middle,1,1,all the time,yes,no,yes,6.2,221,PAGODAS
+100-0267,10/24/18,4,male,37.5,neg,neg,1,house,middle,5,1,all the time,no,no,yes,36.8,330,PAGODAS
+100-0567,10/24/18,8,female,37.5,neg,neg,yes,house,middle,3,2,never,no,no,yes,NA,NA,PAGODAS
+100-0218,10/31/18,9,male,37.5,neg,neg,yes,house,middle,1,1,never,no,no,no,4.5,96,PAGODAS
+100-0209,11/5/18,5,female,38.6,neg,neg,1,house,lower,4,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0527,11/11/18,5,male,38.5,neg,neg,1,house,lower,6,1,all the time,yes,no,no,5.8,237,PAGODAS
+100-0112,11/12/18,6,male,39,neg,neg,yes,house,lower,5,1,all the time,yes,no,no,15.2,423,PAGODAS
+100-0113,11/12/18,4,female,40,neg,neg,1,house,lower,1,1,all the time,no,no,no,11.1,246,PAGODAS
+100-0283,11/15/18,2,female,37.8,neg,neg,1,house,middle,5,5,all the time,yes,no,no,11,355,PAGODAS
+100-0642,11/15/18,8,female,37.8,neg,neg,yes,house,middle,5,1,all the time,no,no,yes,18.4,537,PAGODAS
+100-0655,11/15/18,4,female,37.6,neg,neg,1,house,middle,3,1,all the time,yes,yes,yes,13.7,240,PAGODAS
+100-0478,11/16/18,3,male,38.4,neg,neg,1,house,middle,2,1,all the time,no,no,no,18.8,349,PAGODAS
+100-0708,11/20/18,NA,male,37.5,neg,neg,1,house,middle,2,1,all the time,yes,yes,yes,9,432,PAGODAS
+100-0329,11/25/18,2,female,37.7,neg,neg,1,house,middle,1,1,all the time,no,no,yes,8.2,290,PAGODAS
+100-0232,11/30/18,3,female,38,neg,neg,1,house,middle,5,2,all the time,no,no,yes,11.4,400,PAGODAS
+100-0772,12/5/18,7,male,37.7,neg,neg,yes,house,lower,1,0,all the time,no,no,no,8.5,288,PAGODAS
+100-0254,12/6/18,3,female,39.5,neg,neg,1,house,middle,2,1,all the time,yes,no,no,16.4,289,PAGODAS
+100-0107,12/12/18,2,male,37.7,neg,neg,1,house,lower,2,1,all the time,yes,no,yes,5.7,246,PAGODAS
+100-0772,12/12/18,7,male,37.5,neg,neg,yes,house,lower,1,0,all the time,no,no,no,10.6,369,PAGODAS
+100-0708,12/14/18,NA,male,37.5,neg,neg,1,house,middle,2,1,all the time,yes,yes,yes,12.5,363,PAGODAS
+100-0125,12/19/18,2,female,38.5,neg,neg,1,house,lower,3,1,all the time,no,no,yes,22.8,433,PAGODAS
+100-0630,1/1/19,3,male,37.5,neg,neg,1,house,lower,5,1,all the time,yes,yes,yes,8.9,157,PAGODAS
+100-0631,1/2/19,4,female,37.5,neg,neg,1,house,lower,5,1,all the time,yes,yes,yes,5.4,242,PAGODAS
+100-0374,1/3/19,6,male,38.5,neg,neg,yes,house,middle,4,1,all the time,yes,no,no,25.4,385,PAGODAS
+100-0273,1/8/19,NA,male,38,neg,neg,1,house,lower,3,1,never,no,no,yes,3.8,242,PAGODAS
+100-0552,1/21/19,9,female,38.5,neg,neg,yes,house,middle,3,1,all the time,yes,no,yes,17,277,PAGODAS
+100-0136,1/25/19,4,male,38,neg,neg,1,house,middle,1,1,all the time,no,no,yes,10.1,326,PAGODAS
+100-0135,2/11/19,3,female,38.5,neg,neg,1,house,middle,2,1,all the time,no,no,yes,14.5,333,PAGODAS
+100-0136,2/11/19,4,male,38.8,neg,neg,1,house,middle,1,1,all the time,no,no,yes,9.2,287,PAGODAS
+100-0145,2/11/19,9,male,38,neg,neg,yes,house,middle,2,1,all the time,no,no,no,9.3,239,PAGODAS
+100-0181,2/27/19,6,male,40,neg,neg,yes,house,lower,4,1,all the time,no,no,yes,14.9,386,PAGODAS
+100-0314,3/5/19,6,female,38.5,neg,neg,yes,house,middle,2,1,all the time,no,yes,no,4.6,267,PAGODAS
+100-0208,3/6/19,2,male,NA,neg,neg,1,house,middle,2,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0365,3/12/19,NA,female,39,neg,neg,yes,house,middle,1,1,all the time,yes,no,yes,7.8,64,PAGODAS
+100-0642,3/12/19,8,female,37.5,neg,neg,yes,house,middle,5,1,all the time,no,no,yes,10,323,PAGODAS
+100-0222,3/15/19,6,male,39.5,pos,DENV-1,1,temporary,lower,2,1,all the time,yes,no,yes,11.5,310,PAGODAS
+100-0112,3/19/19,6,male,39.5,neg,neg,yes,house,lower,5,1,all the time,yes,no,no,NA,NA,PAGODAS
+100-0479,4/2/19,3,male,40,pos,DENV-1,1,house,middle,4,1,all the time,no,no,yes,4.6,291,PAGODAS
+100-0557,4/2/19,5,female,37.5,neg,neg,yes,house,middle,5,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0072,4/4/19,4,male,37.3,pos,DENV-2,yes,house,lower,1,1,all the time,yes,yes,yes,4,132,PAGODAS
+100-0604,4/5/19,NA,male,38,neg,neg,yes,house,middle,3,1,all the time,yes,yes,yes,NA,NA,PAGODAS
+100-0176,4/8/19,NA,female,37.8,neg,neg,yes,house,lower,1,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0687,4/18/19,NA,male,38.5,neg,neg,yes,house,middle,3,2,all the time,yes,yes,yes,NA,NA,PAGODAS
+100-0295,4/19/19,9,female,38.5,neg,neg,yes,house,lower,2,2,all the time,no,yes,yes,NA,NA,PAGODAS
+100-0638,4/24/19,2,female,37.5,neg,neg,1,house,middle,1,2,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0757,4/26/19,2,female,38.5,neg,neg,1,house,middle,3,1,all the time,no,no,no,16,250,PAGODAS
+100-0077,4/28/19,9,male,38.5,neg,neg,yes,house,middle,3,3,all the time,no,no,yes,2.8,318,PAGODAS
+100-0729,4/28/19,6,female,39,neg,neg,yes,house,lower,2,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0757,4/28/19,2,female,38,neg,neg,1,house,middle,3,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0401,4/29/19,NA,male,40,neg,neg,1,house,middle,2,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0402,4/29/19,5,male,40,neg,neg,yes,house,middle,2,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0474,4/29/19,3,female,39,neg,neg,1,house,middle,3,1,never,no,no,no,NA,NA,PAGODAS
+100-0500,4/30/19,NA,female,38.2,neg,neg,1,house,middle,1,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0430,5/1/19,3,female,37,neg,neg,1,house,middle,1,1,never,no,no,yes,9.6,244,PAGODAS
+100-0468,5/2/19,4,male,38,neg,neg,1,house,middle,6,1,all the time,yes,no,no,3.6,221,PAGODAS
+100-0378,5/6/19,4,female,38.5,neg,neg,1,house,middle,4,2,all the time,yes,no,yes,6.7,308,PAGODAS
+100-0016,5/7/19,8,male,38.5,neg,neg,yes,house,lower,9,2,all the time,yes,yes,yes,10.3,271,PAGODAS
+100-0283,5/7/19,2,female,38.5,neg,neg,1,house,middle,5,5,all the time,yes,no,no,13.8,372,PAGODAS
+100-0772,5/9/19,7,male,38,neg,neg,yes,house,lower,1,0,all the time,no,no,no,6,280,PAGODAS
+100-0231,5/10/19,7,male,39,neg,neg,yes,house,lower,9,2,all the time,no,no,no,8.6,114,PAGODAS
+100-0766,5/10/19,3,male,NA,neg,neg,1,house,lower,1,0,never,yes,no,yes,11.2,420,PAGODAS
+100-0355,5/17/19,2,male,38.5,neg,neg,1,house,middle,1,1,never,yes,no,no,17,250,PAGODAS
+100-0264,5/21/19,7,male,37.5,neg,neg,yes,house,middle,2,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0773,5/23/19,6,male,38,neg,neg,yes,house,lower,1,0,all the time,no,no,no,NA,NA,PAGODAS
+100-0418,5/24/19,9,female,38.5,pos,DENV-1,yes,house,middle,2,1,all the time,yes,no,no,4.3,258,PAGODAS
+100-0452,5/25/19,3,female,38.6,neg,neg,1,house,lower,5,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0451,5/26/19,5,female,38,neg,neg,1,house,lower,5,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0757,5/30/19,2,female,37.5,neg,neg,1,house,middle,3,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0599,5/31/19,NA,male,38.5,pos,DENV-1,yes,house,middle,2,2,all the time,yes,no,yes,6.5,275,PAGODAS
+100-0774,6/3/19,2,female,38.5,neg,neg,1,house,lower,2,0,all the time,no,no,no,NA,NA,PAGODAS
+100-0758,6/4/19,3,female,38,neg,neg,1,house,middle,3,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0563,6/13/19,6,female,38,neg,neg,yes,house,middle,1,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0634,6/13/19,8,male,39,neg,neg,yes,house,middle,2,2,all the time,yes,no,no,NA,NA,PAGODAS
+100-0661,6/13/19,8,female,39,pos,DENV-1,yes,house,middle,10,3,never,no,yes,no,3.6,289,PAGODAS
+100-0772,6/13/19,7,male,38,neg,neg,yes,house,lower,1,0,all the time,no,no,no,NA,NA,PAGODAS
+100-0562,6/14/19,9,male,38.5,pos,DENV-1,yes,house,middle,1,1,all the time,no,no,no,10,250,PAGODAS
+100-0772,6/15/19,7,male,38,neg,neg,yes,house,lower,1,0,all the time,no,no,no,15.8,313,PAGODAS
+100-0136,6/16/19,4,male,38.5,neg,neg,1,house,middle,1,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0614,6/19/19,NA,female,37.5,neg,neg,yes,house,middle,5,1,all the time,yes,yes,yes,NA,NA,PAGODAS
+100-0477,6/20/19,5,female,37.5,pos,DENV-2,yes,house,middle,2,1,all the time,no,no,no,5.6,299,PAGODAS
+100-0565,6/21/19,4,female,39.5,neg,neg,1,house,middle,1,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0649,6/21/19,9,male,39,neg,neg,yes,house,middle,5,1,all the time,yes,yes,no,NA,NA,PAGODAS
+100-0608,6/22/19,5,male,38.5,pos,DENV-1,yes,house,middle,3,2,all the time,yes,yes,yes,7.1,349,PAGODAS
+100-0153,6/23/19,9,female,39,pos,DENV-2,yes,house,middle,4,1,all the time,yes,no,no,NA,NA,PAGODAS
+100-0618,6/24/19,NA,male,39,pos,DENV-1,yes,house,middle,1,1,never,yes,no,yes,2,93,PAGODAS
+100-0407,6/26/19,7,female,39.5,neg,neg,yes,house,middle,4,1,all the time,yes,no,no,NA,NA,PAGODAS
+100-0405,6/27/19,4,female,39,pos,DENV-2,1,house,middle,1,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0691,6/27/19,NA,male,39.5,neg,neg,yes,house,middle,4,4,all the time,yes,yes,yes,NA,NA,PAGODAS
+100-0758,6/27/19,3,female,39,neg,neg,1,house,middle,3,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0432,6/28/19,9,male,39,pos,DENV-2,yes,house,middle,6,4,all the time,yes,no,yes,5.6,125,PAGODAS
+100-0580,7/1/19,6,female,38,neg,neg,yes,house,middle,3,1,all the time,yes,yes,yes,NA,NA,PAGODAS
+100-0604,7/1/19,NA,male,38,neg,neg,yes,house,middle,3,1,all the time,yes,yes,yes,NA,NA,PAGODAS
+100-0610,7/1/19,NA,male,38.5,pos,DENV-1,yes,house,middle,4,2,all the time,yes,no,yes,3.8,238,PAGODAS
+100-0430,7/2/19,3,female,37.5,pos,DENV-2,1,house,middle,1,1,never,no,no,yes,4.9,187,PAGODAS
+100-0611,7/2/19,NA,male,38.5,neg,neg,yes,house,middle,5,2,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0642,7/2/19,8,female,38,pos,DENV-1,yes,house,middle,5,1,all the time,no,no,yes,6.2,58,PAGODAS
+100-0165,7/3/19,NA,male,38,neg,neg,yes,house,middle,10,1,all the time,yes,yes,yes,10.4,361,PAGODAS
+100-0422,7/4/19,4,female,NA,pos,DENV-1,1,house,middle,1,1,all the time,no,no,no,2.6,244,PAGODAS
+100-0424,7/4/19,4,female,39,pos,DENV-1,1,house,middle,1,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0021,7/6/19,8,male,38.5,neg,neg,yes,house,middle,2,2,all the time,yes,yes,yes,NA,NA,PAGODAS
+100-0237,7/7/19,7,male,39,neg,neg,1,house,lower,3,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0653,7/7/19,9,female,39,pos,DENV-4,yes,house,middle,5,1,never,yes,yes,no,6,240,PAGODAS
+100-0702,7/8/19,4,female,40,pos,DENV-1,1,house,lower,3,1,all the time,yes,no,yes,11,360,PAGODAS
+100-0328,7/9/19,5,male,39,neg,neg,yes,house,middle,4,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0658,7/12/19,5,male,39,pos,DENV-1,yes,house,middle,5,1,all the time,no,yes,yes,NA,NA,PAGODAS
+100-0054,7/14/19,3,female,39,neg,neg,1,house,middle,5,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0039,7/15/19,7,male,38,pos,DENV-2,yes,house,middle,1,2,regularly,yes,yes,yes,3.3,245,PAGODAS
+100-0329,7/15/19,2,female,39,neg,neg,1,house,middle,1,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0428,7/19/19,3,female,39,pos,DENV-2,1,house,middle,1,2,all the time,no,no,yes,2.5,188,PAGODAS
+100-0682,7/20/19,NA,male,37.5,pos,DENV-1,yes,house,middle,2,1,all the time,yes,no,yes,4.1,200,PAGODAS
+100-0734,7/21/19,6,male,39,pos,DENV-1,1,house,lower,4,0,all the time,no,no,no,9.7,387,PAGODAS
+100-0236,7/22/19,7,male,38.5,neg,neg,yes,house,middle,4,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0530,7/22/19,9,female,38,neg,neg,yes,house,middle,4,1,all the time,yes,no,yes,11,264,PAGODAS
+100-0052,7/23/19,6,female,36.5,pos,DENV-1,yes,house,middle,2,1,never,yes,yes,yes,NA,N/A,PAGODAS
+100-0277,7/23/19,9,female,39,pos,DENV-2,yes,house,lower,5,1,all the time,no,yes,yes,5,194,PAGODAS
+100-0427,7/23/19,9,male,39,pos,DENV-2,1,house,middle,1,2,all the time,no,no,yes,NA,NA,PAGODAS
+100-0067,7/25/19,6,female,NA,pos,DENV-2,yes,house,middle,6,2,all the time,no,no,no,NA,NA,PAGODAS
+100-0068,7/25/19,8,male,NA,pos,DENV-2,yes,house,middle,6,2,all the time,no,no,no,NA,NA,PAGODAS
+100-0156,7/25/19,NA,male,NA,pos,DENV-2,yes,house,middle,10,1,all the time,yes,yes,no,4.8,157,PAGODAS
+100-0154,7/26/19,NA,male,38,pos,DENV-1,1,house,middle,10,1,all the time,yes,yes,no,NA,NA,PAGODAS
+100-0160,7/29/19,7,male,NA,pos,DENV-2,yes,house,middle,3,2,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0168,7/30/19,NA,male,NA,neg,neg,yes,house,middle,1,2,never,no,no,yes,2,93,PAGODAS
+100-0670,7/30/19,5,female,NA,pos,DENV-2,yes,house,middle,7,1,all the time,yes,no,yes,4.3,65,PAGODAS
+100-0326,8/2/19,6,female,38,neg,neg,yes,house,middle,7,3,all the time,yes,no,no,2,157,PAGODAS
+100-0696,8/2/19,4,male,38.5,neg,neg,1,house,middle,2,2,never,yes,no,yes,NA,NA,PAGODAS
+100-0610,8/6/19,NA,male,38.5,neg,neg,yes,house,middle,4,2,all the time,yes,no,yes,7.3,280,PAGODAS
+100-0692,8/8/19,NA,male,39,pos,DENV-1,yes,house,middle,12,2,all the time,yes,yes,yes,6.8,251,PAGODAS
+100-0390,8/9/19,9,female,38.9,neg,neg,yes,house,middle,6,2,all the time,yes,no,no,3.9,145,PAGODAS
+100-0622,8/12/19,2,male,38.5,neg,neg,1,house,middle,4,2,all the time,yes,yes,no,NA,NA,PAGODAS
+100-0623,8/12/19,9,male,38.5,neg,neg,yes,house,middle,5,2,all the time,yes,yes,no,NA,NA,PAGODAS
+100-0457,8/13/19,8,female,38,neg,neg,yes,house,middle,5,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0623,8/15/19,9,male,39,pos,DENV-1,yes,house,middle,5,2,all the time,yes,yes,no,3,198,PAGODAS
+100-0215,8/16/19,NA,female,39.5,pos,DENV-2,yes,house,middle,6,2,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0750,8/16/19,6,male,38,neg,neg,1,house,middle,3,0,all the time,no,yes,yes,NA,NA,PAGODAS
+100-0752,8/19/19,3,male,NA,pos,DENV-1,1,house,middle,3,1,all the time,no,yes,no,NA,NA,PAGODAS
+100-0034,8/20/19,9,male,39,pos,DENV-2,yes,house,middle,4,1,all the time,yes,yes,no,5.8,249,PAGODAS
+100-0754,8/21/19,7,male,38.5,neg,neg,yes,house,middle,2,0,all the time,no,yes,no,NA,NA,PAGODAS
+100-0107,8/22/19,2,male,37.5,neg,neg,1,house,lower,2,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0106,8/23/19,5,male,38.5,neg,neg,1,house,lower,2,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0632,8/26/19,4,female,36.5,pos,DENV-1,1,house,middle,2,1,all the time,yes,no,no,NA,N/A,PAGODAS
+100-0652,8/27/19,9,male,38.5,neg,neg,yes,house,middle,1,1,all the time,yes,yes,no,NA,NA,PAGODAS
+100-0622,8/28/19,2,male,38.5,pos,DENV-1,1,house,middle,4,2,all the time,yes,yes,no,5.3,160,PAGODAS
+100-0642,8/29/19,8,female,38.5,neg,neg,yes,house,middle,5,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0013,8/30/19,2,female,39,neg,neg,1,house,middle,1,1,never,yes,no,no,NA,NA,PAGODAS
+100-0747,8/30/19,6,male,38.4,neg,neg,1,house,middle,5,1,all the time,no,yes,yes,NA,NA,PAGODAS
+100-0055,9/1/19,6,female,39,neg,neg,yes,house,middle,1,1,all the time,yes,no,yes,6.2,221,PAGODAS
+100-0612,9/3/19,NA,female,38,neg,neg,yes,house,middle,4,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0241,9/4/19,4,male,38,neg,neg,1,house,lower,1,1,all the time,no,no,yes,3.1,287,PAGODAS
+100-0454,9/12/19,3,female,38.5,neg,neg,1,house,lower,1,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0482,9/13/19,NA,female,38,neg,neg,1,house,middle,2,2,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0524,9/14/19,8,male,38.5,neg,neg,yes,house,middle,4,1,all the time,yes,no,no,6.1,192,PAGODAS
+100-0422,10/8/19,4,female,38,neg,neg,1,house,middle,1,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0424,10/8/19,4,female,37.5,neg,neg,1,house,middle,1,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0757,10/9/19,2,female,37.5,neg,neg,1,house,middle,3,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0580,10/11/19,6,female,38.5,neg,neg,yes,house,middle,3,1,all the time,yes,yes,yes,2.6,176,PAGODAS
+100-0416,10/12/19,9,female,38,neg,neg,yes,house,middle,1,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0154,10/17/19,NA,male,38,neg,neg,1,house,middle,10,1,all the time,yes,yes,no,NA,NA,PAGODAS
+100-0176,10/17/19,NA,female,39,neg,neg,yes,house,lower,1,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0390,10/17/19,9,female,39,neg,neg,yes,house,middle,6,2,all the time,yes,no,no,NA,NA,PAGODAS
+100-0016,11/2/19,8,male,38,neg,neg,yes,house,lower,9,2,all the time,yes,yes,yes,7.4,233,PAGODAS
+100-0020,11/5/19,9,female,39.5,neg,neg,yes,house,lower,2,2,all the time,no,no,no,2.9,143,PAGODAS
+100-0758,11/5/19,3,female,39,neg,neg,1,house,middle,3,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0587,11/8/19,6,male,38.5,neg,neg,yes,house,middle,6,1,all the time,yes,yes,no,8.6,265,PAGODAS
+100-0760,11/14/19,3,male,37.5,neg,neg,1,house,middle,2,1,never,no,no,no,7.6,196,PAGODAS
+100-0774,11/21/19,2,female,38.5,neg,neg,1,house,lower,2,0,all the time,no,no,no,NA,NA,PAGODAS
+100-0459,12/2/19,3,male,37.5,neg,neg,1,house,lower,5,2,all the time,yes,yes,yes,3.3,172,PAGODAS
+100-0702,12/13/19,4,female,39,neg,neg,1,house,lower,3,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0766,12/30/19,3,male,40,neg,neg,1,house,lower,1,0,never,yes,no,yes,9.5,354,PAGODAS
+100-0774,1/2/20,2,female,39.5,neg,neg,1,house,lower,2,0,all the time,no,no,no,NA,NA,PAGODAS
+100-0705,1/24/20,2,female,39,neg,neg,1,house,middle,2,1,all the time,yes,no,yes,10,274,PAGODAS
+100-0760,1/30/20,3,male,39,neg,neg,1,house,middle,2,1,never,no,no,no,NA,NA,PAGODAS
+100-0758,2/8/20,3,female,38.8,neg,neg,1,house,middle,3,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0245,2/16/20,3,male,40,neg,neg,1,house,middle,5,1,all the time,no,no,no,2.8,119,PAGODAS
+100-0201,2/20/20,8,male,NA,neg,neg,yes,house,middle,6,1,all the time,yes,no,yes,10.8,297,PAGODAS
+100-0415,2/26/20,3,male,38.5,neg,neg,1,house,middle,3,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0738,3/7/20,7,female,38.5,neg,neg,yes,house,lower,4,1,all the time,yes,no,yes,7.7,343,PAGODAS
+100-0505,3/11/20,9,female,38,neg,neg,yes,house,middle,5,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0041,3/18/20,9,female,38,neg,neg,yes,house,middle,2,2,all the time,yes,yes,yes,NA,NA,PAGODAS
+100-0042,3/18/20,9,male,39,neg,neg,yes,house,middle,2,2,all the time,yes,yes,yes,NA,NA,PAGODAS
+100-0144,3/18/20,6,male,38,neg,neg,yes,house,middle,2,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0089,3/28/20,3,female,NA,neg,neg,1,house,lower,4,1,all the time,no,no,yes,NA,NA,PAGODAS
+100-0563,3/30/20,6,female,37.4,neg,neg,yes,house,middle,1,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0587,4/1/20,6,male,38,neg,neg,yes,house,middle,6,1,all the time,yes,yes,no,7.7,399,PAGODAS
+100-0588,4/1/20,3,female,38.5,neg,neg,1,house,middle,6,1,all the time,no,yes,no,8.9,327,PAGODAS
+100-0589,4/1/20,4,male,39,neg,neg,1,house,middle,6,1,all the time,yes,yes,no,NA,NA,PAGODAS
+100-0590,4/1/20,8,male,39.5,neg,neg,yes,house,middle,3,1,all the time,yes,yes,yes,14,485,PAGODAS
+100-0445,4/7/20,7,female,38,neg,neg,yes,house,lower,1,1,all the time,no,no,no,NA,NA,PAGODAS
+100-0241,4/18/20,4,male,39.5,neg,neg,1,house,lower,1,1,all the time,no,no,yes,10.5,219,PAGODAS
+100-0490,5/19/20,NA,female,39,neg,neg,yes,house,middle,8,3,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0774,7/15/20,2,female,38,neg,neg,1,house,lower,2,0,all the time,no,no,no,NA,NA,PAGODAS
+100-0374,7/31/20,6,male,39,neg,neg,yes,house,middle,4,1,all the time,yes,no,no,NA,NA,PAGODAS
+100-0034,8/4/20,9,male,38.5,neg,neg,yes,house,middle,4,1,all the time,yes,yes,no,10.8,237,PAGODAS
+100-0421,8/11/20,8,female,39,neg,neg,yes,house,middle,3,1,all the time,yes,no,yes,NA,NA,PAGODAS
+100-0403,8/13/20,3,male,38.4,neg,neg,1,house,middle,1,1,all the time,no,no,no,8.8,333,PAGODAS
+100-0404,8/13/20,5,male,38.4,neg,neg,1,house,middle,1,1,all the time,no,no,no,8.7,274,PAGODAS
+100-0405,8/13/20,4,female,38.8,neg,neg,1,house,middle,1,1,all the time,no,no,no,6.7,394,PAGODAS
+100-0734,8/17/20,6,male,39,neg,neg,1,house,lower,4,0,all the time,no,no,no,NA,NA,PAGODAS
+100-0735,8/17/20,3,male,39,neg,neg,1,house,lower,4,0,all the time,no,no,no,NA,NA,PAGODAS
+100-0701,8/29/20,5,male,38,neg,neg,1,house,lower,3,1,all the time,yes,no,yes,6.3,269,PAGODAS
+100-0596,9/3/20,NA,male,39,neg,neg,yes,house,middle,7,1,rarely,yes,no,yes,6.2,284,PAGODAS
+100-0670,9/3/20,5,female,39,neg,neg,yes,house,middle,7,1,all the time,yes,no,yes,8.8,260,PAGODAS
+100-0768,9/22/20,3,female,NA,neg,neg,1,house,lower,1,0,all the time,no,no,no,NA,NA,PAGODAS
+100-0646,9/27/20,9,female,38,neg,neg,yes,house,middle,4,1,all the time,yes,yes,no,7.3,276,PAGODAS
+100-0529,9/29/20,6,female,39,neg,neg,yes,house,lower,5,1,all the time,yes,no,no,15,310,PAGODAS
+100-0766,10/8/20,3,male,39.7,neg,neg,1,house,lower,1,0,never,yes,no,yes,NA,NA,PAGODAS
+100-0348,10/15/20,7,male,39,neg,neg,yes,house,middle,1,2,never,no,no,yes,9.7,228,PAGODAS
+100-0201,10/27/20,8,male,37.6,neg,neg,yes,house,middle,6,1,all the time,yes,no,yes,10.6,273,PAGODAS
+100-0563,11/5/20,6,female,38,neg,neg,yes,house,middle,1,1,all the time,no,no,no,7.7,281,PAGODAS
+100-0714,11/11/20,6,male,37.5,neg,neg,1,house,middle,2,1,all the time,yes,no,yes,9.7,302,PAGODAS
+100-0714,11/17/20,6,male,37.4,neg,neg,1,house,middle,2,1,all the time,yes,no,yes,9.2,315,PAGODAS
+100-0766,1/4/21,3,male,NA,neg,neg,1,house,lower,1,0,never,yes,no,yes,14.3,206,PAGODAS
