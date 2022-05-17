@@ -25,18 +25,6 @@ all.dat$date <- as.Date(all.dat$date, format = "%m/%d/%y")
 length(unique(all.dat$NIH.ID)) #697 unique in 760 entries, so 63 are duplicate entries
 
 
-
-# and we ask...are any other variables in our dataset associated with dengue positivity?
-
-# we use IDseq and PAGODAs data from the start of both studies through to the end of 2020
-
-#load the combined metadata
-all.dat <- read.csv(file = paste0(homewd, "/data/IDseq_PAGODAS_ALL_metadata_through_2020_CLEAN.csv"), header = T, stringsAsFactors = F)
-head(all.dat)
-all.dat$date <- as.Date(all.dat$date, format = "%m/%d/%y")
-
-length(unique(all.dat$NIH.ID)) #697 unique in 760 entries, so 63 are duplicate entries
-
 all.dat$dengue_result <- as.numeric(all.dat$dengue_result)
 sum(all.dat$dengue_result) #106 positives
 
