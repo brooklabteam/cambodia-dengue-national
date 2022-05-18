@@ -474,7 +474,7 @@ pl<-plot_grid(pl_a, NULL, pl_b, pl_c, NULL, pl_d, ncol = 3, nrow = 2,align = "vh
 
 
 
-ggsave(paste0(homewd, "/final-figures/fig1.jpg"),
+ggsave(paste0(homewd, "/final-figures/fig1.png"),
   plot = pl,
   device = NULL,
   path = NULL,
