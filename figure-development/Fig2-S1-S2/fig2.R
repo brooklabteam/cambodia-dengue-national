@@ -7,8 +7,7 @@ library(plyr)
 library(dplyr)
 library(lubridate)
 
-
-homewd= "/home/rstudio"
+homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(homewd)
 
 #compare N serotype hypothesis across all years to cumulative case data
@@ -116,7 +115,7 @@ pS1 <- ggplot(data=dat.tot) + geom_point(aes(x=week, y=cases, color=year)) +
 
 
 
-ggsave(file = paste0(homewd, "/figS1.png"),
+ggsave(file = paste0(homewd, "/final-figures/figS1.png"),
        plot=pS1,
        units=c("mm"),
        width=65,
@@ -788,8 +787,8 @@ pC
 top <- cowplot::plot_grid(pA,pB, nrow = 1, rel_widths = c(1,1), labels = c("A", "B"), label_size = 22)
 bottom <- cowplot::plot_grid(pC,pD, nrow = 1, rel_widths = c(1,1), labels = c("C", "D"), label_size = 22)
 
-pFig1 <- cowplot::plot_grid(top, bottom, ncol = 1, rel_heights = c(1,1.1))
-pFig1
+pFig2 <- cowplot::plot_grid(top, bottom, ncol = 1, rel_heights = c(1,1.1))
+pFig2
 
 
 
@@ -808,13 +807,13 @@ pFig1
 top <- cowplot::plot_grid(pA,pB_blk_lines, nrow = 1, rel_widths = c(1,1), labels = c("a", "b"), label_size = 22)
 bottom <- cowplot::plot_grid(pC,pD_blk_lines, nrow = 1, rel_widths = c(1,1), labels = c("c", "d"), label_size = 22)
 
-pFig1_blk_lines <- cowplot::plot_grid(top, bottom, ncol = 1, rel_heights = c(1,1.1))# +cowplot::draw_text('epi years of\n\t2007/2012/2019', x = 0.945, y = 0.1, size = 10, hjust = 0.5, vjust = 0.5)
+pFig2_blk_lines <- cowplot::plot_grid(top, bottom, ncol = 1, rel_heights = c(1,1.1))# +cowplot::draw_text('epi years of\n\t2007/2012/2019', x = 0.945, y = 0.1, size = 10, hjust = 0.5, vjust = 0.5)
 
 
 
 
-ggsave(file = paste0(homewd, "/fig1.png"),
-       plot=pFig1_blk_lines,
+ggsave(file = paste0(homewd, "/final-figures/fig1.png"),
+       plot=pFig2_blk_lines,
        units=c("mm"),  
        width=100, 
        height=65, 
@@ -906,7 +905,7 @@ run.plot(mod.dat=out.df,
          dat=dat, 
          age_vect = 1:37, 
          #N_sero=2,
-         filename = paste0(homewd, "/figS2.png"))
+         filename = paste0(homewd, "/final-figures/figS2.png"))
 
 
 
