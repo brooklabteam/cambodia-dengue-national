@@ -29,24 +29,24 @@ max(dat.pos$date) #"2020-09-23"
 min(dat.pos$date) # "2019-03-15"
 
 
-#there are three which are missing igg data - 
+#there is just one missing igg data - 
 subset(dat.pos, is.na(igg_res)) #100-0052, 100-0632, 109-0211
 
 #for this analysis, we only care about age, infection status, and igg status
 dat.pos$age <- as.numeric(dat.pos$age)
 dat.pos$year <- year(dat.pos$date)
-dat.pos$igg_res[dat.pos$igg_res=="pos"] <- 1
-dat.pos$igg_res[dat.pos$igg_res=="neg"] <- 0
+dat.pos$igg_res[dat.pos$igg_res=="pos" & !is.na(dat.pos$igg_res)] <- 1
+dat.pos$igg_res[dat.pos$igg_res=="neg"  & !is.na(dat.pos$igg_res)] <- 0
 
 
 #just 2019
 dat.2019 = subset(dat.pos, year==2019) #80
 dat.2020 = subset(dat.pos, year==2020) #26
-dat.2019 = subset(dat.2019, !is.na(igg_res)) #78. removing two DENV-1 pagodas: 100-0052 and 100-0632
+dat.2019 = subset(dat.2019, !is.na(igg_res)) #80
 dat.2020 = subset(dat.2020, !is.na(igg_res)) #25. removing one denv 2 idseq: 109-0211
 
 
-dat.2019 = subset(dat.2019, !is.na(age)) #70. lost another 8.
+dat.2019 = subset(dat.2019, !is.na(age)) #80.
 dat.2020 = subset(dat.2020, !is.na(age)) #25.
 
 #plot age-sero of naive vs. multi
