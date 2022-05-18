@@ -22,6 +22,9 @@ dat$date <- as.Date(dat$date, format = "%m/%d/%y")
 head(dat)
 max(dat$date) #2020-12-31
 min(dat$date) # 2018-07-16
+
+
+
 #select the positives
 dat.pos = subset(dat, dengue_result==1) #106
 #there are 4 'positives' with no corresponding sequence: "109-0051" "109-0211" "109-0342" "100-0424"
@@ -34,6 +37,7 @@ subset(dat.pos, is.na(igg_res)) #100-0052, 100-0632, 109-0211
 
 #for this analysis, we only care about age, infection status, and igg status
 dat.pos$age <- as.numeric(dat.pos$age)
+dat.pos$age <- round(dat.pos$age, 0)
 dat.pos$year <- year(dat.pos$date)
 dat.pos$igg_res[dat.pos$igg_res=="pos" & !is.na(dat.pos$igg_res)] <- 1
 dat.pos$igg_res[dat.pos$igg_res=="neg"  & !is.na(dat.pos$igg_res)] <- 0
