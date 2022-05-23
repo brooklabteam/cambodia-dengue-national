@@ -217,6 +217,9 @@ fit.all$epiyr[fit.all$epiyr==2012] <- "2008-2011"
 fit.all$epiyr[fit.all$epiyr==2019] <- "2013-2018"
 fit.all$epiyr <- as.factor(fit.all$epiyr)
 
+fit.all$beta_per_1000 <- fit.all$beta*1000
+fit.all$beta_low_per_1000 <- fit.all$betalow*1000
+fit.all$beta_hi_per_1000 <- fit.all$betahigh*1000
 
 p1 <- ggplot(data=fit.all) +#facet_grid(epiyr~., scales = "free_y") +
       geom_line(aes(x=time, y=beta, color=epiyr)) +
@@ -247,6 +250,31 @@ pl_b <- ggplot(data=fit.all) + #facet_grid(epiyr~., scales = "free_y") +
         axis.title.x = element_blank(),
         axis.text = element_text(size=14), legend.title = element_blank(),legend.background = element_blank(),legend.box.background = element_rect(colour = "black"))
 
+#with per 1000
+#or as lines and points
+pl_b <- ggplot(data=fit.all) + #facet_grid(epiyr~., scales = "free_y") +
+  geom_point(aes(x=time, y=beta_per_1000, color=epiyr)) +
+  geom_linerange(aes(x=time, ymin=beta_low_per_1000, ymax=beta_hi_per_1000, color=epiyr), alpha=.3)+
+  geom_line(aes(x=time, y=beta_per_1000, color=epiyr)) +
+  #geom_ribbon(aes(x=time, ymin=betalow, ymax=betahigh, fill=epiyr), alpha=.3)+
+  theme_bw() + scale_y_log10()+
+  scale_color_manual(values=c( "darkcyan", "darkorchid3", "navy"), 
+                     name="fitting period") +
+  scale_fill_manual(values=c( "darkcyan", "darkorchid3", "navy"), 
+                    name="fitting period") + 
+  #ylab(bquote(log[10](beta)~',transmission rate')) +
+  ylab(bquote(atop(beta~', biweekly transmission rate', '(/1000 ppl)'))) +
+  #ylab(bquote(beta~', biweekly transmission rate (/1000 ppl)')) +
+  #ylab("transmission rate, per 1000 ppl") +
+  #xlab("week of year")+
+  scale_x_continuous(breaks=c(1*2,3*2,5*2,7*2,9*2,11*2), labels = c("Jan", "Mar", "May", "Jul", "Sep", "Nov"))+
+  theme(panel.grid = element_blank(), 
+        legend.position = c(.128,.885),
+        legend.text = element_text(size=14),
+        strip.background = element_rect(fill="white"),
+        axis.title.y = element_text(size=16), 
+        axis.title.x = element_blank(),
+        axis.text = element_text(size=14), legend.title = element_blank(),legend.background = element_blank(),legend.box.background = element_rect(colour = "black"))
 
 
 

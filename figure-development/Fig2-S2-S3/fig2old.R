@@ -127,7 +127,7 @@ ggsave(file = paste0(homewd, "/final-figures/figS1.png"),
 
 
 unique(dat$age) #round to years
-dat$age <- ceiling(dat$age)
+dat$age <- round(dat$age,0)
 year.split <- dlply(dat, .(year))
 
 dat.sum <- lapply(year.split, sum.yr, age_vect = 1:max(dat$age))
@@ -390,7 +390,8 @@ model.age.incidence <- function(log.lambda, N_sero, age_vect){
   pprim=as.list(rep(NA,max(age_vect))) #first infection with a single serotype
   pmulti=as.list(rep(NA,max(age_vect))) #secondary infection
   prob_naive_one=as.list(rep(NA,max(age_vect))) #prob of being naive to all strains at one timestep prior to the current
-  for(a in 1:max(age_vect)){ #for-loops over all possible ages in our data range
+ 
+   for(a in 1:max(age_vect)){ #for-loops over all possible ages in our data range
     
     
     dur1=a#up to 1 timestep prior--but we assume they are instantaneous

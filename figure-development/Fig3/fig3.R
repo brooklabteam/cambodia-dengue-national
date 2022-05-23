@@ -87,633 +87,303 @@ df.sum <- ddply(dat, .(age, igg_res), summarise, Nage = length(age))
   df.out <- dplyr::select(df.out.1, age, n, cum_cases, cum_prop_cases, n_prim_cases, ntot, prop_primary_by_age)
   return(df.out)
   }
-model.age.incidence <- function(log.lambda, N_sero, age_vect){
+sum.yr.yr <- function(df, age_vect){
   
-  lambda= exp(as.numeric(log.lambda))
-  pexposed=as.list(rep(NA,max(age_vect))) #proportion exposed in any way
-  pnaive=as.list(rep(NA,max(age_vect))) #naive
-  pprim=as.list(rep(NA,max(age_vect))) #first infection with a single serotype
-  pmulti=as.list(rep(NA,max(age_vect))) #secondary infection
-  prob_naive_one=as.list(rep(NA,max(age_vect))) #prob of being naive to all strains at one timestep prior to the current
-  for(a in 1:max(age_vect)){ #for-loops over all possible ages in our data range
-    
-    
-    dur1=a#up to 1 timestep prior--but we assume they are instantaneous
-    dur2=1 #this timestep
-    
-    inte_exposed_all = a*lambda*N_sero
-    inte_exposed_prior = dur1*lambda*N_sero #rate of getting exposed to all strains in the timesteps before
-    inte_exposed_one = (dur1*lambda) #rate of getting exposed to a single strain in the timesteps before
-    inte_now_one = dur2*lambda
-    
-    
-    #prob_exposed_one = (1-exp(-inte_exposed_one))
-    
-    
-    #this is the probability of being naive to all strains at one timestep prior
-    prob_naive_one[[a]] <- 1-(1-exp(-(inte_exposed_prior)))
-    
-    #this is the probability of being naive to all strains at one timestep prior AND 
-    #getting infected with a given strain in this timestep
-    pprim[[a]] = prob_naive_one[[a]]*(1-exp(-inte_now_one))
-    
-    
-    pexposed[[a]] <- (1-exp(-inte_exposed_all))
-    pnaive[[a]] <- 1-(1-exp(-inte_exposed_all))
-    
-    #if not primarily infected or naive, you should be a multitypic infection
-    #we could fit to that generally but we have serotype-specific info that can 
-    #fill in instead
-    
-    #for it to be a multitypic infection with D1, you need to multiply
-    #prob exposure to D2 up to a-1 x  prob naive to D1 up to a-1 x prob to D1 now
-    pmulti[[a]] = 1 - pnaive[[a]] - (N_sero*pprim[[a]])
-    
-  }
-  
-  #and get the estimates of each
-  p.out = cbind.data.frame(age=age_vect, 
-                           exposed=c(unlist(pexposed)),
-                           naive = c(unlist(pnaive)),
-                           all_prim=c(unlist(pprim)*N_sero), 
-                           multi = c(unlist(pmulti)))
-  
-  #any_primary_inf=c(unlist(pprim)), 
-  
-  p.out[p.out<0] <- 0
-  
-  #check the proportions
-  p.out$sum_exp_naive <- rowSums(p.out[,2:3])
-  p.out$sum_naive_prim_multi <- rowSums(p.out[,3:5])
-  
-  p.add <- cbind.data.frame(age=0, exposed=0, naive=1, all_prim=0, 
-                            multi=0, sum_exp_naive=1, sum_naive_prim_multi=1)
-  p.out <- rbind(p.add, p.out)
-
-  
-  
-  ggplot(data=p.out) + geom_point(aes(x=age, y=multi))  + geom_line(aes(x=age, y=multi))
-  # #need to cap when the proportion reaches 1
-  #  if(max(p.out$multitypic_inf>=1)){
-  #    first.one <- min(which(p.out$multitypic_inf>=1))
-  #    p.out = p.out[1:first.one,]
-  #  }
-  # 
-  #plot(ecdf(p.out$multitypic_inf))
-  
-  #and the multitypic distribution corresponds to the cumulative proportion of cases
-  
-  p.out$cum_prop_cases <- p.out$multi
-  
-  
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=all_primary_inf))  + geom_line(aes(x=age, y=all_primary_inf))
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=multitypic_inf))  + geom_line(aes(x=age, y=multitypic_inf))
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=cum_prop_cases))  + geom_line(aes(x=age, y=cum_prop_cases))
-  
-  return(p.out) #returns prevalence by age for the length of all possible ages in our dataset
-}
-model.age.one <- function(log.lambda, age_vect){
-  
-  lambda= exp(as.numeric(log.lambda))
-  pexposed=as.list(rep(NA,max(age_vect))) #proportion exposed in any way
-  pnaive=as.list(rep(NA,max(age_vect))) #naive
-  #pprim=as.list(rep(NA,max(age_vect))) #first infection with a single serotype
-  #pmulti=as.list(rep(NA,max(age_vect))) #secondary infection
-  #prob_naive_one=as.list(rep(NA,max(age_vect))) #prob of being naive to all strains at one timestep prior to the current
-  for(a in 1:max(age_vect)){ #for-loops over all possible ages in our data range
-    
-    
-    #dur1=a#up to 1 timestep prior--but we assume they are instantaneous
-    #dur2=1 #this timestep
-    
-    inte_exposed_all = a*lambda
-    #inte_exposed_prior = dur1*lambda #rate of getting exposed to all strains in the timesteps before
-    #inte_exposed_one = (dur1*lambda) #rate of getting exposed to a single strain in the timesteps before
-    #inte_now_one = dur2*lambda
-    
-    
-    #prob_exposed_one = (1-exp(-inte_exposed_one))
-    
-    
-    #this is the probability of being naive to all strains at one timestep prior
-    #prob_naive_one[[a]] <- 1-(1-exp(-(inte_exposed_prior)))
-    
-    #this is the probability of being naive to all strains at one timestep prior AND 
-    #getting infected with a given strain in this timestep
-    #pprim[[a]] = prob_naive_one[[a]]*(1-exp(-inte_now_one))
-    
-    
-    pexposed[[a]] <- (1-exp(-inte_exposed_all))
-    pnaive[[a]] <- 1-(1-exp(-inte_exposed_all))
-    
-    #if not primarily infected or naive, you should be a multitypic infection
-    #we could fit to that generally but we have serotype-specific info that can 
-    #fill in instead
-    
-    #for it to be a multitypic infection with D1, you need to multiply
-    #prob exposure to D2 up to a-1 x  prob naive to D1 up to a-1 x prob to D1 now
-   # pmulti[[a]] = 1 - pnaive[[a]] - (N_sero*pprim[[a]])
-    
-  }
-  
-  #and get the estimates of each
-  p.out = cbind.data.frame(age=age_vect, 
-                           exposed=c(unlist(pexposed)),
-                           naive = c(unlist(pnaive)))
-                           #all_prim=c(unlist(pprim)*N_sero), 
-                           #multi = c(unlist(pmulti)))
-  
-  #any_primary_inf=c(unlist(pprim)), 
-  
-  p.out[p.out<0] <- 0
-  
-  #check the proportions
-  p.out$sum_exp_naive <- rowSums(p.out[,2:3])
-  #p.out$sum_naive_prim_multi <- rowSums(p.out[,3:5])
-  
-  p.add <- cbind.data.frame(age=0, exposed=0, naive=1, 
-                           sum_exp_naive=1)
-  p.out <- rbind(p.add, p.out)
-  
-  
-  
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=multi))  + geom_line(aes(x=age, y=multi))
-  # #need to cap when the proportion reaches 1
-  #  if(max(p.out$multitypic_inf>=1)){
-  #    first.one <- min(which(p.out$multitypic_inf>=1))
-  #    p.out = p.out[1:first.one,]
-  #  }
-  # 
-  #plot(ecdf(p.out$multitypic_inf))
-  
-  #and the multitypic distribution corresponds to the cumulative proportion of cases
-  
-  p.out$cum_prop_cases <- p.out$exposed
-  
-  
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=all_primary_inf))  + geom_line(aes(x=age, y=all_primary_inf))
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=multitypic_inf))  + geom_line(aes(x=age, y=multitypic_inf))
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=cum_prop_cases))  + geom_line(aes(x=age, y=cum_prop_cases))
-  
-  return(p.out) #returns prevalence by age for the length of all possible ages in our dataset
-}
-log.lik.prop <- function(par, age_vect, dat, N_sero){
-  
-  #first run the model with the specified par
-  if(N_sero==1){
-    
-    out.mod <- model.age.one(log.lambda = par, age_vect = age_vect)  
-    
-  }else{
-    out.mod <- model.age.incidence(log.lambda = par, age_vect = age_vect,  N_sero=N_sero)  
-  }
- 
-  
-  
-  #to fit, just cut to the dataset that is equal
-  out.mod <- subset(out.mod, age<=max(dat$age))
-  #plot(out.mod$cum_prop_cases, type="b")
-  # # # # 
-  #how likely are the data, given the model as truth?
-  ll=0
-  for (i in 1:length(dat$age)){
-    ll=ll+dbinom(dat$cum_cases[i],dat$n[i],p=out.mod$cum_prop_cases[i],log=T) 
-  }
-  
-  return(-ll)
-}
-log.lik.prop.both <- function(par, age_vect, dat,  N_sero){
-  
-  #first run the model with the specified par
-  if(N_sero==1){
-    
-    out.mod <- model.age.one(log.lambda = par, age_vect = age_vect)  
-    
-    ll=0
-    for (i in 1:length(dat$age)){
-      ll=ll+dbinom(dat$cum_cases[i],dat$n[i],p=out.mod$cum_prop_cases[i],log=T) 
-    }
-    
-  }else{
-    out.mod <- model.age.incidence(log.lambda = par, age_vect = age_vect,  N_sero=N_sero)
-  
-  
-  
-  
-  #head(out.mod)
-  #head(dat)
-  #to fit, just cut to the dataset that is equal
-  out.mod <- subset(out.mod, age<=max(dat$age))
-  #plot(out.mod$cum_prop_cases, type="b")
-  # # # # 
-  #how likely are the data, given the model as truth?
-  ll=0
-  for (i in 1:length(dat$age)){
-    ll=ll+dbinom(dat$cum_cases[i],dat$n[i],p=out.mod$cum_prop_cases[i],log=T) #and prim
-    ll=ll+dbinom(dat$n_prim_cases[i],dat$ntot[i],p=out.mod$all_prim[i],log=T) #and prim
-  }
-  }
-  
-  return(-ll)
-}
-
-
-wrap.all.llik.both <- function(lambda.guess, age_vect, dat, N_sero){
-  
-  #first, prep the data
-  df.out <- sum.dat(dat, age_vect = age_vect)
-  #head(df.out)
-  
-  #  
-  out.fit <- optim(log(lambda.guess), 
-                   fn=log.lik.prop.both, method = "Brent",
-                   lower = -20, upper=20,
-                   age_vect=age_vect,
-                   dat=df.out,
-                   N_sero=N_sero, hessian = T)
-  
-  
-  
-  fisher_info <- solve(out.fit$hessian)
-  prop_sigma <- sqrt(diag(fisher_info))
-  upper <- exp(out.fit$par+1.96*prop_sigma)
-  lower <- exp(out.fit$par-1.96*prop_sigma)
-  
-  
-  out.fit <- cbind.data.frame(lambda_fit = exp(out.fit$par), 
-                              lambda_lower=lower,
-                              lambda_upper=upper,
-                              neg_llik=out.fit$value,
-                              convergence=out.fit$convergence)#, 
-  
-  
-  return(out.fit)
-}
-wrap.all.llik.multi <- function(lambda.guess, age_vect, dat, N_sero){
-  
-  #first, prep the data
-  df.out <- sum.dat(dat, age_vect = age_vect)
-  #head(df.out)
-  
-  #  
-  out.fit <- optim(log(lambda.guess), 
-                   fn=log.lik.prop, method = "Brent",
-                   lower = -20, upper=20,
-                   age_vect=age_vect,
-                   dat=df.out,
-                   N_sero=N_sero, hessian = T)
-  
-  
-  
-  fisher_info <- solve(out.fit$hessian)
-  prop_sigma <- sqrt(diag(fisher_info))
-  upper <- exp(out.fit$par+1.96*prop_sigma)
-  lower <- exp(out.fit$par-1.96*prop_sigma)
-  
-  
-  out.fit <- cbind.data.frame(lambda_fit = exp(out.fit$par), 
-                              lambda_lower=lower,
-                              lambda_upper=upper,
-                              neg_llik=out.fit$value,
-                              convergence=out.fit$convergence)#, 
-  
-  
-  return(out.fit)
-}
-comp.all.NS.both <- function(lambda.guess, age_vect, dat){
-  
-  out.NS1 <- wrap.all.llik.both(lambda.guess = lambda.guess,
-                                      age_vect = age_vect,
-                                      dat=dat,
-                                      N_sero=1)
-  
-  out.NS2 <- wrap.all.llik.both(lambda.guess = lambda.guess,
-                                age_vect = age_vect,
-                                dat=dat,
-                                N_sero=2)
-  
-  out.NS3 <- wrap.all.llik.both(lambda.guess = lambda.guess,
-                                age_vect = age_vect,
-                                dat=dat,
-                                N_sero=3)
-  
-  out.NS4 <- wrap.all.llik.both(lambda.guess = lambda.guess,
-                                age_vect = age_vect,
-                                dat=dat,
-                                N_sero=4)
-  
-  
-  out.NS1$N_sero=1
-  out.NS2$N_sero=2
-  out.NS3$N_sero=3
-  out.NS4$N_sero=4
-  
-  out.all <- rbind(out.NS1, out.NS2, out.NS3, out.NS4)
-  
-  return(out.all)
-  
-  
-}
-comp.all.NS.multi <- function(lambda.guess, age_vect, dat){
-  
-  out.NS1 <- wrap.all.llik.multi(lambda.guess = lambda.guess,
-                                age_vect = age_vect,
-                                dat=dat,
-                                N_sero=1)
-  
-  out.NS2 <- wrap.all.llik.multi(lambda.guess = lambda.guess,
-                                age_vect = age_vect,
-                                dat=dat,
-                                N_sero=2)
-  
-  out.NS3 <- wrap.all.llik.multi(lambda.guess = lambda.guess,
-                                age_vect = age_vect,
-                                dat=dat,
-                                N_sero=3)
-  
-  out.NS4 <- wrap.all.llik.multi(lambda.guess = lambda.guess,
-                                age_vect = age_vect,
-                                dat=dat,
-                                N_sero=4)
-  
-  
-  out.NS1$N_sero=1
-  out.NS2$N_sero=2
-  out.NS3$N_sero=3
-  out.NS4$N_sero=4
-  
-  out.all <- rbind(out.NS1, out.NS2, out.NS3, out.NS4)
-  
-  return(out.all)
-  
-  
-}
-
-out.2019.cohort <- comp.all.NS.both(lambda.guess = c(.01),
-                                  age_vect = 1:37,
-                                  dat=dat.2019)
-
-out.2020.cohort <- comp.all.NS.both(lambda.guess = c(.01),
-                                    age_vect = 1:37,
-                                    dat=dat.2020)
-
-out.2019.multi <- comp.all.NS.multi(lambda.guess = c(.01),
-                                   age_vect = 1:37,
-                                   dat=dat.2019)
-
-out.2020.multi <- comp.all.NS.multi(lambda.guess = c(.01),
-                                    age_vect = 1:37,
-                                    dat=dat.2020)
-
-
-#compare
-run.one.par <- function(lambda, lambda_lower, lambda_upper, age_vect, N_sero){
-  
-  if(N_sero==1){
-    
-    out.run <- model.age.one(log.lambda = log(lambda), 
-                                   #year = mod.dat$year,
-                                   age_vect=age_vect)
-    
-    out.run.lci <- model.age.one(log.lambda = log(lambda_lower), 
-                                       #year = mod.dat$year,
-                                       age_vect=age_vect)
-    # 
-    out.run.uci <- model.age.one(log.lambda = log(lambda_upper), 
-                                       #year = mod.dat$year,
-                                       age_vect=age_vect)
-    #head(out.run) 
-    #out.run <- data.table::rbindlist(out.run)
-    
-    dat.mod <- dplyr::select(out.run, age,  cum_prop_cases)
-    dat.mod$lci_cum_prop = out.run.lci$cum_prop_cases
-    #dat.mod$lci_prim = out.run.lci$all_prim
-    dat.mod$uci_cum_prop = out.run.uci$cum_prop_cases
-    #dat.mod$uci_prim = out.run.uci$all_prim
-    dat.mod$type<- "model"
-    
-    #names(dat.mod) <- c("year", "age", "prop", "lci", "uci", "type")
-    names(dat.mod) <- c( "age", "prop",  "prop_lci", "prop_uci",  "type")
-    
-    #names(dat.mod) <- c( "age", "cum_prop_multi", "prev_prim", "cum_prop_multi_lci","prev_prim_lci", "cum_prop_multi_uci", "prev_prim_uci",  "type")
-    
-    dat.mod$class <- "multi_cum"
-    
-    
-  }else{
-  out.run <- model.age.incidence(log.lambda = log(lambda), 
-                                 #year = mod.dat$year,
-                                 age_vect=age_vect, N_sero=N_sero)
-  
-  out.run.lci <- model.age.incidence(log.lambda = log(lambda_lower), 
-                                     #year = mod.dat$year,
-                                     age_vect=age_vect, N_sero=N_sero)
-  # 
-  out.run.uci <- model.age.incidence(log.lambda = log(lambda_upper), 
-                                     #year = mod.dat$year,
-                                     age_vect=age_vect, N_sero=N_sero)
-  #head(out.run) 
-  #out.run <- data.table::rbindlist(out.run)
-  
-  dat.mod <- dplyr::select(out.run, age,  cum_prop_cases)
-  dat.mod$lci_cum_prop = out.run.lci$cum_prop_cases
-  #dat.mod$lci_prim = out.run.lci$all_prim
-  dat.mod$uci_cum_prop = out.run.uci$cum_prop_cases
-  #dat.mod$uci_prim = out.run.uci$all_prim
-  dat.mod$type<- "model"
-  
-  #names(dat.mod) <- c("year", "age", "prop", "lci", "uci", "type")
-  names(dat.mod) <- c( "age", "prop",  "prop_lci", "prop_uci",  "type")
-  
-  #names(dat.mod) <- c( "age", "cum_prop_multi", "prev_prim", "cum_prop_multi_lci","prev_prim_lci", "cum_prop_multi_uci", "prev_prim_uci",  "type")
-  
-  
-  #out.run$cum_prop_prim <- cumsum(out.run$all_primary_inf)/sum(out.run$all_primary_inf)
-  dat.mod2 <- dplyr::select(out.run, age,  all_prim)
-  dat.mod2$lci_prim = out.run.lci$all_prim
-  dat.mod2$uci_prim = out.run.uci$all_prim
-  #dat.mod$lci = out.run.lci$cum_prop_cases
-  #dat.mod$uci = out.run.uci$cum_prop_cases
-  dat.mod2$type<- "model"
-  #names(dat.mod) <- c("year", "age", "prop", "lci", "uci", "type")
-  names(dat.mod2) <- c( "age", "prop",  "prop_lci", "prop_uci",  "type")
-  dat.mod$class = "multi_cum"
-  dat.mod2$class = "prim_prev"
-  
-  dat.mod <- rbind(dat.mod, dat.mod2)
-  }
-  
-  return(dat.mod)
-}
-run.plot.all <- function(mod.dat, dat, age_vect){
-  
-  #and run over many years
-  run1 <- run.one.par(lambda = mod.dat$lambda_fit[mod.dat$N_sero==1],
-                      lambda_lower = mod.dat$lambda_lower[mod.dat$N_sero==1],
-                      lambda_upper = mod.dat$lambda_upper[mod.dat$N_sero==1],
-                      age_vect = age_vect,
-                      N_sero = 1)
-  run1$N_sero = 1
-  
-  run2 <- run.one.par(lambda = mod.dat$lambda_fit[mod.dat$N_sero==2],
-                      lambda_lower = mod.dat$lambda_lower[mod.dat$N_sero==2],
-                      lambda_upper = mod.dat$lambda_upper[mod.dat$N_sero==2],
-                      age_vect = age_vect,
-                      N_sero = 2)
-  run2$N_sero = 2
-  
-  run3 <- run.one.par(lambda = mod.dat$lambda_fit[mod.dat$N_sero==3],
-                      lambda_lower = mod.dat$lambda_lower[mod.dat$N_sero==3],
-                      lambda_upper = mod.dat$lambda_upper[mod.dat$N_sero==3],
-                      age_vect = age_vect,
-                      N_sero = 3)
-  run3$N_sero = 3
-  
-  
-  run4 <- run.one.par(lambda = mod.dat$lambda_fit[mod.dat$N_sero==4],
-                      lambda_lower = mod.dat$lambda_lower[mod.dat$N_sero==4],
-                      lambda_upper = mod.dat$lambda_upper[mod.dat$N_sero==4],
-                      age_vect = age_vect,
-                      N_sero = 4)
-  run4$N_sero = 4
-  
-  dat.out <- sum.dat(dat,age_vect = age_vect)
-  #head(dat.out)
-  #now join with data and plot
-  
-  
-  dat.dat <- dplyr::select(dat.out, age, cum_prop_cases)
-  dat.dat$lci <- dat.dat$uci <- NA
-  dat.dat$type<- "data"
-  names(dat.dat) <-  c( "age", "prop", "prop_lci", "prop_uci", "type")
-  #names(dat.dat) <-  c("age", "prop",  "type")
-  dat.dat$class ="multi_cum"
-  dat.dat$N_sero = "data"
-  
-  dat.all <- rbind(dat.dat, run1, run2, run3, run4)
-  
-  #and also the primary
-  
-  dat.dat2 <- dplyr::select(dat.out, age, prop_primary_by_age)
-  dat.dat2$lci <- dat.dat2$uci <- NA
-  dat.dat2$type <- "data"
-  names(dat.dat2) <-  c( "age", "prop", "prop_lci", "prop_uci", "type")
-  dat.dat2$class ="prim_prev"
-  
-  dat.dat2$N_sero = "data"
-  
-  dat.all <- rbind(dat.dat2, dat.all)
-  
-  dat.all$type[dat.all$N_sero!="data"] <- paste0(dat.all$type[dat.all$N_sero!="data"], ", N-sero=", dat.all$N_sero[dat.all$N_sero!="data"])
-  dat.all$label <- dat.all$class
-  dat.all$label[dat.all$class=="prim_prev"] <- "b"
-  dat.all$label[dat.all$class=="multi_cum"] <- "a"
-  
-  dat.all$class[dat.all$class=="prim_prev"] <- "proportion\nprimary infections"
-  dat.all$class[dat.all$class=="multi_cum"] <- "cumulative proportion\nsecondary infections"
-  
-  p1 <- ggplot(data=dat.all) + 
-    facet_grid(class~.) +
-    geom_line(data=subset(dat.all, type!="data"), aes(x=age, y=prop, color=type), position = position_jitter(width=.2), size=1) +
-    geom_point(data=subset(dat.all, type=="data"), aes(x=age, y=prop)) +
-    geom_line(data=subset(dat.all, type=="data"), aes(x=age, y=prop), size=.7) +
-    geom_ribbon(data=subset(dat.all, type!="data"), aes(x=age, ymin=prop_lci, ymax=prop_uci, fill=type), position = position_jitter(width=.2), alpha=.3) +
-    geom_label(aes(x=.1,y=.9, label=label), label.size = NA, size=9, fontface="bold")+
-    #geom_line(data=subset(dat.all, class=="primary_infection"),aes(x=age, y=prop, color=type)) +
-    #geom_line(data=subset(dat.all, class!="primary_infection"),aes(x=age, y=prop, color=type)) +
-    #geom_ribbon(aes(x=age, ymin=lci, ymax=uci, fill=type), alpha=.3)+
-    xlim(0,max(age_vect)) + ylab("proportion") +theme_bw()+
-    theme(panel.grid = element_blank(), 
-          strip.background = element_rect(fill="white"),
-          strip.text = element_text(size=16),
-          legend.title = element_blank(),
-          legend.text = element_text(size=10),
-          legend.background = element_rect(color="black"),
-          legend.position = c(.83,.64),
-          axis.title = element_text(size=16),
-          axis.text = element_text(size=14)) 
-    
-  
-  print(p1)
-  
-  return(p1)
-  
-  
-}
-
-
-ptop <- run.plot.all(mod.dat = out.2019.multi,
-                dat=dat.2019,
-                age_vect = 1:37)
-
-ptop2020 <- run.plot.all(mod.dat = out.2020.multi,
-                     dat=dat.2020,
-                     age_vect = 1:37)
-
-
-#functions
-sum.yr <- function(df, age_vect){
-  
-  df.sum <- ddply(df, .(age), summarise, Nage = length(age))
+  df.sum <- ddply(df, .(year, age), summarise, Nage = length(age))
   
   
   df.out = cbind.data.frame(age=1:max(age_vect))
   df.out <- merge(df.out, df.sum, by="age", all.x = T, sort = F)
-  df.out[is.na(df.out)]<- 0
-  df.out <- rbind(c(0,0), df.out)
+  df.out$Nage[is.na(df.out$Nage)] <- 0
+  df.out$year[is.na(df.out$year)] <- unique(df$year)
+  #df.out <- rbind(c(0,0), df.out)
+  #bind
+  df.add <- cbind.data.frame(age=0, year = unique(df$year), Nage=0)
+  df.out <- rbind(df.add, df.out)
   df.out <- arrange(df.out, age)
   df.out$cum_cases <- cumsum(df.out$Nage)
   df.out$n <- sum(df.out$Nage)
   df.out$cum_prop_cases <- cumsum(df.out$Nage)/sum(df.out$Nage)
+  
   return(df.out)
   
 }
-dat.nat <- read.csv(file = paste0(homewd, "/data/DENV-Nat-Aged.csv") , header = T, stringsAsFactors = F)
-head(dat.nat)
-dat.nat <- arrange(dat.nat, date, age)
-dat.nat$age <- ceiling(dat.nat$age)
-dat.nat.2020 = subset(dat.nat, year==2020)
-dat.nat = subset(dat.nat, year==2019)
-
-#now calculate annual FOI, using the Cummings method
-model.age.incidence <- function(log.lambda, N_sero, age_vect, year){
+fit.all.yrs.seq.yr.BFGS <- function(dat, lambda.guess, N.sero.fix, age_vect){
   
-  pexposed=as.list(rep(NA,max(age_vect))) #proportion exposed in any way
-  pnaive=as.list(rep(NA,max(age_vect))) #naive
-  pprim=as.list(rep(NA,max(age_vect))) #first infection with a single serotype
-  pmulti=as.list(rep(NA,max(age_vect))) #secondary infection
-  for(a in 1:max(age_vect)){ #for-loops over all possible ages in our data range
+  #for the first year in the dataset, 
+  #estimate foi just from the cross-sectional data
+  #min.year <- min(as.numeric(as.character(dat$year)))
+  dist.back <- max(dat$age[dat$year==min(dat$year)])#22
+  
+  #first, prep the data
+  year.dat <- dlply(dat, .(year))
+  
+  age_vect_year = floor(age_vect)[!duplicated(floor(age_vect))]
+  
+  year.dat.sum <- lapply(year.dat, sum.yr.yr, age_vect = age_vect_year)
+  df.out <- data.table::rbindlist( year.dat.sum)
+  #head(df.out)
+  #ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
+  #      geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
+  
+  #make your guess parameters
+  #lambda is takes data from the previous year and creates infections in this year
+  if(length(N.sero.fix)==1 & length(lambda.guess)==1){ #here, number of serotypes is fixed across the time series
+    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
+                                lambda = rep(lambda.guess, length((min(dat$year)-dist.back +1):max(dat$year))),
+                                N_sero = rep(N.sero.fix, length((min(dat$year)-dist.back +1):max(dat$year))))
     
-    inte_exposed_all = N_sero*a*exp(as.numeric(log.lambda))
-    inte_exposed_all_but_one = (N_sero-1)*a*exp(as.numeric(log.lambda)) 
-    inte_exposed_one = a*exp(as.numeric(log.lambda))
+  }else if (length(N.sero.fix)>1 & length(lambda.guess)==1){ #here you can vary the sero-strains by provifing your own vector
+    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
+                                lambda = rep(lambda.guess, length((min(dat$year)-dist.back +1):max(dat$year))),
+                                N_sero = N.sero.fix)
+  }else if (length(N.sero.fix)>1 & length(lambda.guess)>1){
+    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
+                                lambda = lambda.guess,
+                                N_sero = N.sero.fix)
     
-    #prob_exposed_one = (1-exp(-inte_exposed_one))
-    
-    #this is the probability of escaping infection with 3 strains at age a
-    prob_escaped_one = (1-(1-exp(-inte_exposed_all_but_one))) 
-    
-    #this is the probaility of being infected with strain i at age a
-    prob_inf_one = 1-exp(-inte_exposed_one)
-    
-    
-    pexposed[[a]]=1-exp(-inte_exposed_all) #returns probability of having experience infection (any number of infection) at a given age
-    pnaive[[a]] = 1-(1-exp(-inte_exposed_all)) #returns the probability of remaining naive for a given age.
-    
-    #returns the probability of experiencing your first infection with any serotype i at a given age
-    #it is the probability of remaining naive up to that point multiplied by the probability of any exposure at that age
-    #pprim[[a]] =  pnaive[[a]]*((1-exp(-inte_exposed_one))-1)#probability of being naive to all but one * being infected with 1... that one???
-    pprim[[a]] =  prob_escaped_one*prob_inf_one
-    pmulti[[a]] = 1-((pnaive[[a]]))-(N_sero*pprim[[a]])
+  }else if (length(N.sero.fix)==1 & length(lambda.guess)>1){
+    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
+                                lambda = lambda.guess,
+                                N_sero =rep(N.sero.fix, length((min(dat$year)-dist.back +1):max(dat$year))))
     
   }
   
+  
+  #and fit it cumulatively
+  
+  #now test the next year with all 4 serotype assumptions
+  log.lambda.guess <- log(par.dat$lambda)
+  
+  out.NS <- optim(par = log.lambda.guess, 
+                  fn=log.lik.fit.all, 
+                  method = "BFGS",
+                  par.dat=par.dat, 
+                  age_vect=age_vect, 
+                  dat=df.out)
+  
+  
+  par.dat$lambda <- exp(out.NS$par)
+  par.dat$llik <- out.NS$value
+  par.dat$convergence <- out.NS$convergence
+  
+  
+  
+  #and return
+  
+  return(par.dat)
+  
+}
+model.age.incidence.series <- function(par.dat, age_vect){
+  
+  # you will have one lambda for each year in the time series
+  # and one N-sero for each year as well
+  # and 35 ages with varying probabilities of infection within those years
+  
+  lambda.start = par.dat$lambda[1]
+  #N_sero = rep(N.sero.guess, length=lts)
+  
+  
+  lts = nrow(par.dat)
+  
+  #proportion exposed in any way - needs to long enough for each age within each year
+  #pexposed= as.list(rep(NA, (length(age_vect)*lts))) 
+  #pexposed= rep(NA, (max(age_vect)))
+  pexposed= rep(NA, (length(age_vect)-1))
+  pexposed[1] <- 0
+  pexposed = rep(list(pexposed),lts) 
+  
+  #naive
+  #pnaive= as.list(rep(NA, (length(age_vect)*lts))) 
+  #pnaive= rep(NA, (max(age_vect)))
+  pnaive= rep(NA, (length(age_vect)-1))
+  pnaive[1] <- 1
+  pnaive = rep(list(pnaive),lts) 
+  
+  
+  #pnaiveone= rep(NA, (max(age_vect)))
+  pnaiveone= rep(NA, (length(age_vect)-1))
+  pnaiveone[1] <- 0
+  pnaiveone = rep(list(pexposed),lts) 
+  
+  
+  #first infection with a single serotype
+  #pprim=as.list(rep(NA, (length(age_vect)*lts)))
+  #pprim= rep(NA, (max(age_vect)))
+  pprim= rep(NA, (length(age_vect)-1))
+  pprim[1] <- 0
+  pprim = rep(list(pprim),lts)
+  
+  #pmulti=as.list(rep(NA, (length(age_vect)*lts))) #secondary infection
+  #pmulti= rep(NA, (max(age_vect)))
+  pmulti= rep(NA, (length(age_vect)-1))
+  pmulti[1] <- 0
+  pmulti = rep(list(pmulti),lts)
+  
+  age_tracker= rep(NA, (length(age_vect)-1))
+  age_tracker[1] <- 0
+  age_tracker = rep(list(age_tracker),lts)
+  
+  year_tracker= rep(NA, (length(age_vect)-1))
+  year_tracker[1] <- 1980
+  year_tracker = rep(list(year_tracker),lts)
+  
+  year.start= min(par.dat$year)
+  
+  
+  
+  for (i in 1:lts){
+    
+    if(i < max(age_vect)){
+      age_vect_tmp = age_vect[1:which(age_vect==i)]
+    }else{
+      age_vect_tmp = age_vect
+    }
+    
+    for(a in 2:(length(age_vect_tmp))){ #for-loops over all possible ages in our data range across all the years
+      
+      
+      
+      #remake the age vector for each year
+      #print(a)
+      age = age_vect_tmp[a]
+      age_trunc = floor(age)
+      age_current = age-age_trunc
+      age_current[age_current==0] <- 1 #if you are at the end of the year, you spent the whole year here
+      #age_class = ceiling(age)
+      
+      year.now = par.dat$year[i]
+      year.par = subset(par.dat, year<=year.now)
+      N_sero = year.par$N_sero#[2:nrow(par.dat)]
+      #lambda = rep(exp(as.numeric(log.lambda.guess)), length=(lts))
+      lambda =  year.par$lambda#[2:nrow(par.dat)] #one per year
+      
+      #make a vector of durations for the lambdas across the time series
+      if (age>1){
+        dur = rep(1, length(lambda))  
+      }else if(age<=1){
+        dur = rep(0, length(lambda))  
+      }
+      
+      #if you were born after the time series began
+      #some of those ones may need to be replaced with 0s
+      if(i>2){
+        #diff.count <- i-age
+        tot.class = ceiling(age)
+        #diff.count <- sum(dur)-age_trunc
+        
+        if(tot.class<length(dur)){
+          dur[1:(length(dur)-tot.class)]<- 0
+        }
+      }
+      
+      dur[length(dur)] <- age_current
+      
+      
+      # #age should never exceed i under our new regime
+      # dur1 <- age - i
+      # if(dur1 <=0){
+      #   dur[1] <- 0
+      # }else{
+      #   dur[1] <- dur[1] + dur1
+      # }
+      #dur1[dur1<0] <- 0
+      
+      
+      # #if 0, this kid spent 1 year in each age class and the dur vector does not need to be changed
+      if(sum(dur) != age){
+        warning("mismatch in age and integration")
+      }
+      
+      #if you are < 1 year in age, we still want it to be possible for you
+      #to experience a multitypic infection (we know that cases are reported <1 year in
+      #our natl data, and we make the assumption that all reported data signifies secondary
+      #infections)
+      
+      #therefore, if you are <1 year, we have to account for this by breaking down the
+      #foi across each quarter
+      
+      #if (age<1){
+      #this just means, we split the current year into time before this timestep and now
+      lambda <- c(lambda, lambda[i])
+      N_sero <- c(N_sero, N_sero[i])
+      dur <- c(dur, dur[i])
+      
+      #and we account for the current timestep accordingly
+      dur[length(dur)-1] <-   dur[length(dur)]-.25
+      dur[length(dur)] <- .25 #always just a quarter year in here
+      
+      if(sum(dur) != age){
+        warning("mismatch in age and integration")
+      }
+      #}else if (age>=1){
+      #still get the bonus of more time in this timstep
+      # dur[i] <-  dur[i]
+      #}
+      
+      #
+      
+      #now, we integrate the hazard of becoming infected over all the years in each
+      
+      #and, finally, because this is dengue, we also need to track the 
+      #rate of getting exposed in this timestep, assuming you were naive at 
+      #all timesteps before so we separate out the current and past timesteps 
+      #in our integration
+      
+      
+      
+      #now we distinguish between exposures in the past and the present
+      
+      # #if this is the first step in the time series, 
+      # we can't tell the difference, so we set everything to inte_pre 
+      # #assuming that everything reported is a multitypic infection
+      
+      inte_pre = sum(dur[1:(length(dur)-1)]*lambda[1:(length(lambda)-1)]*N_sero[1:(length(N_sero)-1)])
+      inte_now = sum(dur[length(dur)]*lambda[length(dur)]*N_sero[length(dur)])  
+      
+      #now sum them
+      inte_all <-  inte_pre + inte_now
+      
+      
+      #this is the probability of being exposed to any serotype at the current time
+      pexposed[[i]][[a]] <- (1-exp(-inte_all))
+      
+      #this is the probability of being naive to all serotypes at this point in time
+      pnaive[[i]][[a]] <- 1-(1-exp(-inte_all))
+      
+      #this is the probability of being naive to all serotypes one year prior
+      #(its the inverse of being exposed at one timestep prior)
+      pnaiveone[[i]][[a]] <- 1-(1-exp(-inte_pre))
+      
+      
+      # this is the probability of being naive to all serotypes up to one year prior AND 
+      # getting infected with any serotype in this year
+      # (e.g. this is the probability of a primary infection)
+      # this will be the combined probability of getting exposed this year AND the probability of 
+      # NOT GETTING any serotypes at all up to now
+      pprim[[i]][[a]] =  pnaiveone[[i]][[a]]*(1-exp(-inte_now))
+      
+      
+      #if not primarily infected or naive, this should be a multitypic infection
+      #but remember it could be a primary infection with any of the four serotypes - that
+      # is already captured above by multiplying the rate of infection by the serotype number
+      pmulti[[i]][[a]] = 1 - pnaive[[i]][[a]] - (pprim[[i]][[a]])
+      age_tracker[[i]][[a]] = age
+      year_tracker[[i]][[a]] =year.now
+      
+    }
+  }
+  
+  #some of the age distributions will be shorter
+  
   #and get the estimates of each
-  p.out = cbind.data.frame(age=age_vect, 
-                           exposed=c(unlist(pexposed)),
-                           naive = c(unlist(pnaive)),
-                           all_primary_inf=c(unlist(pprim)*N_sero), 
-                           multitypic_inf = c(unlist(pmulti)))
+  #p.out = cbind.data.frame(year = rep(seq((year.start), (year.start+lts-1), 1), each=length(age_vect)),
+  p.out <-  cbind.data.frame(year=c(unlist(year_tracker)),
+                             age=c(c(unlist(age_tracker))), 
+                             exposed=c(c(unlist(pexposed))),
+                             naive = c(unlist(pnaive)),
+                             all_prim=c(unlist(pprim)), 
+                             multi = c(unlist(pmulti)))
   
   #any_primary_inf=c(unlist(pprim)), 
   
@@ -723,122 +393,66 @@ model.age.incidence <- function(log.lambda, N_sero, age_vect, year){
   p.out$sum_exp_naive <- rowSums(p.out[,2:3])
   p.out$sum_naive_prim_multi <- rowSums(p.out[,3:5])
   
-  p.add <- cbind.data.frame(age=0, exposed=0, naive=1, all_primary_inf=0, 
-                            multitypic_inf=0, sum_exp_naive=1, sum_naive_prim_multi=1)
-  p.out <- rbind(p.add, p.out)
-  p.out$year <- year
+  # #head(p.out)
+  # p.add <- cbind.data.frame(year = seq((year.start), (year.start+lts-1), 1),
+  #                           age=rep(0, length=lts), 
+  #                           exposed=rep(0, length=lts), naive=rep(1, length=lts), all_prim=rep(0, length=lts), 
+  #                           multi=rep(0, length=lts), sum_exp_naive=rep(1, length=lts), sum_naive_prim_multi=rep(1, length=lts))
+  # p.out <- rbind(p.add, p.out)
   
+  p.out <- arrange(p.out, year, age)
   
-  ggplot(data=p.out) + geom_point(aes(x=age, y=multitypic_inf))  + geom_line(aes(x=age, y=multitypic_inf))
-  # #need to cap when the proportion reaches 1
-  #  if(max(p.out$multitypic_inf>=1)){
-  #    first.one <- min(which(p.out$multitypic_inf>=1))
-  #    p.out = p.out[1:first.one,]
-  #  }
-  # 
-  #plot(ecdf(p.out$multitypic_inf))
+  #ggplot(data=p.out) + geom_point(aes(x=age, y=multi))  + 
+  #geom_line(aes(x=age, y=multi)) +facet_wrap(~year)
+  
   
   #and the multitypic distribution corresponds to the cumulative proportion of cases
+  p.out$cum_prop_cases <- p.out$multi
+  #ggplot(data=p.out) + geom_point(aes(x=age, y=cum_prop_cases))  + geom_line(aes(x=age, y=cum_prop_cases)) +facet_wrap(~year)
+  p.out <- p.out[complete.cases(p.out),]
+  #and split by age category
+  p.out$age_trunc = ceiling(p.out$age)
   
-  p.out$cum_prop_cases <- p.out$multitypic_inf
+  #p.split <- dlply(p.out, .(year, age_trunc))
   
+  #get the mean value in each
+  p.sum <- ddply(p.out, .(year, age_trunc), summarise, exposed = mean(exposed), naive=mean(naive), all_prim=mean(all_prim), multi=mean(multi), sum_exp_naive= mean(sum_exp_naive), sum_naive_prim_multi = mean(sum_naive_prim_multi),cum_prop_cases = mean(cum_prop_cases) )
   
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=all_primary_inf))  + geom_line(aes(x=age, y=all_primary_inf))
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=multitypic_inf))  + geom_line(aes(x=age, y=multitypic_inf))
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=cum_prop_cases))  + geom_line(aes(x=age, y=cum_prop_cases))
+  names(p.sum)[names(p.sum)=="age_trunc"] <- "age"
   
-  return(p.out) #returns prevalence by age for the length of all possible ages in our dataset
-}
-model.age.one <- function(log.lambda, age_vect, year){
+  p.add <- cbind.data.frame(year = unique(p.sum$year), age = rep(0, length(unique(p.sum$year))), exposed=0, naive=1, all_prim=0, multi=0, sum_exp_naive=2, sum_naive_prim_multi=1, cum_prop_cases =0)
   
-  pexposed=as.list(rep(NA,max(age_vect))) #proportion exposed in any way
-  pnaive=as.list(rep(NA,max(age_vect))) #naive
-  #pprim=as.list(rep(NA,max(age_vect))) #first infection with a single serotype
-  #pmulti=as.list(rep(NA,max(age_vect))) #secondary infection
-  for(a in 1:max(age_vect)){ #for-loops over all possible ages in our data range
-    
-    inte_exposed_all = a*exp(as.numeric(log.lambda))
-    #inte_exposed_all_but_one = (N_sero-1)*a*exp(as.numeric(log.lambda)) 
-    #inte_exposed_one = a*exp(as.numeric(log.lambda))
-    
-    #prob_exposed_one = (1-exp(-inte_exposed_one))
-    
-    #this is the probability of escaping infection with 3 strains at age a
-    #prob_escaped_one = (1-(1-exp(-inte_exposed_all_but_one))) 
-    
-    #this is the probaility of being infected with strain i at age a
-    #prob_inf_one = 1-exp(-inte_exposed_one)
-    
-    
-    pexposed[[a]]=1-exp(-inte_exposed_all) #returns probability of having experience infection (any number of infection) at a given age
-    pnaive[[a]] = 1-(1-exp(-inte_exposed_all)) #returns the probability of remaining naive for a given age.
-    
-    #returns the probability of experiencing your first infection with any serotype i at a given age
-    #it is the probability of remaining naive up to that point multiplied by the probability of any exposure at that age
-    #pprim[[a]] =  pnaive[[a]]*((1-exp(-inte_exposed_one))-1)#probability of being naive to all but one * being infected with 1... that one???
-    #pprim[[a]] =  prob_escaped_one*prob_inf_one
-    #pmulti[[a]] = 1-((pnaive[[a]]))-(N_sero*pprim[[a]])
-    
-  }
+  p.sum <- rbind(p.add, p.sum)
+  p.sum <- arrange(p.sum, year, age)
   
-  #and get the estimates of each
-  p.out = cbind.data.frame(age=age_vect, 
-                           exposed=c(unlist(pexposed)),
-                           naive = c(unlist(pnaive)))
-                           #all_primary_inf=c(unlist(pprim)*N_sero), 
-                           #multitypic_inf = c(unlist(pmulti)))
-  
-  #any_primary_inf=c(unlist(pprim)), 
-  
-  p.out[p.out<0] <- 0
-  
-  #check the proportions
-  p.out$sum_exp_naive <- rowSums(p.out[,2:3])
-  #p.out$sum_naive_prim_multi <- rowSums(p.out[,3:5])
-  
-  p.add <- cbind.data.frame(age=0, exposed=0, naive=1,  sum_exp_naive=1)
-  p.out <- rbind(p.add, p.out)
-  p.out$year <- year
+  p1 <- ggplot(data=p.sum) + geom_point(aes(x=age, y=multi))  + 
+    geom_line(aes(x=age, y=multi)) +facet_wrap(~year)
   
   
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=multitypic_inf))  + geom_line(aes(x=age, y=multitypic_inf))
-  # #need to cap when the proportion reaches 1
-  #  if(max(p.out$multitypic_inf>=1)){
-  #    first.one <- min(which(p.out$multitypic_inf>=1))
-  #    p.out = p.out[1:first.one,]
-  #  }
+  # print(p1)
   # 
-  #plot(ecdf(p.out$multitypic_inf))
+  #ggplot(data=subset(p.sum, year==1985)) + geom_point(aes(x=age, y=multi))  + 
+  #geom_line(aes(x=age, y=multi)) 
   
-  #and the multitypic distribution corresponds to the cumulative proportion of cases
-  
-  p.out$cum_prop_cases <- p.out$exposed
-  
-  
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=all_primary_inf))  + geom_line(aes(x=age, y=all_primary_inf))
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=multitypic_inf))  + geom_line(aes(x=age, y=multitypic_inf))
-  #ggplot(data=p.out) + geom_point(aes(x=age, y=cum_prop_cases))  + geom_line(aes(x=age, y=cum_prop_cases))
-  
-  return(p.out) #returns prevalence by age for the length of all possible ages in our dataset
+  return(p.sum) #returns prevalence by age for each year for fitting to the years for which we have data
 }
-log.lik.prop <- function(par, age_vect, dat, year, N_sero){
+log.lik.fit.all <- function(par, par.dat, age_vect, dat){
   
-  #first run the model with the specified par
-  if(N_sero==1){
-    
-    out.mod <- model.age.one(log.lambda = par, age_vect = age_vect, year=year)
-    
-  }else{
-    
-    out.mod <- model.age.incidence(log.lambda = par, age_vect = age_vect, year=year, N_sero=N_sero)  
-  }
+  par.dat$lambda <- exp(par)
   
   
+  out.mod <- model.age.incidence.series(par.dat = par.dat, 
+                                        age_vect=age_vect)  
+  
+  #ggplot(data=out.mod) + geom_point(aes(x=age,y= cum_prop_cases)) + facet_wrap(~year)
+  
+  #now, select only the years for fitting for which there are data
+  out.mod = subset(out.mod, year >=min(dat$year))
   
   
-  #to fit, just cut to the dataset that is equal
-  out.mod <- subset(out.mod, age<=max(dat$age))
-  
+  #plot(out.mod$cum_prop_cases, type="b")
+  out.mod <- arrange(out.mod, year, age)
+  dat <- arrange(dat, year, age)
   # # # # 
   #how likely are the data, given the model as truth?
   ll=0
@@ -848,124 +462,60 @@ log.lik.prop <- function(par, age_vect, dat, year, N_sero){
   
   return(-ll)
 }
-wrap.all.llik <- function(lambda.guess, age_vect, dat, N_sero){
+plot.model.series.data <- function(par.dat, age_vect, dat){
+  
   
   #first, prep the data
-  df.out <- sum.yr(dat, age_vect = age_vect)
+  dat = subset(dat, year<=max(par.dat$year))
+  year.dat <- dlply(dat, .(year))
+  
+  age_vect_year = floor(age_vect)[!duplicated(floor(age_vect))]
+  
+  year.dat.sum <- lapply(year.dat, sum.yr.yr, age_vect = age_vect_year)
+  df.out <- data.table::rbindlist( year.dat.sum)
+  #head(df.out)
+  ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
+    geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
   
   
-  #  
-  out.fit <- optim(log(lambda.guess), fn=log.lik.prop, method = "Brent",
-                   lower = -20, upper=20,
-                   age_vect=age_vect, 
-                   year=unique(dat$year),
-                   dat=df.out,
-                   N_sero=N_sero, hessian = T)
+  out.mod <- model.age.incidence.series(par.dat = par.dat, age_vect = age_vect)
+  head(out.mod)
+  
+  out.mod <- subset(out.mod, year >= min(df.out$year))
+  df.dat <- dplyr::select(df.out, year, age, cum_prop_cases)
+  df.dat$type="data"
+  
+  df.mod <-   dplyr::select(out.mod, year, age, cum_prop_cases)
+  
+  df.mod$type="model"
+  
+  df.all<- rbind(df.mod, df.dat)
   
   
-  
-  fisher_info <- solve(out.fit$hessian)
-  prop_sigma <- sqrt(diag(fisher_info))
-  upper <- exp(out.fit$par+1.96*prop_sigma)
-  lower <- exp(out.fit$par-1.96*prop_sigma)
-  
-  
-  out.fit <- cbind.data.frame(year=unique(dat$year),
-                              lambda_fit = exp(out.fit$par), 
-                              lambda_lower=lower,
-                              lambda_upper=upper,
-                              neg_llik=out.fit$value,
-                              convergence=out.fit$convergence)#, 
-  
-  
-  return(out.fit)
-}
-run.plot.single <- function(mod.dat, dat, age_vect, N_sero){
-  
-  #and run over many years
-  out.run <- model.age.incidence(log.lambda = log(mod.dat$lambda_fit), 
-                                 year = mod.dat$year,
-                                 age_vect=age_vect, N_sero=N_sero)
-  
-  out.run.lci <- model.age.incidence(log.lambda = log(mod.dat$lambda_lower), 
-                                     year = mod.dat$year,
-                                     age_vect=age_vect, N_sero=N_sero)
-  
-  out.run.uci <- model.age.incidence(log.lambda = log(mod.dat$lambda_upper), 
-                                     year = mod.dat$year,
-                                     age_vect=age_vect, N_sero=N_sero)
-  
-  #out.run <- data.table::rbindlist(out.run)
-  
-  dat.mod <- dplyr::select(out.run, year, age,  cum_prop_cases)
-  dat.mod$lci = out.run.lci$cum_prop_cases
-  dat.mod$uci = out.run.uci$cum_prop_cases
-  dat.mod$type<- "model"
-  names(dat.mod) <- c("year", "age", "prop", "lci", "uci", "type")
-  
-  
-  
-  #now join with data and plot
-  
-  dat.out <- sum.yr(df=dat,age_vect = age_vect)
-  dat.out$year <- unique(dat$year)
-  dat.dat <- dplyr::select(dat.out, year, age, cum_prop_cases)
-  dat.dat$lci <- dat.dat$uci <- NA
-  dat.dat$type<- "data"
-  names(dat.dat) <-  c("year", "age", "prop", "lci", "uci", "type")
-  dat.all <- rbind(dat.dat, dat.mod)
-  
-  p1 <- ggplot(data=dat.all) + 
-    geom_point(aes(x=age, y=prop, color=type)) +
-    geom_line(aes(x=age, y=prop, color=type, linetype=type)) +
-    geom_ribbon(aes(x=age, ymin=lci, ymax=uci, fill=type), alpha=.3)+
-    xlim(0,max(age_vect)) + ylab("proportion") +theme_bw()+
-    theme(panel.grid = element_blank())
-  
+  p1 <- ggplot(data=df.all) + geom_point(aes(x=age, y=cum_prop_cases, color=type))  + 
+    geom_line(aes(x=age, y=cum_prop_cases, color=type)) +facet_wrap(~year)
   print(p1)
   
-  return(dat.all)
   
+  # 
+  # p1 <- ggplot(data=subset(df.all, year==year.in)) + geom_point(aes(x=age, y=cum_prop_cases, color=type))  + 
+  #   geom_line(aes(x=age, y=cum_prop_cases, color=type)) +facet_wrap(~year)
+  # print(p1)
   
-}
+} 
 
-#compare fits by year
 
-comp.all.Nsero <- function(lambda.guess, age_vect, dat){
-  
-  out.NS1 <- wrap.all.llik(lambda.guess = lambda.guess,
-                           age_vect = 1:max(dat$age),
-                           dat=dat,
-                           N_sero=1)
-  
-  out.NS2 <- wrap.all.llik(lambda.guess = lambda.guess,
-                                        age_vect = 1:max(dat$age),
-                                        dat=dat,
-                                        N_sero=2)
-  
-  out.NS3 <- wrap.all.llik(lambda.guess = lambda.guess,
-                                        age_vect = 1:max(dat$age),
-                                        dat=dat,
-                                        N_sero=3)
-  
-  out.NS4 <- wrap.all.llik(lambda.guess = lambda.guess,
-                                        age_vect = 1:max(dat$age),
-                                        dat=dat,
-                                        N_sero=4)
-  
-  
-  out.NS1$N_sero=1
-  out.NS2$N_sero=2
-  out.NS3$N_sero=3
-  out.NS4$N_sero=4
-  
-  out.all <- rbind(out.NS1, out.NS2, out.NS3, out.NS4)
-  
-  out.all <- dplyr::select(out.all, -(year))
-  
-  return(out.all)
-  
-}
+#load the fitted data from the national level and estimate just the 2019 results
+
+
+fit.KP.2019 <- fit.all.yrs.seq.yr.BFGS(dat=dat.2019,
+                                      lambda.guess=c(0.01),
+                                      N.sero.fix=2,
+                                      age_vect=seq(0,22, by=1/4))
+
+save(fit.KP.2019, file = paste0(homewd, "/figure-development/Fig3/fit2019tmp.Rdata"))
+plot.model.series.data(par.dat=fit.KP.2019, age_vect=seq(0,22, by=1/4), dat=dat.2019)
+with(subset(fit.KP.2019, year>2002), plot(year, lambda, type="b"))
 
 comp.nat <- comp.all.Nsero(lambda.guess=.02, 
                            age_vect=1:37, 
