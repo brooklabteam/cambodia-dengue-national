@@ -9,7 +9,7 @@ library(ggplot2)
 
 
 #and load the metadata
-homewd= "/Users/carabrook/Developer/cambodia-dengue-distribute"
+homewd = "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(homewd)
 
 #load the transmission tree data
@@ -398,11 +398,10 @@ pmid <- cowplot::plot_grid(pC, pD, nrow = 1, labels = c("c", "d"), label_size = 
 pbottom <- cowplot::plot_grid(pE, pF, nrow = 1, labels = c("e", "f"), label_size = 22, hjust=c(-.5, 0))
 pall <- cowplot::plot_grid(ptop, pmid, pbottom, nrow = 3)
 
-ggsave(file = paste0(homewd,"/figures/final-figures/Fig5-hold.png"),
+ggsave(file = paste0(homewd,"/final-figures/fig5.png"),
         plot=pall,
         units="mm",  
         width=80, 
         height=90, 
         scale=3.5, 
         dpi=300)
-
