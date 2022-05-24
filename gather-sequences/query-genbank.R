@@ -99,5 +99,6 @@ fileConn<-file(paste0(homewd,"/gather-sequences/DENV2-NCBI.txt"))
 writeLines(paste0("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta&retmode=text&id=",paste(denv2$Accession, collapse = ", ")), fileConn)
 close(fileConn)
 
+#then 
 
 

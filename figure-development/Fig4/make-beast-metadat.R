@@ -67,6 +67,23 @@ treedat <- merge(treedat, genbank.dat, by="accession_num")
 head(treedat)
 unique(treedat$country)
 
+#and, until the new trees finish, swap the dates for the cambodia sequences for the 
+#precise dates here
+cam.dat <- read.csv(file = paste0(homewd, "/gather-sequences/cambodia-seq-details.csv"), header = T, stringsAsFactors = F)
+head(cam.dat)
+cam.dat <- dplyr::select(cam.dat, accession_num, date)
+cam.dat$date <- as.Date(cam.dat$date, format="%m/%d/%y")
+names(cam.dat) <- c("accession_num", "precise_date")
+
+treedat <- merge(treedat, cam.dat, by="accession_num", all.x=T)
+head(treedat)
+
+treedat$date[!is.na(treedat$precise_date)] <- treedat$precise_date[!is.na(treedat$precise_date)]
+
+#and drop column 
+treedat <- dplyr::select(treedat, -(precise_date))
+treedat$date
+
 #now, for all the cambodia sequences, add in lat-long info and the DENV genotype
 gis.dat <- read.csv(file = paste0(homewd, "/data/lat-long-cambodia.csv"), header = T, stringsAsFactors = F)
 head(gis.dat)
@@ -88,10 +105,13 @@ head(host.dat)
 host.dat <- dplyr::select(host.dat, NIH.ID, age, sex, date)
 host.dat$date <- as.Date(host.dat$date, format = "%m/%d/%y")
 
+#treemerge <- merge(treedat, host.dat, by = c("NIH.ID"), all.x=T)
 treemerge <- merge(treedat, host.dat, by = c("NIH.ID", "date"), all.x=T)
 head(treemerge)
 
 write.csv(treemerge, file = paste0(homewd, "/data/beasttree_metadata.csv"), row.names = F)
+#above is 95% correct - the "tip_name" column will change in the new version
+
 #now go make transmission trees
 
 #and build figures 4 and 5
