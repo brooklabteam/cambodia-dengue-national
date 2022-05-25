@@ -18,7 +18,6 @@ sum.yr.yr <- function(df, age_vect){
   
   
   df.out = cbind.data.frame(age=1:max(age_vect))
-  #df.out = cbind.data.frame(age=1:max(df.sum$age))
   df.out <- merge(df.out, df.sum, by="age", all.x = T, sort = F)
   df.out$Nage[is.na(df.out$Nage)] <- 0
   df.out$year[is.na(df.out$year)] <- unique(df$year)
@@ -34,7 +33,7 @@ sum.yr.yr <- function(df, age_vect){
   return(df.out)
   
 }
-sum.yr <- function(df){
+sum.yr <- function(df, age_vect){
   
   df.sum <- ddply(df, .(age), summarise, Nage = length(age))
   
@@ -490,7 +489,7 @@ plot.model.series.data.oneyr <- function(par.dat, age_vect, dat, year.in){
   print(p1)
   
 } 
-log.lik.fit.all <- function(par, par.dat, dat, age_vect=age_vect){
+log.lik.fit.all <- function(par, par.dat, age_vect, dat){
   
   par.dat$lambda <- exp(par)
   
@@ -507,34 +506,22 @@ log.lik.fit.all <- function(par, par.dat, dat, age_vect=age_vect){
   #plot(out.mod$cum_prop_cases, type="b")
   out.mod <- arrange(out.mod, year, age)
   dat <- arrange(dat, year, age)
-  #names(dat)[length(names(dat))] <- "cum_prop_cases_data"
-  #names(out.mod)
-  
-  #and merge model and data
-  merge.dat <- merge(out.mod, dat, by = c("year", "age"))
-  merge.dat <- arrange(merge.dat, year, age)
   # # # # 
   #how likely are the data, given the model as truth?
   ll=0
-  for (i in 1:length(merge.dat$age)){
-    ll=ll+dbinom(merge.dat$cum_cases[i],merge.dat$n[i],p=merge.dat$cum_prop_cases[i],log=T) 
+  for (i in 1:length(dat$age)){
+    ll=ll+dbinom(dat$cum_cases[i],dat$n[i],p=out.mod$cum_prop_cases[i],log=T) 
   }
   
   return(-ll)
 }
-fit.all.yrs.seq.yr.BFGS <- function(dat, lambda.guess, N.sero.fix, age_vect){
+fit.all.yrs.seq.yr.extend <- function(dat, lambda.guess, N.sero.fix, age_vect){
   
-  #get the birth year of everyone in the dataset, 
-  #the furthest back is where you start
-  dat$birth_year = dat$year-dat$age
-  start.year <- min(dat$birth_year)
-  dist.back =  min(dat$year) -start.year
-  # #for the first year in the dataset, 
-  # #estimate foi just from the cross-sectional data
-  # #min.year <- min(as.numeric(as.character(dat$year)))
-  # dist.back <- max(dat$age[dat$year==min(dat$year)])#22
-  # dist.back <- max(dat$age[dat$year==max(dat$year)])#22
-  age_vect_year = 0:dat$age[dat$birth_year==start.year]
+  #for the first year in the dataset, 
+  #estimate foi just from the cross-sectional data
+  #min.year <- min(as.numeric(as.character(dat$year)))
+  dist.back <- max(dat$age[dat$year==min(dat$year)])#22
+  
   #first, prep the data
   year.dat <- dlply(dat, .(year))
   
@@ -542,11 +529,79 @@ fit.all.yrs.seq.yr.BFGS <- function(dat, lambda.guess, N.sero.fix, age_vect){
   
   year.dat.sum <- lapply(year.dat, sum.yr.yr, age_vect = age_vect_year)
   df.out <- data.table::rbindlist( year.dat.sum)
-  # head(df.out)
-  #   ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
-  #         geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
-  # # # 
-  # #make your guess parameters
+  #head(df.out)
+  #ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
+  #      geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
+  
+  #make your guess parameters
+  #lambda is takes data from the previous year and creates infections in this year
+  if(length(N.sero.fix)==1 & length(lambda.guess)==1){ #here, number of serotypes is fixed across the time series
+    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
+                                lambda = rep(lambda.guess, length((min(dat$year)-dist.back +1):max(dat$year))),
+                                N_sero = rep(N.sero.fix, length((min(dat$year)-dist.back +1):max(dat$year))))
+    
+  }else if (length(N.sero.fix)>1 & length(lambda.guess)==1){ #here you can vary the sero-strains by provifing your own vector
+    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
+                                lambda = rep(lambda.guess, length((min(dat$year)-dist.back +1):max(dat$year))),
+                                N_sero = N.sero.fix)
+  }else if (length(N.sero.fix)>1 & length(lambda.guess)>1){
+    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
+                                lambda = lambda.guess,
+                                N_sero = N.sero.fix)
+    
+  }else if (length(N.sero.fix)==1 & length(lambda.guess)>1){
+    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
+                                lambda = lambda.guess,
+                                N_sero =rep(N.sero.fix, length((min(dat$year)-dist.back +1):max(dat$year))))
+    
+  }
+  
+  
+  
+  
+  #and fit it cumulatively
+  
+  #now test the next year with all 4 serotype assumptions
+  log.lambda.guess <- log(par.dat$lambda)
+  
+  out.NS <- optim(par = log.lambda.guess, 
+                  fn=log.lik.fit.all, 
+                  method = "Nelder-Mead",
+                  par.dat=par.dat, 
+                  age_vect=age_vect, 
+                  dat=df.out)
+  
+  
+  par.dat$lambda <- exp(out.NS$par)
+  par.dat$llik <- out.NS$value
+  par.dat$convergence <- out.NS$convergence
+  
+  
+  
+  #and return
+  
+  return(par.dat)
+  
+}
+fit.all.yrs.seq.yr.BFGS <- function(dat, lambda.guess, N.sero.fix, age_vect){
+  
+  #for the first year in the dataset, 
+  #estimate foi just from the cross-sectional data
+  #min.year <- min(as.numeric(as.character(dat$year)))
+  dist.back <- max(dat$age[dat$year==min(dat$year)])#22
+  
+  #first, prep the data
+  year.dat <- dlply(dat, .(year))
+  
+  age_vect_year = floor(age_vect)[!duplicated(floor(age_vect))]
+  
+  year.dat.sum <- lapply(year.dat, sum.yr.yr, age_vect = age_vect_year)
+  df.out <- data.table::rbindlist( year.dat.sum)
+  #head(df.out)
+  #ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
+  #      geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
+  
+  #make your guess parameters
   #lambda is takes data from the previous year and creates infections in this year
   if(length(N.sero.fix)==1 & length(lambda.guess)==1){ #here, number of serotypes is fixed across the time series
     par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
@@ -579,71 +634,7 @@ fit.all.yrs.seq.yr.BFGS <- function(dat, lambda.guess, N.sero.fix, age_vect){
                   fn=log.lik.fit.all, 
                   method = "BFGS",
                   par.dat=par.dat, 
-                  dat=df.out)
-  
-  
-  par.dat$lambda <- exp(out.NS$par)
-  par.dat$llik <- out.NS$value
-  par.dat$convergence <- out.NS$convergence
-  
-  
-  
-  #and return
-  
-  return(par.dat)
-  
-}
-fit.all.yrs.seq.yr.NM <- function(dat, lambda.guess, N.sero.fix){
-  
-  #for the first year in the dataset, 
-  #estimate foi just from the cross-sectional data
-  #min.year <- min(as.numeric(as.character(dat$year)))
-  dist.back <- max(dat$age[dat$year==min(dat$year)])#22
-  
-  #first, prep the data
-  year.dat <- dlply(dat, .(year))
-  
-  #age_vect_year = floor(age_vect)[!duplicated(floor(age_vect))]
-  
-  year.dat.sum <- lapply(year.dat, sum.yr.yr)
-  df.out <- data.table::rbindlist( year.dat.sum)
-  #head(df.out)
-  # ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
-  #       geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
-  # 
-  #make your guess parameters
-  #lambda is takes data from the previous year and creates infections in this year
-  if(length(N.sero.fix)==1 & length(lambda.guess)==1){ #here, number of serotypes is fixed across the time series
-    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
-                                lambda = rep(lambda.guess, length((min(dat$year)-dist.back +1):max(dat$year))),
-                                N_sero = rep(N.sero.fix, length((min(dat$year)-dist.back +1):max(dat$year))))
-    
-  }else if (length(N.sero.fix)>1 & length(lambda.guess)==1){ #here you can vary the sero-strains by provifing your own vector
-    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
-                                lambda = rep(lambda.guess, length((min(dat$year)-dist.back +1):max(dat$year))),
-                                N_sero = N.sero.fix)
-  }else if (length(N.sero.fix)>1 & length(lambda.guess)>1){
-    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
-                                lambda = lambda.guess,
-                                N_sero = N.sero.fix)
-    
-  }else if (length(N.sero.fix)==1 & length(lambda.guess)>1){
-    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
-                                lambda = lambda.guess,
-                                N_sero =rep(N.sero.fix, length((min(dat$year)-dist.back +1):max(dat$year))))
-    
-  }
-  
-  
-  #and fit it cumulatively
-  
-  #now test the next year with all 4 serotype assumptions
-  log.lambda.guess <- log(par.dat$lambda)
-  
-  out.NS <- optim(par = log.lambda.guess, 
-                  fn=log.lik.fit.all, 
-                  method = "Nelder-Mead",
-                  par.dat=par.dat, 
+                  age_vect=age_vect, 
                   dat=df.out)
   
   
@@ -754,6 +745,7 @@ profile.likelihood.CIs <- function(par.set, age_vect, dat,lambda.min, lambda.max
 }
 
 
+
 #load the age structured national data
 dat <- read.csv(file = paste0(homewd, "/data/DENV-Nat-Aged.csv") , header = T, stringsAsFactors = F)
 # dat
@@ -766,19 +758,21 @@ unique(dat$age) #round to years
 #dat$age <- round(dat$age, 0)
 dat$age <- ceiling(dat$age)
 
+
+#load your parameter sets 
+load(paste0(homewd, "/figure-development/Fig2-S2-S3/tmp-dat/cumulative.fit.par.NS2.BFGS.Rdata"))
+
 #now fit to get convergence
-lambda.guess = rep(0.01, 40) #one value for each year in the dataset...
-fit.nat.NS2.BFGS <- fit.all.yrs.seq.yr.BFGS(dat=dat,
-                                          lambda.guess=lambda.guess,
-                                          N.sero.fix=2,
-                                          age_vect=seq(0,max(dat$age), by=1/4))
 
-fit.nat.NS2.NM <- fit.all.yrs.seq.yr.NM(dat=dat,
-                                        lambda.guess=lambda.guess,
-                                         N.sero.fix=2)
+#fix at 1 serotype
+lambda.guess = (cumulative.fit.par.NS2.BFGS$lambda*2)
+cumulative.fit.par.NS1.BFGS <- fit.all.yrs.seq.yr.BFGS(dat=dat,
+                                                       lambda.guess=lambda.guess,
+                                                       N.sero.fix=1,
+                                                       age_vect=seq(0,22, by=1/4))
 
-save(cumulative.fit.par.NS2.BFGS, 
-     file=paste0(homewd, "/figure-development/Fig2-S2-S3/tmp-dat/cumulative.fit.NS2.new.Rdata"))
+save(cumulative.fit.par.NS1.BFGS, 
+     file=paste0(homewd, "/figure-development/Fig2-S2-S3/tmp-dat/cumulative.fit.par.NS1.BFGS.Rdata"))
 
 #and 2
 lambda.guess = (cumulative.fit.par.NS2.BFGS$lambda)

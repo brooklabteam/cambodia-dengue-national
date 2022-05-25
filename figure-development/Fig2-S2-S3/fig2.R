@@ -98,7 +98,7 @@ pA <- ggplot(data=dat.sum)+ geom_point(aes(x=age, y=cum_prop_cases, color=year))
 #then plot the FOI through time
 #load the FOI under assumptions of a 2-seroptype sysetm
 #eventually will move to data folder, but leaving here for now until we have confidence intervals to match
-dat.foi <- read.csv(file = paste0(homewd, "/data/foi-fit-dat.csv"), header = T, stringsAsFactors = F)
+dat.foi <- read.csv(file = paste0(homewd, "/data/foi-fit-national.csv"), header = T, stringsAsFactors = F)
 dat.foi$lambda_per_1000 <- dat.foi$lambda*1000
 dat.foi$lambda_per_1000_lci <- dat.foi$lci*1000
 dat.foi$lambda_per_1000_uci <- dat.foi$uci*1000
@@ -112,14 +112,14 @@ pB2 <- ggplot(data = subset(dat.foi, year>=2002)) +theme_bw() +
         axis.text = element_text(size=12)) + scale_color_manual(values=colz) +
   geom_line(aes(x=year, y=lambda_per_1000)) + 
   ylab(bquote(lambda~' (/1000 ppl)')) +
-  geom_point(aes(x=year, y=lambda_per_1000, color=year_plot), size=3, show.legend = F) +
-  geom_ribbon(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci), alpha=.3) +
-  geom_linerange(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci, color=year_plot), size=1, show.legend = F)
+  geom_point(aes(x=year, y=lambda_per_1000, color=year_plot), size=3, show.legend = F) #+
+  #geom_ribbon(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci), alpha=.3) +
+  #geom_linerange(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci, color=year_plot), size=1, show.legend = F)
 
 
 library(ggmap)
-colz.long <- c(rep("#cdcdcb", 20), colz)
-names(colz.long) <- 1982:2020
+colz.long <- c(rep("#cdcdcb", 21), colz)
+names(colz.long) <- 1981:2020
 pB1 <- ggplot(data = subset(dat.foi, year>=1982)) +theme_bw() +
   theme(panel.grid = element_blank(), axis.title.x = element_blank(),
         axis.title.y = element_text(size=16),
@@ -145,16 +145,18 @@ plot.model.series.data.whole <- function(par.dat, age_vect, dat){
   
   
   #first, prep the data
-  dat = subset(dat, year<=max(par.dat$year))
+  #for the first year in the dataset, 
+  #estimate foi just from the cross-sectional data
+  #min.year <- min(as.numeric(as.character(dat$year)))
+  dist.back <- max(dat$age[dat$year==min(dat$year)])#22
+  
+  #first, prep the data
   year.dat <- dlply(dat, .(year))
   
   age_vect_year = floor(age_vect)[!duplicated(floor(age_vect))]
   
   year.dat.sum <- lapply(year.dat, sum.yr.yr, age_vect = age_vect_year)
   df.out <- data.table::rbindlist( year.dat.sum)
-  #head(df.out)
-  #ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
-   # geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
   
   
   out.mod <- model.age.incidence.series(par.dat = par.dat, age_vect = age_vect)
@@ -220,8 +222,8 @@ sum.yr.yr <- function(df, age_vect){
   df.out <- rbind(df.add, df.out)
   df.out <- arrange(df.out, age)
   df.out$cum_cases <- cumsum(df.out$Nage)
-  df.out$n <- sum(df.out$Nage)
-  df.out$cum_prop_cases <- cumsum(df.out$Nage)/sum(df.out$Nage)
+  df.out$n <- sum(df.sum$Nage)
+  df.out$cum_prop_cases <- df.out$cum_cases/df.out$n
   
   return(df.out)
   
@@ -506,18 +508,19 @@ ggsave(file = paste0(homewd, "/final-figures/figS2.png"),
 #then, just our three epidemic years
 plot.model.series.data.epi <- function(par.dat, age_vect, dat){
   
+  #first, prep the data
+  #for the first year in the dataset, 
+  #estimate foi just from the cross-sectional data
+  #min.year <- min(as.numeric(as.character(dat$year)))
+  dist.back <- max(dat$age[dat$year==min(dat$year)])#22
   
   #first, prep the data
-  dat = subset(dat, year<=max(par.dat$year))
   year.dat <- dlply(dat, .(year))
   
   age_vect_year = floor(age_vect)[!duplicated(floor(age_vect))]
   
   year.dat.sum <- lapply(year.dat, sum.yr.yr, age_vect = age_vect_year)
   df.out <- data.table::rbindlist( year.dat.sum)
-  #head(df.out)
-  #ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
-  # geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
   
   
   out.mod <- model.age.incidence.series(par.dat = par.dat, age_vect = age_vect)

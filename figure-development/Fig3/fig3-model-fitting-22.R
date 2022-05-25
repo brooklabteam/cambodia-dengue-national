@@ -7,8 +7,25 @@ library(plyr)
 library(dplyr)
 library(lubridate)
 
-homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
+homewd= "/Users/carabrook/Developer/cambodia-dengue-national/"
 setwd(homewd)
+
+
+#load the age structured national data
+dat <- read.csv(file = paste0(homewd, "/data/DENV-KPS-Aged.csv") , header = T, stringsAsFactors = F)
+# dat
+dat$date <- as.Date(dat$date, format = "%m/%d/%y")
+dat$epiwk <- as.Date(dat$epiwk, format = "%m/%d/%y")
+head(dat)
+dat %>% filter(epiwk=='2001-12-31')
+dat$epiwk <- gsub('2001-12-31','2002-01-01',dat$epiwk)
+dat %>% filter(epiwk=='2001-12-31')
+dat <- arrange(dat, date, age)
+
+dat$age <- dat$age + dat$month/12
+unique(dat$age) #round to years ()
+#dat$age <- round(dat$age, 0)
+dat$age <- ceiling(dat$age)
 
 #compare N serotype hypothesis across all years to cumulative case data
 #functions
@@ -18,7 +35,6 @@ sum.yr.yr <- function(df, age_vect){
   
   
   df.out = cbind.data.frame(age=1:max(age_vect))
-  #df.out = cbind.data.frame(age=1:max(df.sum$age))
   df.out <- merge(df.out, df.sum, by="age", all.x = T, sort = F)
   df.out$Nage[is.na(df.out$Nage)] <- 0
   df.out$year[is.na(df.out$year)] <- unique(df$year)
@@ -28,13 +44,13 @@ sum.yr.yr <- function(df, age_vect){
   df.out <- rbind(df.add, df.out)
   df.out <- arrange(df.out, age)
   df.out$cum_cases <- cumsum(df.out$Nage)
-  df.out$n <- sum(df.out$Nage)
-  df.out$cum_prop_cases <- cumsum(df.out$Nage)/sum(df.out$Nage)
+  df.out$n <- sum(df.sum$Nage)
+  df.out$cum_prop_cases <- df.out$cum_cases/df.out$n
   
   return(df.out)
   
 }
-sum.yr <- function(df){
+sum.yr <- function(df, age_vect){
   
   df.sum <- ddply(df, .(age), summarise, Nage = length(age))
   
@@ -313,228 +329,39 @@ model.age.incidence.series <- function(par.dat, age_vect){
   
   return(p.sum) #returns prevalence by age for each year for fitting to the years for which we have data
 }
-plot.model.series.data <- function(par.dat, age_vect, dat){
+log.lik.last.yr <- function(par, par.dat, age_vect, dat){
   
-  
-  #first, prep the data
-  dat = subset(dat, year<=max(par.dat$year))
-  year.dat <- dlply(dat, .(year))
-  
-  age_vect_year = floor(age_vect)[!duplicated(floor(age_vect))]
-  
-  year.dat.sum <- lapply(year.dat, sum.yr.yr, age_vect = age_vect_year)
-  df.out <- data.table::rbindlist( year.dat.sum)
-  #head(df.out)
-  ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
-    geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
-  
-  
-  out.mod <- model.age.incidence.series(par.dat = par.dat, age_vect = age_vect)
-  head(out.mod)
-  
-  out.mod <- subset(out.mod, year >= min(df.out$year))
-  df.dat <- dplyr::select(df.out, year, age, cum_prop_cases)
-  df.dat$type="data"
-  
-  df.mod <-   dplyr::select(out.mod, year, age, cum_prop_cases)
-  
-  df.mod$type="model"
-  
-  df.all<- rbind(df.mod, df.dat)
-  
-  
-  p1 <- ggplot(data=df.all) + geom_point(aes(x=age, y=cum_prop_cases, color=type))  + 
-    geom_line(aes(x=age, y=cum_prop_cases, color=type)) +facet_wrap(~year)
-  print(p1)
-  
-  
-  # 
-  # p1 <- ggplot(data=subset(df.all, year==year.in)) + geom_point(aes(x=age, y=cum_prop_cases, color=type))  + 
-  #   geom_line(aes(x=age, y=cum_prop_cases, color=type)) +facet_wrap(~year)
-  # print(p1)
-  
-} 
-plot.model.series.data.oneplot <- function(par.dat, age_vect, dat){
-  
-  
-  #first, prep the data
-  dat = subset(dat, year<=max(par.dat$year))
-  year.dat <- dlply(dat, .(year))
-  
-  age_vect_year = floor(age_vect)[!duplicated(floor(age_vect))]
-  
-  year.dat.sum <- lapply(year.dat, sum.yr.yr, age_vect = age_vect_year)
-  df.out <- data.table::rbindlist( year.dat.sum)
-  #head(df.out)
-  ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
-    geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
-  
-  
-  out.mod <- model.age.incidence.series(par.dat = par.dat, age_vect = age_vect)
-  head(out.mod)
-  
-  out.mod <- subset(out.mod, year >= min(df.out$year))
-  df.dat <- dplyr::select(df.out, year, age, cum_prop_cases)
-  df.dat$type="data"
-  
-  df.mod <-   dplyr::select(out.mod, year, age, cum_prop_cases)
-  
-  df.mod$type="model"
-  
-  df.all<- rbind(df.mod, df.dat)
-  
-  linez = c("data" = 1, "model"=2)
-  
-  df.all$epidemic_period <- NA
-  df.all$epidemic_period[df.all$year<=2007]<- 2007
-  df.all$epidemic_period[df.all$year>2007 &df.all$year<=2012]<- 2012
-  df.all$epidemic_period[df.all$year>2012]<- 2019
-  
-  p1 <- ggplot(data=df.all) + geom_point(aes(x=age, y=cum_prop_cases, shape=type, color=year))  + theme_bw() +
-    geom_line(data=subset(df.all, type == "data"), aes(x=age, y=cum_prop_cases, color=year, group=year), linetype=1) +
-    geom_line(data=subset(df.all, type == "model"), aes(x=age, y=cum_prop_cases, color=year, group=year), linetype=2) +
-    scale_color_viridis_c(direction = -1) + facet_wrap(~epidemic_period)
-  print(p1)
-  
-  p1 <- ggplot(data=subset(df.all, year==2007 | year==2012 |year==2019)) + geom_point(aes(x=age, y=cum_prop_cases, shape=type, color=year))  + theme_bw() +
-    geom_line(data=subset(df.all, year==2007 & type == "data" | year==2012 &type == "data" |year==2019& type == "data"), aes(x=age, y=cum_prop_cases, color=year, group=year), linetype=1) +
-    geom_line(data=subset(df.all,year==2007 & type == "model" | year==2012 &type == "model" | year==2019 & type == "model" ), aes(x=age, y=cum_prop_cases, color=year, group=year), linetype=2) +
-    scale_color_viridis_c(direction = -1) + facet_grid(epidemic_period~.)
-  print(p1)
-  
-  
-  # 
-  # p1 <- ggplot(data=subset(df.all, year==year.in)) + geom_point(aes(x=age, y=cum_prop_cases, color=type))  + 
-  #   geom_line(aes(x=age, y=cum_prop_cases, color=type)) +facet_wrap(~year)
-  # print(p1)
-  
-} 
-plot.model.series.data.historical <- function(par.dat, age_vect, dat){
-  
-  
-  #first, prep the data
-  dat = subset(dat, year<=max(par.dat$year))
-  year.dat <- dlply(dat, .(year))
-  
-  age_vect_year = floor(age_vect)[!duplicated(floor(age_vect))]
-  
-  year.dat.sum <- lapply(year.dat, sum.yr.yr, age_vect = age_vect_year)
-  df.out <- data.table::rbindlist( year.dat.sum)
-  #head(df.out)
-  ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
-    geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
-  
-  
-  out.mod <- model.age.incidence.series(par.dat = par.dat, age_vect = age_vect)
-  head(out.mod)
-  
-  #out.mod <- subset(out.mod, year >= min(df.out$year))
-  df.dat <- dplyr::select(df.out, year, age, cum_prop_cases)
-  df.dat$type="data"
-  
-  df.mod <-   dplyr::select(out.mod, year, age, cum_prop_cases)
-  
-  df.mod$type="model"
-  
-  df.all<- rbind(df.mod, df.dat)
-  
-  
-  p1 <- ggplot(data=df.all) + geom_point(aes(x=age, y=cum_prop_cases, color=type))  + 
-    geom_line(aes(x=age, y=cum_prop_cases, color=type)) +facet_wrap(~year)
-  print(p1)
-  
-  
-  # 
-  # p1 <- ggplot(data=subset(df.all, year==year.in)) + geom_point(aes(x=age, y=cum_prop_cases, color=type))  + 
-  #   geom_line(aes(x=age, y=cum_prop_cases, color=type)) +facet_wrap(~year)
-  # print(p1)
-  
-} 
-plot.model.series.data.oneyr <- function(par.dat, age_vect, dat, year.in){
-  
-  
-  #first, prep the data
-  dat = subset(dat, year<=max(par.dat$year))
-  year.dat <- dlply(dat, .(year))
-  
-  age_vect_year = floor(age_vect)[!duplicated(floor(age_vect))]
-  
-  year.dat.sum <- lapply(year.dat, sum.yr.yr, age_vect = age_vect_year)
-  df.out <- data.table::rbindlist( year.dat.sum)
-  #head(df.out)
-  ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
-    geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
-  
-  
-  out.mod <- model.age.incidence.series(par.dat = par.dat, age_vect = age_vect)
-  head(out.mod)
-  
-  df.dat <- dplyr::select(df.out, year, age, cum_prop_cases)
-  df.dat$type="data"
-  
-  df.mod <-   dplyr::select(out.mod, year, age, cum_prop_cases)
-  
-  df.mod$type="model"
-  
-  df.all<- rbind(df.mod, df.dat)
-  
-  
-  # p1 <- ggplot(data=df.all) + geom_point(aes(x=age, y=cum_prop_cases, color=type))  + 
-  #   geom_line(aes(x=age, y=cum_prop_cases, color=type)) +facet_wrap(~year)
-  # print(p1)
-  
-  
-  
-  p1 <- ggplot(data=subset(df.all, year==year.in)) + geom_point(aes(x=age, y=cum_prop_cases, color=type))  + 
-    geom_line(aes(x=age, y=cum_prop_cases, color=type)) +facet_wrap(~year)
-  print(p1)
-  
-} 
-log.lik.fit.all <- function(par, par.dat, dat, age_vect=age_vect){
-  
-  par.dat$lambda <- exp(par)
+  par.dat$lambda[length(par.dat$lambda)] <- exp(par)
   
   
   out.mod <- model.age.incidence.series(par.dat = par.dat, 
                                         age_vect=age_vect)  
   
-  #ggplot(data=out.mod) + geom_point(aes(x=age,y= cum_prop_cases)) + facet_wrap(~year)
+  
   
   #now, select only the years for fitting for which there are data
-  out.mod = subset(out.mod, year >=min(dat$year))
+  out.mod = subset(out.mod, year ==unique(dat$year))
   
   
   #plot(out.mod$cum_prop_cases, type="b")
   out.mod <- arrange(out.mod, year, age)
   dat <- arrange(dat, year, age)
-  #names(dat)[length(names(dat))] <- "cum_prop_cases_data"
-  #names(out.mod)
-  
-  #and merge model and data
-  merge.dat <- merge(out.mod, dat, by = c("year", "age"))
-  merge.dat <- arrange(merge.dat, year, age)
   # # # # 
   #how likely are the data, given the model as truth?
   ll=0
-  for (i in 1:length(merge.dat$age)){
-    ll=ll+dbinom(merge.dat$cum_cases[i],merge.dat$n[i],p=merge.dat$cum_prop_cases[i],log=T) 
+  for (i in 1:length(dat$age)){
+    ll=ll+dbinom(dat$cum_cases[i],dat$n[i],p=out.mod$cum_prop_cases[i],log=T) 
   }
   
   return(-ll)
 }
-fit.all.yrs.seq.yr.BFGS <- function(dat, lambda.guess, N.sero.fix, age_vect){
+fit.one.year.BFGS <- function(dat, par.dat, lambda.guess, N.sero.fix, age_vect){
   
-  #get the birth year of everyone in the dataset, 
-  #the furthest back is where you start
-  dat$birth_year = dat$year-dat$age
-  start.year <- min(dat$birth_year)
-  dist.back =  min(dat$year) -start.year
-  # #for the first year in the dataset, 
-  # #estimate foi just from the cross-sectional data
-  # #min.year <- min(as.numeric(as.character(dat$year)))
-  # dist.back <- max(dat$age[dat$year==min(dat$year)])#22
-  # dist.back <- max(dat$age[dat$year==max(dat$year)])#22
-  age_vect_year = 0:dat$age[dat$birth_year==start.year]
+  #for the first year in the dataset, 
+  #estimate foi just from the cross-sectional data
+  #min.year <- min(as.numeric(as.character(dat$year)))
+  dist.back <- max(dat$age[dat$year==min(dat$year)])#16
+  
   #first, prep the data
   year.dat <- dlply(dat, .(year))
   
@@ -542,11 +369,68 @@ fit.all.yrs.seq.yr.BFGS <- function(dat, lambda.guess, N.sero.fix, age_vect){
   
   year.dat.sum <- lapply(year.dat, sum.yr.yr, age_vect = age_vect_year)
   df.out <- data.table::rbindlist( year.dat.sum)
-  # head(df.out)
-  #   ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
-  #         geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
-  # # # 
-  # #make your guess parameters
+  #head(df.out)
+  # ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
+  #       geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
+  # 
+  
+  
+  
+  
+  #and fit it cumulatively
+  
+  #now test the next year with all 4 serotype assumptions
+  log.lambda.guess <- log(lambda.guess)
+  
+  out.NS <- optim(par = log.lambda.guess, 
+                  fn=log.lik.last.yr, 
+                  method = "BFGS",
+                  par.dat=par.dat, 
+                  age_vect=age_vect, 
+                  dat=df.out)
+  
+  
+  par.dat$lambda_KP <- NA
+  par.dat$lambda_KP[length(par.dat$lambda_KP)] <- exp(out.NS$par)
+  par.dat$llik_KP <- NA
+  par.dat$llik_KP <- out.NS$value
+  par.dat$convergence_KP <- NA
+  par.dat$convergence_KP <- out.NS$convergence
+  
+  
+  
+  #and return
+  
+  return(par.dat)
+  
+}
+fit.all.yrs.seq.yr.BFGS <- function(dat, dist.back, lambda.guess, N.sero.fix, age_vect){
+  
+  
+  #for the first year in the dataset, 
+  #estimate foi just from the cross-sectional data
+  #min.year <- min(as.numeric(as.character(dat$year)))
+  # dist.back <- max(dat$age[dat$year==min(dat$year)])
+  # 
+  # #edit lambda guess accordingly - it assumes you go 22 years back
+  # if(dist.back<22){
+  #   diff.tmp = 22-dist.back +1
+  #   lambda.guess <-   lambda.guess[diff.tmp:length(lambda.guess)]
+  # }
+  
+  
+  #first, prep the data
+  year.dat <- dlply(dat, .(year))
+  
+  age_vect_year = floor(age_vect)[!duplicated(floor(age_vect))]
+  
+  year.dat.sum <- lapply(year.dat, sum.yr.yr, age_vect = age_vect_year)
+  df.out <- data.table::rbindlist( year.dat.sum)
+  # #head(df.out)
+  #  ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
+  #    geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
+  # # 
+  #make your guess parameters
   #lambda is takes data from the previous year and creates infections in this year
   if(length(N.sero.fix)==1 & length(lambda.guess)==1){ #here, number of serotypes is fixed across the time series
     par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
@@ -579,6 +463,7 @@ fit.all.yrs.seq.yr.BFGS <- function(dat, lambda.guess, N.sero.fix, age_vect){
                   fn=log.lik.fit.all, 
                   method = "BFGS",
                   par.dat=par.dat, 
+                  age_vect=age_vect, 
                   dat=df.out)
   
   
@@ -593,73 +478,40 @@ fit.all.yrs.seq.yr.BFGS <- function(dat, lambda.guess, N.sero.fix, age_vect){
   return(par.dat)
   
 }
-fit.all.yrs.seq.yr.NM <- function(dat, lambda.guess, N.sero.fix){
+log.lik.fit.all <- function(par, par.dat, age_vect, dat){
   
-  #for the first year in the dataset, 
-  #estimate foi just from the cross-sectional data
-  #min.year <- min(as.numeric(as.character(dat$year)))
-  dist.back <- max(dat$age[dat$year==min(dat$year)])#22
+  par.dat$lambda <- exp(par)
   
-  #first, prep the data
-  year.dat <- dlply(dat, .(year))
   
-  #age_vect_year = floor(age_vect)[!duplicated(floor(age_vect))]
+  out.mod <- model.age.incidence.series(par.dat = par.dat, 
+                                        age_vect=age_vect)  
   
-  year.dat.sum <- lapply(year.dat, sum.yr.yr)
-  df.out <- data.table::rbindlist( year.dat.sum)
-  #head(df.out)
-  # ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
-  #       geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
-  # 
-  #make your guess parameters
-  #lambda is takes data from the previous year and creates infections in this year
-  if(length(N.sero.fix)==1 & length(lambda.guess)==1){ #here, number of serotypes is fixed across the time series
-    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
-                                lambda = rep(lambda.guess, length((min(dat$year)-dist.back +1):max(dat$year))),
-                                N_sero = rep(N.sero.fix, length((min(dat$year)-dist.back +1):max(dat$year))))
-    
-  }else if (length(N.sero.fix)>1 & length(lambda.guess)==1){ #here you can vary the sero-strains by provifing your own vector
-    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
-                                lambda = rep(lambda.guess, length((min(dat$year)-dist.back +1):max(dat$year))),
-                                N_sero = N.sero.fix)
-  }else if (length(N.sero.fix)>1 & length(lambda.guess)>1){
-    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
-                                lambda = lambda.guess,
-                                N_sero = N.sero.fix)
-    
-  }else if (length(N.sero.fix)==1 & length(lambda.guess)>1){
-    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
-                                lambda = lambda.guess,
-                                N_sero =rep(N.sero.fix, length((min(dat$year)-dist.back +1):max(dat$year))))
-    
+  #ggplot(data=out.mod) + geom_point(aes(x=age,y= cum_prop_cases)) + facet_wrap(~year)
+  
+  #now, select only the years for fitting for which there are data
+  out.mod = subset(out.mod, year >=min(dat$year))
+  
+  
+  #plot(out.mod$cum_prop_cases, type="b")
+  out.mod <- arrange(out.mod, year, age)
+  
+
+  
+  dat <- arrange(dat, year, age)
+  
+  #here, there will be model projections through age_vect that may exceed the data
+  
+  # # # # 
+  #how likely are the data, given the model as truth?
+  ll=0
+  for (i in 1:length(dat$age)){
+    ll=ll+dbinom(dat$cum_cases[i],dat$n[i],p=out.mod$cum_prop_cases[i],log=T) 
   }
   
-  
-  #and fit it cumulatively
-  
-  #now test the next year with all 4 serotype assumptions
-  log.lambda.guess <- log(par.dat$lambda)
-  
-  out.NS <- optim(par = log.lambda.guess, 
-                  fn=log.lik.fit.all, 
-                  method = "Nelder-Mead",
-                  par.dat=par.dat, 
-                  dat=df.out)
-  
-  
-  par.dat$lambda <- exp(out.NS$par)
-  par.dat$llik <- out.NS$value
-  par.dat$convergence <- out.NS$convergence
-  
-  
-  
-  #and return
-  
-  return(par.dat)
-  
+  return(-ll)
 }
 get.lliks <- function(index.par, par.dat, df,  n.iterations, age_vect){
-  
+  print(index.par)
   #sample from 0 to 300, using 3000 numbers
   lambda.choose = par.dat$lambda[index.par]
   lambda.test = seq(par.dat$lambda_min[index.par], par.dat$lambda_max[index.par], length=n.iterations)
@@ -710,7 +562,7 @@ get.lliks <- function(index.par, par.dat, df,  n.iterations, age_vect){
   #and return
   return( ret.llik )
 }
-profile.likelihood.CIs <- function(par.set, age_vect, dat,lambda.min, lambda.max, n.iterations){
+profile.likelihood.CIs <- function(par.set, age_vect, dat, n.iterations){
   
   #profile the range of likelihoods across each lambda parameter
   #to get confidence intervals around it
@@ -739,7 +591,8 @@ profile.likelihood.CIs <- function(par.set, age_vect, dat,lambda.min, lambda.max
   
   
   #now apply over all the parameters to get your likelihoods across this range of lambda values
-  index.list <- as.list(1:nrow(par.set))
+  #start with #2 since we have no control over what happens in that first timestep
+  index.list <- as.list(2:nrow(par.set))
   out.list <- lapply(index.list, get.lliks, par.dat=par.set, df= df.out, 
                      n.iterations = n.iterations, age_vect=age_vect)
   
@@ -754,113 +607,29 @@ profile.likelihood.CIs <- function(par.set, age_vect, dat,lambda.min, lambda.max
 }
 
 
-#load the age structured national data
-dat <- read.csv(file = paste0(homewd, "/data/DENV-Nat-Aged.csv") , header = T, stringsAsFactors = F)
-# dat
-dat %>% filter(epiwk=='2001-12-31')
-dat$epiwk <- gsub('2001-12-31','2002-01-01',dat$epiwk)
-dat %>% filter(epiwk=='2001-12-31')
-dat <- arrange(dat, date, age)
+#load the national parameter data
 
-unique(dat$age) #round to years
-#dat$age <- round(dat$age, 0)
-dat$age <- ceiling(dat$age)
-
-#now fit to get convergence
-lambda.guess = rep(0.01, 40) #one value for each year in the dataset...
-fit.nat.NS2.BFGS <- fit.all.yrs.seq.yr.BFGS(dat=dat,
-                                          lambda.guess=lambda.guess,
-                                          N.sero.fix=2,
-                                          age_vect=seq(0,max(dat$age), by=1/4))
-
-fit.nat.NS2.NM <- fit.all.yrs.seq.yr.NM(dat=dat,
-                                        lambda.guess=lambda.guess,
-                                         N.sero.fix=2)
-
-save(cumulative.fit.par.NS2.BFGS, 
-     file=paste0(homewd, "/figure-development/Fig2-S2-S3/tmp-dat/cumulative.fit.NS2.new.Rdata"))
-
-#and 2
-lambda.guess = (cumulative.fit.par.NS2.BFGS$lambda)
-lambda.guess[1] <- 0.00001
-cumulative.fit.par.NS2.BFGS <- fit.all.yrs.seq.yr.BFGS(dat=dat,
-                                                    lambda.guess=lambda.guess,
-                                                    N.sero.fix=2,
-                                                    age_vect=seq(0,22, by=1/4))
-
-cumulative.fit.par.NS2.NM <- fit.all.yrs.seq.yr.extend(dat=dat,
-                                                       lambda.guess=lambda.guess,
-                                                       N.sero.fix=2,
-                                                       age_vect=seq(0,22, by=1/4))
-
-save(cumulative.fit.par.NS2.BFGS, file = paste0(homewd, "/figure-development/Fig2-S2-S3/tmp-dat/cumulative.fit.par.NS2.BFGS.Rdata"))
-with(cumulative.fit.par.NS2.BFGS, plot(year[22:40], lambda[22:40], type="b"))
-with(cumulative.fit.par.NS3.BFGS[2:nrow(cumulative.fit.par.NS2.BFGS),], plot(year, lambda, type="b"))
-with(subset(cumulative.fit.par.NS2.BFGS, year>=2002), plot(year, lambda, type="b"))
-
-plot.model.series.data(par.dat=cumulative.fit.par.NS2.BFGS, age_vect=seq(0,22, by=1/4), dat=dat)
-plot.model.series.data.oneyr(par.dat=cumulative.fit.par.NS2.BFGS, 
-                             age_vect=seq(0,22, by=1/4), 
-                             dat=dat, year.in = 2020)
-plot.model.series.data.oneyr(par.dat=cumulative.fit.par.NS2.BFGS, 
-                             age_vect=seq(0,22, by=1/4), 
-                             dat=dat, year.in = 2019)
-
-#and 3
-lambda.guess = (cumulative.fit.par.NS2.BFGS$lambda*2)/3
-cumulative.fit.par.NS3.BFGS <- fit.all.yrs.seq.yr.BFGS(dat=dat,
-                                                     lambda.guess=lambda.guess,
-                                                     N.sero.fix=3,
-                                                     age_vect=seq(0,22, by=1/4))
-
-save(cumulative.fit.par.NS3.BFGS, file=paste0(homewd, "/figure-development/Fig2-S2-S3/tmp-dat/cumulative.fit.par.NS3.BFGS.Rdata"))
-plot.model.series.data(par.dat=cumulative.fit.par.NS3.BFGS, age_vect=seq(0,22, by=1/4), dat=dat)
-plot.model.series.data.oneyr(par.dat=cumulative.fit.par.NS3.BFGS, 
-                             age_vect=seq(0,22, by=1/4), 
-                             dat=dat, year.in = 2020)
-with(cumulative.fit.par.NS3.BFGS[2:nrow(cumulative.fit.par.NS3.BFGS),], plot(year, lambda, type="b"))
-with(subset(cumulative.fit.par.NS3.BFGS, year>=2002), plot(year, lambda, type="b"))
-
-#and 4
-lambda.guess = (cumulative.fit.par.NS2.BFGS$lambda*2)/4
-cumulative.fit.par.NS4.BFGS <- fit.all.yrs.seq.yr.BFGS(dat=dat,
-                                                       lambda.guess=lambda.guess,
-                                                       N.sero.fix=4,
-                                                       age_vect=seq(0,22, by=1/4))
-
-save(cumulative.fit.par.NS4.BFGS, file=paste0(homewd, "/figure-development/Fig2-S2-S3/tmp-dat/cumulative.fit.par.NS4.BFGS.Rdata"))
-with(cumulative.fit.par.NS4.BFGS[2:nrow(cumulative.fit.par.NS3.BFGS),], plot(year, lambda, type="b"))
-with(subset(cumulative.fit.par.NS4.BFGS, year>=2002), plot(year, lambda, type="b"))
-
-
-#and try it with your epidemic hypotheses
-load(paste0(homewd, "/figure-development/Fig2-S2-S3/tmp-dat/cumulative.fit.par.NS1.BFGS.Rdata"))
-cumulative.fit.par.NS1.BFGS$lambda_guess <- cumulative.fit.par.NS1.BFGS$lambda
-cumulative.fit.par.NS1.BFGS$lambda_guess[cumulative.fit.par.NS1.BFGS$year==2007 | cumulative.fit.par.NS1.BFGS$year==2012 | cumulative.fit.par.NS1.BFGS$year==2019] <- (cumulative.fit.par.NS1.BFGS$lambda_guess[cumulative.fit.par.NS1.BFGS$year==2007 | cumulative.fit.par.NS1.BFGS$year==2012 | cumulative.fit.par.NS1.BFGS$year==2019])/2
-cumulative.fit.par.NS1.BFGS$N_sero_guess <- 1
-cumulative.fit.par.NS1.BFGS$N_sero_guess[cumulative.fit.par.NS1.BFGS$year==2007 | cumulative.fit.par.NS1.BFGS$year==2012 | cumulative.fit.par.NS1.BFGS$year==2019] <- 2
-lambda.guess = cumulative.fit.par.NS1.BFGS$lambda_guess
-N.sero.guess = cumulative.fit.par.NS1.BFGS$N_sero_guess
-
-cumulative.fit.combined <- fit.all.yrs.seq.yr.BFGS(dat=dat,
-                                                  lambda.guess=lambda.guess,
-                                                  N.sero.fix=N.sero.guess,
-                                                  age_vect=seq(0,22, by=1/4))
-save(cumulative.fit.combined, file=paste0(homewd, "/figure-development/Fig2-S2-S3/tmp-dat/umulative.fit.combined.BFGS.Rdata"))
-with(cumulative.fit.combined[2:nrow(cumulative.fit.combined),], plot(year, lambda, type="b"))
-with(subset(cumulative.fit.combined, year>=2002), plot(year, lambda, type="b"))
-plot.model.series.data(par.dat=cumulative.fit.combined, age_vect=seq(0,22, by=1/4), dat=dat)
+nat.par <- read.csv(file = paste0(homewd, "/data/foi-fit-national.csv"), header = T, stringsAsFactors = F)
+lambda.guess = nat.par$lambda
+fit.KP.nat.all <- fit.all.yrs.seq.yr.BFGS(dat=dat, dist.back = 22,
+                                             lambda.guess=lambda.guess, N.sero.fix=2,
+                                             age_vect=seq(0,22, by=1/4))
+#save(fit.KP.all, file = paste0(homewd, "/figure-development/Fig3/new.fitKP.national.Rdata"))
+with(subset(fit.KP.all, year>=2002), plot(year, lambda, type="b"))
+with(subset(fit.KP.all, year>1987), plot(year, lambda, type="b"))
 
 
 ################################################################
 ################################################################
-load(paste0(homewd, "/figure-development/Fig2-S2-S3/tmp-dat/cumulative.fit.par.NS2.BFGS.Rdata"))
+load(paste0(homewd, "/figure-development/Fig3/new.fitKP.national.Rdata"))
 #and add in some min/max guesses
 
-par.profile = cumulative.fit.par.NS2.BFGS
+par.profile = fit.KP.all
 par.profile$lambda_min <- 0.0001
 par.profile$lambda_max <- 1
 par.profile$lambda_max[1] <- 150
+par.profile$lambda_min[2] <- 0.0000001
+par.profile$lambda_min[length(par.profile$lambda_min)] <- 0.0000001
 
 
 
@@ -868,8 +637,6 @@ par.profile$lambda_max[1] <- 150
 profile.CIs <- profile.likelihood.CIs(par.set = par.profile,
                                        dat=dat,
                                        age_vect=seq(0,22, by=1/4),
-                                       lambda.min = 0.0001, 
-                                       lambda.max = 200,
                                        n.iterations = 100)
 
 profile.CIs$eval_CI <- NA
@@ -877,4 +644,4 @@ profile.CIs$eval_CI[profile.CIs$lambda>profile.CIs$lci & profile.CIs$lambda<prof
 profile.CIs$eval_CI[is.na(profile.CIs$eval_CI)] <- "parameter estimation uncertain"
 
 foi.fit.dat <- profile.CIs
-#write.csv(foi.fit.dat, file = paste0(homewd, "/data/foi-fit-dat.csv"), row.names = F)
+#write.csv(foi.fit.dat, file = paste0(homewd, "/data/foi-fit-dat-kampong-speu.csv"), row.names = F)

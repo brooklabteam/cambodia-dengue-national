@@ -1,0 +1,2 @@
+"year","lambda","N_sero","llik","convergence","lambda_min","lambda_max","lci","uci","eval_CI","lambda_KP","llik_KP","convergence_KP","lambda_KP_lci","lambda_KP_uci"
+2019,0.0837549698045462,2,115191.558909964,0,1e-04,1,0.0821,0.0851,"lambda within CI bounds",0.125425710821781,92.9188364427397,0,0.0801,0.1881
