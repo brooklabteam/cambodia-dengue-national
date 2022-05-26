@@ -105,16 +105,16 @@ dat.foi$lambda_per_1000_uci <- dat.foi$uci*1000
 dat.foi$year_plot <- dat.foi$year
 dat.foi$year_plot <- as.factor(dat.foi$year_plot)
 
-pB2 <- ggplot(data = subset(dat.foi, year>=2002)) +theme_bw() +
-  theme(panel.grid = element_blank(), axis.title.x = element_blank(),
-        axis.title.y = element_text(size=14),
-        plot.margin = unit(c(.1,.1,.1,.1), "lines"),
-        axis.text = element_text(size=12)) + scale_color_manual(values=colz) +
-  geom_line(aes(x=year, y=lambda_per_1000)) + 
-  ylab(bquote(lambda~' (/1000 ppl)')) +
-  geom_point(aes(x=year, y=lambda_per_1000, color=year_plot), size=3, show.legend = F) +
-  geom_ribbon(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci), alpha=.3) +
-  geom_linerange(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci, color=year_plot), size=1, show.legend = F)
+# pB2 <- ggplot(data = subset(dat.foi, year>=2002)) +theme_bw() +
+#   theme(panel.grid = element_blank(), axis.title.x = element_blank(),
+#         axis.title.y = element_text(size=14),
+#         plot.margin = unit(c(.1,.1,.1,.1), "lines"),
+#         axis.text = element_text(size=12)) + scale_color_manual(values=colz) +
+#   geom_line(aes(x=year, y=lambda_per_1000)) + 
+#   ylab(bquote(lambda~' (/1000 ppl)')) +
+#   geom_point(aes(x=year, y=lambda_per_1000, color=year_plot), size=3, show.legend = F) +
+#   geom_ribbon(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci), alpha=.3) +
+#   geom_linerange(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci, color=year_plot), size=1, show.legend = F)
 
 pB2 <- ggplot(data = subset(dat.foi, year>=2002)) +theme_bw() +
   theme(panel.grid = element_blank(), axis.title.x = element_blank(),
@@ -133,18 +133,18 @@ pB2 <- ggplot(data = subset(dat.foi, year>=2002)) +theme_bw() +
 library(ggmap)
 colz.long <- c(rep("#cdcdcb", 21), colz)
 names(colz.long) <- 1981:2020
-pB1 <- ggplot(data = subset(dat.foi, year>=1980)) +theme_bw() +
-  theme(panel.grid = element_blank(), axis.title.x = element_blank(),
-        axis.title.y = element_text(size=16),
-        axis.text = element_text(size=14)) + scale_color_manual(values=colz.long) +
-  geom_line(aes(x=year, y=lambda_per_1000)) + 
-  geom_vline(aes(xintercept=2001.5), linetype=2, color="red") +
-  ylab(bquote(lambda~',force of infection (/1000 ppl)')) +
-  geom_point(aes(x=year, y=lambda_per_1000, color=year_plot), size=3, show.legend = F) +
-  geom_ribbon(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci), alpha=.3) 
-  #coord_cartesian(ylim=c(0,1000))
+# pB1 <- ggplot(data = subset(dat.foi, year>=1980)) +theme_bw() +
+#   theme(panel.grid = element_blank(), axis.title.x = element_blank(),
+#         axis.title.y = element_text(size=16),
+#         axis.text = element_text(size=14)) + scale_color_manual(values=colz.long) +
+#   geom_line(aes(x=year, y=lambda_per_1000)) + 
+#   geom_vline(aes(xintercept=2001.5), linetype=2, color="red") +
+#   ylab(bquote(lambda~',force of infection (/1000 ppl)')) +
+#   geom_point(aes(x=year, y=lambda_per_1000, color=year_plot), size=3, show.legend = F) +
+#   geom_ribbon(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci), alpha=.3) 
+#   #coord_cartesian(ylim=c(0,1000))
 
-pB1 <- ggplot(data = subset(dat.foi, year>=1980)) +theme_bw() +
+pB1 <- ggplot(data = dat.foi) +theme_bw() +
   theme(panel.grid = element_blank(), axis.title.x = element_blank(),
         axis.title.y = element_text(size=16),
         axis.text = element_text(size=14)) + scale_color_manual(values=colz.long) +
@@ -156,9 +156,9 @@ pB1 <- ggplot(data = subset(dat.foi, year>=1980)) +theme_bw() +
 #coord_cartesian(ylim=c(0,1000))
 
 
-
-pB <- pB1 + annotation_custom(ggplotGrob(pB2), xmin = 2002, xmax = 2021, ymin = 200, ymax = 470) + 
-      theme(plot.margin = unit(c(.5,.5,1.8,.5), "lines"),)
+# 
+# pB <- pB1 + annotation_custom(ggplotGrob(pB2), xmin = 2002, xmax = 2021, ymin = 200, ymax = 470) + 
+#       theme(plot.margin = unit(c(.5,.5,1.8,.5), "lines"),)
 
 pB <- pB1 + annotation_custom(ggplotGrob(pB2), xmin = 2002, xmax = 2021, ymin = .5, ymax = .98) + 
   theme(plot.margin = unit(c(.5,.5,1.8,.5), "lines"),)
