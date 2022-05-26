@@ -24,7 +24,7 @@ sum.yr <- function(df, age_vect){
   df.out <- rbind(c(0,0), df.out)
   df.out <- arrange(df.out, age)
   df.out$cum_cases <- cumsum(df.out$Nage)
-  df.out$n <- sum(df.out$Nage)
+  df.out$n <- sum(df.sum$Nage)
   df.out$cum_prop_cases <- cumsum(df.out$Nage)/sum(df.out$Nage)
   return(df.out)
   
@@ -112,15 +112,28 @@ pB2 <- ggplot(data = subset(dat.foi, year>=2002)) +theme_bw() +
         axis.text = element_text(size=12)) + scale_color_manual(values=colz) +
   geom_line(aes(x=year, y=lambda_per_1000)) + 
   ylab(bquote(lambda~' (/1000 ppl)')) +
-  geom_point(aes(x=year, y=lambda_per_1000, color=year_plot), size=3, show.legend = F) #+
-  #geom_ribbon(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci), alpha=.3) +
-  #geom_linerange(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci, color=year_plot), size=1, show.legend = F)
+  geom_point(aes(x=year, y=lambda_per_1000, color=year_plot), size=3, show.legend = F) +
+  geom_ribbon(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci), alpha=.3) +
+  geom_linerange(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci, color=year_plot), size=1, show.legend = F)
+
+pB2 <- ggplot(data = subset(dat.foi, year>=2002)) +theme_bw() +
+  theme(panel.grid = element_blank(), axis.title.x = element_blank(),
+        axis.title.y = element_text(size=14),
+        plot.margin = unit(c(.1,.1,.1,.1), "lines"),
+        axis.text = element_text(size=12)) + scale_color_manual(values=colz) +
+  geom_line(aes(x=year, y=lambda)) + 
+  ylab(bquote(lambda)) +
+  geom_point(aes(x=year, y=lambda, color=year_plot), size=3, show.legend = F) +
+  geom_ribbon(aes(x=year, ymin=lci, ymax=uci), alpha=.3) +
+  geom_linerange(aes(x=year, ymin=lci, ymax=uci, color=year_plot), size=1, show.legend = F)
+
+
 
 
 library(ggmap)
 colz.long <- c(rep("#cdcdcb", 21), colz)
 names(colz.long) <- 1981:2020
-pB1 <- ggplot(data = subset(dat.foi, year>=1982)) +theme_bw() +
+pB1 <- ggplot(data = subset(dat.foi, year>=1980)) +theme_bw() +
   theme(panel.grid = element_blank(), axis.title.x = element_blank(),
         axis.title.y = element_text(size=16),
         axis.text = element_text(size=14)) + scale_color_manual(values=colz.long) +
@@ -128,12 +141,27 @@ pB1 <- ggplot(data = subset(dat.foi, year>=1982)) +theme_bw() +
   geom_vline(aes(xintercept=2001.5), linetype=2, color="red") +
   ylab(bquote(lambda~',force of infection (/1000 ppl)')) +
   geom_point(aes(x=year, y=lambda_per_1000, color=year_plot), size=3, show.legend = F) +
-  geom_ribbon(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci), alpha=.3) #+
+  geom_ribbon(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci), alpha=.3) 
+  #coord_cartesian(ylim=c(0,1000))
 
-pB <- pB1 + annotation_custom(ggplotGrob(pB2), xmin = 2002, xmax = 2021, ymin = 400, ymax = 1000) + 
+pB1 <- ggplot(data = subset(dat.foi, year>=1980)) +theme_bw() +
+  theme(panel.grid = element_blank(), axis.title.x = element_blank(),
+        axis.title.y = element_text(size=16),
+        axis.text = element_text(size=14)) + scale_color_manual(values=colz.long) +
+  geom_line(aes(x=year, y=lambda)) + 
+  geom_vline(aes(xintercept=2001.5), linetype=2, color="red") +
+  ylab(bquote(lambda~',force of infection (per capita)')) +
+  geom_point(aes(x=year, y=lambda, color=year_plot), size=3, show.legend = F) +
+  geom_ribbon(aes(x=year, ymin=lci, ymax=uci), alpha=.3) 
+#coord_cartesian(ylim=c(0,1000))
+
+
+
+pB <- pB1 + annotation_custom(ggplotGrob(pB2), xmin = 2002, xmax = 2021, ymin = 200, ymax = 470) + 
       theme(plot.margin = unit(c(.5,.5,1.8,.5), "lines"),)
 
-
+pB <- pB1 + annotation_custom(ggplotGrob(pB2), xmin = 2002, xmax = 2021, ymin = .5, ymax = .98) + 
+  theme(plot.margin = unit(c(.5,.5,1.8,.5), "lines"),)
 
 
 
@@ -159,7 +187,7 @@ plot.model.series.data.whole <- function(par.dat, age_vect, dat){
   df.out <- data.table::rbindlist( year.dat.sum)
   
   
-  out.mod <- model.age.incidence.series(par.dat = par.dat, age_vect = age_vect)
+  out.mod <- model.age.incidence.series(par.dat = par.dat, age_vect = age_vect, year.start = min(par.dat$year))
   head(out.mod)
   
   #and also run it at the uci and lci
@@ -167,8 +195,8 @@ plot.model.series.data.whole <- function(par.dat, age_vect, dat){
   par.dat.lci$lambda <- par.dat.lci$lci
   par.dat.uci$lambda <- par.dat.uci$uci
   
-  out.mod.lci <- model.age.incidence.series(par.dat = par.dat.lci, age_vect = age_vect)
-  out.mod.uci <- model.age.incidence.series(par.dat = par.dat.uci, age_vect = age_vect)
+  out.mod.lci <- model.age.incidence.series(par.dat = par.dat.lci, age_vect = age_vect, year.start = min(par.dat$year))
+  out.mod.uci <- model.age.incidence.series(par.dat = par.dat.uci, age_vect = age_vect,year.start = min(par.dat$year))
   
   head(out.mod.lci)
   head(out.mod.uci)
@@ -228,7 +256,7 @@ sum.yr.yr <- function(df, age_vect){
   return(df.out)
   
 }
-model.age.incidence.series <- function(par.dat, age_vect){
+model.age.incidence.series <- function(par.dat, age_vect, year.start){
   
   # you will have one lambda for each year in the time series
   # and one N-sero for each year as well
@@ -279,7 +307,7 @@ model.age.incidence.series <- function(par.dat, age_vect){
   age_tracker = rep(list(age_tracker),lts)
   
   year_tracker= rep(NA, (length(age_vect)-1))
-  year_tracker[1] <- 1980
+  year_tracker[1] <- year.start
   year_tracker = rep(list(year_tracker),lts)
   
   year.start= min(par.dat$year)
@@ -523,7 +551,7 @@ plot.model.series.data.epi <- function(par.dat, age_vect, dat){
   df.out <- data.table::rbindlist( year.dat.sum)
   
   
-  out.mod <- model.age.incidence.series(par.dat = par.dat, age_vect = age_vect)
+  out.mod <- model.age.incidence.series(par.dat = par.dat, age_vect = age_vect, year.start = min(par.dat$year))
   head(out.mod)
   
   #and also run it at the uci and lci
@@ -531,8 +559,8 @@ plot.model.series.data.epi <- function(par.dat, age_vect, dat){
   par.dat.lci$lambda <- par.dat.lci$lci
   par.dat.uci$lambda <- par.dat.uci$uci
   
-  out.mod.lci <- model.age.incidence.series(par.dat = par.dat.lci, age_vect = age_vect)
-  out.mod.uci <- model.age.incidence.series(par.dat = par.dat.uci, age_vect = age_vect)
+  out.mod.lci <- model.age.incidence.series(par.dat = par.dat.lci, age_vect = age_vect, year.start = min(par.dat$year))
+  out.mod.uci <- model.age.incidence.series(par.dat = par.dat.uci, age_vect = age_vect, year.start = min(par.dat$year))
   
   head(out.mod.lci)
   head(out.mod.uci)
