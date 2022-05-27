@@ -99,9 +99,9 @@ pA <- ggplot(data=dat.sum)+ geom_point(aes(x=age, y=cum_prop_cases, color=year))
 #load the FOI under assumptions of a 2-seroptype sysetm
 #eventually will move to data folder, but leaving here for now until we have confidence intervals to match
 dat.foi <- read.csv(file = paste0(homewd, "/data/foi-fit-national.csv"), header = T, stringsAsFactors = F)
-dat.foi$lambda_per_1000 <- dat.foi$lambda*1000
-dat.foi$lambda_per_1000_lci <- dat.foi$lci*1000
-dat.foi$lambda_per_1000_uci <- dat.foi$uci*1000
+# dat.foi$lambda_per_1000 <- dat.foi$lambda*1000
+# dat.foi$lambda_per_1000_lci <- dat.foi$lci*1000
+# dat.foi$lambda_per_1000_uci <- dat.foi$uci*1000
 dat.foi$year_plot <- dat.foi$year
 dat.foi$year_plot <- as.factor(dat.foi$year_plot)
 
