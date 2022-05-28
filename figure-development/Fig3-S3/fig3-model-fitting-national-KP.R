@@ -2,11 +2,11 @@
 
 rm(list=ls())
 
-library(ggplot2)
-library(plyr)
-library(dplyr)
-library(lubridate)
-library(matrixcalc)
+require(ggplot2)
+require(plyr)
+require(dplyr)
+require(lubridate)
+require(matrixcalc)
 
 homewd= "/Users/carabrook/Developer/cambodia-dengue-national/"
 setwd(homewd)
@@ -732,8 +732,8 @@ lambda.guess.dat <- read.csv(file = paste0(homewd, "data/foi-fit-national.csv"),
 
 #now fit to get convergence
 lambda.guess = lambda.guess.dat$lambda[7:length(lambda.guess.dat$lambda)]
-lambda.guess[1] <- 0.00001
-lambda.guess[2] <- 0.001
+#lambda.guess[1] <- 0.00001
+#lambda.guess[2] <- 0.001
 
 fit.KP.nat.all <- fit.all.yrs.seq.yr.BFGS(dat=dat, dist.back = 16,
                                              lambda.guess=lambda.guess,

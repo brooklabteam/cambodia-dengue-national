@@ -49,7 +49,9 @@ dat.all.denv1$Accession[dat.all.denv1$tip_label=="NC_002640_DENV4"] <- "NC_00264
 dat.all.denv1$Serotype[dat.all.denv1$tip_label=="NC_002640_DENV4"] <- "DENV-4"
 
 dat.all.denv1 <- dplyr::select(dat.all.denv1, tip_label, Accession, Locality, Serotype, Subclade)
-
+unique(dat.all.denv1$Subclade)
+subset(dat.all.denv1, is.na(Subclade))
+dat.all.denv1$Subclade[dat.all.denv1$Serotype=="DENV-4"] <- "Outgroup"
 
 colz1 = c('Genotype-I' = "tomato",
           'Genotype-II' = "royalblue", 
@@ -78,7 +80,7 @@ gen1 <- MRCA(rooted.D1, which(rooted.D1$tip.label == "AY726550_Myanmar_2001" ),w
 
 
 dat.all.denv1$Subclade
-dat.all.denv1$Subclade[is.na(dat.all.denv1$Subclade)] <- "Outgroup"
+#dat.all.denv1$Subclade[is.na(dat.all.denv1$Subclade)] <- "Outgroup"
 dat.all.denv1$Subclade <- factor(dat.all.denv1$Subclade, 
                                  levels=c("Genotype-I", "Genotype-II", "Genotype-III",
                                           "Old-Cambodia", "New-Cambodia", "Outgroup")) 
@@ -183,11 +185,11 @@ pB
 
 #and together
 
-FigSXX <- cowplot::plot_grid(pA, pB, ncol = 2, nrow = 1, labels = c("a", "b"),label_size = 18)
+FigS4 <- cowplot::plot_grid(pA, pB, ncol = 2, nrow = 1, labels = c("a", "b"),label_size = 18)
 
 
-ggsave(file = paste0(homewd, "figures/final-figures/SuppFig4.png"),
-       plot=FigSXX,
+ggsave(file = paste0(homewd, "/final-figures/FigS4.png"),
+       plot=FigS4,
        units="mm",  
        width=100, 
        height=60, 
