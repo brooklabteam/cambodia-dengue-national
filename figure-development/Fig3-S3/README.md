@@ -1,5 +1,0 @@
-# This folder contains the script to generate Figure 3 of the main text and Fig S3 of the supplement.
-
-First, running the fitting scripts to generate the FOI estimates. The script, "fig3-model-fitting-cohort.R", fits an FOI model to 2 years (2019 and 2020) of age-structured incidence data from our cohort study in Kampong Speu province. The script, "fig3-model-fitting-national-KP.R" fits an FOI model to 18 years of national age-structured incidence data for Kampong Speu province specifically. This is the same as the script "fig2-model-fitting.R" in the "Fig2-S2" subfolder but run on a provincial level instead of national. The parameter estimates generated from these scripts (as well as the datasets they use) are all located in the "data" folder. The FOI estimates for the national-level Kampong Speu surveillance data are called "foi-fit-KP-national.csv" and the estimates for the 2019 and 2020 cohort data are called "foi-kampong-speu-2019-cohort.csv".
-
-The script "fig3-S3.R" pulls these FOI estimates, runs the age-prevalence model, and compares with the corresponding data to produce Figure 3 of the main text and Figure S3 of the supplement.
