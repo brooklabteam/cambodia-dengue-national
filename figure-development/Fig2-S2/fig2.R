@@ -40,6 +40,8 @@ dat %>% filter(epiwk=='2001-12-31')
 
 dat <- arrange(dat, date, age)
 
+dat.raw <- dat #save this
+
 unique(dat$age) #round to years
 dat$age <- ceiling(dat$age)
 year.split <- dlply(dat, .(year))
@@ -86,7 +88,7 @@ pA <- ggplot(data=dat.sum)+ geom_point(aes(x=age, y=cum_prop_cases, color=year))
   geom_point(data=subset(dat.sum, year==2007 | year==2012| year==2019), aes(x=age, y=cum_prop_cases, color=year)) +
   geom_line(data=subset(dat.sum, year==2007 | year==2012| year==2019), aes(x=age, y=cum_prop_cases, color=year, group=year)) + 
   scale_color_manual(values=colz) +
-  ylab("annual cumulative\nproportion of cases") +
+  ylab("annual cumulative proportion of cases") +
   theme_bw() + coord_cartesian(xlim = c(0,30)) + 
   theme(panel.grid = element_blank(), legend.title = element_blank(),
         plot.margin = unit(c(.2,.1,.1,.1), "cm"),
@@ -95,28 +97,90 @@ pA <- ggplot(data=dat.sum)+ geom_point(aes(x=age, y=cum_prop_cases, color=year))
         legend.position = c(.8,.45)) + guides(color=guide_legend(ncol=2))
 
 
+#and add in the regression of the mean age of infection
+
+head(dat.raw)
+library(plotrix)
+m1 <- lm(age~as.numeric(as.Date(epiwk)), data = dat)
+summary(m1)
+#and add in the projections from the model
+mod.df <- cbind.data.frame(time=as.Date(dat$epiwk), age = predict(m1))
+mod.df <- ddply(mod.df, .(time), summarise, age = unique(age))
+
+
+
+library(mgcv)
+m1 <- gam(age~s(year, bs="tp", k=7) + s(month, bs="cc"), data = dat)
+#m2 <- gam(age~s(year, bs="tp", k=7) + s(month, bs="cc"), correlation = corARMA(form = ~ 1|year, p = 1), data = dat)
+#m3 <- gam(age~s(year, bs="tp", k=7) + s(month, bs="cc"), correlation = corARMA(form = ~ 1|year, p = 2), data = dat)
+#m4 <- gam(age~s(year, bs="tp", k=7) + s(month, bs="cc"), correlation = corARMA(form = ~ 1|year, p = 3), data = dat)
+AIC(m1,m2,m3,m4)#no difference so no need to keep correlation matrix
+summary(m1)
+#and add in the projections from the model
+tmp = plot(m1)[[1]]
+
+#then plot without the effects of month
+mod.df <- cbind.data.frame(year=dat$year, age = predict.gam(m1, exclude = "s(month)"))
+mod.df$SE <- predict.gam(m1, exclude = "s(month)", se.fit = T)$se
+mod.df <- ddply(mod.df, .(year), summarise, age = unique(age), SE = unique(SE))
+mod.df$lci_age <- mod.df$age -1.96*mod.df$SE
+mod.df$uci_age <- mod.df$age +1.96*mod.df$SE
+
+dat.mean <- ddply(dat, .(year), summarise, mean_age = mean(age), n_count = length(age), SD= sd(age), N=length(age))
+dat.mean$SE <- dat.mean$SD/sqrt(dat.mean$N)
+dat.mean$mean_age_lci <- dat.mean$mean_age -1.96*dat.mean$SE
+dat.mean$mean_age_uci <- dat.mean$mean_age +1.96*dat.mean$SE
+dat.mean[dat.mean<0] <- 0
+
+
+pB <- ggplot(dat.mean) + 
+      geom_point(aes(x=year, y = mean_age), size = 5, shape=1) +
+      geom_errorbar(aes(x=year, ymin=mean_age_lci, ymax=mean_age_uci)) + theme_bw() +
+      theme(panel.grid = element_blank(), 
+            #plot.margin = unit(c(.2,.1,.1,.1), "cm"),
+            axis.text = element_text(size = 14),
+            plot.margin = unit(c(.2,.2,.6,.4), "cm"),
+            axis.title = element_text(size=16), axis.title.x = element_blank()) + 
+      ylab("average age of dengue infection") + 
+    geom_line(data=mod.df, aes(x=year, y = age), color="red") +
+    geom_ribbon(data=mod.df, aes(x=year, ymin = lci_age, ymax=uci_age), fill="red", alpha=.3) 
+
+#and calculate the derivative of the slope to get its rate of change
+library(gratia)
+get.gam.deriv <- function(orig_dat, orig_gam, years_to_calc){
+  
+  newDF <- with(orig_dat, data.frame(year = rep(years_to_calc, each=12), month=rep(1:12,length(years_to_calc))))
+  
+  out = derivatives(orig_gam,
+                    newdata = newDF,
+                    order=1,
+                    type="central",
+                    eps = 1e-7,
+                    interval = "confidence")
+  
+  out_df_year <- subset(out, var=="year")
+  names(out_df_year)[names(out_df_year)=="data"] <- "year"
+  out_df_year <- ddply(out_df_year, .(year), summarise, slope= mean(derivative),lci = unique(lower), uci=unique(upper))
+  
+  return(out_df_year)
+  
+}
+out.gam <- get.gam.deriv(orig_dat = dat,
+                         orig_gam = m1, years_to_calc = 2002:2020)
+
+out.gam <- format(out.gam, scientific=FALSE)
+
+#write this and save values 
+write.csv(out.gam, file = paste0(homewd, "/data/SuppTable3.csv"), row.names = F)
 #then plot the FOI through time
 #load the FOI under assumptions of a 2-seroptype sysetm
 #eventually will move to data folder, but leaving here for now until we have confidence intervals to match
 dat.foi <- read.csv(file = paste0(homewd, "/data/foi-fit-national.csv"), header = T, stringsAsFactors = F)
-# dat.foi$lambda_per_1000 <- dat.foi$lambda*1000
-# dat.foi$lambda_per_1000_lci <- dat.foi$lci*1000
-# dat.foi$lambda_per_1000_uci <- dat.foi$uci*1000
+
 dat.foi$year_plot <- dat.foi$year
 dat.foi$year_plot <- as.factor(dat.foi$year_plot)
 
-# pB2 <- ggplot(data = subset(dat.foi, year>=2002)) +theme_bw() +
-#   theme(panel.grid = element_blank(), axis.title.x = element_blank(),
-#         axis.title.y = element_text(size=14),
-#         plot.margin = unit(c(.1,.1,.1,.1), "lines"),
-#         axis.text = element_text(size=12)) + scale_color_manual(values=colz) +
-#   geom_line(aes(x=year, y=lambda_per_1000)) + 
-#   ylab(bquote(lambda~' (/1000 ppl)')) +
-#   geom_point(aes(x=year, y=lambda_per_1000, color=year_plot), size=3, show.legend = F) +
-#   geom_ribbon(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci), alpha=.3) +
-#   geom_linerange(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci, color=year_plot), size=1, show.legend = F)
-
-pB2 <- ggplot(data = subset(dat.foi, year>=2002)) +theme_bw() +
+pC2 <- ggplot(data = subset(dat.foi, year>=2002)) +theme_bw() +
   theme(panel.grid = element_blank(), axis.title.x = element_blank(),
         axis.title.y = element_text(size=14),
         plot.margin = unit(c(.1,.1,.1,.1), "lines"),
@@ -133,18 +197,9 @@ pB2 <- ggplot(data = subset(dat.foi, year>=2002)) +theme_bw() +
 library(ggmap)
 colz.long <- c(rep("#cdcdcb", 21), colz)
 names(colz.long) <- 1981:2020
-# pB1 <- ggplot(data = subset(dat.foi, year>=1980)) +theme_bw() +
-#   theme(panel.grid = element_blank(), axis.title.x = element_blank(),
-#         axis.title.y = element_text(size=16),
-#         axis.text = element_text(size=14)) + scale_color_manual(values=colz.long) +
-#   geom_line(aes(x=year, y=lambda_per_1000)) + 
-#   geom_vline(aes(xintercept=2001.5), linetype=2, color="red") +
-#   ylab(bquote(lambda~',force of infection (/1000 ppl)')) +
-#   geom_point(aes(x=year, y=lambda_per_1000, color=year_plot), size=3, show.legend = F) +
-#   geom_ribbon(aes(x=year, ymin=lambda_per_1000_lci, ymax=lambda_per_1000_uci), alpha=.3) 
-#   #coord_cartesian(ylim=c(0,1000))
 
-pB1 <- ggplot(data = dat.foi) +theme_bw() +
+
+pC1 <- ggplot(data = subset(dat.foi, year>=1987)) +theme_bw() +
   theme(panel.grid = element_blank(), axis.title.x = element_blank(),
         axis.title.y = element_text(size=16),
         axis.text = element_text(size=14)) + scale_color_manual(values=colz.long) +
@@ -153,14 +208,9 @@ pB1 <- ggplot(data = dat.foi) +theme_bw() +
   ylab(bquote(lambda~',force of infection (per capita)')) +
   geom_point(aes(x=year, y=lambda, color=year_plot), size=3, show.legend = F) +
   geom_ribbon(aes(x=year, ymin=lci, ymax=uci), alpha=.3) 
-#coord_cartesian(ylim=c(0,1000))
 
 
-# 
-# pB <- pB1 + annotation_custom(ggplotGrob(pB2), xmin = 2002, xmax = 2021, ymin = 200, ymax = 470) + 
-#       theme(plot.margin = unit(c(.5,.5,1.8,.5), "lines"),)
-
-pB <- pB1 + annotation_custom(ggplotGrob(pB2), xmin = 2002, xmax = 2021, ymin = .5, ymax = .98) + 
+pC <- pC1 + annotation_custom(ggplotGrob(pC2), xmin = 2002, xmax = 2021, ymin = .2, ymax = .48) + 
   theme(plot.margin = unit(c(.5,.5,1.8,.5), "lines"),)
 
 
@@ -599,6 +649,81 @@ plot.model.series.data.epi <- function(par.dat, age_vect, dat){
     scale_linetype_manual(values=linez)+scale_color_manual(values=yearz, guide="none") + scale_fill_manual(values=yearz, guide="none")+
     geom_ribbon(data=subset(df.epi, type=="model"), aes(x=age, ymin=cum_prop_lci, ymax=cum_prop_uci, fill =year), alpha=.3) + facet_grid(year~.) + 
     theme_bw() + theme(panel.grid = element_blank(), legend.title = element_blank(), strip.background = element_rect(fill="white"),
+                       legend.position = c(.85,.1), axis.title = element_text(size=16),strip.text = element_text(size=14),
+                       axis.text = element_text(size=14), legend.text = element_text(size=12)) +
+    ylab("annual cumulative proportion of cases")
+  print(p1)
+  
+  
+  
+  return(p1)
+  
+} 
+plot.model.series.data.epi.together <- function(par.dat, age_vect, dat){
+  
+  #first, prep the data
+  #for the first year in the dataset, 
+  #estimate foi just from the cross-sectional data
+  #min.year <- min(as.numeric(as.character(dat$year)))
+  dist.back <- max(dat$age[dat$year==min(dat$year)])#22
+  
+  #first, prep the data
+  year.dat <- dlply(dat, .(year))
+  
+  age_vect_year = floor(age_vect)[!duplicated(floor(age_vect))]
+  
+  year.dat.sum <- lapply(year.dat, sum.yr.yr, age_vect = age_vect_year)
+  df.out <- data.table::rbindlist( year.dat.sum)
+  
+  
+  out.mod <- model.age.incidence.series(par.dat = par.dat, age_vect = age_vect, year.start = min(par.dat$year))
+  head(out.mod)
+  
+  #and also run it at the uci and lci
+  par.dat.lci <- par.dat.uci <- par.dat
+  par.dat.lci$lambda <- par.dat.lci$lci
+  par.dat.uci$lambda <- par.dat.uci$uci
+  
+  out.mod.lci <- model.age.incidence.series(par.dat = par.dat.lci, age_vect = age_vect, year.start = min(par.dat$year))
+  out.mod.uci <- model.age.incidence.series(par.dat = par.dat.uci, age_vect = age_vect, year.start = min(par.dat$year))
+  
+  head(out.mod.lci)
+  head(out.mod.uci)
+  
+  out.mod.lci <- subset(out.mod.lci, year >= min(df.out$year))
+  out.mod.uci <- subset(out.mod.uci, year >= min(df.out$year))
+  out.mod <- subset(out.mod, year >= min(df.out$year))
+  
+  df.dat <- dplyr::select(df.out, year, age, cum_prop_cases)
+  df.dat$type="data"
+  
+  df.mod <-   dplyr::select(out.mod, year, age, cum_prop_cases)
+  
+  df.mod$type="model"
+  
+  df.mod$cum_prop_lci <- out.mod.lci$cum_prop_cases
+  df.mod$cum_prop_uci <- out.mod.uci$cum_prop_cases
+  
+  df.dat$cum_prop_lci <- df.dat$cum_prop_uci <- NA
+  
+  df.all<- rbind(df.mod, df.dat)
+  
+  df.epi = subset(df.all, year==2007 | year==2012 | year==2019)
+  
+  
+  
+  shapez = c("model" = 24, "data" = 21)
+  linez = c("model" = 2, "data" = 1)
+  
+  
+  
+  yearz = c('2007' = "orange", '2012' = "tomato2", '2019'="red")
+  df.epi$year <- as.factor(df.epi$year)
+  p1 <- ggplot(data=df.epi) + geom_point(aes(x=age, y=cum_prop_cases, shape=type, fill=year, color=year), size=3)  + 
+    geom_line(aes(x=age, y=cum_prop_cases, linetype=type, color=year)) + scale_shape_manual(values=shapez)+ 
+    scale_linetype_manual(values=linez)+scale_color_manual(values=yearz, guide="none") + scale_fill_manual(values=yearz, guide="none")+
+    geom_ribbon(data=subset(df.epi, type=="model"), aes(x=age, ymin=cum_prop_lci, ymax=cum_prop_uci, fill =year), alpha=.3) + #facet_grid(year~.) + 
+    theme_bw() + theme(panel.grid = element_blank(), legend.title = element_blank(), strip.background = element_rect(fill="white"),
                        legend.position = c(.85,.05), axis.title = element_text(size=16),strip.text = element_text(size=14),
                        axis.text = element_text(size=14), legend.text = element_text(size=12)) +
     ylab("annual cumulative proportion of cases")
@@ -610,16 +735,27 @@ plot.model.series.data.epi <- function(par.dat, age_vect, dat){
   
 } 
 
-pC <- plot.model.series.data.epi(par.dat=dat.foi,
+pD <- plot.model.series.data.epi(par.dat=dat.foi,
                                     age_vect=seq(0,22, by=1/4), 
                                     dat=dat)
 
 
+
+#pD <- plot.model.series.data.epi.together(par.dat=dat.foi,
+ #                                age_vect=seq(0,22, by=1/4), 
+  #                               dat=dat)
+
+
+
+
 #compile
-left <- cowplot::plot_grid(pA,pB, nrow = 2, ncol=1, rel_heights = c(1,1), labels = c("a", "b"), label_size = 22)
+top <- cowplot::plot_grid(pA,pB,  nrow = 1, ncol=2, rel_heights = c(1,1,1), labels = c("a", "b"), label_size = 22)
+bottom <- cowplot::plot_grid(pC, pD, nrow = 1, ncol=2, rel_heights = c(1,1,1), labels = c( "c", "d"), label_size = 22)
+
+#left <- cowplot::plot_grid(pA,pB, pC, nrow = 3, ncol=1, rel_heights = c(1,1,1), labels = c("a", "b", "c"), label_size = 22)
 
 
-pFig2 <- cowplot::plot_grid(left, pC, ncol = 2, nrow=1, rel_widths = c(1.3,1), labels = c("", "c"), label_size = 22)# +cowplot::draw_text('epi years of\n\t2007/2012/2019', x = 0.945, y = 0.1, size = 10, hjust = 0.5, vjust = 0.5)
+pFig2 <- cowplot::plot_grid(top, bottom, ncol = 1, nrow=2, rel_widths = c(1,1.4))# +cowplot::draw_text('epi years of\n\t2007/2012/2019', x = 0.945, y = 0.1, size = 10, hjust = 0.5, vjust = 0.5)
 
 
 
@@ -627,8 +763,8 @@ pFig2 <- cowplot::plot_grid(left, pC, ncol = 2, nrow=1, rel_widths = c(1.3,1), l
 ggsave(file = paste0(homewd, "/final-figures/fig2.png"),
        plot=pFig2,
        units=c("mm"),  
-       width=100, 
-       height=75, 
+       width=110, 
+       height=85, 
        scale=3, 
        dpi=300)
 

@@ -6,6 +6,7 @@ library(ggplot2)
 library(plyr)
 library(dplyr)
 library(lubridate)
+library(matrixcalc)
 
 homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(homewd)
@@ -508,21 +509,28 @@ unique(dat$age) #round to years
 #dat$age <- round(dat$age, 0)
 dat$age <- ceiling(dat$age)
 
+dat$year_of_first_FOI <- dat$year-dat$age+1
 
 #load your parameter guesses
-load(paste0(homewd, "/figure-development/Fig2-S2-S3/lambda.guess.Rdata"))
+load(paste0(homewd, "/figure-development/Fig2-S2/lambda.guess.Rdata"))
+tmp.dat <- read.csv(file = paste0(homewd, "/data/foi-fit-KP-national.csv"), header = T, stringsAsFactors = F)
+tmp.dat <- dplyr::select(tmp.dat, -(lci), -(uci))
+lambda.guess.dat[7:nrow(lambda.guess.dat),] <-  tmp.dat
 
-#now fit to get convergence
-lambda.guess = (lambda.guess.dat$lambda)
-lambda.guess[1] <- 0.00001
-lambda.guess[2] <- 0.001
+lambda.tmp <- cbind.data.frame(year=1931:1980, lambda=0.01, N_sero=2, llik=NA, convergence=NA)
+lambda.guess.dat <- rbind( lambda.tmp, lambda.guess.dat)
+
+# #now fit to get convergence
+ lambda.guess = (lambda.guess.dat$lambda)
+# lambda.guess[1] <- 0.0001
+#lambda.guess[2] <- 0.001
 
 #NOTE on dist.back: you need to start far enough back such that the oldest kid 
 #in the first year of data is born in this year. You can go back further, but the 
 #inference won't work if you start earlier...
 
 foi.fit.national <- fit.all.yrs.seq.yr.BFGS(dat=dat,
-                                            dist.back = 22,
+                                            dist.back = 72,
                                             lambda.guess=lambda.guess,
                                             N.sero.fix=2,
                                             age_vect=seq(0,22, by=1/4),

@@ -17,14 +17,14 @@ homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(homewd)
 
 #get tree
-tree1 <- read.annot.beast(file = paste0(homewd, "/BEAST-tree/denv1-small/DENV1avg.tree"))
+tree1 <- read.annot.beast(file = paste0(homewd, "/BEAST-tree/denv1-out/DENV1avg.tree"))
 
 #plot(tree)
 #and load the metadata
 
 #and load the metadata
 dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = T, stringsAsFactors = F)
-dat$date <- as.Date(dat$date, format="%m/%d/%y")
+dat$date <- as.Date(dat$date)#, format="%m/%d/%y")
 mrsd.denv1 <- max(dat$date[dat$DENV.serotype=="DENV-1"]) #"2020-07-13"
 
 #plot timetree
@@ -184,7 +184,7 @@ tree2 <- read.annot.beast(file = paste0(homewd, "/BEAST-tree/denv2-out/DENV2avg.
 
 #and load the metadata
 dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = T, stringsAsFactors = F)
-dat$date <- as.Date(dat$date, format="%m/%d/%y")
+dat$date <- as.Date(dat$date)#, format="%m/%d/%y")
 mrsd.denv2 <- max(dat$date[dat$DENV.serotype=="DENV-2"]) #"2020-09-23"
 
 #plot timetree
