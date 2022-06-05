@@ -5,4 +5,6 @@
 .DS_Store
 DENV1.trees
 DENV2.trees
+DENV1.log
+DENV2.log
 
