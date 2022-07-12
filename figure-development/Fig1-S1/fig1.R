@@ -497,7 +497,7 @@ pl_d <-
 
 
 
-pl<-plot_grid(pl_a, NULL, pl_b, pl_c, NULL, pl_d, ncol = 3, nrow = 2,align = "vh",labels = c("a","", "b","c","","d"), label_size =xy_size+20, hjust=-0.5, vjust = c(1.3,1.3,1.4,1.4),rel_widths = c(1, 0.08,1))+ theme(plot.margin = unit(c(1,1,2,1), "cm")) 
+pl<-plot_grid(pl_a, NULL, pl_b, pl_c, NULL, pl_d, ncol = 3, nrow = 2,align = "vh",labels = c("A","", "B","C","","D"), label_size =xy_size+20, hjust=-0.5, vjust = c(1.3,1.3,1.4,1.4),rel_widths = c(1, 0.08,1))+ theme(plot.margin = unit(c(1,1,2,1), "cm")) 
 
 
 

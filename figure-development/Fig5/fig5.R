@@ -393,9 +393,9 @@ pF <- #ggplot(data=out.prop) + theme_bw()+
 
 
 
-ptop <- cowplot::plot_grid(pA, pB, nrow = 1, labels = c("a", "b"), label_size = 22, hjust=c(-.5, 0))
-pmid <- cowplot::plot_grid(pC, pD, nrow = 1, labels = c("c", "d"), label_size = 22, hjust=c(-.5, 0))
-pbottom <- cowplot::plot_grid(pE, pF, nrow = 1, labels = c("e", "f"), label_size = 22, hjust=c(-.5, 0))
+ptop <- cowplot::plot_grid(pA, pB, nrow = 1, labels = c("A", "B"), label_size = 22, hjust=c(-.5, 0))
+pmid <- cowplot::plot_grid(pC, pD, nrow = 1, labels = c("C", "D"), label_size = 22, hjust=c(-.5, 0))
+pbottom <- cowplot::plot_grid(pE, pF, nrow = 1, labels = c("E", "F"), label_size = 22, hjust=c(-.5, 0))
 pall <- cowplot::plot_grid(ptop, pmid, pbottom, nrow = 3)
 
 ggsave(file = paste0(homewd,"/final-figures/fig5.png"),

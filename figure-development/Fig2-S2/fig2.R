@@ -749,8 +749,8 @@ pD <- plot.model.series.data.epi(par.dat=dat.foi,
 
 
 #compile
-top <- cowplot::plot_grid(pA,pB,  nrow = 1, ncol=2, rel_heights = c(1,1,1), labels = c("a", "b"), label_size = 22)
-bottom <- cowplot::plot_grid(pC, pD, nrow = 1, ncol=2, rel_heights = c(1,1,1), labels = c( "c", "d"), label_size = 22)
+top <- cowplot::plot_grid(pA,pB,  nrow = 1, ncol=2, rel_heights = c(1,1,1), labels = c("A", "B"), label_size = 22)
+bottom <- cowplot::plot_grid(pC, pD, nrow = 1, ncol=2, rel_heights = c(1,1,1), labels = c( "C", "D"), label_size = 22)
 
 #left <- cowplot::plot_grid(pA,pB, pC, nrow = 3, ncol=1, rel_heights = c(1,1,1), labels = c("a", "b", "c"), label_size = 22)
 

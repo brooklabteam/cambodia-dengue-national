@@ -12,10 +12,10 @@ homewd= "/Users/carabrook/Developer/cambodia-dengue-national/"
 setwd(paste0(homewd, "/figure-development/FigS3"))
 
 #load the DENV1 tree
-treeD1 <-  read.tree(file = paste0(homewd, "figure-development/FigS4/denv1ML/T3.raxml.supportFBP"))
+treeD1 <-  read.tree(file = paste0(homewd, "figure-development/FigS3/denv1ML/T3.raxml.supportFBP"))
 
 #and DENV2
-treeD2 <-  read.tree(file = paste0(homewd, "figure-development/FigS4/denv2ML/T3.raxml.supportFBP"))
+treeD2 <-  read.tree(file = paste0(homewd, "figure-development/FigS3/denv2ML/T3.raxml.supportFBP"))
 #root it
 
 
@@ -29,7 +29,7 @@ rooted.D2 <- root(treeD2, which(treeD2$tip.label == "NC_002640_DENV4"))
 plot(rooted.D2)
 
 #load tree data prepared from elsewhere
-dat <- read.csv(file = paste0(homewd, "figure-development/FigS4/ML-Sequences.csv"))
+dat <- read.csv(file = paste0(homewd, "figure-development/FigS3/ML-Sequences.csv"))
 head(dat)
 #check subgroup names
 unique(dat$Subclade[dat$Serotype=="DENV-1"])
@@ -185,7 +185,7 @@ pB
 
 #and together
 
-FigS3 <- cowplot::plot_grid(pA, pB, ncol = 2, nrow = 1, labels = c("a", "b"),label_size = 18)
+FigS3 <- cowplot::plot_grid(pA, pB, ncol = 2, nrow = 1, labels = c("A", "B"),label_size = 18)
 
 
 ggsave(file = paste0(homewd, "/final-figures/FigS3.png"),

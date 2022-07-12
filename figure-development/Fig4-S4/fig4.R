@@ -108,25 +108,6 @@ pB1 <- ggtree(tree1, mrsd=mrsd.denv1, color="forestgreen")  +
 
 
 
-
-
-# # #and collapse the clades with the sylvatic strains
-#  node1 <- MRCA(tree2, "KY923048_2015-07-31", "OL414763_2019-08-02")
-#  nodecollapse1 <- MRCA(tree2, "KY923048_2015-07-31", "OL414763_2019-08-15")
-# # node2 <- MRCA(tree2, "KY923048_2015-07-31", "OL414763_109-0039_2019-08-02")
-# # node2 <- MRCA(tree2, "KY923048_2015-07-31", "FJ467493_2008-07-31")
-# # node2 <- nodeid(tree2, "KY923048_2015-07-31")
-# # node1<-  nodeid(tree2, "FJ467493_2008-07-31")
-# # 
-# # p2 <- ggtree(tree2, mrsd=mrsd.denv2, color="navy")  + theme_tree2() + # nodelab() +
-# # coord_cartesian( ylim=c(0,180)) +geom_tiplab(size=2) #two very disparate lineages of denv2xlim=c(1900,2021),
-
-
-
-
-#tree3 <- tree_subset(tree=tree2, node =  nodecollapse1, levels_back=0)
-#tree4 <- tree_subset(tree=tree3, node = 176, levels_back=0)
-
 #node.tree2.1 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414741_2019-07-15" ),which(tree2@phylo$tip.label == "KU509277_2010-07-31"))
 node.tree2 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414741_2019-07-23" ),which(tree2@phylo$tip.label == "KU509277_2010-07-31"))
 #node.tree2.2 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414721_2019-07-15"),which(tree2@phylo$tip.label == "KF744400_2000-07-31"))
@@ -229,10 +210,10 @@ pC <-pC2 %<+% tree2merge +
   scale_shape_manual(values=shapez) +scale_fill_manual(values=colorz)
 
 
-pBC <-cowplot::plot_grid(pB,pC,nrow=2,ncol=1,labels=c("b", "c"),label_size=30)+
+pBC <-cowplot::plot_grid(pB,pC,nrow=2,ncol=1,labels=c("B", "C"),label_size=30)+
   theme(plot.margin = unit(c(0,0,0,0), "cm"))
 
-pALL <- cowplot::plot_grid(pA, pBC, nrow=2, ncol = 1, rel_widths = c(2,1), rel_heights = c(1,2.2),align = "w",labels=c("a"),label_size=30)
+pALL <- cowplot::plot_grid(pA, pBC, nrow=2, ncol = 1, rel_widths = c(2,1), rel_heights = c(1,2.2),align = "w",labels=c("A"),label_size=30)
 
 pALL_new <- pALL + theme(plot.background = element_rect(fill ="white"))+ theme_classic()+  theme(axis.line=element_blank(),axis.text.x=element_blank(),
                                                                                                      axis.text.y=element_blank(),axis.ticks=element_blank(),

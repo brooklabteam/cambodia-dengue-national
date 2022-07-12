@@ -437,11 +437,11 @@ mrsd.denv2 - (88.16610*365) # "1932-08-15"
 
 
 
-pBC <- cowplot::plot_grid(pS3B,  pS3C, labels=c("b", "c"), nrow=2, ncol=1, label_size = 20)
+pBC <- cowplot::plot_grid(pS3B,  pS3C, labels=c("B", "C"), nrow=2, ncol=1, label_size = 20)
 
 
 
-pS3_KPS<- cowplot::plot_grid(pKPS,  nrow=1, ncol=1, labels = c("a"), label_size = 20)
+pS3_KPS<- cowplot::plot_grid(pKPS,  nrow=1, ncol=1, labels = c("A"), label_size = 20)
 
 
 pALL <- cowplot::plot_grid(pS3_KPS, pBC, nrow=2, ncol = 1, rel_widths = c(1), rel_heights = c(1,2))
