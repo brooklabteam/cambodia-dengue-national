@@ -1,0 +1,22 @@
+
+Family: gaussian 
+Link function: identity 
+
+Formula:
+age.adjusted.incidence ~ year + s(month, k = 7, bs = "cc")
+
+Parametric coefficients:
+              Estimate Std. Error t value Pr(>|t|)   
+(Intercept) -11.501383   4.231086  -2.718  0.00708 **
+year          0.005792   0.002104   2.753  0.00640 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Approximate significance of smooth terms:
+           edf Ref.df    F p-value    
+s(month) 4.042      5 20.7  <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+R-sq.(adj) =  0.325   Deviance explained =   34%
+GCV = 0.031103  Scale est. = 0.030278  n = 228
