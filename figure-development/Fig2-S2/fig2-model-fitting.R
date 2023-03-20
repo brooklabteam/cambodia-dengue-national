@@ -331,7 +331,7 @@ log.lik.fit.all <- function(par, par.dat, age_vect, dat, year.start){
   out.mod <- arrange(out.mod, year, age)
   dat <- arrange(dat, year, age)
   # # # # 
-  #how likely are the data, given the model as truth?
+  #how likely are the data, given the model as truth? lined up by agea and year
   ll=0
   for (i in 1:length(dat$age)){
     ll=ll+dbinom(dat$cum_cases[i],dat$n[i],p=out.mod$cum_prop_cases[i],log=T) 
@@ -355,7 +355,7 @@ fit.all.yrs.seq.yr.BFGS <- function(dat, dist.back, lambda.guess, N.sero.fix, ag
   df.out <- data.table::rbindlist( year.dat.sum)
   #head(df.out)
   # ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
-  #       geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
+   #      geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
   # 
   #make your guess parameters
   #lambda is takes data from the previous year and creates infections in this year
