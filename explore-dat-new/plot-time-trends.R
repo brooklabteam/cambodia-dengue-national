@@ -81,49 +81,107 @@ p2 <- ggplot(data=dat.prov) + geom_line(aes(x=epiwk, y=cases, color=provname)) +
       geom_vline(xintercept = c(as.Date("2012-01-01")), color="red", linetype=2)+
       geom_vline(xintercept = c(as.Date("2019-01-01")), color="red", linetype=2)
 
-#look at the three epidemic years
-p2a <- ggplot(data=dat.prov) + geom_line(aes(x=epiwk, y=cases, color=provname)) + 
-        coord_cartesian(xlim=c(as.Date("2018-01-01"), as.Date("2021-01-01"))) #facet_grid(provname~.) +
-p2a
-
-
-p2ab <- ggplot(data=subset(dat.prov, provname=="Phnom Penh" | provname=="Kampong Speu" | provname=="Kandal" | provname=="Siem Reap" | provname=="Kampong Cham" | provname=="Pursat")) + 
-  geom_line(aes(x=epiwk, y=cases, color=provname)) + 
-  coord_cartesian(xlim=c(as.Date("2015-01-01"), as.Date("2021-01-01"))) #facet_grid(provname~.) +
-p2ab
-
-
-p2b <- ggplot(data=subset(dat.prov, provname=="Phnom Penh" | provname=="Kampong Speu" | provname=="Kandal" | provname=="Siem Reap" | provname=="Kampong Cham" | provname=="Takeo")) + 
-    geom_line(aes(x=epiwk, y=cases, color=provname)) + 
-   coord_cartesian(xlim=c(as.Date("2011-01-01"), as.Date("2014-01-01")))#coord_cartesian(xlim=c(as.Date("2006-01-01"), as.Date("2009-01-01")))
-p2b
-
-#wowo, the synchrony here is unbelieveable
-p2c <- ggplot(data=subset(dat.prov, provname=="Phnom Penh" | provname=="Kampong Speu" | provname=="Kandal" | provname=="Siem Reap" | provname=="Kampong Cham" | provname=="Takeo")) + 
-  geom_line(aes(x=epiwk, y=cases, color=provname)) + 
-  coord_cartesian(xlim=c(as.Date("2006-01-01"), as.Date("2009-01-01"))) #facet_grid(provname~.) + 
-p2c
-
-
-#and what about non-epidemic years??
-p2d <- ggplot(data=subset(dat.prov, provname=="Phnom Penh" | provname=="Kampong Speu" | provname=="Kandal" | provname=="Siem Reap" | provname=="Kampong Cham" | provname=="Takeo")) + 
-  geom_line(aes(x=epiwk, y=cases, color=provname)) + 
-  coord_cartesian(xlim=c(as.Date("2015-01-01"), as.Date("2020-01-01"))) #facet_grid(provname~.) + 
-p2d
 
 head(dat.prov)
 library(mgcv)
 
 unique(dat.prov$biwk)
 dat.prov$provname <- as.factor(dat.prov$provname)
-m1 <- gam(cases ~ s(year, bs="tp", k=3) + s(biwk, k=7, bs="cc") + s(provname, bs="re"), dat = dat.prov, family="poisson")
+
+#remove the one time series with very limited data
+dat.sum <- ddply(dat.prov, .(provname), summarise, min_year = min(year), max_year=max(year))
+
+dat.prov = subset(dat.prov, provname!="Tboung Khmum")
+
+m1 <- gam(cases ~ year + s(year, by=provname, bs="tp", k=3) + 
+            s(biwk, k=7, bs="cc") + s(provname, bs="re"),
+            dat = dat.prov, family="poisson")
 summary(m1)
+
+out <- plot(m1)
+
+unique(dat.prov$provname)
+prov.list <- list()
+for (i in 1:24){
+  prov.list[[i]] <- out[[i]]
+}
+extract.slope.dat <- function(df){
+  dat.out <- cbind.data.frame(year= df$x, slope= df$fit)
+  dat.out$slope_uci = dat.out$slope + 1.96*(df$se)
+  dat.out$slope_lci = dat.out$slope + 1.96*(df$se)
+  dat.out$province <- sapply(strsplit(df$ylab, "provname"), '[',2)
+return(dat.out)  
+}
+
+prov.list <- lapply(prov.list, extract.slope.dat)
+prov.df <- data.table::rbindlist(prov.list)
+head(prov.df)
+tail(prov.df)
+
+
+#supplemental plot of the time trends for each province
+pS1 <- ggplot(prov.df) + theme_bw() + theme(panel.grid = element_blank(), strip.background = element_rect(fill="white")) +
+  facet_wrap(~province, ncol=4) + ylab("partial effect on slope cases through time") + geom_hline(aes(yintercept=0))+
+  geom_line(aes(x=year, y=slope, color=province)) + 
+  geom_ribbon(aes(x=year, ymin=slope_lci, ymax=slope_uci, fill=province), alpha=.3)
+
+prov.sum <- ddply(prov.df, .(province), summarise, median_slope=median(slope), upper_slope=max(slope), lower_slope=min(slope), mean_slope=mean(slope))
+ggplot(prov.sum) + geom_point(aes(province, median_slope, color=province)) + geom_linerange(aes(x=province, ymin=lower_slope, ymax=upper_slope, color=province)) + geom_hline(yintercept=0)
+
+pS1 <- ggplot(subset(prov.df, province=="Mondul Kiri")) + theme_bw() + theme(panel.grid = element_blank(), strip.background = element_rect(fill="white")) +
+  facet_wrap(~province, ncol=4) + ylab("slope cases through time") + geom_hline(aes(yintercept=0))+
+  geom_line(aes(x=year, y=slope, color=province)) + 
+  geom_ribbon(aes(x=year, ymin=slope_lci, ymax=slope_uci, fill=province), alpha=.3)
+
+
+dat.prov$projected_cases <- predict.gam(m1, exclude=c("s(biwk)"), type = "response")
+
+pS2 <- ggplot(dat.prov) + theme_bw() + theme(panel.grid = element_blank(), strip.background = element_rect(fill="white")) +
+  facet_wrap(~provname, ncol=4) + ylab("slope cases through time") +
+  geom_line(aes(x=epiwk, y=cases, group=provname)) +
+  geom_line(aes(x=epiwk, y=projected_cases, color=provname)) 
+  
+
+
+pS2 <- ggplot(subset(dat.prov, provname=="Mondul Kiri")) + theme_bw() + theme(panel.grid = element_blank(), strip.background = element_rect(fill="white")) +
+  facet_wrap(~provname, ncol=4) + ylab("slope cases through time") +
+  geom_line(aes(x=epiwk, y=cases, group=provname)) +
+  geom_line(aes(x=epiwk, y=projected_cases, color=provname)) 
+
+
+
+#get slope
+diff(prov.df$slope)/diff(prov.df$year)
+
+#then, collect the derivative, combine and take the average
+library(gratia)
+
+newDF=cbind.data.frame(year=prov.df$year)
+newDF$province = "Phonm Penh"
+
+out = derivatives(m1,
+                  newdata = newDF,
+                  order=1,
+                  type="central",
+                  eps = 1e-7,
+                  interval = "confidence")
+
+out_df <- cbind.data.frame(bat_species=bat_spp, 
+                           measurement=measurement, 
+                           day_of_year=days_to_calc, 
+                           slope= out$derivative,
+                           lci = out$lower,
+                           uci=out$upper)
+
+
+m1b <- gam(cases ~ s(year, by=provname, bs="tp", k=3) + 
+            s(biwk, k=7, bs="cc"),
+          dat = dat.prov, family="poisson")
+summary(m1b)
+
+AIC(m1, m1b)
 #plot.gam(m1) #positive trend by year but some deviations
 
-dat.prov$month <- month(dat.prov$epiwk)
-dat.prov$doy <- yday(dat.prov$epiwk)
-dat.prov$week <- week(dat.prov$epiwk)
-#low smoothing on year because you want to get the linear trend
 m1alt <- gam(cases ~ s(year, by=provname, k=3, bs="tp") + s(week, k=7, bs="cc"), dat = dat.prov, family="poisson")
 summary(m1alt)
 plot(m1alt)
@@ -227,21 +285,22 @@ library(sf)
 cam = sf::st_read(paste0(homewd, "/data/province-shape/khm_admbnda_adm1_gov_20181004.shp"))
 head(cam)
 unique(cam$ADM1_EN)
-unique(case.dat$provname)
-case.dat$provname <- as.character(case.dat$provname)
-setdiff(unique(case.dat$provname), unique(cam$ADM1_EN))
+unique(prov.sum$province)
+prov.sum$province <- as.character(prov.sum$province)
+setdiff(unique(prov.sum$province), unique(cam$ADM1_EN))
 
 cam$ADM1_EN[cam$ADM1_EN=="Siemreap"] <- "Siem Reap"
 cam$ADM1_EN[cam$ADM1_EN=="Oddar Meanchey"] <- "Otdar Meanchey"
 
 #and merge with the slopes
-dat.merge <- dplyr::select(case.dat, y, IsSignificant, provname, diagnostic)
-names(dat.merge)[names(dat.merge)=="provname"] <- "ADM1_EN"
+#dat.merge <- dplyr::select(case.dat, y, IsSignificant, provname, diagnostic)
+dat.merge <- dplyr::select(prov.sum, province, median_slope, upper_slope, lower_slope, mean_slope)
+names(dat.merge)[names(dat.merge)=="province"] <- "ADM1_EN"
 cam_merge <- merge(cam, dat.merge, by = "ADM1_EN", all.x=T, sort=F)
 
-colz = c("No" = "gray", "Yes" = "black")
+#colz = c("No" = "gray", "Yes" = "black")
 # get map
-pCam <- ggplot(cam_merge) + geom_sf(aes(fill=y, color=IsSignificant), size =.4) + 
+pCam <- ggplot(cam_merge) + geom_sf(aes(fill=mean_slope), size =.4) + 
    theme_bw() + 
   theme(panel.background = element_blank()) + 
   theme(panel.grid = element_blank(),
@@ -250,9 +309,9 @@ pCam <- ggplot(cam_merge) + geom_sf(aes(fill=y, color=IsSignificant), size =.4) 
         # panel.background = element_rect(fill=NULL, color = "white", size=3),
         axis.title = element_blank(),
         plot.margin = unit(c(0,0,0,0),"lines")) +
-  facet_grid(~diagnostic) +
-  scale_fill_gradient2(low = 'navy', mid = 'white', high = 'firebrick', name="slope\nthrough\ntime") +
-  scale_color_manual(values = colz) +
+  #facet_grid(~diagnostic) +
+  scale_fill_gradient2(low = 'navy', mid = 'white', high = 'firebrick', name="mean partial\neffect on slope of cases\nthrough time") +
+  #scale_color_manual(values = colz) +
   guides(color="none")
 
 

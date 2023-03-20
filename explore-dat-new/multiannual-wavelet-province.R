@@ -56,7 +56,16 @@ anal.dat.nat.multi <-  analyze.wavelet(dat.nat,
                                  upperPeriod = 20, #largest possible period (in weeks; here, 10 years)
                                  make.pval = TRUE, n.sim = 1000)
 
+dat.nat.anual <-  analyze.wavelet(dat.nat,
+                                       my.series = 2,
+                                       #loess.span = 0,
+                                       dt = 1/12,#this allows for annual timestep
+                                       dj = 1/100, #default =1/20. image gets clearer as number on the bottom gets bigger
+                                       lowerPeriod = 1/12,#shortest possible period (2)
+                                       upperPeriod = 2, #largest possible period (in weeks; here, 10 years)
+                                       make.pval = TRUE, n.sim = 1000)
 
+#multi
 wt.image(anal.dat.nat.multi, color.key = "quantile", n.levels = 250,
          legend.params = list(lab = "wavelet power levels", mar = 4.7),
          label.time.axis = TRUE,
@@ -67,6 +76,21 @@ wt.image(anal.dat.nat.multi, color.key = "quantile", n.levels = 250,
                                labels = 2002:2019))
 
 
+#annual
+wt.image(dat.nat.anual, color.key = "quantile", n.levels = 250,
+         legend.params = list(lab = "wavelet power levels", mar = 4.7),
+         label.time.axis = TRUE,
+         plot.coi = F,
+         spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
+         periodlab= "period (in years)",
+         spec.time.axis = list(at = seq(1,12*18, 12), #converting weeks to years
+                               labels = 2002:2019))
+
+avg.powr <- colSums(anal.dat.nat.multi$Power)/333
+plot(avg.powr) #multi-annual
+
+avg.powr.annual <- colSums(dat.nat.anual$Power)/333
+plot(avg.powr.annual) #multi-annual
 #save... this is the national multi-annual periodicity - both cycles getting longer
 
 maximum.level = 1.001*max(anal.dat.nat.multi$Power.avg, anal.dat.nat.multi$Power.avg)
