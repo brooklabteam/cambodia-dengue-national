@@ -431,6 +431,16 @@ log.lik.fit.all <- function(par, par.dat, dat, age.mod, year.start){
     #print(ll)
   }
   
+  if (sum(par.dat$lambda>1)>0) { #add a penalty for any lambda value over 1
+    #print("correcting for high lambda")
+    #print("original:")
+    #print(-ll)
+    ll=ll - 100000 #penalty
+    #print("corrected:")
+    #print(-ll)
+    
+  }
+  
   return(-ll)
 }
 fit.all.yrs.seq.yr.BFGS <- function(dat, age.mod, lambda.guess, N.sero.fix,  fit.CI){

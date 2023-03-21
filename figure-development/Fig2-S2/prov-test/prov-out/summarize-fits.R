@@ -6,6 +6,7 @@ library(ggplot2)
 
 homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(paste0(homewd, "/figure-development/Fig2-S2/prov-test/prov-out/"))
+setwd(paste0(homewd, "/figure-development/Fig2-S2/prov-fits-original/prov-out"))
 
 #load and combine the fits and plot them together (except not the ones with Inf)
 load("fit-prov-Banteay-Meanchey.Rdata")
@@ -65,6 +66,16 @@ p1 <- ggplot (fit.dat) + geom_point(aes(x=year, y=lambda, color=provname)) +
       geom_vline(xintercept = 2007, linetype=2) +
       geom_vline(xintercept = 2012, linetype=2) +
       geom_vline(xintercept = 2019, linetype=2)
+
+
+
+ggplot (fit.dat) + geom_point(aes(x=year, y=lambda, color=provname)) +
+  geom_line(aes(x=year, y=lambda, color=provname)) +theme_bw() + 
+  theme(panel.grid = element_blank()) + coord_cartesian(ylim = c(0,1)) +
+  geom_vline(xintercept = 2007, linetype=2) +
+  geom_vline(xintercept = 2012, linetype=2) +
+  geom_vline(xintercept = 2019, linetype=2) + facet_wrap(~provname, ncol=4)
+
 
 p2 <- ggplot(subset(fit.dat, year>=1995)) + geom_point(aes(x=year, y=lambda, color=provname)) +
   geom_line(aes(x=year, y=lambda, color=provname)) +theme_bw() + 
