@@ -149,11 +149,12 @@ wc.sel.phases(corr.oni, spec.time.axis = list(at = seq(1,12*18, 12), labels = 20
 
 ggplot(dat.nat)+ geom_hline(aes(yintercept=0)) +
         geom_vline(aes(xintercept=as.Date("2007-01-01"))) + geom_vline(aes(xintercept=as.Date("2012-01-01"))) + geom_vline(aes(xintercept=as.Date("2019-01-01"))) +
-        geom_point(data=subset(dat.nat, oni>0), aes(x=month_date, y=oni), color="red") + 
-        geom_line(data=subset(dat.nat, oni>0), aes(x=month_date, y=oni), color="red") +
-        geom_point(data=subset(dat.nat, oni<0), aes(x=month_date, y=oni), color="blue") + 
-        geom_line(data=subset(dat.nat, oni<0), aes(x=month_date, y=oni), color="blue") 
-        
+        #geom_point(data=subset(dat.nat, oni>0), aes(x=month_date, y=oni), color="red") + 
+        geom_bar(data=subset(dat.nat, oni>0), aes(x=month_date, y=oni), stat="identity", fill="red") + 
+        #geom_line(data=subset(dat.nat, oni>0), aes(x=month_date, y=oni), color="red") +
+        #geom_point(data=subset(dat.nat, oni<0), aes(x=month_date, y=oni), color="blue") + 
+        #geom_line(data=subset(dat.nat, oni<0), aes(x=month_date, y=oni), color="blue") 
+        geom_bar(data=subset(dat.nat, oni<0), aes(x=month_date, y=oni), stat="identity", fill="blue") 
 
 # is temp increasing with time?
 
