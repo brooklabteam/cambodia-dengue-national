@@ -86,6 +86,11 @@ wt.image(dat.nat.anual, color.key = "quantile", n.levels = 250,
          spec.time.axis = list(at = seq(1,12*18, 12), #converting weeks to years
                                labels = 2002:2019))
 
+reconstruct(dat.nat.anual, only.ridge = T, period=1)
+wt.sel.phases(dat.nat.anual,    spec.time.axis = list(at = seq(1,12*18, 12), #converting weeks to years
+                                                  labels = 2002:2019))
+
+
 avg.powr <- colSums(anal.dat.nat.multi$Power)/333
 plot(avg.powr) #multi-annual
 

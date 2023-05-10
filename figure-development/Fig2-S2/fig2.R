@@ -97,6 +97,14 @@ pA <- ggplot(data=dat.sum)+ geom_point(aes(x=age, y=cum_prop_cases, color=year))
         legend.position = c(.8,.45)) + guides(color=guide_legend(ncol=2))
 
 
+#alternate by cases per 1000
+#load the age structured national data
+popdat <- read.csv(file = paste0(homewd, "/data/cambodia_pop_dat.csv") , header = T, stringsAsFactors = F)
+
+head(popdat)
+head(dat.sum)
+
+
 #and add in the regression of the mean age of infection
 
 head(dat.raw)

@@ -59,11 +59,11 @@ merge.denv2 <- merge(name.dat.denv2, all.denv2, by = "Accession", all.x = T, sor
 head(merge.denv1)
 head(merge.denv2)
 
-dat.1 <- read.fasta(file = paste0(homewd, "/alignment/allDENV1_beast.fasta"), as.string = T, forceDNAtolower = F)
-names(dat.1)
-
-dat.2 <- read.fasta(file = paste0(homewd, "/alignment/allDENV2_beast.fasta"), as.string = T, forceDNAtolower = F)
-names(dat.2)
+# dat.1 <- read.fasta(file = paste0(homewd, "/alignment/allDENV1_beast.fasta"), as.string = T, forceDNAtolower = F)
+# names(dat.1)
+# 
+# dat.2 <- read.fasta(file = paste0(homewd, "/alignment/allDENV2_beast.fasta"), as.string = T, forceDNAtolower = F)
+# names(dat.2)
 
 #and write with beast name
 write.fasta(denv1.pre, names=merge.denv1$beast_name,  file = paste0(homewd, "/alignment/allDENV1_beast.fasta"), as.string = T)

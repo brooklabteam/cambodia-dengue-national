@@ -431,6 +431,9 @@ fit.all.yrs.seq.yr.BFGS <- function(dat,  lambda.guess, N.sero.fix, age_vect, fi
   
   #and fit it cumulatively across the entire time series
   
+  #now, for all lambda prior to 1970, assume a very, very, very low FOI
+  par.dat$lambda[par.dat$year<1970] <- 0.0000001
+  
   
     #if this is the first year, you need
     log.lambda.guess <- log(par.dat$lambda)
