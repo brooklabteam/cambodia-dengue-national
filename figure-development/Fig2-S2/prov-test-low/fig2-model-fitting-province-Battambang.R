@@ -372,14 +372,18 @@ log.lik.fit.all <- function(par, par.dat, dat, year.start){
     }
   }
   
-  if (sum(par.dat$lambda>1)>0) { #add a penalty for any lambda value over 1
-    #print("correcting for high lambda")
-    #print("original:")
-    #print(-ll)
-    ll=ll - 100000 #penalty
-    #print("corrected:")
-    #print(-ll)
-    
+  par.dat$lambda_high <- 0
+  par.dat$lambda_high[par.dat$lambda>1] <- 1
+  tot_over = sum(par.dat$lambda_high)
+  if(tot_over>0){
+    #add a penalty for any lambda value over 1
+    #   print("correcting for high lambda")
+    #   print("original:")
+    #   print(-ll)
+    ll=ll-(tot_over*1000000)
+    #   
+    #   print("corrected:")
+    #   print(-ll)
   }
   
   return(-ll)

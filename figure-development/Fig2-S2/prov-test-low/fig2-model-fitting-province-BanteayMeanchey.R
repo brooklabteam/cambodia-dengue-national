@@ -372,15 +372,19 @@ log.lik.fit.all <- function(par, par.dat, dat, year.start){
     }
   }
   
-  if (sum(par.dat$lambda>1)>0) { #add a penalty for any lambda value over 1
-    #print("correcting for high lambda")
-    #print("original:")
-    #print(-ll)
-    ll=ll - 100000 #penalty
-    #print("corrected:")
-    #print(-ll)
-    
-  }
+   par.dat$lambda_high <- 0
+   par.dat$lambda_high[par.dat$lambda>1] <- 1
+   tot_over = sum(par.dat$lambda_high)
+   if(tot_over>0){
+     #add a penalty for any lambda value over 1
+  #   print("correcting for high lambda")
+  #   print("original:")
+  #   print(-ll)
+     ll=ll-(tot_over*1000000)
+  #   
+  #   print("corrected:")
+  #   print(-ll)
+   }
   
   return(-ll)
 }
@@ -587,6 +591,8 @@ dat$year_of_first_FOI <- dat$year-dat$age+1
 dat <- arrange(dat, procode, date)
 
 dat = subset(dat, provname=="Banteay Meanchey")
+dat = subset(dat, provname=="Phnom Penh")
+dat = subset(dat, year<2020 & year>2016 & age<3)
 
 out <- fit.all.yrs.seq.yr.BFGS(dat=dat,
                                lambda.guess=0.001,

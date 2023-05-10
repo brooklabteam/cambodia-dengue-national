@@ -375,7 +375,7 @@ log.lik.fit.all <- function(par, par.dat, dat, year.start){
   
   return(-ll)
 }
-fit.all.yrs.seq.yr.BFGS <- function(dat,  lambda.guess, N.sero.fix,  fit.CI){
+fit.all.yrs.seq.yr.BFGS <- function(dat,  lambda.guess, N.sero.fix, age_vect, fit.CI){
   
   
   #get dist back here 
@@ -431,19 +431,22 @@ fit.all.yrs.seq.yr.BFGS <- function(dat,  lambda.guess, N.sero.fix,  fit.CI){
   
   #and fit it cumulatively across the entire time series
   
+  #now, for all lambda prior to 1970, assume a very, very, very low FOI
+  par.dat$lambda[par.dat$year<1970] <- 0.0000001
   
-    #if this is the first year, you need
-    log.lambda.guess <- log(par.dat$lambda)
-    
-    out.NS <- optim(par = log.lambda.guess, 
-                    fn=log.lik.fit.all, 
-                    method = "BFGS",
-                    par.dat=par.dat, 
-                    year.start = (min(dat$year)-dist.back),#this is the year the model will start iterating with the first birth cohort
-                    #age_vect=age_vect, 
-                    dat=df.out, hessian = T)
-    
-
+  
+  #if this is the first year, you need
+  log.lambda.guess <- log(par.dat$lambda)
+  
+  out.NS <- optim(par = log.lambda.guess, 
+                  fn=log.lik.fit.all, 
+                  method = "BFGS",
+                  par.dat=par.dat, 
+                  year.start = (min(dat$year)-dist.back),#this is the year the model will start iterating with the first birth cohort
+                  #age_vect=age_vect, 
+                  dat=df.out, hessian = T)
+  
+  
   par.dat$lambda <- exp(out.NS$par)
   par.dat$llik <- out.NS$value
   par.dat$convergence <- out.NS$convergence
@@ -463,25 +466,24 @@ fit.all.yrs.seq.yr.BFGS <- function(dat,  lambda.guess, N.sero.fix,  fit.CI){
       par.dat$uci <- CI$upper
       
     }else{
-      par.dat$lci <- "not yet"
-      par.dat$uci <- "not yet"
       
-      # #now apply over all the parameters to get your likelihoods across this range of lambda values
-      # index.list <- as.list(1:nrow(par.dat))
-      # par.dat$lambda_min <- 0.000001
-      # par.dat$lambda_min[par.dat$lambda_min>par.dat$lambda] <- par.dat$lambda[par.dat$lambda_min>par.dat$lambda]/10
-      # par.dat$lambda_max <- 1
-      # par.dat$lambda_max[par.dat$lambda_max<par.dat$lambda] <- par.dat$lambda[par.dat$lambda_max<par.dat$lambda]*10
-      # 
-      # out.list <- lapply(index.list, get.lliks, par.dat=par.dat, df= df.out, 
-      #                    year.start = (min(dat$year)-dist.back),
-      #                    n.iterations = 100)
-      # 
-      # #out.list returns the parameter estimates and CIs by year
+      
+      #now apply over all the parameters to get your likelihoods across this range of lambda values
+      index.list <- as.list(1:nrow(par.dat))
+      par.dat$lambda_min <- 0.000001
+      par.dat$lambda_min[par.dat$lambda_min>par.dat$lambda] <- par.dat$lambda[par.dat$lambda_min>par.dat$lambda]/10
+      par.dat$lambda_max <- 1
+      par.dat$lambda_max[par.dat$lambda_max<par.dat$lambda] <- par.dat$lambda[par.dat$lambda_max<par.dat$lambda]*10
+      
+      out.list <- lapply(index.list, get.lliks, par.dat=par.dat, df= df.out, 
+                         year.start = (min(dat$year)-dist.back),
+                         n.iterations = 100, age_vect=age_vect)
+      
+      #out.list returns the parameter estimates and CIs by year
       
       #bind and return back
       
-      #par.dat <- data.table::rbindlist(out.list)
+      par.dat <- data.table::rbindlist(out.list)
     }
     
   }
