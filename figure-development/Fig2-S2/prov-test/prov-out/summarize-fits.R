@@ -6,7 +6,7 @@ library(ggplot2)
 
 homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(paste0(homewd, "/figure-development/Fig2-S2/prov-test/prov-out/"))
-setwd(paste0(homewd, "/figure-development/Fig2-S2/prov-fits-original/prov-out"))
+#setwd(paste0(homewd, "/figure-development/Fig2-S2/prov-fits-original/prov-out"))
 
 #load and combine the fits and plot them together (except not the ones with Inf)
 load("fit-prov-Banteay-Meanchey.Rdata")
@@ -60,12 +60,14 @@ fit.dat <- rbind(fit.dat, out)
 head(fit.dat)
 fit.dat <- subset(fit.dat, lambda<10)
  
-p1 <- ggplot (fit.dat) + geom_point(aes(x=year, y=lambda, color=provname)) +
-      geom_line(aes(x=year, y=lambda, color=provname)) +theme_bw() + 
-      theme(panel.grid = element_blank()) + coord_cartesian(ylim = c(0,1)) +
+p1 <- ggplot (fit.dat) + geom_point(aes(x=year, y=lambda, color=provname)) + 
+      geom_line(aes(x=year, y=lambda, color=provname), linewidth=.8) +theme_bw() + 
+      theme(panel.grid = element_blank(), axis.title.x = element_blank(), 
+            axis.title.y = element_text(size=16), axis.text = element_text(size=14)) + coord_cartesian(ylim = c(0,1)) +
       geom_vline(xintercept = 2007, linetype=2) +
       geom_vline(xintercept = 2012, linetype=2) +
-      geom_vline(xintercept = 2019, linetype=2)
+      geom_vline(xintercept = 2019, linetype=2) +
+      geom_vline(xintercept = 1997, linetype=2)
 
 
 
