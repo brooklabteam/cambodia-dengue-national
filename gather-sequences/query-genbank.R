@@ -73,7 +73,8 @@ dat.sub <- data.table::rbindlist(dat.out)
 head(dat.sub)
 
 
-
+length(dat.cambodia$Accession[dat.cambodia$Serotype==1])#192
+length(dat.cambodia$Accession[dat.cambodia$Serotype==2])#116
 dat.sub <- rbind(dat.sub, dat.cambodia)
 names(dat.sub)[names(dat.sub)=="year"] <- "Year"
 
