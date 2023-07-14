@@ -100,7 +100,7 @@ pB1 <- ggtree(tree1, mrsd=mrsd.denv1, color="forestgreen")  +
   #geom_range(range='length_0.95_HPD', color='red', alpha=.6, size=2) +
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1) +
   scale_x_continuous(breaks=c(1950, 1975, 2000, 2020))+
-  scale_fill_continuous(low="yellow", high="red")+
+  scale_fill_continuous(low="yellow", high="red", limits=c(0,1))+
   theme(legend.position = c(.2,.8), 
         legend.key.size = unit(.3, units="cm"),
         legend.text = element_text(size=6),
@@ -121,7 +121,7 @@ pC2 <- ggtree(tree2, mrsd=mrsd.denv2, color="navy")  + theme_tree2() +
                   offset =-37, angle=270, offset.text = -12)  +
   #geom_tiplab(size=1)+
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1) +
-  scale_fill_continuous(low="yellow", high="red") +
+  scale_fill_continuous(low="yellow", high="red", limits=c(0,1)) +
   scale_x_continuous(breaks=c(1950, 1975, 2000, 2020))+
   theme(legend.position = c(.2,.8), 
         legend.key.size = unit(.3, units="cm"),

@@ -87,10 +87,9 @@ dat.all.denv1$Subclade <- factor(dat.all.denv1$Subclade,
 
 #take a glance
 pA <- ggtree(rooted.D1) %<+% dat.all.denv1 + geom_tippoint(aes(fill=Subclade), shape=21 ) +
-  geom_tiplab(size=1) + geom_nodelab(size=1) +
-  scale_fill_manual(values=colz1) + theme(legend.position = c(.13,.83), 
-                                          legend.background = element_rect(color="black"),
-                                          legend.title = element_blank()) +
+  geom_tiplab(size=1, hjust=-.1) + #geom_nodelab(size=1, hjust=2) +
+  scale_fill_manual(values=colz1, name=NULL) + theme(legend.position = c(.3,.83), 
+                                          legend.background = element_rect(color="black")) +
   geom_cladelabel(node=gen2, label="Genotype II", color="royalblue", offset = .0335) +
   geom_cladelabel(node=gen3, label="Genotype III", color="darkgoldenrod1",  offset = .082, extend = c(0,5)) +
   geom_cladelabel(node=gen1, label="Genotype I", color="tomato",  offset = .018) +
@@ -98,7 +97,16 @@ pA <- ggtree(rooted.D1) %<+% dat.all.denv1 + geom_tippoint(aes(fill=Subclade), s
 
 pA
 
+A.dat <- pA$data
 
+A.dat$node_fill <- NA
+A.dat$node_fill[(length(dat.all.denv1$tip_label)+1):length(A.dat$label)] <- as.numeric(A.dat$label[(length(dat.all.denv1$tip_label)+1): length(A.dat$label)])#fill with label
+
+
+pA2 <- pA  %<+% A.dat + 
+        ggnewscale::new_scale_fill() + 
+        geom_nodepoint(aes(fill=node_fill), shape=21, color="black", size=1, stroke=.1) + 
+        scale_fill_continuous(low="yellow", high="red", limits=c(0,100), name="Bootstrap\nSupport") + theme(legend.box = "horizontal", legend.title = element_text(size=10))
 #and do DENV2
 
 dat.denv2 <- subset(dat, Serotype!="DENV-1")
@@ -164,12 +172,12 @@ AsAm <- MRCA(rooted.D2, which(rooted.D2$tip.label == "HQ999999_Guatemala_2009" )
 Asian1 <- MRCA(rooted.D2, which(rooted.D2$tip.label == "GQ868591_Thailand_1964" ),which(rooted.D2$tip.label == "OL414721_Cambodia_2019"))
 Asian2 <- MRCA(rooted.D2, which(rooted.D2$tip.label == "HQ891024_Taiwan_2008" ),which(rooted.D2$tip.label == "JF730050_Puerto_Rico_2007"))
 
-
+rooted.D2$node.label[as.numeric(rooted.D2$node.label)<80] <- ""
 
 #take a glance
 pB <- ggtree(rooted.D2) %<+% dat.all.denv2 + geom_tippoint(aes(fill=Subclade), shape=21 ) +
-  geom_tiplab(size=1) + geom_nodelab(size=1) +
-  scale_fill_manual(values=colz2) + theme(legend.position = c(.13,.76), 
+  geom_tiplab(size=1, hjust=-.1) + #geom_nodelab(size=1, hjust=2) +
+  scale_fill_manual(values=colz2, name=NULL) + theme(legend.position = c(.13,.76), 
                                           legend.background = element_rect(color="black"),
                                           legend.title = element_blank()) +
   geom_cladelabel(node=cosmoIII, label="Cosmopolitan III", color="royalblue", offset = .039, extend = c(0,8), fontsize = 3.5) +
@@ -179,13 +187,26 @@ pB <- ggtree(rooted.D2) %<+% dat.all.denv2 + geom_tippoint(aes(fill=Subclade), s
   geom_cladelabel(node=AsAm , label="Asian-American", color="darkorange1",  offset = .057, fontsize = 3.5) +
   geom_cladelabel(node=Asian1 , label="Asian-I", color="forestgreen",  offset = .0565, fontsize = 3.5) +
   geom_cladelabel(node=Asian2 , label="Asian-II", color="darkgoldenrod1",  offset = .129, extend = c(1,1), fontsize = 3.5) +
-  xlim(c(0,.16)) +geom_treescale( x=.004,y=74, linesize = .5, fontsize = 3.5) 
+  xlim(c(0,.16)) +geom_treescale( x=.002,y=74, linesize = .5, fontsize = 3.5) 
 
 pB
 
+
+B.dat <- pB$data
+
+B.dat$node_fill <- NA
+B.dat$node_fill[(length(dat.all.denv2$tip_label)+1):length(B.dat$label)] <- as.numeric(B.dat$label[(length(dat.all.denv2$tip_label)+1):length(B.dat$label)])#fill with label
+
+
+pB2 <- pB  %<+% B.dat + 
+  ggnewscale::new_scale_fill() + 
+  geom_nodepoint(aes(fill=node_fill), shape=21, color="black", size=1, stroke=.1, show.legend = F) + 
+  scale_fill_continuous(low="yellow", high="red", limits=c(0,100)) 
+#and do DENV2
+
 #and together
 
-FigS3 <- cowplot::plot_grid(pA, pB, ncol = 2, nrow = 1, labels = c("A", "B"),label_size = 18)
+FigS3 <- cowplot::plot_grid(pA2, pB2, ncol = 2, nrow = 1, labels = c("A", "B"),label_size = 18)
 
 
 ggsave(file = paste0(homewd, "/final-figures/FigS3.png"),
