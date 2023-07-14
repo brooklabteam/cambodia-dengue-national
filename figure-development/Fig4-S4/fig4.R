@@ -65,8 +65,8 @@ pA<-pSEA+
 
 
 #now add the trees
-tree1 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv1-out/DENV1avg.tree"))
-tree2 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv2-out/DENV2avg.tree"))
+tree1 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv1-out-final/DENV1avg.tree"))
+tree2 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv2-out-final/DENV2avg.tree"))
 
 tree1dat <- cbind.data.frame(tip_name = tree1@phylo$tip.label)
 
@@ -87,16 +87,16 @@ dat$date <- as.Date(dat$date)#, format = "%m/%d/%y")
 #dat$date <- as.Date(dat$date, format = "%m/%d/%y")
 
 
-mrsd.denv1 <- max(dat$date[dat$DENV.serotype=="DENV-1"]) #"2020-07-13"
+mrsd.denv1 <- max(dat$date[dat$DENV.serotype=="DENV-1"]) #"2020-12-15"
 mrsd.denv2 <- max(dat$date[dat$DENV.serotype=="DENV-2"])#"2020-09-23"
 
-node.tree1 <- MRCA(tree1, which(tree1@phylo$tip.label== "OL412678_2019-07-25" ),which(tree1@phylo$tip.label == "GQ357692_2008-07-31"))
+node.tree1 <- MRCA(tree1, which(tree1@phylo$tip.label== "OL412678_2019-07-25" ),which(tree1@phylo$tip.label == "ON046271_2004-11-20"))
 
 
 pB1 <- ggtree(tree1, mrsd=mrsd.denv1, color="forestgreen")  + 
   geom_cladelab(node=node.tree1, label="Genotype I", textcolor="seagreen", barcolor="seagreen", fontsize=6,
-               offset =-37, angle=270, offset.text = -12, vjust=2, hjust=.5)  +
-  theme_tree2() + coord_cartesian(xlim=c(1930,2030), ylim=c(0,350)) + 
+              offset =-37, angle=270, offset.text = -12, vjust=2, hjust=.5)  +
+  theme_tree2() + coord_cartesian(xlim=c(1930,2030), ylim=c(0,390)) + 
   #geom_range(range='length_0.95_HPD', color='red', alpha=.6, size=2) +
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1) +
   scale_x_continuous(breaks=c(1950, 1975, 2000, 2020))+
@@ -114,7 +114,7 @@ node.tree2 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414741_2019-07-23" ),
 node.tree2.1 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414721_2019-07-25" ),which(tree2@phylo$tip.label == "KF744400_2000-07-31"))
 
 pC2 <- ggtree(tree2, mrsd=mrsd.denv2, color="navy")  + theme_tree2() + 
-  coord_cartesian(xlim=c(1930,2030),  ylim=c(0,300))+
+  coord_cartesian(xlim=c(1930,2030),  ylim=c(0,350))+
   geom_cladelab(node=node.tree2, label="Cosmopolitan I", textcolor="tomato",barcolor="tomato",
                 offset =-37, angle=270, offset.text = -12, fontsize=6, vjust=2, hjust=.5)  +
   geom_cladelab(node=node.tree2.1, label="Asian I", textcolor="navy", barcolor="navy", fontsize=6,vjust=2, hjust=.5,

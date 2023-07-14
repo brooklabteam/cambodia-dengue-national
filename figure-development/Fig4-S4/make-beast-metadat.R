@@ -32,8 +32,8 @@ setwd(homewd)
 
 
 #load the trees
-tree1 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv1-out/DENV1avg.tree"))
-tree2 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv2-out/DENV2avg.tree"))
+tree1 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv1-out-final/DENV1avg.tree"))
+tree2 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv2-out-final/DENV2avg.tree"))
 
 
 
