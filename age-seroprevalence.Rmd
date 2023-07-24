@@ -1,0 +1,101 @@
+---
+title: "Modeling Age-Seroprevalence"
+output: pdf_document
+date: "2023-05-10"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Modeling Age-Seroprevalence 
+
+### Catalytic Model
+
+The catalytic model (Muench 1959) describes the dynamics of a perfectly immunizing, acute infection, whereby we can divide the population into two classes: susceptible and seropositive, which together, make up 100% of the population. From this, it follows that we can describe this population with just one differential equation, where, here, we represent the seropositive population as (P):
+
+\begin{align}
+		\tag{1}
+ 		\frac{dP(a)}{da} = & \lambda(a) (1-P(a))
+\end{align}
+
+where $a$ represents the host's age and $\lambda(a)$ is the age-specific force of infection, the rate at which susceptibles seroconvert. 
+
+[Long et al. 2010](https://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1001224) demonstrate how to integrate equation (1) to solve for $P(a)$, then subsequently convert the mathematics into R-code. We replicated this approach in [Brook et al. 2017](https://www.sciencedirect.com/science/article/pii/S1755436517300634). From this integration, we find that:
+
+\begin{align}
+    \tag{2}
+    P(a) = 1+C e^{-\int_{0}^{a} \lambda(a) da}
+\end{align}
+
+Now, if we assume all individuals are susceptible at birth, such that $P(a) =0$ when $a = 0$, we find that then $C=-1$. from this, we can adapt equation (2) such that:
+
+\begin{align}
+    \tag{3}
+    P(a) = 1- e^{-\int_{0}^{a} \lambda(a) da}
+\end{align}
+
+### Reverse Catalytic Model
+
+Next, we can extend equation (1) to allow for cases in which immunity wanes and hosts return to susceptible status and become re-exposed (via $\lambda(a)$) as they age. [Pomeroy et al. 2015](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0136642) define this approach in their paper. Including waning immunity, the population can now be described as:
+
+\begin{align}
+		\tag{4}
+ 		\frac{dP(a)}{da} = & \lambda(a)(1-P(a))-\sigma P(a)
+\end{align}
+
+where $\sigma$ is the rate of waning immunity, here modeled as constant across all age classes.
+
+As in equation (2), we can now integrate equation (4) to solve for $P(a)$. From this, we get:
+
+
+\begin{align}
+    \tag{5}
+    P(a) =  \frac{\lambda(a)}{\lambda(a)+\sigma} +C e^{-\int_{0}^{a} (\lambda(a) + \sigma) da}
+\end{align}
+
+Again, we can assume that all individuals are susceptible at birth, such that $P(a) =0$ when $a = 0$. Here, we find then that $C=-\frac{\lambda(a)}{\lambda(a)+\sigma}$. From this, we can adapt equation (5) such that:
+
+
+\begin{align}
+    \tag{6}
+    P(a) =  \frac{\lambda(a)}{\lambda(a)+\sigma}(1- e^{-\int_{0}^{a} (\lambda(a) + \sigma) da})
+\end{align}
+
+In the supplementary material of [Brook et al. 2017](https://www.sciencedirect.com/science/article/pii/S1755436517300634), we converted this into R-code.
+
+
+### Catalytic Model for Multiple Exposures in Age-Structured Dengue Incidence
+
+[Ferguson et al. 1999](https://royalsocietypublishing.org/doi/abs/10.1098/rstb.1999.0428) build on this prior work to model the force of infection for exposure to multiple (two) serotypes of dengue, using age-structured serological data. [Cummings et al. 2009](https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000139) then adapt Ferguson's work to model age-structured incidence data. They assume that all reported cases represent secondary infections (which are more severe and, thus, more likely to be reported). The bulk of their work is in the supplementary material, where they derive expressions for three possible disease states: those naive to all serotypes, those previously exposed to only one serotype (but still susceptible to the others), and those previously exposed to multiple serotypes.
+
+These equations are defined as follows:
+
+\begin{align}
+    \tag{7}
+    x(a,t) =  e^{-\int_{0}^{a} \sum_i \lambda_i (a - \tau, t - \tau) d \tau}
+\end{align}
+
+where $ x(a,t) $ is the population susceptible to all dengue serotypes at age $a$ and time $t$ and $\lambda_i$ is the FOI of seroptype $i$.
+
+
+\begin{align}
+    \tag{8}
+    z_i(a,t) =    x(a,t)[  e^{-\int_{0}^{a} \lambda_i (a - \tau, t - \tau) d \tau}-1]
+\end{align}
+
+where $z_i(a,t)$ is the population exposed to a single serotype $i$ at time $t$ but still susceptible to all others. And, finally:
+
+\begin{align}
+    \tag{9}
+    z_**(a,t) =    1-x(a,t)-\sum_i z_i(a,t)
+\end{align}
+
+where *z_**(a,t)* represents the population of multi-typic infections.
+
+I have already successfully converted the above model to R-code and fit it to data. However, I have some cases of very old individuals getting infected in the dataset in more recent years, which I think is because they are experiencing tertiary exposures to a new genotype (and/or it is possible people did not live long enough before for their immunity to wane). 
+
+Regardless, **my question then is this: Can we incorporate a term for waning immunity in the dengue hazard model, such that those in the multi-typic infection class can wane back into the 'single serotype immune class' and become re-exposed?**
+
+
+On the attached page, I show my rendition of the Cummings et al. 2009 model, in compartmental diagram form, as well as how I envision this extension, again in compartmental diagram form. But I don't remember calculus, so how would you solve it????
