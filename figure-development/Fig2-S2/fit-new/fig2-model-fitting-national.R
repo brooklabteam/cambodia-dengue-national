@@ -358,8 +358,8 @@ log.lik.fit.all <- function(par, par.dat, dat, year.start){
   out.merge <- merge(out.mod, dat.merge, by= c("year", "age"))
   out.merge$cum_prop_cases_data <- out.merge$cum_cases/out.merge$n
   
-  #ggplot(data=out.merge) + geom_line(aes(x=age,y= cum_prop_cases), color="tomato") + facet_wrap(~year) + 
-  #geom_point(aes(x=age, y=cum_prop_cases_data)) + geom_line(aes(x=age, y=cum_prop_cases_data))
+  # ggplot(data=out.merge) + geom_line(aes(x=age,y= cum_prop_cases), color="tomato") + facet_wrap(~year) + 
+  # geom_point(aes(x=age, y=cum_prop_cases_data)) + geom_line(aes(x=age, y=cum_prop_cases_data))
   
   # # # # 
   #how likely are the data, given the model as truth?
@@ -411,9 +411,9 @@ fit.all.yrs.seq.yr.BFGS <- function(dat,  lambda.guess, N.sero.fix,  fit.CI){
   
   
   #head(df.out)
-  #    ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
-  #      geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
-  # # # # 
+  #     ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
+  #       geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
+  # # # # # 
   # #make your guess parameters
   #lambda is takes data from the previous year and creates infections in this year
   
