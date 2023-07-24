@@ -1,0 +1,42 @@
+
+RAxML-NG v. 1.1.0 released on 29.11.2021 by The Exelixis Lab.
+Developed by: Alexey M. Kozlov and Alexandros Stamatakis.
+Contributors: Diego Darriba, Tomas Flouri, Benoit Morel, Sarah Lutteropp, Ben Bettisworth.
+Latest version: https://github.com/amkozlov/raxml-ng
+Questions/problems/suggestions? Please visit: https://groups.google.com/forum/#!forum/raxml
+
+System: Apple M1 Pro, 10 cores, 32 GB RAM
+
+RAxML-NG was called at 26-May-2022 13:33:01 as follows:
+
+/Applications/raxml-ng/raxml-ng --check --msa /Users/carabrook/Developer/cambodia-dengue-national/figure-development/FigS4/denv2ML/align-DENV2-ML.fasta --model GTR+I+G4 --prefix T1
+
+Analysis options:
+  run mode: Alignment validation
+  start tree(s): 
+  random seed: 1653589981
+  SIMD kernels: SSE3
+  parallelization: coarse-grained (auto), PTHREADS (auto)
+
+[00:00:00] Reading alignment from file: /Users/carabrook/Developer/cambodia-dengue-national/figure-development/FigS4/denv2ML/align-DENV2-ML.fasta
+[00:00:00] Loaded alignment with 150 taxa and 11082 sites
+
+Alignment comprises 1 partitions and 11082 sites
+
+Partition 0: noname
+Model: GTR+FO+I+G4m
+Alignment sites: 11082
+Gaps: 4.04 %
+Invariant sites: 55.15 %
+
+
+
+Alignment can be successfully read by RAxML-NG.
+
+
+Execution log saved to: /Users/carabrook/Developer/cambodia-dengue-national/figure-development/FigS4/denv2ML/T1.raxml.log
+
+Analysis started: 26-May-2022 13:33:01 / finished: 26-May-2022 13:33:01
+
+Elapsed time: 0.038 seconds
+
