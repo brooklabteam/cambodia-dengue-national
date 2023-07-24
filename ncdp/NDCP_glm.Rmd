@@ -1,0 +1,253 @@
+---
+title: "NDCP GLMs"
+version: May 26, 2023
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Load packages
+library(tidyverse)
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(mgcv)
+library(RColorBrewer)
+library(lubridate)
+
+# Set wd
+setwd("/Users/yekcc/Library/CloudStorage/OneDrive-ICERCambodia/Dengue/NDCP")
+```
+
+```{r}
+# Load and clean NDCP dataset
+NDCP=read_excel("Dengue all years_2002-2020_CompletedV2.xlsx")
+NDCP <- dplyr::rename(NDCP,diagnostic=dianostic)
+NDCP <- NDCP %>% mutate(diagnosis = recode(NDCP$diagnostic, "DF"="df", "DSS"="dss")) %>% mutate(sex = recode(NDCP$sex, "m"="M"))
+
+# Load mortality dataset
+dta0 <- read_excel("Dengue_2002-20020_mortality.xlsx")
+dta0 %>% pivot_wider(names_from=Outcome,values_from="No") -> dta0
+dta0$Alive <- dta0$Total - dta0$Deaths
+
+# Expand case fatality rates to a new dataframe with a binomial output of 0 for non-fatal and 1 for fatal cases
+outdta1 <- NULL
+
+for(i in 1:19){
+  # Year 2002 through 2020
+  for(j in 1:12){
+    # Month 1 through 12
+    Outcome <- c(rep(1,dta0$Deaths[12*(i-1)+j]),rep(0,dta0$Alive[12*(i-1)+j]))
+    outdta<- as.data.frame(Outcome)
+    outdta$Month <- dta0$Month[12*(i-1)+j]
+    outdta$Year <- dta0$Year[12*(i-1)+j]
+    
+    outdta1 <- rbind(outdta1, outdta)
+  }
+}
+
+
+# Load climate data
+ppt <- read.csv("monthly_ppt.csv") #sumppt is total monthly precipitation averaged across provinces, meanppt is mean daily precipitation. For these analyses we keep sumppt
+
+temp <- read.csv("monthly_temp.csv")  #meant, mint, maxt are average, minimum, and maximum daily temperatures for each month, respectively. For these analyses we keep meant
+climate <- full_join(ppt,temp)
+
+```
+
+
+```{r}
+# Calculate lag for ppt and temp and create a lagged version of the crude case number dataset
+
+#vThis is the climate dataset
+clim.sum <- climate %>% mutate(epiyear=year-2002) %>% mutate(epimonth=12*epiyear+month)
+
+# This is the crude case number dataset
+dat.sum <- NDCP %>% group_by(year,month) %>% dplyr::summarise(cases=n()) %>% mutate(epiyear=year-2002) %>% mutate(epimonth=12*epiyear+month)
+
+# Merge the two
+merge.dat <- merge(dat.sum,clim.sum,by="epimonth")
+merge.melt <- melt(merge.dat,id.vars=c("epimonth"))
+case.dat1 = subset(merge.melt,variable=="cases")
+case.dat1$variable <- "meant"
+case.dat2 = subset(merge.melt,variable=="cases")
+case.dat2$variable <- "sumppt"
+case.dat <- rbind(case.dat1,case.dat2)
+
+
+# Plot cases and climate variables
+ggplot(data=subset(merge.melt, variable=="meant" |variable=="sumppt")) + 
+  geom_line(data=case.dat, aes(x=epimonth, y=value),  size=1, alpha=.2) +
+  geom_point(data=case.dat, aes(x=epimonth, y=value), size=3, alpha=.2) +
+  geom_point(aes(x=epimonth, y=value, color=variable),  size=3, show.legend = F) +
+  geom_line(aes(x=epimonth, y=value, color=variable),  size=1, show.legend = F) +
+  facet_grid(variable~., scales = "free") + ylim(c(0, NA)) +
+  theme_bw() + theme(legend.position = c(.2,.87), panel.grid = element_blank(),
+                     legend.title = element_blank(),
+                     axis.title = element_blank(), 
+                     strip.text = element_text(size=14),
+                     strip.background = element_rect(fill="white"),
+                     legend.text = element_text(size=12),
+                     plot.margin = unit(c(.2,.1,1.3,1.1), "lines"),
+                     axis.text = element_text(size=14))
+
+
+# Look for cross-correlations
+dat.lag <- cbind.data.frame(lag = print(ccf(merge.dat$sumppt, merge.dat$cases))$lag, acf=print(ccf(merge.dat$sumppt, merge.dat$cases))$acf)
+dat.lag$variable <- "sumppt"
+dat.lag$lag[dat.lag$acf==max(dat.lag$acf)] #Sum ppt precedes cases by 11 months
+dat2 = cbind.data.frame(lag = print(ccf(merge.dat$meant, merge.dat$cases))$lag, acf=print(ccf(merge.dat$meant, merge.dat$cases))$acf)
+dat2$variable <- "meant"
+dat2$lag[dat2$acf==max(dat2$acf)] #Mean temp precedes cases by 3 months
+dat.lag <- rbind(dat.lag, dat2)
+
+# Plot acf
+# include the optimal lag on plot
+max.lag <- dlply(dat.lag, .(variable))
+get.lag <- function(df){
+  lag = df$lag[df$acf==max(df$acf)]
+  df.out = cbind.data.frame(variable=unique(df$variable), lag=lag)
+  return(df.out)
+}
+max.lag <- data.table::rbindlist(lapply(max.lag, get.lag))
+max.lag$label = paste0("lag=", max.lag$lag, "epimonth")
+
+ggplot(dat.lag) + geom_label(data=max.lag, aes(x=18,y=.4, label=label), label.size = 0) +
+             geom_bar(aes(x=lag, y=acf), stat = "identity") + ylim(c(NA,.45)) +
+             geom_hline(aes(yintercept=0.09), color="blue", linetype=2) +
+             geom_hline(aes(yintercept=-0.09), color="blue", linetype=2) +
+             facet_grid(variable~.) + theme_bw() + theme(legend.position = c(.2,.87), panel.grid = element_blank(),
+                                                         legend.title = element_blank(),
+                                                         axis.title = element_text(size=16),
+                                                         strip.background = element_rect(fill="white"),
+                                                         strip.text = element_text(size=14),
+                                                         legend.text = element_text(size=12),
+                                                         plot.margin = unit(c(.2,.1,.1,1.1), "lines"),
+                                                         axis.text = element_text(size=14))
+
+
+```
+
+```{r}
+# Make a dataframe with lagged climate variables
+##Temp lagged 3 months, Precipitation lagged 11 months
+merge.shift <- merge.dat[12: length(merge.dat$epimonth),]
+merge.shift$precip_lag <- merge.dat$sumppt[1:(length(merge.dat$sumppt)-11)]
+merge.shift$meantempLag <- merge.dat$meant[9:(length(merge.dat$meant)-3)]
+
+
+# Run glm with fixed effects
+m1 <- glm(cases~ epiyear.x + meantempLag + precip_lag, data = merge.shift, family = "poisson")
+summary(m1)
+
+# Repeat with unlagged data
+m2 <- glm(cases~ epiyear.x + meant + sumppt, data = merge.shift, family = "poisson")
+summary(m2)
+
+# Now with climate variables as random effects
+library(lme4)
+m3 <- glmer(cases~epiyear.x + (1|meantempLag) + (1|precip_lag) ,data = merge.shift, family = "poisson")
+summary(m3) ## Issue here with very large eigenvalue / "model is nearly unidentifiable"
+
+# Compare the first two
+AIC(m1,m2) #m1 is better
+
+
+# Plot model output
+out.m1 <- as.data.frame(summary(m1)$coefficients)
+out.m1$lci <- out.m1[,1] - 1.96*out.m1[,2]
+out.m1$uci <- out.m1[,1] + 1.96*out.m1[,2]
+out.m1$effect <- row.names(out.m1)
+out.m1 <- subset(out.m1, effect!="(Intercept)")
+out.m1$effect[out.m1$effect=="meantempLag"] <- "mean temperature,\nlagged 3 months"
+out.m1$effect[out.m1$effect=="precip_lag"] <- "sum precipitation,\nlagged 11 months"
+out.m1$effect[out.m1$effect=="epiyear.x"] <- "year"
+names(out.m1)[names(out.m1)=="effect"] <- "predictor"
+
+ggplot(out.m1) + geom_point(aes(x=predictor, y=Estimate), size=3) +
++     geom_errorbar(aes(x=predictor, ymin=lci, ymax=uci), linewidth=1) +
++     geom_hline(aes(yintercept=0), linetype=2, color="cornflowerblue", linewidth=1) +
++     theme_bw() +  coord_flip(ylim=c(-.03,3.3)) +
++     ylab("Slope") +
++     theme(panel.grid = element_blank(),
++           axis.title = element_text(size=16),
++           plot.margin = unit(c(.5,.5,.1,.5), "lines"),
++           axis.text = element_text(size=14))
+
+
+# Now plot the predictions alongside crude case data
+merge.shift$predict_case <- m1$fitted.values
+merge.shift$predict_case_lci <- merge.shift$predict_case - 1.96*(summary(m1)$coefficients[1, 2])
+merge.shift$predict_case_uci <- merge.shift$predict_case + 1.96*(summary(m1)$coefficients[1, 2])
+merge.shift$date <- as.Date(paste0(merge.shift$year.x, "-", merge.shift$month.x, "-01"))
+
+ggplot(data=merge.shift) + theme_bw() + ylab("Crude Cases") +
+  geom_line(aes(x=date, y= cases)) +
+  geom_line(data=merge.shift, aes(x=date, y=predict_case), color="red") +
+  geom_ribbon( aes(x=date, ymin=predict_case_lci, ymax=predict_case_uci), 
+               alpha=.3, fill="red")
+
+```
+
+
+```{r}
+# Run glm with fixed effects and lagged climate variables for case phenotypes and case fatality data
+
+logreg <- NDCP %>% select("year","month","age","diagnosis") %>% mutate(df=ifelse(diagnosis=="df",1,0)) %>% mutate(dhf=ifelse(diagnosis=="dhf",1,0)) %>% mutate(dss=ifelse(diagnosis=="dss",1,0))
+
+shifted <- merge.shift %>% dplyr::rename(year=year.x,month=month.x) %>% select("year","month","precip_lag","meantempLag")
+
+logreg <- left_join(logreg,shifted)
+logreg <- drop_na(logreg)
+
+glmdhf = glm(dhf ~ year + precip_lag + meantempLag,family="binomial",data = logreg)
+summary(glmdhf)
+
+glmdss = glm(dss ~ year + precip_lag + meantempLag,family="binomial",data = logreg)
+summary(glmdss)
+
+# And case fatality
+outdta1 <- outdta1 %>% dplyr::rename(month=Month,year=Year)
+outdta1 <- left_join(outdta1,shifted)
+
+glmcfr = glm(Outcome ~ year + precip_lag + meantempLag,family="binomial",data = outdta1)
+summary(glmcfr)
+
+```
+
+```{r}
+# Lastly, glm of case age by year
+
+##Mean age by year
+agemean <- NDCP %>% group_by(year,month) %>% dplyr::summarise(age=mean(age))
+
+agemean <- left_join(agemean,shifted)
+
+glmage = glm(age ~ year + precip_lag + meantempLag,family="gaussian",data = agemean)
+summary(glmage)
+
+agemgam <- gam(age ~ year + s(month, k=7, bs="cc"),
+                               family="gaussian",data = agemean)
+summary(agemgam)
+agemean$predict_gam <- predict.gam(agemgam, type="response",exclude="s(month)")
+agemean$predict_gam_lci <- agemean$predict_gam - 1.96*predict.gam(agemgam,type="response",exclude="s(month)",se.fit=T)$se
+agemean$predict_gam_uci <- agemean$predict_gam + 1.96*predict.gam(agemgam,type="response",exclude="s(month)",se.fit=T)$se
+
+agemean.annual <- dplyr::select(agemean, year, month, date, predict_gam, predict_gam_lci, predict_gam_uci)
+agemean.annual <- subset(agemean.annual, month ==1)
+
+fig2a <- ggplot(data=agemean) + theme_bw() + ylab("Mean age of dengue cases (years)") + geom_line(aes(x=date,y=age)) + xlab("Time") + geom_line(data=agemean.annual,aes(x=date,y=predict_gam),color="red") + geom_ribbon(data=agemean.annual,aes(x=date,ymin=predict_gam_lci,ymax=predict_gam_uci),alpha=.3,fill="red")
+
+
+
+
+```
+
+
+
+
+
+
