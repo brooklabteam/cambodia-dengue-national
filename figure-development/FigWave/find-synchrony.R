@@ -29,6 +29,8 @@ climdat <- merge(climdat, popdat, by=c("provname", "year"), all.x = T)
 climdat$cases_per_1000 <- (climdat$cases/climdat$pop)*1000
 
 #ggplot(climdat) +geom_line(aes(x=month_date, y=pop, color=provname))
+#ggplot(climdat) +geom_line(aes(x=month_date, y=precip_mm, color=provname)) + coord_cartesian(xlim=c(as.Date("2018-01-01"),as.Date("2020-12-01")))
+#ggplot(climdat) +geom_line(aes(x=month_date, y=temp_C, color=provname))
 
 #first, for each time series per province, run a function to collect:
 #(a) the reconstructed period for each timestep, both annual

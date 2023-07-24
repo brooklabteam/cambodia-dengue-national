@@ -144,6 +144,16 @@ p3 <- ggplot(dat) + theme_bw() + ylab("mean period duration,\ndengue incidence")
 
 p3
 
+
+p3b <- ggplot(dat) + theme_bw() + ylab("mean period duration,\ndengue incidence") +
+  theme(panel.grid = element_blank(), legend.position = "bottom", axis.title.x = element_blank(), axis.title.y = element_text(size=16),
+        axis.text = element_text(size=14)) +
+  geom_line(aes(x=month_date,y=multi_period, color=provname)) +
+  #geom_line(data=nat.dat, aes(x=month_date, y= multi_period), linewidth=1.5) + 
+  facet_wrap(~provname, ncol=4)
+
+p3b
+
 #less here - power
 p4 <- ggplot(data=dat) + theme_bw() +
   theme(panel.grid = element_blank(), axis.title = element_blank(),
