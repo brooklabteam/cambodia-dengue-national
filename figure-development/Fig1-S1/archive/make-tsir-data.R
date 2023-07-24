@@ -145,7 +145,7 @@ get.data.tsir <- function(dat, pop.dat){
   #and merge
   new.dat <- merge(out.dat, pop.dat, by="time", all.x = T, sort = F)
   #and slim to what is needed
-  new.dat <- dplyr::select(new.dat, time, cases, births, pop)
+  new.dat <- dplyr::select(new.dat, time, cases, births, pop, yr, biweek)
   
   
   ## return things needed for TSIR

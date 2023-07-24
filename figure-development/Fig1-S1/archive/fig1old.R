@@ -1,16 +1,47 @@
-
-
-library(plyr)
-library(dplyr)
-library(ggplot2)
-
-rm(list=ls())
 # This file is for figure 1. 
+
+######################################################################################
+#### Fig A | TSIR with increased S,time vs case ######################################
+######################################################################################
 
 homewd = "/Users/carabrook/Developer/cambodia-dengue-national"
 
 
+rm(list = ls())
 
+
+library(ggplot2)
+library(reshape2)
+library(pracma)
+library(astsa)
+library(sp)
+library(GADMTools)
+library(plotrix)
+library(tsiR)
+library(lubridate)
+library(plm)
+library(interp)
+library(foreign)
+library(gplots)
+library(lfe)
+library(zoo)
+library(e1071)
+library(xts)
+library(RColorBrewer)
+library(cowplot)
+library(ggpubr)
+library(graphics)
+library(stargazer)
+library(grid)
+library(gridExtra)
+library(png)
+library(kernlab)
+require("knitr")
+
+# homewd = "/home/mae/0BrookLab/TSIR/0main_r_tsir/6_fig4/data"
+ homewd = "/Users/carabrook/Developer/cambodia-dengue-national"
+#homewd <- "/home/rstudio"
+# setwd(homewd)
 
 #see the script "generate-combined-tsir-increased-S-increased-beta-dataset.R" 
 # to build the datasets that are used here
