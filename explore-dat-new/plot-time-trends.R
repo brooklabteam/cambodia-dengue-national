@@ -13,8 +13,8 @@ head(dat)
 
 #plot time series of each type by province by year
 
-unique(dat$dianostic) #df, dhf, dss
-dat$date <- as.Date(dat$date)
+unique(dat$diagnostic) #df, dhf, dss
+dat$date <- as.Date(dat$date, format = "%m/%d/%y")
 dat$epiwk <- cut.Date(dat$date, breaks="weeks", start.on.monday = T)
 dat$epiwk <- as.Date(as.character(dat$epiwk))
 dat$epiwk[dat$epiwk< "2002-01-01"] <- "2002-01-01"
@@ -34,21 +34,21 @@ dat$case=1
 
 
 #sum by epidemic biweek, type, province
-dat.sum <- ddply(dat, .(year, biwk, provname, dianostic), summarise, cases = sum(case), epiwk = min(epiwk))
+dat.sum <- ddply(dat, .(year, biwk, provname, diagnostic), summarise, cases = sum(case), epiwk = min(epiwk))
 
 head(dat.sum)
 
 #plot infection type by province by year
-p1 <- ggplot(data=dat.sum) + geom_line(aes(x=epiwk, y=cases, color=dianostic)) +
+p1 <- ggplot(data=dat.sum) + geom_line(aes(x=epiwk, y=cases, color=diagnostic)) +
       facet_wrap(~provname, ncol = 5, scales = "free_y") + coord_cartesian(xlim=c(as.Date("2018-01-01"), as.Date("2021-01-01")))
 p1
 
 
-p2 <- ggplot(data=dat.sum) + geom_line(aes(x=epiwk, y=cases, color=dianostic)) +
+p2 <- ggplot(data=dat.sum) + geom_line(aes(x=epiwk, y=cases, color=diagnostic)) +
   facet_wrap(~provname, ncol = 5, scales = "free_y") + coord_cartesian(xlim=c(as.Date("2011-01-01"), as.Date("2014-01-01")))
 p2
 
-p3 <- ggplot(data=dat.sum) + geom_line(aes(x=epiwk, y=cases, color=dianostic)) +
+p3 <- ggplot(data=dat.sum) + geom_line(aes(x=epiwk, y=cases, color=diagnostic)) +
   facet_wrap(~provname, ncol = 5, scales = "free_y") + coord_cartesian(xlim=c(as.Date("2006-01-01"), as.Date("2009-01-01")))
 p3
 
@@ -166,12 +166,12 @@ out = derivatives(m1,
                   eps = 1e-7,
                   interval = "confidence")
 
-out_df <- cbind.data.frame(bat_species=bat_spp, 
-                           measurement=measurement, 
-                           day_of_year=days_to_calc, 
-                           slope= out$derivative,
-                           lci = out$lower,
-                           uci=out$upper)
+# out_df <- cbind.data.frame(bat_species=bat_spp, 
+#                            measurement=measurement, 
+#                            day_of_year=days_to_calc, 
+#                            slope= out$derivative,
+#                            lci = out$lower,
+#                            uci=out$upper)
 
 
 m1b <- gam(cases ~ s(year, by=provname, bs="tp", k=3) + 
@@ -181,11 +181,13 @@ summary(m1b)
 
 AIC(m1, m1b)
 #plot.gam(m1) #positive trend by year but some deviations
+dat.prov$month = month(dat.prov$epiwk)
 
-m1alt <- gam(cases ~ s(year, by=provname, k=3, bs="tp") + s(week, k=7, bs="cc"), dat = dat.prov, family="poisson")
+m1alt <- gam(cases ~ s(year, by=provname, k=3, bs="tp") + s(month, k=7, bs="cc"), dat = dat.prov, family="poisson")
 summary(m1alt)
 plot(m1alt)
-dat.prov$proj <- predict.gam(m1alt, exclude="s(week)")
+#dat.prov$proj <- predict.gam(m1alt, exclude="s(week)")
+dat.prov$proj <- predict.gam(m1alt, exclude="s(month)")
 
 ggplot(dat.prov) + geom_line(aes(x=epiwk, y=proj, color=provname))
 
@@ -210,7 +212,7 @@ dec.cases = subset(prov.df[[1]], y<0) #these are the exterior of the country
 
 #and check the same for dhf and dss
 head(dat)
-dat.prov.dhf <- ddply(subset(dat, dianostic=="dhf"), .(year, biwk, provname), summarise, cases = sum(case), epiwk=min(epiwk))
+dat.prov.dhf <- ddply(subset(dat, diagnostic=="dhf"), .(year, biwk, provname), summarise, cases = sum(case), epiwk=min(epiwk))
 head(dat.prov.dhf)
 #plot
 
@@ -221,6 +223,7 @@ p3 <- ggplot(data=dat.prov.dhf) + geom_line(aes(x=epiwk, y=cases, color=provname
   geom_vline(xintercept = c(as.Date("2019-01-01")), color="red", linetype=2)
 
 dat.prov.dhf$provname <- as.factor(dat.prov.dhf$provname)
+dat.prov.dhf[!is.na(dat.prov$epiwk),]$month <- month(dat.prov$epiwk[!is.na(dat.prov$epiwk)])
 m2 <- gam(cases ~ s(year, bs="tp", k=3) + s(biwk, k=7, bs="cc") + s(provname, bs="re"), dat = dat.prov.dhf, family="poisson")
 summary(m2)
 #plot.gam(m2) #positive trend by year but some deviations
@@ -238,7 +241,7 @@ dec.cases.dhf = subset(prov.df.dhf[[1]], y<0) #these are the exterior of the cou
 #above - similar
 
 #and dss
-dat.prov.dss <- ddply(subset(dat, dianostic=="dss"), .(year, biwk, provname), summarise, cases = sum(case), epiwk=min(epiwk))
+dat.prov.dss <- ddply(subset(dat, diagnostic=="dss"), .(year, biwk, provname), summarise, cases = sum(case), epiwk=min(epiwk))
 head(dat.prov.dss)
 #plot
 

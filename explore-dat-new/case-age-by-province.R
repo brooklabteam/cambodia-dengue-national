@@ -15,7 +15,7 @@ min(dat$year)
 #plot time series of each type by province by year
 
 unique(dat$dianostic) #df, dhf, dss
-dat$date <- as.Date(dat$date)
+dat$date <- as.Date(dat$date, format = "%m/%d/%y")
 dat$epimonth <- cut.Date(dat$date, breaks="months", start.on.monday = T)
 dat$epimonth <- as.Date(as.character(dat$epimonth))
 
@@ -90,12 +90,12 @@ p1 <- ggplot(dat.new) + geom_line(aes(x=epimonth, y=cases)) +
 
 #do the same for dss and dhf
 #total cases by week by year by province
-dat.prov.diag <- ddply(dat, .(epimonth, provname, dianostic), summarise, cases = sum(case))
+dat.prov.diag <- ddply(dat, .(epimonth, provname, diagnostic), summarise, cases = sum(case))
 head(dat.prov.diag)
 dat.prov.diag$year <- year(dat.prov.diag$epimonth)
 dat.prov.diag$month <- month(dat.prov.diag$epimonth)
 
-dat.prov.diag.list <- dlply(dat.prov.diag, .(provname, dianostic))
+dat.prov.diag.list <- dlply(dat.prov.diag, .(provname, diagnostic))
 
 dat.prov.diag <-data.table::rbindlist(lapply(dat.prov.diag.list, get.annual.direction, k=5))
 
@@ -107,7 +107,7 @@ dat.prov.diag$direction[dat.prov.diag$annual_slope<0] <- "neg"
 dat.prov.diag$direction[dat.prov.diag$sig=="not-sig"] <- "not-sig"
 
 
-p2 <- ggplot(subset(dat.prov.diag, dianostic=="df")) + geom_line(aes(x=epimonth, y=cases)) +
+p2 <- ggplot(subset(dat.prov.diag, diagnostic=="df")) + geom_line(aes(x=epimonth, y=cases)) +
   geom_line(aes(x=epimonth, y=predict_gam, color=direction)) +
   geom_ribbon(aes(x=epimonth, ymin=predict_gam_lci, 
                   ymax=predict_gam_uci, fill=direction), alpha=.3) +
@@ -116,7 +116,7 @@ p2 <- ggplot(subset(dat.prov.diag, dianostic=="df")) + geom_line(aes(x=epimonth,
   facet_wrap(~provname, nrow=5, ncol=5) + ggtitle(label="dengue fever")
 
 
-p3 <- ggplot(subset(dat.prov.diag, dianostic=="dhf")) + geom_line(aes(x=epimonth, y=cases)) +
+p3 <- ggplot(subset(dat.prov.diag, diagnostic=="dhf")) + geom_line(aes(x=epimonth, y=cases)) +
   geom_line(aes(x=epimonth, y=predict_gam, color=direction)) +
   geom_ribbon(aes(x=epimonth, ymin=predict_gam_lci, 
                   ymax=predict_gam_uci, fill=direction), alpha=.3) +
@@ -125,7 +125,7 @@ p3 <- ggplot(subset(dat.prov.diag, dianostic=="dhf")) + geom_line(aes(x=epimonth
   facet_wrap(~provname, nrow=5, ncol=5) + ggtitle(label="dengue hemorrhagic fever")
 
 
-p4 <- ggplot(subset(dat.prov.diag, dianostic=="dss")) + geom_line(aes(x=epimonth, y=cases)) +
+p4 <- ggplot(subset(dat.prov.diag, diagnostic=="dss")) + geom_line(aes(x=epimonth, y=cases)) +
   geom_line(aes(x=epimonth, y=predict_gam, color=direction)) +
   geom_ribbon(aes(x=epimonth, ymin=predict_gam_lci, 
                   ymax=predict_gam_uci, fill=direction), alpha=.3) +
