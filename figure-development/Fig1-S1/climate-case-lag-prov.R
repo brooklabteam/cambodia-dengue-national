@@ -125,3 +125,7 @@ ddply(lag.climate.df, .(variable), summarise, mean_lag=mean(lag), median_lag = m
 
 #and save lag data
 write.csv(lag.climate.df, file=paste0(homewd,"/data/lags_climate_prov.csv"), row.names = F)
+
+
+#make lagged data based on optimal lags
+
