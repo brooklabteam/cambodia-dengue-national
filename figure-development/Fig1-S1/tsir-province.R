@@ -1203,24 +1203,25 @@ length(unique(tsir.dat$provname)) #25 unique provinces
 
 
 
-# #remove 8 provinces with few cases and sporadic dynamics
-tsir.dat.split <- subset(tsir.dat, provname!="Kep")
-tsir.dat.split <- subset(tsir.dat.split, provname!="Banteay Meanchey")
-tsir.dat.split <- subset(tsir.dat.split, provname!= "Mondul Kiri")
-tsir.dat.split <- subset(tsir.dat.split, provname!="Pailin")
-tsir.dat.split <- subset(tsir.dat.split, provname!="Koh Kong")
-tsir.dat.split <- subset(tsir.dat.split, provname!="Ratanak Kiri")
-tsir.dat.split <- subset(tsir.dat.split, provname!="Stung Treng")
-tsir.dat.split <- subset(tsir.dat.split, provname!="Tboung Khmum")
-
+# # #remove 8 provinces with few cases and sporadic dynamics
+# tsir.dat.split <- subset(tsir.dat, provname!="Kep")
+# tsir.dat.split <- subset(tsir.dat.split, provname!="Banteay Meanchey")
+# tsir.dat.split <- subset(tsir.dat.split, provname!= "Mondul Kiri")
+# tsir.dat.split <- subset(tsir.dat.split, provname!="Pailin")
+# tsir.dat.split <- subset(tsir.dat.split, provname!="Koh Kong")
+# tsir.dat.split <- subset(tsir.dat.split, provname!="Ratanak Kiri")
+# tsir.dat.split <- subset(tsir.dat.split, provname!="Stung Treng")
+ tsir.dat <- subset(tsir.dat, provname!="Tboung Khmum")
+# 
 #split by province and pre-epidemic period
-tsir.split.2007 <- dlply(tsir.dat.split,.(provname))
+tsir.split.2007 <- dlply(tsir.dat,.(provname))
 
-tsir.dat.2012 <- subset(tsir.dat.split, time > 2007.9999)
+tsir.dat.2012 <- subset(tsir.dat, time > 2007.9999)
 tsir.split.2012 <- dlply(tsir.dat.2012,.(provname))
 
-tsir.dat.2019 <- subset(tsir.dat.split, time > 2012.9999)
+tsir.dat.2019 <- subset(tsir.dat, time > 2012.9999)
 tsir.split.2019 <- dlply(tsir.dat.2019,.(provname))
+
 
 
 plot.test.tsir <- function(df, epiyr, sbar1){ 
@@ -1229,14 +1230,15 @@ plot.test.tsir <- function(df, epiyr, sbar1){
   
   suffix = unique(df$provname)
   suffix <- gsub(pattern=" ", replacement = "_", x=suffix)
+  print(suffix)
   
   time.start =  min(df$time)
   dat = subset(df, time >= time.start & time<epiyr)
   
   
   
-  p1 <- plotdata(dplyr::select(dat, -(provname)))
-  
+  p1 <- plotdata(dplyr::select(dat, -(provname), -(biweek), -(year)))
+  p1 <- p1 + theme(plot.margin = unit(c(1,.2,.2,.2), "cm"))
   # 
   # ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/prov-data-plots/data_", epiyr,"_", suffix, ".png"),
   #        units="mm",  
@@ -1247,62 +1249,62 @@ plot.test.tsir <- function(df, epiyr, sbar1){
   
   if(is.null(sbar1)){
     
-  
-  
-  fittedpars1 <- estpars(data=dat,
-                         IP=2, 
-                         alpha=NULL, 
-                         sbar=NULL, 
-                         xreg = "cumcases",
-                         regtype='lm',
-                         family='poisson',
-                         link='log')
-  
- 
-  p2 <- plotsbar(fittedpars1)
-  
-  # ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/prov-Sbar-plots/lm_", epiyr,"_", suffix, ".png"),
-  #        units="mm",  
-  #        width=100, 
-  #        height=110, 
-  #        scale=3, 
-  #        dpi=300)
-  # 
-  
-  # if ((fittedpars1$sbar + fittedpars1$Z[1])>0){
-  #   
-  #   
-     simfitted1 <- simulatetsir(data=dat,
-                                IP = 2,
-                                parms=fittedpars1,
-                                #epidemics='break', threshold=3,
-                                method='pois', nsim=100)
-  #   
-  # }
-  
-  p3 <- plotrho(fittedpars1)
-     
-  fittedpars2 <- estpars(data=dat,
-                         IP=2, 
-                         alpha=NULL, 
-                         sbar=NULL, 
-                         xreg = "cumcases",
-                         regtype='gaussian',
-                         family='poisson',
-                         link='log')
-  
-  
-  p4 <- plotsbar(fittedpars2)
-  
-  simfitted2 <- simulatetsir(data=dat,
-                             IP = 2,
-                             parms=fittedpars2,
-                             #epidemics='break', threshold=3,
-                             method='pois', nsim=100)
-  
-  p5 <- plotrho(fittedpars2)
-  #   
-  
+    
+    
+    fittedpars1 <- estpars(data=dat,
+                           IP=2, 
+                           alpha=NULL, 
+                           sbar=NULL, 
+                           xreg = "cumcases",
+                           regtype='lm',
+                           family='poisson',
+                           link='log')
+    
+    
+    p2 <- plotsbar(fittedpars1)
+    
+    # ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/prov-Sbar-plots/lm_", epiyr,"_", suffix, ".png"),
+    #        units="mm",  
+    #        width=100, 
+    #        height=110, 
+    #        scale=3, 
+    #        dpi=300)
+    # 
+    
+    # if ((fittedpars1$sbar + fittedpars1$Z[1])>0){
+    #   
+    #   
+    simfitted1 <- simulatetsir(data=dat,
+                               IP = 2,
+                               parms=fittedpars1,
+                               #epidemics='break', threshold=3,
+                               method='pois', nsim=100)
+    #   
+    # }
+    
+    p3 <- plotrho(fittedpars1)
+    
+    fittedpars2 <- estpars(data=dat,
+                           IP=2, 
+                           alpha=NULL, 
+                           sbar=NULL, 
+                           xreg = "cumcases",
+                           regtype='gaussian',
+                           family='poisson',
+                           link='log')
+    
+    
+    p4 <- plotsbar(fittedpars2)
+    
+    simfitted2 <- simulatetsir(data=dat,
+                               IP = 2,
+                               parms=fittedpars2,
+                               #epidemics='break', threshold=3,
+                               method='pois', nsim=100)
+    
+    p5 <- plotrho(fittedpars2)
+    #   
+    
   }else{
     
     
@@ -1359,12 +1361,15 @@ plot.test.tsir <- function(df, epiyr, sbar1){
     # 
     p5 <- plotrho(fittedpars2)
   }
- 
   
-  pB <- cowplot::plot_grid(p2, p3, ncol = 1, nrow=2)
-  pC <- cowplot::plot_grid(p4, p5, ncol = 1, nrow=2)
   
-  out.plot <- cowplot::plot_grid(p1, pB, pC, ncol = 3, nrow=1, rel_widths = c(1,1.1,1.1), labels = c("A. Data", "B. lm", "C. gaussian"), label_size = 22)
+  pB <- cowplot::plot_grid(p2, p3, ncol = 1, nrow=2) + theme(plot.margin = unit(c(1,.2,.2,.2), "cm"))
+  pC <- cowplot::plot_grid(p4, p5, ncol = 1, nrow=2) + theme(plot.margin = unit(c(1,.2,.2,.2), "cm"))
+  
+  out.plot <- cowplot::plot_grid(p1, pB, pC, ncol = 3, nrow=1, 
+                                 rel_widths = c(1,1.1,1.1), 
+                                 labels = c("A. Data", "B. Linear regression fit", "C. Gaussian regression fit"), 
+                                 label_size = 18, label_x = c(0,-.2,-.2)) + theme(plot.background = element_rect(fill="white"))
   
   ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/comp-plots/", suffix, "_", epiyr, ".png"),
          units="mm",  
@@ -1375,7 +1380,7 @@ plot.test.tsir <- function(df, epiyr, sbar1){
   
   # if ((fittedpars2$sbar + fittedpars2$Z[1])>0){
   #   
-     
+  
   # }
   # 
   # ## The type of regression used in susceptible reconstruction. 
@@ -1385,8 +1390,11 @@ plot.test.tsir <- function(df, epiyr, sbar1){
   # # One can use any of the GLM ones, but the options are essentially 'poisson' (with link='log'), 'gaussian' (with link='log' or 'identity'), or 'quasipoisson' (with link='log'). Default is 'gaussian'.
   # if ( ((fittedpars1$sbar + fittedpars1$Z[1])>0) & ((fittedpars2$sbar + fittedpars2$Z[1])>0)) {
   #   
-    # out.df <- cbind.data.frame(regtype=c("lm", "gaussian"), AIC = c(fittedpars1$AIC, fittedpars2$AIC), rsquared=c(simfitted1$rsquared, simfitted2$rsquared), Prop_Susceptible = c((signif(fittedpars1$sbar/mean(dat$pop) * 100, 2)), (signif(fittedpars2$sbar/mean(dat$pop) * 100, 2))))
-     
+  out.df <- cbind.data.frame(provname = c(rep(unique(dat$provname),2)),
+                             regtype=c("lm", "gaussian"), 
+                             AIC = c(fittedpars1$AIC, fittedpars2$AIC), rsquared=c(simfitted1$rsquared, simfitted2$rsquared), 
+                             Prop_Susceptible = c((signif(fittedpars1$sbar/mean(dat$pop) * 100, 2)), (signif(fittedpars2$sbar/mean(dat$pop) * 100, 2))))
+  
   # } else if ( ((fittedpars1$sbar + fittedpars1$Z[1])<0) & ((fittedpars2$sbar + fittedpars2$Z[1])>0)){
   #   
   #   out.df <- cbind.data.frame(regtype=c("lm", "gaussian"), AIC = c(fittedpars1$AIC, fittedpars2$AIC), rsquared=c(NA, simfitted2$rsquared))
@@ -1397,28 +1405,77 @@ plot.test.tsir <- function(df, epiyr, sbar1){
   # }
   # out.df$provname <- suffix
   # 
-  # return(out.df)
+  return(out.df)
   
 }
 
 
+
 #Run this to test all the time series
 fit.2007.plot <- lapply(tsir.split.2007, plot.test.tsir, epiyr = 2007, sbar=NULL)
+fit.2007.plot <- data.table::rbindlist(fit.2007.plot)
+fit.2007.plot$epiyr = 2007
+# choose.reg <- function(df){
+#   df1 <- df[df$rsquared ==min(df$rsquared),]
+#   return(df1)
+# }
+# fit.2007.plot <- dlply(fit.2007.plot, .(provname))
+# fit.2007.slim <-  lapply(fit.2007.plot, choose.reg)
+# fit.2007.slim <- data.table::rbindlist(fit.2007.slim ) #10 lm vs. 7 gaussian
+
 fit.2012.plot <- lapply(tsir.split.2012, plot.test.tsir, epiyr = 2012, sbar=NULL)
+fit.2012.plot <- data.table::rbindlist(fit.2012.plot)
+fit.2012.plot$epiyr = 2012
+# fit.2012.plot <- dlply(fit.2012.plot, .(provname))
+# fit.2012.slim <-  lapply(fit.2012.plot, choose.reg)
+# fit.2012.slim <- data.table::rbindlist(fit.2012.slim ) #6 lm vs. 11 gaussian
+
 fit.2019.plot <- lapply(tsir.split.2019, plot.test.tsir, epiyr = 2019, sbar=NULL)
+fit.2019.plot <- data.table::rbindlist(fit.2019.plot)
+fit.2019.plot$epiyr = 2019
+# fit.2019.plot <- dlply(fit.2019.plot, .(provname))
+# fit.2019.slim <-  lapply(fit.2019.plot, choose.reg)
+# fit.2019.slim <- data.table::rbindlist(fit.2019.slim ) #11 lm vs. 6 gaussian
+
+fit.comp <- rbind(fit.2007.plot, fit.2012.plot, fit.2019.plot)
+
+#combine all the fits
+# 
+# #and write over the few that need help
+# plot.test.tsir(tsir.split.2012$Kandal, epiyr = 2012, sbar1 = median(c(.57, .62)))
+# plot.test.tsir(df = tsir.split.2019$`Phnom Penh`, epiyr = 2019, sbar1 = median(c(.43, .46)))
+# plot.test.tsir(df = tsir.split.2019$`Kampong Thom`, epiyr = 2019, sbar1 = median(c(.51, .59)))
+# plot.test.tsir(df = tsir.split.2019$`Kampong Cham`, epiyr = 2019, sbar1 = median(c(.44, .84)))
+# plot.test.tsir(df = tsir.split.2019$`Siem Reap`, epiyr = 2019, sbar1 = .36)
+# plot.test.tsir(df = tsir.split$`Siem Reap`, epiyr = 2007, sbar1 = .36)
+# plot.test.tsir(df = tsir.split$`Preah Vihear`, epiyr = 2007, sbar1 =.45)
 
 
-#and write over the few that need help
-plot.test.tsir(tsir.split.2012$Kandal, epiyr = 2012, sbar1 = median(c(.57, .62)))
-plot.test.tsir(df = tsir.split.2019$`Phnom Penh`, epiyr = 2019, sbar1 = median(c(.43, .46)))
-plot.test.tsir(df = tsir.split.2019$`Kampong Thom`, epiyr = 2019, sbar1 = median(c(.51, .59)))
-plot.test.tsir(df = tsir.split.2019$`Kampong Cham`, epiyr = 2019, sbar1 = median(c(.44, .84)))
-plot.test.tsir(df = tsir.split.2019$`Siem Reap`, epiyr = 2019, sbar1 = .36)
-plot.test.tsir(df = tsir.split$`Siem Reap`, epiyr = 2007, sbar1 = .36)
-plot.test.tsir(df = tsir.split$`Preah Vihear`, epiyr = 2007, sbar1 =.45)
+runFulltSIR <- function(dat, fit.comp.df, epiyr1, sbar1){
+  #first, subselect the comp data to the right province and year
+  prov.comp= subset(fit.comp.df, provname==unique(dat$provname) & epiyr==epiyr1)
+  
+  prov.choose = prov.comp[prov.comp$rsquared==max(prov.comp$rsquared),]
+  if(nrow(prov.choose)>1){
+    prov.choose = subset(prov.choose, regtype=="lm") #choose the simpler model
+   }
+  
+  if(prov.choose$regtype=="lm"){
+    
+   out.df <-  fit_tsir(df=dat, epiyr = epiyr1, sbar=sbar1)
+   out.df$sus_reconstruction = "lm"
+   
+  }else if (prov.choose$regtype=="gaussian"){
+    
+   out.df <-  fit_tsir_gaussian(df=dat, epiyr = epiyr1, sbar=sbar1)  
+   out.df$sus_reconstruction = "gaussian"
+  }
+  
+  
+  
+  return(out.df)
+}
 
-
-# Now rerun gaussian and fit and save data
 plotres <- function (dat, max.plot = 10) {
   if (is.null(dat$SIRS) == TRUE) {
     dat$SIRS <- FALSE
@@ -1658,7 +1715,7 @@ plotres <- function (dat, max.plot = 10) {
     }
   }
 }
-fit_tsir <- function(df, epiyr, sbar){
+fit_tsir_gaussian <- function(df, epiyr, sbar){
   
   #first, fit using the gaussian assumption
   
@@ -1669,24 +1726,24 @@ fit_tsir <- function(df, epiyr, sbar){
   time.start =  min(df$time)
   dat = subset(df, time >= time.start & time<epiyr)
   
-
+  
   fittedpars <- estpars(data=dat,
-                         IP=2, 
-                         alpha=NULL, 
-                         sbar=sbar, 
-                         xreg = "cumcases",
-                         regtype='gaussian',
-                         family='poisson',
-                         link='log')
+                        IP=2, 
+                        alpha=NULL, 
+                        sbar=sbar, 
+                        xreg = "cumcases",
+                        regtype='gaussian',
+                        family='poisson',
+                        link='log')
   
   
   #p1 <- plotsbar(fittedpars2)
   
   simfitted <- simulatetsir(data=dat,
-                             IP = 2,
-                             parms=fittedpars,
-                             #epidemics='break', threshold=3,
-                             method='pois', nsim=100)
+                            IP = 2,
+                            parms=fittedpars,
+                            #epidemics='break', threshold=3,
+                            method='pois', nsim=100)
   
   
   out.plot <- plotres(dat=simfitted)
@@ -1701,7 +1758,7 @@ fit_tsir <- function(df, epiyr, sbar){
   pS2top <- cowplot::plot_grid(pAB, pCD, nrow = 2, ncol=1,align = "vh")
   FigOut <- cowplot::plot_grid(pS2top, pEFG, nrow=2, ncol=1, align = "vh", rel_heights = c(1,1.3))
   
-
+  
   
   ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/TSIR-prov-fits/", suffix, "_", epiyr, ".png"),
          plot = FigOut,
@@ -1720,66 +1777,115 @@ fit_tsir <- function(df, epiyr, sbar){
   beta.df$rsquared <- simfitted$rsquared
   
   return(beta.df)
-
+  
+}
+fit_tsir <- function(df, epiyr, sbar){
+  
+  #first, fit using the gaussian assumption
+  
+  suffix = unique(df$provname)
+  print(suffix)
+  suffix <- gsub(pattern=" ", replacement = "_", x=suffix)
+  
+  time.start =  min(df$time)
+  dat = subset(df, time >= time.start & time<epiyr)
+  
+  
+  fittedpars <- estpars(data=dat,
+                        IP=2, 
+                        alpha=NULL, 
+                        sbar=sbar, 
+                        xreg = "cumcases",
+                        regtype='lm',
+                        family='poisson',
+                        link='log')
+  
+  
+  #p1 <- plotsbar(fittedpars)
+  
+  simfitted <- simulatetsir(data=dat,
+                            IP = 2,
+                            parms=fittedpars,
+                            #epidemics='break', threshold=3,
+                            method='pois', nsim=100)
+  
+  
+  out.plot <- plotres(dat=simfitted)
+  
+  
+  pAB <- cowplot::plot_grid(out.plot[[1]], out.plot[[2]], nrow=1, ncol=2, align = "vh", labels = c("A", "B"))
+  pCD <- cowplot::plot_grid(out.plot[[3]], out.plot[[4]],  nrow=1, ncol=2, align = "vh", labels = c("C", "D"))
+  pEFG <- cowplot::plot_grid(out.plot[[5]], out.plot[[6]], out.plot[[7]],  nrow=3, ncol=1, align = "vh", labels = c("E", "F", "G"))
+  
+  
+  
+  pS2top <- cowplot::plot_grid(pAB, pCD, nrow = 2, ncol=1,align = "vh")
+  FigOut <- cowplot::plot_grid(pS2top, pEFG, nrow=2, ncol=1, align = "vh", rel_heights = c(1,1.3))
+  
+  
+  
+  ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/TSIR-prov-fits/", suffix, "_", epiyr, ".png"),
+         plot = FigOut,
+         units="mm",  
+         width=50, 
+         height=60, 
+         scale=3, 
+         dpi=300)
+  
+  
+  #and return beta
+  beta.df <- cbind.data.frame(biwk=1:26, beta=simfitted$beta, betalow = simfitted$contact$betalow, betahigh = simfitted$contact$betahigh)
+  beta.df$provname <- unique(dat$provname)
+  rownames(beta.df) <- c()
+  beta.df$epiyr <- epiyr
+  beta.df$rsquared <- simfitted$rsquared
+  
+  return(beta.df)
+  
 }
 
-beta.df.2007 <- lapply(tsir.split.2007, fit_tsir, epiyr = 2007, sbar=NULL)
+
+beta.df.2007 <- lapply(tsir.split.2007, runFulltSIR, epiyr1 = 2007, sbar1=NULL, fit.comp.df=fit.comp)
 beta.df.2007 <- data.table::rbindlist(beta.df.2007)
 head(beta.df.2007)
-beta.df.2012 <- lapply(tsir.split.2012, fit_tsir, epiyr = 2012, sbar=NULL)
+beta.df.2012 <- lapply(tsir.split.2012, runFulltSIR, epiyr1 = 2012, sbar1=NULL, fit.comp.df=fit.comp)
 beta.df.2012 <- data.table::rbindlist(beta.df.2012)
 head(beta.df.2012)
-beta.df.2019 <- lapply(tsir.split.2019, fit_tsir, epiyr = 2019, sbar=NULL)
+beta.df.2019 <- lapply(tsir.split.2019, runFulltSIR, epiyr1 = 2019, sbar1=NULL, fit.comp.df=fit.comp)
 beta.df.2019 <- data.table::rbindlist(beta.df.2019)
 head(beta.df.2019)
 
 beta.all <- rbind(beta.df.2007, beta.df.2012, beta.df.2019)
-head(beta.all)
+head(beta.all) #phnom penh 2019 amd preah sihanouk 2019 are bad (below .2)
 
-
-#now, re-do a few for which you decided to fix the mean susceptible pop
-#check each first before you overwrite it
-kandall.2012 <- fit_tsir(df = tsir.split.2012$Kandal, epiyr = 2012, sbar = median(c(.57, .62)))
-phnom.penh.2019 <- fit_tsir(df = tsir.split.2019$`Phnom Penh`, epiyr = 2019, sbar = .7)
-kampong.thom.2019 <- fit_tsir(df = tsir.split.2019$`Kampong Thom`, epiyr = 2019, sbar = .9)
-kampong.cham.2019 <- fit_tsir(df = tsir.split.2019$`Kampong Cham`, epiyr = 2019, sbar = .95)
-siem.reap.2019 <- fit_tsir(df = tsir.split.2019$`Siem Reap`, epiyr = 2019, sbar = .9)
-siem.reap.2007 <- fit_tsir(df = tsir.split.2007$`Siem Reap`, epiyr = 2007, sbar = .7)
-preah.vihear.2007 <- fit_tsir(df = tsir.split.2007$`Preah Vihear`, epiyr = 2007, sbar =.45)
-
-#now write over this in the overall beta fits
-beta.all[beta.all$provname=="Kandal" & beta.all$epiyr==2012,] <- kandall.2012 
-beta.all[beta.all$provname=="Phnom Penh" & beta.all$epiyr==2019,] <- phnom.penh.2019
-beta.all[beta.all$provname=="Kampong Thom" & beta.all$epiyr==2019,] <- kampong.thom.2019
-beta.all[beta.all$provname=="Kampong Cham" & beta.all$epiyr==2019,] <-kampong.cham.2019
-beta.all[beta.all$provname=="Siem Reap" & beta.all$epiyr==2019,] <- siem.reap.2019
-beta.all[beta.all$provname=="Siem Reap" & beta.all$epiyr==2007,] <- siem.reap.2007
-beta.all[beta.all$provname=="Preah Vihear" & beta.all$epiyr==2007,] <- preah.vihear.2007
-
-
-# pick those time series that are the most reliable (e.g. those with rsquared >.2)
+# pick those time series that are the most reliable (e.g. those with rsquared >.2) to do the climate lags
 # everything else gets rejected
+low.rsq <- subset(beta.all,rsquared<.4)
+low.rsq <- ddply(low.rsq , .(provname, epiyr), summarise, rsquared = unique(rsquared))
 low.rsq <- subset(beta.all,rsquared<.2)
 low.rsq <- ddply(low.rsq , .(provname, epiyr), summarise, rsquared = unique(rsquared))
 
+#maybe not worth trusting Mondul Kiri or Ratanak Kiri
 
-beta.all <- subset(beta.all,rsquared>=.2)
+
+
+#beta.all <- subset(beta.all,rsquared>=.2)
 
 # Now, supplementary plot of Beta fitted by district
 beta.all$epiyr <- as.factor(beta.all$epiyr)
 
-pSupp <- ggplot(data=beta.all)+ theme_bw() +
+pSupp <- ggplot(data=subset(beta.all, provname!="Mondul Kiri" & provname!="Ratanak Kiri")) + theme_bw() +
          geom_ribbon(aes(x=biwk, ymin= betalow, ymax=betahigh, fill=epiyr), alpha=.3) + 
          geom_line(aes(x=biwk, y= beta, color=epiyr), size=1) + scale_fill_manual(name="epidemic year", values=c("tomato", "cornflowerblue", "seagreen")) +
          scale_color_manual(name="epidemic year", values=c("tomato", "cornflowerblue", "seagreen")) +
-         facet_wrap(~provname, scales = "free_y")+ylab(bquote(beta~', biweekly transmission')) +
+         facet_wrap(provname~., scales = "free_y")+ylab(bquote(beta~', biweekly transmission')) +
          xlab("biweek of year") +
-         theme(panel.grid = element_blank(), legend.position = c(.9,.1),
+         theme(panel.grid = element_blank(), legend.position = c(.94,.06),
                strip.background = element_rect(fill="white"),
                axis.title = element_text(size=18), axis.text = element_text(size=13))
 
 
-ggsave(file = paste0(homewd, "/final-figures/SuppFigBeta.png"),
+ggsave(file = paste0(homewd, "/final-figures/SuppFigBetaProv.png"),
        plot = pSupp,
        units="mm",  
        width=100, 
@@ -1788,7 +1894,41 @@ ggsave(file = paste0(homewd, "/final-figures/SuppFigBeta.png"),
        dpi=300)
 
 
-# Now, attached this beta to the climate data (another script)
+#write.csv(beta.all, file = paste0(homewd, "/data/beta_TSIR_fit_province.csv"), row.names = F)
+
+
+# Now attach as an output on the case data
+
+beta.merge = subset(beta.all, provname!="Mondul Kiri" & provname!="Ratanak Kiri")
+beta.merge <- dplyr::select(beta.merge, provname, biwk, beta, betahigh, betalow, epiyr)
+head(beta.merge)
+unique(beta.merge$provname)
+names(beta.merge)[names(beta.merge)=="biwk"] <- "biweek"
+
+head(tsir.dat)
+tsir.merge <- dplyr::select(tsir.dat, time, cases, year, biweek, provname)
+tsir.merge$epiyr = 2007
+tsir.merge$epiyr[tsir.merge$time>=2008] <- 2012
+tsir.merge$epiyr[tsir.merge$time>=2013] <- 2019
+tsir.merge = subset(tsir.merge, time<2020)
+head(tsir.merge)
+tail(tsir.merge)
+unique(tsir.merge$provname)
+
+setdiff(unique(tsir.merge$provname), unique(beta.merge$provname)) #"Mondul Kiri"  "Ratanak Kiri"
+# and merge 
+
+out.merge <- merge(tsir.merge, beta.merge, by = c("provname", "epiyr", "biweek"))
+unique(out.merge$provname)
+out.merge <- arrange(out.merge, provname, time)
+head(out.merge) # pSupp above could be made from this dataset
+
+# Now, write to data folder
+
+write.csv(out.merge, file = paste0(homewd, "/data/beta_TSIR_fit_province.csv"), row.names = F)
+
+# And in another attached this beta to the climate data (another script)
+
 # This should be a supplementary plot those
 
 
@@ -1797,797 +1937,4 @@ ggsave(file = paste0(homewd, "/final-figures/SuppFigBeta.png"),
 #and finally go to predictions with susceptibles
 
 #and remake figure 1 - just a few examples???
-
-#and bind all
-beta.all$epiyr <- as.factor(beta.all$epiyr)
-ggplot(data=beta.all) + geom_line(aes(x=biwk, y= beta, color=provname), size=1) + facet_grid(~epiyr)
-ggplot(data=subset(beta.all, rsquared>.2)) + geom_line(aes(x=biwk, y= beta, color=provname), size=1) + facet_grid(~epiyr)
-ggplot(data=subset(beta.all, rsquared>.2))+
-  geom_line(aes(x=biwk, y= beta, color=epiyr), size=1) + facet_wrap(~provname, scales = "free_y")
-
-
-tmp <- subset(beta.all, rsquared<0.5)
-head(tmp)
-tmp <- ddply(tmp,.(provname, epiyr), summarise, rsquared = unique(rsquared))
-# Then, plot all beta together and with climate parameters
-# Then calc all lags at province and national level
-# Then fit panel regression and repull climate data
-
-
-
-
-#fit gaussian
-fit.2007.gauss <- lapply(tsir.split, fit.gauss.tsir, epiyr = 2007)
-fit.2007.gauss <- data.table::rbindlist(fit.2007.gauss)
-
-
-
-plot.test.tsir(tsir.dat, epiyr = 2007, sbar1 =.5)
-
-
-
-#and apply fits on the 2007 data
-fit.2007 <- lapply(tsir.split, fit.test.tsir, epiyr = 2007)
-fit.2007.df <- data.table::rbindlist(fit.2007)
-
-fit.2007.gauss <- lapply(tsir.split, fit.gauss.tsir, epiyr = 2007)
-
-
-
-
-fit.test.tsir <- function(df, epiyr){
-  
-  #get the suffix to all the filenames
-  
-  suffix = unique(df$provname)
-  suffix <- gsub(pattern=" ", replacement = "_", x=suffix)
-  
-  time.start =  min(df$time)
-  dat = subset(df, time >= time.start & time<epiyr)
-  plotdata(dplyr::select(dat, -(provname)))
-  
-  ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/prov-data-plots/data_", epiyr,"_", suffix, ".png"),
-         units="mm",  
-         width=100, 
-         height=110, 
-         scale=3, 
-         dpi=300)
-  
-  fittedpars1 <- estpars(data=dat,
-                         IP=2, 
-                         alpha=NULL, 
-                         sbar=NULL, 
-                         xreg = "cumcases",
-                         regtype='lm',
-                         family='poisson',
-                         link='log')
-  
-  
-  
-  plotsbar(fittedpars1)
-  
-  ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/prov-Sbar-plots/lm_", epiyr,"_", suffix, ".png"),
-         units="mm",  
-         width=100, 
-         height=110, 
-         scale=3, 
-         dpi=300)
-  
-  
-  if ((fittedpars1$sbar + fittedpars1$Z[1])>0){
-    
-    
-    simfitted1 <- simulatetsir(data=dat,
-                               IP = 2,
-                               parms=fittedpars1,
-                               epidemics='break', threshold=3,
-                               method='pois', nsim=100)
-    
-  }
-  
-  fittedpars2 <- estpars(data=dat,
-                         IP=2, 
-                         alpha=NULL, 
-                         sbar=NULL, 
-                         xreg = "cumcases",
-                         regtype='gaussian',
-                         family='poisson',
-                         link='log')
-  
-  
-  plotsbar(fittedpars2)
-  
-  ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/prov-Sbar-plots/gaussian_", epiyr,"_", suffix, ".png"),
-         units="mm",  
-         width=100, 
-         height=110, 
-         scale=3, 
-         dpi=300)
-  
-  if ((fittedpars2$sbar + fittedpars2$Z[1])>0){
-    
-    simfitted2 <- simulatetsir(data=dat,
-                               IP = 2,
-                               parms=fittedpars2,
-                               #epidemics='break', threshold=3,
-                               method='pois', nsim=100)
-    
-  }
-  
-  ## The type of regression used in susceptible reconstruction. 
-  # Options are 'gaussian', 'lm' (linear model), 'spline' (smooth.spline with 2.5 degrees freedom), 'lowess' (with f = 2/3, iter = 1), 'loess' (degree 1), and 'user' which is just a user inputed vector. Defaults to 'gaussian' and if that fails then defaults to loess.
-  
-  ## The family in the GLM regression. 
-  # One can use any of the GLM ones, but the options are essentially 'poisson' (with link='log'), 'gaussian' (with link='log' or 'identity'), or 'quasipoisson' (with link='log'). Default is 'gaussian'.
-  if ( ((fittedpars1$sbar + fittedpars1$Z[1])>0) & ((fittedpars2$sbar + fittedpars2$Z[1])>0)) {
-    
-    out.df <- cbind.data.frame(regtype=c("lm", "gaussian"), AIC = c(fittedpars1$AIC, fittedpars2$AIC), rsquared=c(simfitted1$rsquared, simfitted2$rsquared))
-  } else if ( ((fittedpars1$sbar + fittedpars1$Z[1])<0) & ((fittedpars2$sbar + fittedpars2$Z[1])>0)){
-    
-    out.df <- cbind.data.frame(regtype=c("lm", "gaussian"), AIC = c(fittedpars1$AIC, fittedpars2$AIC), rsquared=c(NA, simfitted2$rsquared))
-    
-  }else if ( ((fittedpars1$sbar + fittedpars1$Z[1])>0) & ((fittedpars2$sbar + fittedpars2$Z[1])<0)){
-    
-    out.df <- cbind.data.frame(regtype=c("lm", "gaussian"), AIC = c(fittedpars1$AIC, fittedpars2$AIC), rsquared=c(simfitted1$rsquared, NA))
-  }
-  out.df$provname <- suffix
-  
-  return(out.df)
-  
-}
-fit.gauss.tsir <- function(df, epiyr){
-  
-  #get the suffix to all the filenames
-  
-  suffix = unique(df$provname)
-  suffix <- gsub(pattern=" ", replacement = "_", x=suffix)
-  
-  time.start =  min(df$time)
-  dat = subset(df, time >= time.start & time<epiyr)
-  plotdata(dplyr::select(dat, -(provname)))
-  
-  ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/prov-data-plots/data_", epiyr,"_", suffix, ".png"),
-         units="mm",  
-         width=100, 
-         height=110, 
-         scale=3, 
-         dpi=300)
-  
-  
-  fittedpars2 <- estpars(data=dat,
-                         IP=2, 
-                         alpha=NULL, 
-                         sbar=NULL, 
-                         xreg = "cumcases",
-                         regtype='gaussian',
-                         family='poisson',
-                         link='log')
-  
-  
-  plotsbar(fittedpars2)
-  
-  ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/prov-Sbar-plots/gaussian_", epiyr,"_", suffix, ".png"),
-         units="mm",  
-         width=100, 
-         height=110, 
-         scale=3, 
-         dpi=300)
-  
-  if ((fittedpars2$sbar + fittedpars2$Z[1])>0){
-    
-    simfitted2 <- simulatetsir(data=dat,
-                               IP = 2,
-                               parms=fittedpars2,
-                               #epidemics='break', threshold=3,
-                               method='pois', nsim=100)
-    
-  }
-  
-  
-  
-  out.df <- cbind.data.frame(regtype=c("gaussian"), AIC = c( fittedpars2$AIC), rsquared=c(simfitted2$rsquared))
-  
-  
-  
-  out.df$provname <- suffix
-  
-  out.df$Sbar = fittedpars2$sbar
-  out.df$SbarProp <- out.df$Sbar/mean(df$pop)
-  
-  return(out.df)
-  
-}
-fit.loess.tsir <- function(df, epiyr){
-  
-  #get the suffix to all the filenames
-  
-  suffix = unique(df$provname)
-  suffix <- gsub(pattern=" ", replacement = "_", x=suffix)
-  
-  time.start =  min(df$time)
-  dat = subset(df, time >= time.start & time<epiyr)
-  # plotdata(dplyr::select(dat, -(provname)))
-  # 
-  # ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/prov-data-plots/data_", epiyr,"_", suffix, ".png"),
-  #        units="mm",  
-  #        width=100, 
-  #        height=110, 
-  #        scale=3, 
-  #        dpi=300)
-  # 
-  
-  fittedpars2 <- estpars(data=dat,
-                         IP=2, 
-                         alpha=NULL, 
-                         sbar=NULL, 
-                         xreg = "cumcases",
-                         regtype='loess',
-                         family='poisson',
-                         link='log')
-  
-  
-  plotsbar(fittedpars2)
-  
-  ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/prov-Sbar-plots/loess_", epiyr,"_", suffix, ".png"),
-         units="mm",  
-         width=100, 
-         height=110, 
-         scale=3, 
-         dpi=300)
-  
-  if ((fittedpars2$sbar + fittedpars2$Z[1])>0){
-    
-    simfitted2 <- simulatetsir(data=dat,
-                               IP = 2,
-                               parms=fittedpars2,
-                               #epidemics='break', threshold=3,
-                               method='pois', nsim=100)
-    
-  }
-  
-  
-  
-  out.df <- cbind.data.frame(regtype=c("loess"), AIC = c( fittedpars2$AIC), rsquared=c(simfitted2$rsquared))
-  
-  
-  
-  out.df$provname <- suffix
-  
-  out.df$Sbar = fittedpars2$sbar
-  out.df$SbarProp <- out.df$Sbar/mean(df$pop)
-  
-  return(out.df)
-  
-}
-
-fit.2012.gauss <- lapply(tsir.split.2012, fit.gauss.tsir, epiyr = 2012)
-fit.2012.gauss <- data.table::rbindlist(fit.2012.gauss)
-fit.2019.gauss <- lapply(tsir.split.2019, fit.gauss.tsir, epiyr = 2019)
-fit.2019.gauss <- data.table::rbindlist(fit.2019.gauss)
-
-
-
-fit.2007.loess <- lapply(tsir.split, fit.loess.tsir, epiyr = 2007)
-fit.2007.loess <- data.table::rbindlist(fit.2007.loess)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#split by province
-tsir.split <- dlply(tsir.dat,.(provname))
-
-
-
-fit.2012.gauss <- data.table::rbindlist(fit.2007.gauss)
-
-
-
-  
-#and apply fits on the 2007 data
-fit.2007 <- lapply(tsir.split, fit.TSIR, family="poisson", epiyr = 2007)
-
-dat = tsir.split$`Phnom Penh`
-
-fit.all <- lapply( tsir.split, fit.TSIR, family="gaussian", epiyr = 2019)
-
-#and apply fits on the 2007 data
-fit.2007 <- lapply(tsir.split, fit.TSIR, family="gaussian", epiyr = 2007)
-
-
-
-simulatetsir <- function (data, nsim = 100, IP = 2, parms, method = "deterministic", 
-                                    epidemics = "cont", pred = "forward", threshold = 1, inits.fit = FALSE, 
-                                    add.noise.sd = 0, mul.noise.sd = 0) 
-{
-  nzeros <- length(which(data$cases == 0))
-  ltot <- length(data$cases)
-  if (nzeros > 0.3 * ltot && epidemics == "cont") {
-    print(sprintf("time series is %.0f%% zeros, consider using break method", 
-                  100 * nzeros/ltot))
-  }
-  Smean <- parms$Smean
-  beta <- parms$beta
-  adj.rho <- parms$rho
-  Z <- parms$Z
-  sbar <- parms$sbar
-  alpha <- parms$alpha
-  X <- parms$X
-  Y <- parms$Y
-  Yhat <- parms$Yhat
-  contact <- parms$contact
-  alphalow <- parms$alphalow
-  alphahigh <- parms$alphahigh
-  loglik <- parms$loglik
-  pop <- data$pop
-  datacopy <- data
-  period <- rep(1:(52/IP), round(nrow(data) + 1))[1:(nrow(data) - 
-                                                       1)]
-  if (IP == 1) {
-    period <- rep(1:(52/2), each = 2, round(nrow(data) + 
-                                              1))[1:(nrow(data) - 1)]
-  }
-  S <- rep(0, length(data$cases))
-  I <- rep(0, length(data$cases))
-  nsample <- 30
-  inits.grid <- expand.grid(S0 = seq(0.01 * mean(pop), 0.1 * 
-                                       mean(pop), length = nsample), I0 = seq(0.01 * 0.001 * 
-                                                                                mean(pop), 1 * 0.001 * mean(pop), length = nsample))
-  if (inits.fit == TRUE) {
-    inits.res <- rep(NA, nsample * nsample)
-    for (it in 1:nrow(inits.grid)) {
-      S0 <- inits.grid[it, 1]
-      I0 <- inits.grid[it, 2]
-      S[1] <- S0
-      I[1] <- I0
-      for (t in 2:(nrow(data))) {
-        lambda <- min(S[t - 1], unname(beta[period[t - 
-                                                     1]] * S[t - 1] * (I[t - 1])^alpha))
-        if (is.nan(lambda) == T) {
-          lambda <- 0
-        }
-        I[t] <- lambda
-        if (epidemics == "cont") {
-          I[t] <- I[t]
-        }
-        if (epidemics == "break") {
-          t0s <- epitimes(data, threshold)$start
-          if (t %in% t0s) {
-            I[t] <- adj.rho[t] * data$cases[t]
-          }
-        }
-        S[t] <- max(S[t - 1] + data$births[t - 1] - I[t], 
-                    0)
-      }
-      inits.res[it] <- sum((I - data$cases * adj.rho)^2)
-    }
-    inits <- inits.grid[which.min(inits.res), ]
-    inits.grid$S0 <- inits.grid$S0/mean(pop)
-    inits.grid$I0 <- inits.grid$I0/mean(pop)
-    inits.grid$log10LS <- log10(inits.res)
-    S_start <- inits[[1]]
-    I_start <- inits[[2]]
-  }else {
-    S_start <- sbar + Z[1]
-    I_start <- adj.rho[1] * datacopy$cases[1]
-  }
-  IC <- c(S_start, I_start)
-  print(c(alpha = unname(signif(alpha, 2)), `mean beta` = unname(signif(mean(beta), 
-                                                                        3)), `mean rho` = unname(signif(mean(1/adj.rho), 3)), 
-          `mean sus` = unname(signif(sbar, 3)), `prop. init. sus.` = unname(signif(S_start/mean(pop), 
-                                                                                   3)), `prop. init. inf.` = unname(signif(I_start/mean(pop), 
-                                                                                                                           3))))
-  nsim <- nsim
-  res <- matrix(0, length(data$cases), nsim)
-  Sres <- matrix(0, length(data$cases), nsim)
-  for (ct in 1:nsim) {
-    S <- rep(0, length(data$cases))
-    I <- rep(0, length(data$cases))
-    S[1] <- S_start
-    I[1] <- I_start
-    for (t in 2:(nrow(data))) {
-      if (pred == "step-ahead") {
-        lambda <- min(S[t - 1], unname(beta[period[t - 
-                                                     1]] * S[t - 1] * (adj.rho[t - 1] * data$cases[t - 
-                                                                                                     1])^alpha))
-      }
-      if (pred == "forward") {
-        I <- I
-        lambda <- min(S[t - 1], unname(beta[period[t - 
-                                                     1]] * S[t - 1] * (I[t - 1])^alpha))
-      }
-      if (is.nan(lambda) == T) {
-        lambda <- 0
-      }
-      if (method == "deterministic") {
-        I[t] <- lambda * rnorm(n = 1, mean = 1, sd = mul.noise.sd)
-        if (I[t] < 0 && lambda >= 0) {
-          warning("infected overflow  -- reduce multiplicative noise sd")
-        }
-      }
-      if (method == "negbin") {
-        I[t] <- rnbinom(n = 1, mu = lambda, size = I[t - 
-                                                       1] + 1e-10)
-      }
-      if (method == "pois") {
-        I[t] <- rpois(n = 1, lambda = lambda)
-      }
-      if (epidemics == "cont") {
-        I[t] <- I[t]
-      }
-      if (epidemics == "break") {
-        t0s <- epitimes(data, threshold)$start
-        if (t %in% t0s) {
-          I[t] <- adj.rho[t] * data$cases[t]
-        }
-      }
-      S[t] <- max(S[t - 1] + data$births[t - 1] - I[t] + 
-                    rnorm(n = 1, mean = 0, sd = add.noise.sd), 0)
-      if (S[t] < 0 && (S[t - 1] + data$births[t - 1] - 
-                       I[t]) > 0) {
-        warning("susceptible overflow  -- reduce additive noise sd")
-      }
-    }
-    res[, ct] <- I/adj.rho
-    Sres[, ct] <- S
-  }
-  res[is.nan(res)] <- 0
-  res[res < 1] <- 0
-  res <- as.data.frame(res)
-  Sres <- as.data.frame(Sres)
-  Sres$mean <- rowMeans(Sres, na.rm = T)
-  Sres$sd <- apply(Sres, 1, function(row) sd(row[-1], na.rm = T))
-  Sres$time <- data$time
-  res$mean <- rowMeans(res, na.rm = T)
-  res$sd <- apply(res, 1, function(row) sd(row[-1], na.rm = T))
-  res$time <- data$time
-  res$cases <- data$cases
-  obs <- res$cases
-  pred <- res$mean
-  fit <- lm(pred ~ obs)
-  rsquared <- signif(summary(fit)$adj.r.squared, 2)
-  return(list(X = X, Y = Y, Yhat = Yhat, pop = pop, Smean = Smean, 
-              IP = IP, beta = beta, rho = adj.rho, Z = Z, sbar = sbar, 
-              alpha = alpha, pop = pop, alphalow = alphalow, alphahigh = alphahigh, 
-              res = res, simS = Sres, loglik = loglik, nsim = nsim, 
-              contact = contact, rsquared = rsquared, inits.fit = inits.fit, 
-              inits.grid = inits.grid, inits = IC))
-}
-
-
-
-
-
-
-
-
-#and apply fits on the 2007 data
-fit.2007 <- lapply( tsir.split, fit.TSIR, family="gaussian", epiyr = 2007)
-
-extract.rsq <- function(df){
-  rsquared = df$rsquared
-  return(rsquared)
-}
-
-fitR2.df <- cbind.data.frame(names = names(fit.2007), year=2007)
-fitR2.df$rsquared <-  c(unlist(lapply(fit.2007, extract.rsq)))
-fitR2.df$flag = 0
-fitR2.df$flag[fitR2.df$rsquared>.5] <- 1
-
-
-tsir.dat.2012 <- subset(tsir.dat, year>2007)
-
-#split by province
-tsir.split.2012 <- dlply(tsir.dat.2012,.(provname))
-
-
-#and apply fits on the 2012 data
-fit.2012 <- lapply( tsir.split.2012, fit.TSIR, family="gaussian", epiyr = 2012)
-
-
-fitR2.df2 <- cbind.data.frame(names = names(fit.2012), year=2012)
-fitR2.df2$rsquared <-  c(unlist(lapply(fit.2012, extract.rsq)))
-fitR2.df2$flag = 0
-fitR2.df2$flag[fitR2.df2$rsquared>.5] <- 1
-
-
-tsir.dat.2019 <- subset(tsir.dat, year>2012)
-
-#split by province
-tsir.split.2019 <- dlply(tsir.dat.2019,.(provname))
-
-fit.2019 <- lapply( tsir.split.2019, fit.TSIR, family="gaussian", epiyr = 2019)
-
-
-fitR2.df3 <- cbind.data.frame(names = names(fit.2019), year=2019)
-fitR2.df3$rsquared <-  c(unlist(lapply(fit.2019, extract.rsq)))
-fitR2.df3$flag = 0
-fitR2.df3$flag[fitR2.df3$rsquared>.5] <- 1
-
-
-#extract and plot beta
-extract.beta <- function(df, name.df){
-  beta.df <- cbind.data.frame(biwk = 1:26, beta=df$beta)
-  beta.df$provname <- name.df
-  beta.df$rsquared <- df$rsquared
-  return(beta.df)
-}
-beta.df <- data.table::rbindlist(mapply(extract.beta, fit.2019, as.list(names(fit.2019)), SIMPLIFY = F))
-
-head(beta.df)
-
-ggplot(beta.df) + geom_point(aes(x=biwk, y=beta, color=provname)) +
-    geom_line(aes(x=biwk, y=beta, color=provname)) + 
-    facet_wrap(~provname, scales = "free_y")
-
-ggplot(data=subset(beta.df, rsquared>.3)) + geom_point(aes(x=biwk, y=beta, color=provname)) +
-  geom_line(aes(x=biwk, y=beta, color=provname)) + 
-  facet_wrap(~provname, scales = "free_y")
-
-
-#fit to pre epidemic period with increased S
-sim.2007 <- sim.com.epi(dat = tsir.df,#at,
-                        time.start =  min(tsir.df$time),
-                        family="gaussian",
-                        epiyr = 2007)
-
-#and fit with increased beta
-sim.beta.2007 <- sim.com.beta(dat = tsir.dat,
-                        time.start =  min(tsir.dat$time),
-                        family="gaussian",
-                        epiyr = 2007)
-
-#now return and recover Sdat for increased S
-Sdat2007 <- sim.return.S.incS(fracincS = sim.2007$frac_incS,
-                              dat=tsir.dat,
-                              time.start =  min(tsir.dat$time),
-                              family="gaussian",
-                              epiyr = 2007)
-
-
-#and sim with increased S
-comp.2007 <- sim.with.increaseS(
-  fracincS = sim.2007$frac_incS,
-  dat = tsir.dat,
-  time.start =  min(tsir.dat$time),
-  family = "gaussian",
-  epiyr = 2007
-)
-
-
-#and sim with increased beta
-comp.beta.2007 <- sim.with.increaseBeta(
-  fracincBeta = sim.beta.2007$frac_incBeta,
-  dat = tsir.dat,
-  time.start =  min(tsir.dat$time),
-  family = "gaussian",
-  epiyr = 2007
-)
-
-
-#now for 2012 - fit with increased S
-sim.2012 <- sim.com.epi(dat = tsir.dat,
-                        time.start =  min(tsir.dat$time[tsir.dat$time>=2008]),
-                        family="gaussian",
-                        epiyr = 2012)
-
-#and with increased beta
-sim.beta.2012 <- sim.com.beta(dat = tsir.dat,
-                        time.start =  min(tsir.dat$time[tsir.dat$time>=2008]),
-                        family="gaussian",
-                        epiyr = 2012)
-
-
-#now return S from increased S
-Sdat2012 <- sim.return.S.incS(fracincS = sim.2012$frac_incS,
-                              dat=subset(tsir.dat, time >=min(tsir.dat$time[tsir.dat$time>=2008]) & time<2013),
-                              time.start =  min(tsir.dat$time[tsir.dat$time>=2008]),
-                              family="gaussian",
-                              epiyr = 2012)
-
-
-#now sim with increased S
-comp.2012 <- sim.with.increaseS(
-  fracincS = sim.2012$frac_incS,
-  dat = subset(tsir.dat, time >= min(tsir.dat$time[tsir.dat$time >=
-                                                     2008]) & time < 2013),
-  time.start =  min(tsir.dat$time[tsir.dat$time >=
-                                    2008]),
-  family = "gaussian",
-  epiyr = 2012
-)
-
-#and sim with increased beta
-comp.beta.2012  <- sim.with.increaseBeta(
-  fracincBeta = sim.beta.2012$frac_incBeta,
-  dat = subset(tsir.dat, time >= min(tsir.dat$time[tsir.dat$time >=
-                                                     2008]) & time < 2013),
-  time.start =  min(tsir.dat$time[tsir.dat$time >=
-                                    2008]),
-  family = "gaussian",
-  epiyr = 2012
-)
-
-
-#and fit 2019 with increased S
-sim.2019 <- sim.com.epi(dat = tsir.dat,
-                        time.start =  min(tsir.dat$time[tsir.dat$time>=2013]),
-                        family="gaussian",
-                        epiyr = 2019)
-
-#and with increased beta
-sim.beta.2019 <- sim.com.beta(dat = tsir.dat,
-                        time.start =  min(tsir.dat$time[tsir.dat$time>=2013]),
-                        family="gaussian",
-                        epiyr = 2019)
-
-
-#now return S from increased S
-Sdat2019 <- sim.return.S.incS(fracincS = sim.2019$frac_incS,
-                              dat=subset(tsir.dat, time >=min(tsir.dat$time[tsir.dat$time>=2013]) &time<2020),
-                              time.start =  min(tsir.dat$time[tsir.dat$time>=2013]),
-                              family="gaussian",
-                              epiyr = 2019)
-
-
-#now return and simulate with results
-comp.2019 <- sim.with.increaseS(
-  fracincS = sim.2019$frac_incS,
-  dat = subset(tsir.dat, time >= min(tsir.dat$time[tsir.dat$time >=
-                                                     2013]) & time < 2020),
-  time.start =  min(tsir.dat$time[tsir.dat$time >=
-                                    2013]),
-  family = "gaussian",
-  epiyr = 2019
-)
-
-
-#and sim with increased beta
-comp.beta.2019  <- sim.with.increaseBeta(
-  fracincBeta = sim.beta.2019$frac_incBeta,
-  dat = subset(tsir.dat, time >= min(tsir.dat$time[tsir.dat$time >=
-                                                     2013]) & time < 2020),
-  time.start =  min(tsir.dat$time[tsir.dat$time >=
-                                    2013]),
-  family = "gaussian",
-  epiyr = 2019
-)
-
-
-
-
-
-#and combine for the susceptible plot
-SdatIncSim <- rbind(Sdat2007, Sdat2012, Sdat2019)
-
-SdatIncSim$sim <- "TSIR-increased-S"
- 
-#and without the breaks
-###and the whole time series
-#and the results for 2019
-
-sim.all <- sim.com.epi(dat = tsir.dat,
-                       time.start =  min(tsir.dat$time[tsir.dat$time>=2002]),
-                       family="gaussian",
-                       epiyr = 2019)
-
-Sdat2019fullsim <- sim.return.S.noinc(fracincS = sim.all$frac_incS,
-                                      dat=subset(tsir.dat, time>=2002),
-                                      time.start =  min(tsir.dat$time[tsir.dat$time>=2002]),
-                                      family="gaussian",
-                                      epiyr = 2019)
-
-Sdat2019fullsim$sim <- "TSIR"
-
-#and combine and plot
-
-Sdatcombined <- rbind(SdatIncSim, Sdat2019fullsim)
-Sdatcombined$epiyr <- 0
-Sdatcombined$epiyr[Sdatcombined$year==2007|Sdatcombined$year==2012|Sdatcombined$year==2019] <- 1
-Sdatcombined$epiyr <- factor(Sdatcombined$epiyr)
-
-head(Sdatcombined)
-unique(Sdatcombined$sim)
-
-#and write data file
-#write.csv(Sdatcombined, file = paste0(homewd, "/SdatCara.csv"), row.names = F)
-saveRDS(Sdatcombined,file = paste0(homewd, "/data/Sdatcombined.rds"))
-
-
-
-##################################################################
-####################################################################
-#####################################################################
-######################################################################
-
-#and save the sims of increased S and not for the joint dataset
-all.comp <- rbind(comp.2007, comp.2012, comp.2019)
-
-#and combine beta sims and add to dataset
-comp.beta <- rbind(comp.beta.2007, comp.beta.2012, comp.beta.2019)
-comp.beta = subset(comp.beta, variable == "prediction TSIR-increased Beta")
-
-#and combine
-all.comp <- rbind(all.comp, comp.beta)
-
-#and save all comp as data
-write.csv(all.comp, file = paste0(homewd, "/data/TSIR_fitted_timeseries_estimates.csv"), row.names = F)
-
-my_blue<-"#2980B9"
-my_orange<-"#D35400"
-my_red<-"tomato"
-my_green<-"seagreen"
-my_yellow<-"#F1C40F"
-my_purple <- "purple"
-
-
-
-#now plot the whole thing
-# all.IncBeta <- rbind(comp.2007, comp.2012, comp.2019)
-# all.IncBeta <- subset(all.IncBeta, variable == "prediction TSIR-increased Beta")
-# all.IncBeta$epiyr <- 1
-# 
-# #and join
-# Sdatcombined <- rbind(Sdatcombined, all.IncBeta)
-#and plot all
-dat=all.comp
-dat$variable = factor(dat$variable, levels=c("data",
-                                             "TSIR fit",
-                                             "prediction TSIR",
-                                             "prediction TSIR-increased S",
-                                             "prediction TSIR-increased Beta"))
-colz = c('data' = "black", 'TSIR fit' = my_blue, 'prediction TSIR' = my_green, 'prediction TSIR-increased S' =my_red, 'prediction TSIR-increased Beta' = my_purple)
-typez = c('data' = 2, 'TSIR fit' = 1, 'prediction TSIR' = 1, 'prediction TSIR-increased S' = 1, 'prediction TSIR-increased Beta' = 1)
-
-
-pl_a <- ggplot(data=dat, aes(x=time, y=reported_cases, color=variable, linetype=variable)) + 
-  geom_line(data=dplyr::filter(dat, variable=="data"), size=1) +
-  geom_line(data=dplyr::filter(dat, variable=="TSIR fit" & time<2007), size=1) +
-  geom_line(data=dplyr::filter(dat, variable=="TSIR fit" & time>=2008 & time<2012), size=1) +
-  geom_line(data=dplyr::filter(dat, variable=="TSIR fit" & time>=2013), size=1) +
-  geom_line(data=dplyr::filter(dat, variable=="prediction TSIR" & time>=2007 & time<2008), size=1) +
-  geom_line(data=dplyr::filter(dat, variable=="prediction TSIR" & time>=2012 & time<2013), size=1) +
-  geom_line(data=dplyr::filter(dat, variable=="prediction TSIR" & time>=2019 & time<2020), size=1) +
-  geom_line(data=dplyr::filter(dat, variable=="prediction TSIR-increased S" & time>=2007 & time<2008), size=1) +
-  geom_line(data=dplyr::filter(dat, variable=="prediction TSIR-increased Beta" & time>=2007 & time<2008), size=1) +
-  geom_line(data=dplyr::filter(dat, variable=="prediction TSIR-increased S" & time>=2012 & time<2013), size=1) +
-  geom_line(data=dplyr::filter(dat, variable=="prediction TSIR-increased Beta" & time>=2012 & time<2013), size=1) +
-  geom_line(data=dplyr::filter(dat, variable=="prediction TSIR-increased S" & time>=2019 & time<2020), size=1) +
-  geom_line(data=dplyr::filter(dat, variable=="prediction TSIR-increased Beta" & time>=2019 & time<2020), size=1) +
-  scale_color_manual(values=colz) + # coord_cartesian(ylim = c(0,1500))+
-  scale_linetype_manual(values=typez) +theme_bw() +
-  theme(panel.grid = element_blank(),
-        axis.title.x = element_blank(),
-        axis.title.y = element_text(size=18),
-        legend.text = element_text(size=10),
-        legend.position = c(.1,.82),
-        axis.text = element_text(size=14), legend.title = element_blank()) +
-  ylab(paste0("reported cases"))
-
-plot(pl_a)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

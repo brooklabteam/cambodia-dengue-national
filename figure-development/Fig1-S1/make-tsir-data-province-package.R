@@ -51,13 +51,38 @@ head(dat)
 #plot time series of each type by province by year
 unique(dat$diagnostic) #df, dhf, dss
 dat$date <- as.Date(dat$date, format = "%m/%d/%y")
-dat$epiwk <- cut.Date(dat$date, breaks="weeks", start.on.monday = T)
-dat$epiwk <- as.Date(as.character(dat$epiwk))
-dat$epiwk[dat$epiwk< "2002-01-01"] <- "2002-01-01"
-head(dat)
 
-#now sum by week and split by province 
-dat.sum <- ddply(dat,.(provname,epiwk), summarise, cases=sum(case))
+sort(unique(dat$week_report)) # 1:52
+sort(unique(dat$year)) # 2002: 2020
+
+
+#and sum by week of year and year and province
+dat.sum <- ddply(dat,.(provname, year, week_report), summarise, cases=sum(case))
+head(dat.sum)
+
+
+dat.sum$year <- as.factor(dat.sum$year)
+
+#and plot 
+ggplot(dat.sum) + geom_line(aes(x=week_report, y=cases, color=year)) + 
+  facet_wrap(~provname, scales = "free_y")
+
+#now assign a "time" for each of the biweek values
+time.df <- cbind.data.frame(week_report = 1:52, biweek =rep(1:26,each =2))
+time.df <- arrange(time.df, week_report, biweek)
+head(time.df)
+
+#and add this to each
+dat.sum <- merge(dat.sum, time.df, by="week_report", all.x = T)
+#dat.sum$time <- as.numeric(dat.sum$time + as.numeric(as.character(dat.sum$year)) )
+head(dat.sum)
+#unique(dat.sum$time - trunc(dat.sum$time)) #26 possible timesteps per year
+dat.sum$week_report <- as.numeric(as.character(dat.sum$week_report))
+
+head(dat.sum)
+
+dat.sum <- arrange(dat.sum, provname, year, biweek, week_report)
+
 head(dat.sum)
 
 #and split by the province level
@@ -69,18 +94,45 @@ dat.split <- dlply(dat.sum, .(provname))
 load(paste0(homewd, "/data/cambodia_province_proportions.Rdata"))
 head(prop.prov)
 
+
 build.prov.tsir <- function(prov.case.dat, nat.births, nat.pop, prop.prov){
   #first, scale the pop and birth vectors by prov
   prov.proportion = prop.prov$pop_prop[prop.prov==unique(prov.case.dat$provname)]
   prop.pop <- nat.pop*prov.proportion
   prop.births <- nat.births*prov.proportion
   
-  #add time column
-  prov.case.dat$time <- year(prov.case.dat$epiwk) + yday(prov.case.dat$epiwk)/365
+  #add time column based on week and biweek
+  #time.df<- cbind.data.frame(week_report=1:52, time = rep((0:25)/26, each=2), biweek = rep(1:26, each=2))
   
-  #and use tsir
+  time.df <- cbind.data.frame(year = rep(2002:2020, each=52), week_report=rep(1:52, 19), time = rep(rep((0:25)/26, each=2), 19) , biweek = rep(rep(1:26, each=2),19))
   
-  out.prov <- tsiRdata(time = prov.case.dat$time, cases = prov.case.dat$cases, births = prop.births, pop = prop.births)
+  
+  prov.case.dat <- merge(time.df, prov.case.dat, by=c("week_report", "biweek", "year"), all.x = T)
+  
+  #prov.case.dat <- merge(prov.case.dat, time.df, by=c("week_report", "biweek"), all.x = T)
+  prov.case.dat$time <- as.numeric(as.character(prov.case.dat$year)) + prov.case.dat$time
+  prov.case.dat$time <- as.numeric(as.character(prov.case.dat$time))
+  
+  prov.case.dat <- arrange(prov.case.dat, time)
+  
+  #head(prov.case.dat)
+  
+  #if there is an NA in cases, it means this was not reported for this timestep
+  #set to 1
+  prov.case.dat$cases[is.na(prov.case.dat$cases)] <- 1
+  prov.case.dat$provname[is.na(prov.case.dat$provname)] <- unique(prov.case.dat$provname[!is.na(prov.case.dat$provname)])
+  
+  prov.sum = ddply(prov.case.dat, .(year, biweek), summarise, cases=sum(cases), time=unique(time))
+  #head(prov.sum)
+  
+  prov.sum <- arrange(prov.sum, time)
+  #prov.case.dat$time <- year(prov.case.dat$epiwk) + yday(prov.case.dat$epiwk)/365
+  
+  intbirths <- approx(prop.births, n = length(prov.sum$time))$y/(26)
+  intpop <- approx(prop.pop, n = length(prov.sum$time))$y
+  
+  
+  out.prov <- cbind.data.frame(time=prov.sum$time, cases = prov.sum$cases, births = intbirths, pop=intpop, year = prov.sum$year, biweek = prov.sum$biweek)
   out.prov$provname <- unique(prov.case.dat$provname)
   
   return(out.prov)
@@ -98,7 +150,17 @@ tsir.prov <- data.table::rbindlist(tsir.prov)
 
 head(tsir.prov)
 
+sort(unique(tsir.prov$time-trunc(tsir.prov$time)))  #26 timesteps!, 
 
+#within a year and a province only 26
+sort(unique(tsir.prov$time[tsir.prov$provname=="Battambang" & trunc(tsir.prov$time)==2014]-trunc(tsir.prov$time[tsir.prov$provname=="Battambang"& trunc(tsir.prov$time)==2014])))
+
+tsir.prov$year <- as.factor(tsir.prov$year)
+ggplot(tsir.prov) + geom_line(aes(x=biweek, y=cases, color=year)) + facet_wrap(provname~., scales = "free_y")
+
+tsir.prov$year <- as.numeric(as.character(tsir.prov$year))
+
+#some years have only 25 depending
 write.csv(tsir.prov, file = paste0(homewd, "/data/tsir_dat_province.csv"), row.names = F)
 
 
