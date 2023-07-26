@@ -127,40 +127,10 @@ climate.shift$temp_C_lag <- climate.merge$temp_C[1:(length(climate.merge$temp_C)
 head(climate.shift)
 
 #and the shifted precip.
-climate.shift$precip_mm_lag <- climate.merge$precip_mm[5:(length(climate.merge$precip_mm)-7)]
+climate.shift$precip_mm_lag <- climate.merge$precip_mm[6:(length(climate.merge$precip_mm)-2)]
 
-# Make a dataframe with lagged climate variables
-##Temp lagged 7 biweeks, Precipitation lagged not lagged at all - or do we do 25 biweeks?
-merge.shift <- dat.all.nat[8:length(dat.all.nat$dates),] #starts in year 2
-head(merge.shift)
-#merge.shift$precip_lag <- dat.all.nat$precip_mm[1:(length(dat.all.nat$precip_mm)-11)] #no shift for precip
-merge.shift$meantempLag <- dat.all.nat$temp_C[1:length(dat.all.nat$temp_C[1:(length(dat.all.nat$temp_C)-7)])]
+#write data and do lagged regression in another script
+write.csv(climate.shift, file = paste0(homewd, "/data/lagged-nat-clim-beta.csv"), row.names = F)
 
-head(merge.shift)  # here is your lagged dataset for regression / tsir
-
-#no longer starts at the beginning of the year. But we can recover those values using the 2001 climate data
-merge.start = dat.all.nat[1:7,] 
-temp.nat.2001 = subset(temp.nat, dates < as.Date("2002-01-01"))
-tail(temp.nat.2001)
-temp.merge = temp.nat.2001[20:26,]
-merge.start$meantempLag <- temp.merge$temp_C
-
-
-
-merge.shift <- rbind(merge.start, merge.shift)
-
-head(merge.shift)
-
-#write data
-write.csv(merge.shift, file = paste0(homewd, "/data/lagged-nat-clim.csv"), row.names = F)
-
-
-
-
-
-
-#
-
-#then do regress
 
 

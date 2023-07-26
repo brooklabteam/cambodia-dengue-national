@@ -129,3 +129,16 @@ write.csv(lag.climate.df, file=paste0(homewd,"/data/lags_climate_prov.csv"), row
 
 #make lagged data based on optimal lags
 
+#make shifted dataset and save
+head(climate.merge)
+
+climate.shift <- climate.merge[8:nrow(climate.merge),] #starts in year 8 after 7 timestep shift
+climate.shift$temp_C_lag <- climate.merge$temp_C[1:(length(climate.merge$temp_C)-7)]
+head(climate.shift)
+
+#and the shifted precip.
+climate.shift$precip_mm_lag <- climate.merge$precip_mm[6:(length(climate.merge$precip_mm)-2)]
+
+#write data and do lagged regression in another script
+write.csv(climate.shift, file = paste0(homewd, "/data/lagged-prov-clim-beta.csv"), row.names = F)
+
