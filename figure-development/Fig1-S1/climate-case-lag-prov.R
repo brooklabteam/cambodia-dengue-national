@@ -69,6 +69,9 @@ climate.merge$year <- as.factor(climate.merge$year)
 ggplot(climate.merge) + geom_line(aes(x=biweek, y=precip_mm, color=year)) + facet_wrap(provname~.)
 ggplot(climate.merge) + geom_line(aes(x=biweek, y=temp_C, color=year)) + facet_wrap(provname~.)
 
+#drop the sus reconstruction info
+climate.merge <- dplyr::select(climate.merge, -(rsquared), -(sus_reconstruction))
+
 #save this
 
 write.csv(climate.merge, file = paste0(homewd, "/data/climate_beta_prov.csv"), row.names = F)

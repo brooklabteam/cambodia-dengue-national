@@ -7,6 +7,7 @@ library(dplyr)
 library(lme4)
 library(lmerTest)
 library(sjPlot)
+library(mgcv)
 
 
 homewd = "/Users/carabrook/Developer/cambodia-dengue-national"
@@ -20,7 +21,11 @@ homewd = "/Users/carabrook/Developer/cambodia-dengue-national"
 dat <- read.csv(file = paste0(homewd, "/data/lagged-prov-clim-beta.csv"), header = T, stringsAsFactors = F)
 head(dat)
 
-#remove the epidemic years that were not fitted
+#sort again by time
+dat <- arrange(dat, provname, time)
+
+
+#remove the epidemic years with the betas that were not fitted
 dat.epi = subset(dat, year==2007 | year==2012 | year==2019) #set these aside
 dat.epi$beta <- NA
 dat.epi$betalow <- NA
@@ -35,10 +40,13 @@ dat = subset(dat, year!=2007 & year!=2012 & year!=2019)
 # log beta for the response
 dat$log_beta <- log((dat$beta))
 
-# and make random effects into factors for regressiion
+
+
+# and make random effects into factors for regression
 dat$provname <- as.factor(dat$provname)
 dat$biweek <- as.factor(dat$biweek)
 dat$year <- as.factor(dat$year)
+dat$epiyr <- as.factor(dat$epiyr)
 
 briere_out <- function(temp_c, c_val, minT, maxT){
   briere_out = c_val*temp_c*(temp_c-minT)*((maxT-temp_c)^(1/2))
@@ -50,8 +58,13 @@ dat$temp_C_lag_briere <- briere_out(temp_c = dat$temp_C_lag, c_val = 4.99*10^-4,
 
 
 
-m1 <- lmer(log_beta~temp_C_lag + precip_mm_lag + (1 | provname / biweek) + (1 | provname/year), 
-           data = dat)# control = lmerControl(optimizer ='optimx', optCtrl=list(method='nlminb')))
+m1 <- lmer(log_beta~temp_C_lag + precip_mm_lag + (1 | provname / biweek) + (1 | provname/year) + (1 | epiyr), 
+           data = dat, control = lmerControl(optimizer ="Nelder_Mead"))
+
+
+m1b <- lmer(log_beta~temp_C_lag + precip_mm_lag + (1 | provname / biweek)  + (1 | epiyr), 
+           data = dat, control = lmerControl(optimizer ="Nelder_Mead"))
+
 
 summary(m1)
 
@@ -89,7 +102,7 @@ pA
 
 
 m2 <- lmer(log_beta~temp_C_lag_briere + 
-             precip_mm_lag + (1 | provname / biweek) + (1 | provname/year), 
+             precip_mm_lag + (1 | provname / biweek) + (1 | provname/year) + (1 | epiyr), 
            data = dat, control = lmerControl(optimizer ="Nelder_Mead"))# 'optimx', optCtrl=list(method='nlminb')))
 
 
@@ -160,8 +173,9 @@ library(mgcv)
 gam1 <- gam(log_beta~s(temp_C_lag, k=7, bs='tp') + 
                     s(precip_mm_lag, k=7, bs='tp') +
                     s(provname, biweek, bs="re") +
-                    s(provname, year, bs="re"), 
-                    data = dat)# control = lmerControl(optimizer ='optimx', optCtrl=list(method='nlminb')))
+                    s(provname, year, bs="re") +
+                    s(epiyr, bs="re"), 
+                    data = dat)
 
 #linear response GAM
 summary(gam1)# R-sq.(adj) =  0.994.  Deviance explained = 99.5%
@@ -171,10 +185,11 @@ test.df$precip_mm_lag <- 20
 test.df$biweek <- 10
 test.df$year <- 2005
 test.df$provname = "Kandal"
+test.df$epiyr = 2007
 
-temp.df <- cbind.data.frame(x=20:34, beta_coeff=c(predict.gam(gam1, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname,biweek)", "s(provname,year)"), type = "terms")))
-temp.df$beta_coeff_low <- c(predict.gam(gam1, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname,biweek)", "s(provname,year)"), type = "terms")-1.96*predict.gam(gam1, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname,biweek)", "s(provname,year)"), type = "terms", se.fit = TRUE)$se.fit)
-temp.df$beta_coeff_high <-c(predict.gam(gam1, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname,biweek)", "s(provname,year)"), type = "terms")+1.96*predict.gam(gam1, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname,biweek)", "s(provname,year)"), type = "terms", se.fit = TRUE)$se.fit)
+temp.df <- cbind.data.frame(x=20:34, beta_coeff=c(predict.gam(gam1, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname,biweek)", "s(provname,year)", "s(epiyr)"), type = "terms")))
+temp.df$beta_coeff_low <- c(predict.gam(gam1, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname,biweek)", "s(provname,year)",  "s(epiyr)"), type = "terms")-1.96*predict.gam(gam1, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname,biweek)", "s(provname,year)", "s(epiyr)"), type = "terms", se.fit = TRUE)$se.fit)
+temp.df$beta_coeff_high <-c(predict.gam(gam1, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname,biweek)", "s(provname,year)",  "s(epiyr)"), type = "terms")+1.96*predict.gam(gam1, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname,biweek)", "s(provname,year)",  "s(epiyr)"), type = "terms", se.fit = TRUE)$se.fit)
 temp.df$predictor <- "'lagged temp ('^0~'C)'"
 
 
@@ -184,11 +199,12 @@ test.df$temp_C_lag = 25
 test.df$biweek <- 10
 test.df$year <- 2005
 test.df$provname = "Kandal"
+test.df$epiyr = 2007
 
 
-precip.df <- cbind.data.frame(x=0:30, beta_coeff=c(predict.gam(gam1, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname,biweek)", "s(provname,year)"), type = "terms")))
-precip.df$beta_coeff_low <- c(predict.gam(gam1, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname,biweek)", "s(provname,year)"), type = "terms")-1.96*predict.gam(gam1, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname,biweek)", "s(provname,year)"), type = "terms", se.fit = TRUE)$se.fit)
-precip.df$beta_coeff_high <-c(predict.gam(gam1, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname,biweek)", "s(provname,year)"), type = "terms")+1.96*predict.gam(gam1, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname,biweek)", "s(provname,year)"), type = "terms", se.fit = TRUE)$se.fit)
+precip.df <- cbind.data.frame(x=0:30, beta_coeff=c(predict.gam(gam1, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname,biweek)", "s(provname,year)",  "s(epiyr)"), type = "terms")))
+precip.df$beta_coeff_low <- c(predict.gam(gam1, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname,biweek)", "s(provname,year)",  "s(epiyr)"), type = "terms")-1.96*predict.gam(gam1, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname,biweek)", "s(provname,year)",  "s(epiyr)"), type = "terms", se.fit = TRUE)$se.fit)
+precip.df$beta_coeff_high <-c(predict.gam(gam1, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname,biweek)", "s(provname,year)",  "s(epiyr)"), type = "terms")+1.96*predict.gam(gam1, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname,biweek)", "s(provname,year)",  "s(epiyr)"), type = "terms", se.fit = TRUE)$se.fit)
 precip.df$predictor <- "'lagged precip (mm)'"
 
 
@@ -229,9 +245,21 @@ ggsave(file = paste0(homewd, "/final-figures/SuppFig_BetaClimResponse.png"),
 # from this fitted model GAM
 
 head(dat.epi)
+dat.epi$provname <- as.factor(dat.epi$provname)
+dat.epi$biweek <- as.factor(dat.epi$biweek)
+dat.epi$year <- as.factor(dat.epi$year)
+dat.epi$epiyr <- as.factor(dat.epi$epiyr)
+
 dat.epi$beta <- c(exp(predict.gam(gam1, newdata = dat.epi, type="response")))
 dat.epi$betalow <- c(exp(predict.gam(gam1, newdata = dat.epi, type="response") - 1.96*(predict.gam(gam1, newdata = dat.epi, type="response", se.fit = T)$se.fit)))
 dat.epi$betahigh <- c(exp(predict.gam(gam1, newdata = dat.epi, type="response") - 1.96*(predict.gam(gam1, newdata = dat.epi, type="response", se.fit = T)$se.fit)))
+
+
+#also try with the linear regression
+dat.epi2 = dat.epi
+dat.epi2$beta <- c(exp(predict(m1b, newdata = dat.epi2, type="response"))) #can't predict CIs from mixed effects model
+dat.epi2$betalow <-NA
+dat.epi2$betahigh <-NA
 
 # attach to the main dataset
 head(dat)
@@ -241,21 +269,28 @@ dat$year <- as.numeric(as.character(dat$year))
 dat$biweek <- as.numeric(as.character(dat$biweek))
 
 dat.all <- rbind(dat, dat.epi)
+dat.all2 <- rbind(dat, dat.epi2)
 
 
 dat.all <- arrange(dat.all, provname, year, biweek)
+dat.all2 <- arrange(dat.all2, provname, year, biweek)
 
 # Now pull in the pop and births, merge, and send to TSIR
 tsir.prov <- read.csv(file=paste0(homewd, "/data/tsir_dat_province.csv"), header = T, stringsAsFactors = F)
 head(tsir.prov)
 
 dat.all <- dplyr::select(dat.all, -(time), -(cases))
+dat.all2 <- dplyr::select(dat.all2, -(time), -(cases))
 
 tsir.clim <- merge(dat.all, tsir.prov, by=c("provname", "year", "biweek"), all.x = T)
 head(tsir.clim)
 
 write.csv(tsir.clim, paste0(homewd, "/data/tsir_dat_beta_climate_province.csv"), row.names = F)
 
+tsir.clim2 <- merge(dat.all2, tsir.prov, by=c("provname", "year", "biweek"), all.x = T)
+head(tsir.clim2)
+
+write.csv(tsir.clim2, paste0(homewd, "/data/tsir_dat_beta_climate_province_linear.csv"), row.names = F)
 
 ############################################################
 ############################################################
