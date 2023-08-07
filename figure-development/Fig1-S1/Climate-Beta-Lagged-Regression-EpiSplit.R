@@ -17,7 +17,7 @@ homewd = "/Users/carabrook/Developer/cambodia-dengue-national"
 # of how transmission (beta) responds to climate (temp + precipitation)
 
 
-# first load the province data
+# first load the province data with the TSIR fits for each inter-epidemic period
 dat.all <- read.csv(file = paste0(homewd, "/data/lagged-prov-clim-beta.csv"), header = T, stringsAsFactors = F)
 head(dat.all)
 
@@ -33,18 +33,15 @@ dat.all.epi$betahigh <- NA
 
 dat.all = subset(dat.all, year!=2007 & year!=2012 & year!=2019)
 
-# #and national data
-# nat.dat <- read.csv(file = paste0(homewd, "/data/lagged-nat-clim-beta.csv"), header = T, stringsAsFactors = F)
-# head(nat.dat)
 
 # log beta for the response
 dat.all$log_beta <- log((dat.all$beta))
 
 
-#now split by epiyear and return each separately
+#now split by epiyear and return regression each separately
 dat.epi.year.split <- dlply(dat.all, .(epiyr))
+epi.year.split <- dlply(dat.all.epi, .(epiyr))
 
-dat = dat.epi.year.split[[1]]
 
 
 briere_out <- function(temp_c, c_val, minT, maxT){
@@ -132,7 +129,7 @@ m2 <- lmer(log_beta~temp_C_lag_briere +
 
 summary(m2)
 
-plot_model(m2, type="est")
+#plot_model(m2, type="est")
 
 est.df <- get_model_data(m2, type="est")
 est.df$term <- as.character(est.df$term)
@@ -323,11 +320,11 @@ dat.epi$beta <- c(exp(predict.gam(gam1, newdata = dat.epi, type="response")))
 dat.epi$betalow <- c(exp(predict.gam(gam1, newdata = dat.epi, type="response") - 1.96*(predict.gam(gam1, newdata = dat.epi, type="response", se.fit = T)$se.fit)))
 dat.epi$betahigh <- c(exp(predict.gam(gam1, newdata = dat.epi, type="response") - 1.96*(predict.gam(gam1, newdata = dat.epi, type="response", se.fit = T)$se.fit)))
 
-#and predict from linear mode
-dat.epi2 = dat.epi
-dat.epi2$beta <- c(exp(predict(m1, newdata = dat.epi, type="response")))
-dat.epi2$betalow <- NA
-dat.epi2$betahigh <- NA
+# #and predict from linear mode
+# dat.epi2 = dat.epi
+# dat.epi2$beta <- c(exp(predict(m1, newdata = dat.epi, type="response")))
+# dat.epi2$betalow <- NA
+# dat.epi2$betahigh <- NA
 
 # attach to the main dataset
 head(dat)
@@ -337,35 +334,42 @@ dat$year <- as.numeric(as.character(dat$year))
 dat$biweek <- as.numeric(as.character(dat$biweek))
 
 dat.all <- rbind(dat, dat.epi)
-dat.all2 <- rbind(dat, dat.epi2)
+#dat.all2 <- rbind(dat, dat.epi2)
 
 
 dat.all <- arrange(dat.all, provname, year, biweek)
-dat.all2 <- arrange(dat.all2, provname, year, biweek)
+#dat.all2 <- arrange(dat.all2, provname, year, biweek)
 
 # Now pull in the pop and births, merge, and send to TSIR
 tsir.prov <- read.csv(file=paste0(homewd, "/data/tsir_dat_province.csv"), header = T, stringsAsFactors = F)
 head(tsir.prov)
 
 dat.all <- dplyr::select(dat.all, -(time), -(cases))
-dat.all2 <- dplyr::select(dat.all2, -(time), -(cases))
+#dat.all2 <- dplyr::select(dat.all2, -(time), -(cases))
 
 tsir.clim <- merge(dat.all, tsir.prov, by=c("provname", "year", "biweek"), all.x = T)
 head(tsir.clim)
 
-tsir.clim2 <- merge(dat.all2, tsir.prov, by=c("provname", "year", "biweek"), all.x = T)
-head(tsir.clim2)
+#tsir.clim2 <- merge(dat.all2, tsir.prov, by=c("provname", "year", "biweek"), all.x = T) #here using the linear projections
+#head(tsir.clim2)
 
-#and save
-write.csv(tsir.clim, paste0(homewd, "/data/tsir_dat_beta_climate_province_", epiyr, ".csv"), row.names = F)
-write.csv(tsir.clim2, paste0(homewd, "/data/tsir_dat_beta_climate_province_linear_", epiyr, ".csv"), row.names = F)
+#and return in the end, we use only the GAM projections
+#write.csv(tsir.clim, paste0(homewd, "/data/tsir_dat_beta_climate_province_", epiyr, ".csv"), row.names = F)
+#write.csv(tsir.clim2, paste0(homewd, "/data/tsir_dat_beta_climate_province_linear_", epiyr, ".csv"), row.names = F)
+
+return(tsir.clim)
 
 }
 
+# This saves the plots for each inter-epidemic period regression and returns the data for compilation to feed into TSIR
+out.epiyr.regression = mapply(fit.climate.regression, dat = dat.epi.year.split, dat.epi = epi.year.split, SIMPLIFY = FALSE)
 
-fit.climate.regression(dat=dat.epi.year.split[[1]], dat.epi = subset(dat.all.epi, year==2007))
-fit.climate.regression(dat=dat.epi.year.split[[2]], dat.epi = subset(dat.all.epi, year==2012))
-fit.climate.regression(dat=dat.epi.year.split[[3]], dat.epi = subset(dat.all.epi, year==2019))
+#and subset compile and save 
+epiyr.beta.df = data.table::rbindlist(out.epiyr.regression)
+epiyr.beta.df =subset(epiyr.beta.df , year == 2007 | year== 2012| year==2019)
+
+write.csv(epiyr.beta.df, paste0(homewd, "/data/tsir_dat_beta_climate_province.csv"), row.names = F)
+
 
 ############################################################
 ############################################################

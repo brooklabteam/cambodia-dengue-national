@@ -168,12 +168,20 @@ plot.test.tsir <- function(df, epiyr, sbar1){
   }
   
   
+  out.df <- cbind.data.frame(provname = c(rep(unique(dat$provname),2)),
+                             regtype=c("lm", "gaussian"), 
+                             AIC = c(fittedpars1$AIC, fittedpars2$AIC), rsquared=c(simfitted1$rsquared, simfitted2$rsquared), 
+                             Prop_Susceptible = c((signif(fittedpars1$sbar/mean(dat$pop) * 100, 2)), (signif(fittedpars2$sbar/mean(dat$pop) * 100, 2))))
+  
+  
+  
+  
   pB <- cowplot::plot_grid(p2, p3, ncol = 1, nrow=2) + theme(plot.margin = unit(c(1,.2,.2,.2), "cm"))
   pC <- cowplot::plot_grid(p4, p5, ncol = 1, nrow=2) + theme(plot.margin = unit(c(1,.2,.2,.2), "cm"))
   
   out.plot <- cowplot::plot_grid(p1, pB, pC, ncol = 3, nrow=1, 
                                  rel_widths = c(1,1.1,1.1), 
-                                 labels = c("A. Data", "B. Linear regression fit", "C. Gaussian regression fit"), 
+                                 labels = c("A. Data", paste0("B. Linear; R-sq=", out.df$rsquared[out.df$regtype=="lm"]), paste0("C. Gaussian; R-sq=", out.df$rsquared[out.df$regtype=="gaussian"])), 
                                  label_size = 18, label_x = c(0,-.2,-.2)) + theme(plot.background = element_rect(fill="white"))
   
   ggsave(file = paste0(homewd, "/figure-development/Fig1-S1/comp-plots/", suffix, "_", epiyr, ".png"),
@@ -195,10 +203,6 @@ plot.test.tsir <- function(df, epiyr, sbar1){
   # # One can use any of the GLM ones, but the options are essentially 'poisson' (with link='log'), 'gaussian' (with link='log' or 'identity'), or 'quasipoisson' (with link='log'). Default is 'gaussian'.
   # if ( ((fittedpars1$sbar + fittedpars1$Z[1])>0) & ((fittedpars2$sbar + fittedpars2$Z[1])>0)) {
   #   
-  out.df <- cbind.data.frame(provname = c(rep(unique(dat$provname),2)),
-                             regtype=c("lm", "gaussian"), 
-                             AIC = c(fittedpars1$AIC, fittedpars2$AIC), rsquared=c(simfitted1$rsquared, simfitted2$rsquared), 
-                             Prop_Susceptible = c((signif(fittedpars1$sbar/mean(dat$pop) * 100, 2)), (signif(fittedpars2$sbar/mean(dat$pop) * 100, 2))))
   
   # } else if ( ((fittedpars1$sbar + fittedpars1$Z[1])<0) & ((fittedpars2$sbar + fittedpars2$Z[1])>0)){
   #   
@@ -863,6 +867,9 @@ fit.2019.plot$epiyr = 2019
 
 fit.comp <- rbind(fit.2007.plot, fit.2012.plot, fit.2019.plot)
 
+#and save this 
+write.csv(fit.comp, file =paste0(homewd, "/data/comp_Sus_reconstruct_prov_epiyr.csv"), row.names = F)
+
 beta.df.2007 <- lapply(tsir.split.2007, runFulltSIR, epiyr1 = 2007, sbar1=NULL, fit.comp.df=fit.comp)
 beta.df.2007 <- data.table::rbindlist(beta.df.2007)
 head(beta.df.2007)
@@ -874,7 +881,7 @@ beta.df.2019 <- data.table::rbindlist(beta.df.2019)
 head(beta.df.2019)
 
 beta.all <- rbind(beta.df.2007, beta.df.2012, beta.df.2019)
-head(beta.all) #phnom penh 2019 amd preah sihanouk 2019 are bad (below .2)
+head(beta.all) 
 
 # pick those time series that are the most reliable (e.g. those with rsquared >.2) to do the climate lags
 # everything else gets rejected
