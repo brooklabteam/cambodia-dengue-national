@@ -44,8 +44,8 @@ FigS10 <- ggplot(data=subset(beta.dat, provname!="Mondul Kiri" & provname!="Rata
         axis.title = element_text(size=18), axis.text = element_text(size=13))
 
 
-ggsave(file = paste0(homewd, "/final-figures/FigS10.png"),
-       plot = FigS10,
+ggsave(file = paste0(homewd, "/final-figures/FigS9.png"),
+       plot = FigS9,
        units="mm",  
        width=100, 
        height=70, 

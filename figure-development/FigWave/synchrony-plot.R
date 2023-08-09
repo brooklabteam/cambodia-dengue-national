@@ -329,5 +329,9 @@ p17 | p13
 p15 | p11
 
 
+#annual cycles are synchronized across provinces and with temperature in epidemic years
+
+p4 | p16  | p17
+
 
 

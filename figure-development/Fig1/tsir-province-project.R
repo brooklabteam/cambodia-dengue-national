@@ -286,6 +286,25 @@ wrap.pipeline.TSIR <- function(df, epiyr1, sbar1, sus.dat, epi.beta.df){
                              nsim=100,
                              stochastic = T)
    
+   
+   predict_ts_lci <- predicttsir(times=dat.fit$time,
+                             births = dat.fit$births,
+                             beta = fittedpars$contact$betalow,
+                             alpha = fittedpars$alpha,
+                             S0 = Sbegin[1],
+                             I0 = dat.fit$cases[1],
+                             nsim=100,
+                             stochastic = T)
+   
+   predict_ts_uci <- predicttsir(times=dat.fit$time,
+                                 births = dat.fit$births,
+                                 beta = fittedpars$contact$betahigh,
+                                 alpha = fittedpars$alpha,
+                                 S0 = Sbegin[1],
+                                 I0 = dat.fit$cases[1],
+                                 nsim=100,
+                                 stochastic = T)
+   
   
    #now run  all 4 time series for the epidemic year
    
@@ -302,6 +321,26 @@ wrap.pipeline.TSIR <- function(df, epiyr1, sbar1, sus.dat, epi.beta.df){
                                     I0 = Ifinal,
                                     nsim=100,
                                     stochastic = T)
+   
+   
+   
+   predict_epi_noInc_lci <- predicttsir(times=dat.pred$time,
+                                    births = dat.pred$births,
+                                    beta = fittedpars$contact$betalow,
+                                    alpha = fittedpars$alpha,
+                                    S0 = Sepi,
+                                    I0 = Ifinal,
+                                    nsim=100,
+                                    stochastic = T)
+   
+   predict_epi_noInc_uci <- predicttsir(times=dat.pred$time,
+                                        births = dat.pred$births,
+                                        beta = fittedpars$contact$betahigh,
+                                        alpha = fittedpars$alpha,
+                                        S0 = Sepi,
+                                        I0 = Ifinal,
+                                        nsim=100,
+                                        stochastic = T)
   
    
   #2. project epi year with increased S and normal beta
@@ -317,6 +356,25 @@ wrap.pipeline.TSIR <- function(df, epiyr1, sbar1, sus.dat, epi.beta.df){
                                  nsim=100,
                                  stochastic = T)
   
+  predict_epi_Inc_lci <- predicttsir(times=dat.pred$time,
+                                 births = dat.pred$births,
+                                 beta = fittedpars$contact$betalow,
+                                 alpha = fittedpars$alpha,
+                                 S0 = SepiIncNoClim,
+                                 I0 = Ifinal,
+                                 nsim=100,
+                                 stochastic = T)
+  
+  
+  predict_epi_Inc_uci <- predicttsir(times=dat.pred$time,
+                                     births = dat.pred$births,
+                                     beta = fittedpars$contact$betahigh,
+                                     alpha = fittedpars$alpha,
+                                     S0 = SepiIncNoClim,
+                                     I0 = Ifinal,
+                                     nsim=100,
+                                     stochastic = T)
+  
   
   
   #3. project epi year with no increased S but climate-driven beta
@@ -331,6 +389,26 @@ wrap.pipeline.TSIR <- function(df, epiyr1, sbar1, sus.dat, epi.beta.df){
                                          I0 = Ifinal,
                                          nsim=100,
                                          stochastic = T)
+   
+   
+   
+   predict_epi_noInc_clim_lci <- predicttsir(times=dat.pred$time,
+                                         births = dat.pred$births,
+                                         beta = beta.epi$betalow,
+                                         alpha = fittedpars$alpha,
+                                         S0 = Sepi,
+                                         I0 = Ifinal,
+                                         nsim=100,
+                                         stochastic = T)
+   
+   predict_epi_noInc_clim_uci <- predicttsir(times=dat.pred$time,
+                                             births = dat.pred$births,
+                                             beta = beta.epi$betahigh,
+                                             alpha = fittedpars$alpha,
+                                             S0 = Sepi,
+                                             I0 = Ifinal,
+                                             nsim=100,
+                                             stochastic = T)
   
   
   #4. project epi year with increased S and climate-driven beta
@@ -344,6 +422,24 @@ wrap.pipeline.TSIR <- function(df, epiyr1, sbar1, sus.dat, epi.beta.df){
                                       nsim=100,
                                       stochastic = T)
   
+  predict_epi_Inc_clim_lci <- predicttsir(times=dat.pred$time,
+                                      births = dat.pred$births,
+                                      beta = beta.epi$betalow,
+                                      alpha = fittedpars$alpha,
+                                      S0 = SepiIncClim,
+                                      I0 = Ifinal,
+                                      nsim=100,
+                                      stochastic = T)
+  
+  predict_epi_Inc_clim_uci <- predicttsir(times=dat.pred$time,
+                                          births = dat.pred$births,
+                                          beta = beta.epi$betahigh,
+                                          alpha = fittedpars$alpha,
+                                          S0 = SepiIncClim,
+                                          I0 = Ifinal,
+                                          nsim=100,
+                                          stochastic = T)
+  
   
   
   
@@ -354,41 +450,52 @@ wrap.pipeline.TSIR <- function(df, epiyr1, sbar1, sus.dat, epi.beta.df){
   
   #1. here just TSIR
   
-  IPredEpi1 = cbind.data.frame(time=predict_epi_noInc$I$time, mean_Inc=predict_epi_noInc$I$mean)
-  names(IPredEpi1) <- c("time", "model_predicted_absolute_cases")
+  IPredEpi1 = cbind.data.frame(time=predict_epi_noInc$I$time, mean_Inc=predict_epi_noInc$I$mean, mean_Inc_lci = predict_epi_noInc_lci$I$mean, mean_Inc_uci = predict_epi_noInc_uci$I$mean)
+  names(IPredEpi1) <- c("time", "model_predicted_absolute_cases", "model_predicted_absolute_cases_lci", "model_predicted_absolute_cases_uci")
   # For the epidemic year prediction, use the mean reporting rate across the TSIR fit. This will be 
   # the same value always in the case of S reconstruction by lm but will be a true mean in the case of 
   # years with S reconstruction by gaussian regression
   IPredEpi1$model_predicted_reported_cases <- IPredEpi1$model_predicted_absolute_cases/mean(fittedpars$rho)
+  IPredEpi1$model_predicted_reported_cases_lci <- IPredEpi1$model_predicted_absolute_cases_lci/mean(fittedpars$rho)
+  IPredEpi1$model_predicted_reported_cases_uci <- IPredEpi1$model_predicted_absolute_cases_uci/mean(fittedpars$rho)
   IPredEpi1$sim_type <- "TSIR-prediction"
    
   
   #2.  here with increased S and normal beta
-  IPredEpi2 = cbind.data.frame(time=predict_epi_Inc$I$time, mean_Inc=predict_epi_Inc$I$mean)
-  names(IPredEpi2) <- c("time", "model_predicted_absolute_cases")
+  IPredEpi2 = cbind.data.frame(time=predict_epi_Inc$I$time, mean_Inc=predict_epi_Inc$I$mean, mean_Inc_lci=predict_epi_Inc_lci$I$mean, mean_Inc_uci=predict_epi_Inc_uci$I$mean)
+  names(IPredEpi2) <- c("time", "model_predicted_absolute_cases", "model_predicted_absolute_cases_lci", "model_predicted_absolute_cases_uci")
   IPredEpi2$model_predicted_reported_cases <- IPredEpi2$model_predicted_absolute_cases/mean(fittedpars$rho)
+  IPredEpi2$model_predicted_reported_cases_lci <- IPredEpi2$model_predicted_absolute_cases_lci/mean(fittedpars$rho)
+  IPredEpi2$model_predicted_reported_cases_uci <- IPredEpi2$model_predicted_absolute_cases_uci/mean(fittedpars$rho)
   IPredEpi2$sim_type <- "increased-S-standard-beta"
   
   
   #3. here with no increase in S but a climate-driven beta
-  IPredEpi3 = cbind.data.frame(time=predict_epi_noInc_clim$I$time, mean_Inc=predict_epi_noInc_clim$I$mean)
-  names(IPredEpi3) <- c("time", "model_predicted_absolute_cases")
+  IPredEpi3 = cbind.data.frame(time=predict_epi_noInc_clim$I$time, mean_Inc=predict_epi_noInc_clim$I$mean, mean_Inc_lci=predict_epi_noInc_clim_lci$I$mean, mean_Inc_uci=predict_epi_noInc_clim_uci$I$mean)
+  names(IPredEpi3) <- c("time", "model_predicted_absolute_cases", "model_predicted_absolute_cases_lci", "model_predicted_absolute_cases_uci")
   IPredEpi3$model_predicted_reported_cases <- IPredEpi3$model_predicted_absolute_cases/mean(fittedpars$rho)
+  IPredEpi3$model_predicted_reported_cases_lci <- IPredEpi3$model_predicted_absolute_cases_lci/mean(fittedpars$rho)
+  IPredEpi3$model_predicted_reported_cases_uci <- IPredEpi3$model_predicted_absolute_cases_uci/mean(fittedpars$rho)
   IPredEpi3$sim_type <- "no-increase-S-climate-beta"
   
   
   #4. here with both increased S and climate driven beta
   
-  IPredEpi4 = cbind.data.frame(time=predict_epi_Inc_clim$I$time, mean_Inc=predict_epi_Inc_clim$I$mean)
-  names(IPredEpi4) <- c("time", "model_predicted_absolute_cases")
+  IPredEpi4 = cbind.data.frame(time=predict_epi_Inc_clim$I$time, mean_Inc=predict_epi_Inc_clim$I$mean, mean_Inc_lci=predict_epi_Inc_clim_lci$I$mean, mean_Inc_uci=predict_epi_Inc_clim_uci$I$mean)
+  names(IPredEpi4) <- c("time", "model_predicted_absolute_cases", "model_predicted_absolute_cases_lci", "model_predicted_absolute_cases_uci")
   IPredEpi4$model_predicted_reported_cases <- IPredEpi4$model_predicted_absolute_cases/mean(fittedpars$rho)
+  IPredEpi4$model_predicted_reported_cases_lci <- IPredEpi4$model_predicted_absolute_cases_lci/mean(fittedpars$rho)
+  IPredEpi4$model_predicted_reported_cases_uci <- IPredEpi4$model_predicted_absolute_cases_uci/mean(fittedpars$rho)
   IPredEpi4$sim_type <- "increased-S-climate-beta"
   
   
   # fitted TSIR
-  IFit = cbind.data.frame(time=predict_ts$I$time, mean_Inc=predict_ts$I$mean)
-  names(IFit) <- c("time", "model_predicted_absolute_cases")
+  IFit = cbind.data.frame(time=predict_ts$I$time, mean_Inc=predict_ts$I$mean, mean_Inc_lci=predict_ts_lci$I$mean, mean_Inc_uci=predict_ts_uci$I$mean)
+  names(IFit) <- c("time", "model_predicted_absolute_cases", "model_predicted_absolute_cases_lci", "model_predicted_absolute_cases_uci")
   IFit$model_predicted_reported_cases <- IFit$model_predicted_absolute_cases/mean(fittedpars$rho)
+  IFit$model_predicted_reported_cases_lci <- IFit$model_predicted_absolute_cases_lci/mean(fittedpars$rho)
+  IFit$model_predicted_reported_cases_uci <- IFit$model_predicted_absolute_cases_uci/mean(fittedpars$rho)
+  
   IFit$sim_type <- "TSIR-fit"
   
   #bind all the predictions
@@ -453,9 +560,9 @@ tsir.split.2019 <- dlply(tsir.dat.2019,.(provname))
 
 # and apply it across the board. save the data and plot it after
 
-clim.project.tsir.2007 <- lapply(tsir.split.2007, wrap.pipeline.TSIR, epiyr=2007, sbar1 = NULL, sus.dat = sus.merge, epi.beta.df = clim.dat)
-clim.project.tsir.2012 <- lapply(tsir.split.2012, wrap.pipeline.TSIR, epiyr=2012, sbar1 = NULL, sus.dat = sus.merge, epi.beta.df = clim.dat)
-clim.project.tsir.2019 <- lapply(tsir.split.2019, wrap.pipeline.TSIR, epiyr=2019, sbar1 = NULL, sus.dat = sus.merge, epi.beta.df = clim.dat)
+clim.project.tsir.2007 <- lapply(tsir.split.2007, wrap.pipeline.TSIR, epiyr1=2007, sbar1 = NULL, sus.dat = sus.merge, epi.beta.df = clim.dat)
+clim.project.tsir.2012 <- lapply(tsir.split.2012, wrap.pipeline.TSIR, epiyr1=2012, sbar1 = NULL, sus.dat = sus.merge, epi.beta.df = clim.dat)
+clim.project.tsir.2019 <- lapply(tsir.split.2019, wrap.pipeline.TSIR, epiyr1=2019, sbar1 = NULL, sus.dat = sus.merge, epi.beta.df = clim.dat)
 
 
 # save the first element from each which is the ratio of susceptible increases 
@@ -464,7 +571,10 @@ sus.df.2007 <-data.table::rbindlist(sapply(clim.project.tsir.2007,'[', 1))
 sus.df.2012 <-data.table::rbindlist(sapply(clim.project.tsir.2012,'[', 1))
 sus.df.2019 <-data.table::rbindlist(sapply(clim.project.tsir.2019,'[', 1))
 
-sus.clim.df <- rbind.data.frame(sus.df.2007, sus.df.2012, sus.df.2019)
+sus.clim.df <- rbind.data.frame(sus.df.2007, sus.df.2012, sus.df.2019) 
+#in 2007, - values for 5 provinces, + values for 11 provinces, 0 values for 6 provinces
+#in 2012, - values for 14 provinces, + values for 3 provinces, 0 values for 5 provinces
+#in 2019, - values for 12 provinces, + values for 7 provinces, 0 values for 3 provinces
 write.csv(sus.clim.df, paste0(homewd,"/data/sus_increase_by_clim_by_prov.csv"), row.names = F)
 #save 
 
@@ -479,27 +589,35 @@ project.df.all <- rbind.data.frame(project.df.2007, project.df.2012, project.df.
 write.csv(project.df.all, paste0(homewd,"/data/climate_projections_TSIR_by_prov.csv"), row.names = F)
 
 
-ggplot(project.df.all) + facet_wrap(~provname, scales = "free_y") +
-    geom_line(aes(x=time, y=cases), linetype=2) +
-    geom_line(aes(x=time, y=model_predicted_reported_cases, color=sim_type)) 
-
 
 project.df.all$sim_type <- factor(project.df.all$sim_type, levels=c("TSIR-fit", "TSIR-prediction", "increased-S-standard-beta", "no-increase-S-climate-beta", "increased-S-climate-beta"))
+
 colz = c('TSIR-fit'="#00B0F6",'TSIR-prediction' = "#E76BF3", 'increased-S-standard-beta' = "#A3A500", 'no-increase-S-climate-beta'="#00BF7D",'increased-S-climate-beta' = "#F8766D" )
 
 ggplot(subset(project.df.all, provname=="Battambang")) + facet_wrap(~provname, scales = "free_y") +
-  geom_line(aes(x=time, y=cases), linetype=2) + scale_color_manual(values=colz) + theme_bw() +
+  geom_line(aes(x=time, y=cases), linetype=2) + scale_color_manual(values=colz) + scale_fill_manual(values=colz) + theme_bw() +
   theme(panel.grid = element_blank(), strip.background = element_rect(fill="white")) +
+  geom_ribbon(data = subset(project.df.all, provname=="Battambang" &time<2008),
+              aes(x=time, ymin=model_predicted_reported_cases_lci, ymax=model_predicted_reported_cases_uci, fill=sim_type), alpha=.2) +
   geom_line(data = subset(project.df.all, provname=="Battambang" &time<2008),
             aes(x=time, y=model_predicted_reported_cases, color=sim_type), size=.8) +
+  geom_ribbon(data = subset(project.df.all, provname=="Battambang" & time>=2008 & time<2012  & sim_type=="TSIR-fit"),
+              aes(x=time, ymin=model_predicted_reported_cases_lci, ymax=model_predicted_reported_cases_uci, fill=sim_type), alpha=.2) +
   geom_line(data = subset(project.df.all, provname=="Battambang" & time>=2008 & time<2012  & sim_type=="TSIR-fit"),
             aes(x=time, y=model_predicted_reported_cases, color=sim_type), size=.8) +
+  geom_ribbon(data = subset(project.df.all, provname=="Battambang" & time>=2012 & time<2013 & sim_type!="TSIR-fit"),
+              aes(x=time, ymin=model_predicted_reported_cases_lci, ymax=model_predicted_reported_cases_uci, fill=sim_type), alpha=.2) +
   geom_line(data = subset(project.df.all, provname=="Battambang" & time>=2012 & time<2013 & sim_type!="TSIR-fit"),
             aes(x=time, y=model_predicted_reported_cases, color=sim_type), size=.8) +
+  geom_ribbon(data = subset(project.df.all, provname=="Battambang" & time>=2013 & time<2019  & sim_type=="TSIR-fit"),
+              aes(x=time, ymin=model_predicted_reported_cases_lci, ymax=model_predicted_reported_cases_uci, fill=sim_type), alpha=.2) +
   geom_line(data = subset(project.df.all, provname=="Battambang" & time>=2013 & time<2019  & sim_type=="TSIR-fit"),
             aes(x=time, y=model_predicted_reported_cases, color=sim_type), size=.8) +
+  geom_ribbon(data = subset(project.df.all, provname=="Battambang" & time>=2019 & sim_type!="TSIR-fit"),
+              aes(x=time, ymin=model_predicted_reported_cases_lci, ymax=model_predicted_reported_cases_uci, fill=sim_type), alpha=.2) +
   geom_line(data = subset(project.df.all, provname=="Battambang" & time>=2019 & sim_type!="TSIR-fit"),
             aes(x=time, y=model_predicted_reported_cases, color=sim_type), size=.8) 
+  
   
 # geom_line(data = subset(project.df.all, provname=="Battambang" &time<2008),
 #             aes(x=time, y=model_predicted_reported_cases, color=sim_type))
@@ -508,19 +626,31 @@ ggplot(subset(project.df.all, provname=="Battambang")) + facet_wrap(~provname, s
 
 
 p1 <- ggplot(project.df.all) + facet_wrap(~provname, scales = "free_y") + ylab("reported cases") +
-  geom_line(aes(x=time, y=cases), linetype=2) + scale_color_manual(values=colz) + theme_bw() +
+  geom_line(aes(x=time, y=cases), linetype=2) + scale_color_manual(values=colz, labels=scales::parse_format()) +
+  scale_fill_manual(values=colz, labels=scales::parse_format()) + theme_bw() +
   theme(panel.grid = element_blank(), strip.background = element_rect(fill="white"), 
         legend.title = element_blank(), legend.position = c(.91,.08), axis.title.x = element_blank()) +
+  geom_ribbon(data = subset(project.df.all, time<2008),
+            aes(x=time, ymin=model_predicted_reported_cases_lci, ymax=model_predicted_reported_cases_uci, fill=sim_type), alpha=.2) +
   geom_line(data = subset(project.df.all, time<2008),
             aes(x=time, y=model_predicted_reported_cases, color=sim_type), size=.8) +
+  geom_ribbon(data = subset(project.df.all,time>=2008 & time<2012  & sim_type=="TSIR-fit"),
+              aes(x=time, ymin=model_predicted_reported_cases_lci, ymax=model_predicted_reported_cases_uci, fill=sim_type), alpha=.2) +
   geom_line(data = subset(project.df.all,time>=2008 & time<2012  & sim_type=="TSIR-fit"),
             aes(x=time, y=model_predicted_reported_cases, color=sim_type), size=.8) +
+  geom_ribbon(data = subset(project.df.all, time>=2012 & time<2013 & sim_type!="TSIR-fit"),
+              aes(x=time, ymin=model_predicted_reported_cases_lci, ymax=model_predicted_reported_cases_uci, fill=sim_type), alpha=.2) +
   geom_line(data = subset(project.df.all, time>=2012 & time<2013 & sim_type!="TSIR-fit"),
             aes(x=time, y=model_predicted_reported_cases, color=sim_type), size=.8) +
+  geom_ribbon(data = subset(project.df.all, time>=2013 & time<2019  & sim_type=="TSIR-fit"),
+              aes(x=time, ymin=model_predicted_reported_cases_lci, ymax=model_predicted_reported_cases_uci, fill=sim_type), alpha=.2) +
   geom_line(data = subset(project.df.all, time>=2013 & time<2019  & sim_type=="TSIR-fit"),
             aes(x=time, y=model_predicted_reported_cases, color=sim_type), size=.8) +
+  geom_ribbon(data = subset(project.df.all, time>=2019 & sim_type!="TSIR-fit"),
+              aes(x=time, ymin=model_predicted_reported_cases_lci, ymax=model_predicted_reported_cases_uci, fill=sim_type), alpha=.2) +
   geom_line(data = subset(project.df.all, time>=2019 & sim_type!="TSIR-fit"),
             aes(x=time, y=model_predicted_reported_cases, color=sim_type), size=.8) 
+  
 
 
 
