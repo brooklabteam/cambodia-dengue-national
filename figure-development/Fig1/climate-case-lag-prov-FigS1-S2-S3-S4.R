@@ -8,23 +8,16 @@ library(mgcv)
 
 homewd = "/Users/carabrook/Developer/cambodia-dengue-national"
 
-#load the province-level transmission
-# beta.df <- read.csv(file = paste0(homewd, "/data/beta_TSIR_fit_province.csv"), header = T, stringsAsFactors = F)
-# head(beta.df)
+#load and prep the climate data at the province level
+temp.dat <- read.csv(file = paste0(homewd, "/data/biweek_temp.csv"), header = T, stringsAsFactors = F )
+precip.dat <- read.csv(file = paste0(homewd, "/data/biweek_ppt.csv"), header = T, stringsAsFactors = F )
+head(temp.dat) # year and biweek
+head(precip.dat) # year and biweek
 
-
-#also load and prep the climate data at the province level
-katwd = "/Users/carabrook/Developer/cambodia-dengue-province"
-temp.dat <- read.csv(file = paste0(katwd, "/Climate_data/Cambodia_province_climate/data_final/biweek_temp.csv"), header = T, stringsAsFactors = F )
-precip.dat <- read.csv(file = paste0(katwd, "/Climate_data/Cambodia_province_climate/data_final/biweek_ppt.csv"), header = T, stringsAsFactors = F )
-
-names(temp.dat)[names(temp.dat)=="adm1_name"] <- "provname"
-names(precip.dat)[names(precip.dat)=="adm1_name"] <- "provname"
 
 temp.dat = subset(temp.dat, provname!="Administrative unit not available")
 precip.dat = subset(precip.dat, provname!="Administrative unit not available")
-head(temp.dat) # year and biweek
-head(precip.dat) # year and biweek
+
 
 #setdiff(unique(temp.dat$provname), unique(beta.df$provname)) #"Mondul Kiri"    "Oddar Meanchey" "Ratanak Kiri"   "Siemreap"       "Tboung Khmum"  
 temp.dat$provname[temp.dat$provname=="Siemreap"] <- "Siem Reap"
@@ -38,45 +31,12 @@ temp.dat$year <-as.factor(temp.dat$year)
 ggplot(temp.dat) + geom_line(aes(x=biwk, y=temp_C, color=year)) + facet_wrap(provname~.)
 
 precip.dat$year <-as.factor(precip.dat$year)
-precip.dat = subset(precip.dat, year!=2021) #never use
-ggplot(precip.dat) + geom_line(aes(x=biwk, y=precip_mm, color=year)) + facet_wrap(provname~.)
 
-#need to correct precip.dat for 2020 and 2021 (even though will be dropped in merge)
-precip.dat$year <- as.numeric(as.character(precip.dat$year))
-precip.dat$precip_mm[precip.dat$year>=2020] <- precip.dat$precip_mm[precip.dat$year>=2020]/1000
-precip.dat$precip_m[precip.dat$year>=2020] <- precip.dat$precip_m[precip.dat$year>=2020]/1000
-
-
-precip.dat$year <-as.factor(precip.dat$year)
-ggplot(precip.dat) + geom_line(aes(x=biwk, y=precip_mm, color=year)) + facet_wrap(provname~.)
-
-######################################################
-######################################################
-
-#for the 4 provinces out of whack, just go ahead and replace with the 2019 value for that province
-precip.dat$precip_m[precip.dat$year==2020 & precip.dat$provname=="Preah Sihanouk"] <- precip.dat$precip_m[precip.dat$year==2019 & precip.dat$provname=="Preah Sihanouk"]
-precip.dat$precip_m[precip.dat$year==2020 & precip.dat$provname=="Pailin"] <- precip.dat$precip_m[precip.dat$year==2019 & precip.dat$provname=="Pailin"]
-precip.dat$precip_m[precip.dat$year==2020 & precip.dat$provname=="Kep"] <- precip.dat$precip_m[precip.dat$year==2019 & precip.dat$provname=="Kep"]
-precip.dat$precip_m[precip.dat$year==2020 & precip.dat$provname=="Phnom Penh"] <- precip.dat$precip_m[precip.dat$year==2019 & precip.dat$provname=="Phnom Penh"]
-
-precip.dat$precip_mm[precip.dat$year==2020 & precip.dat$provname=="Preah Sihanouk"] <- precip.dat$precip_mm[precip.dat$year==2019 & precip.dat$provname=="Preah Sihanouk"]
-precip.dat$precip_mm[precip.dat$year==2020 & precip.dat$provname=="Pailin"] <- precip.dat$precip_mm[precip.dat$year==2019 & precip.dat$provname=="Pailin"]
-precip.dat$precip_mm[precip.dat$year==2020 & precip.dat$provname=="Kep"] <- precip.dat$precip_mm[precip.dat$year==2019 & precip.dat$provname=="Kep"]
-precip.dat$precip_mm[precip.dat$year==2020 & precip.dat$provname=="Phnom Penh"] <- precip.dat$precip_mm[precip.dat$year==2019 & precip.dat$provname=="Phnom Penh"]
-
-######################################################
-######################################################
-precip.dat$year <- as.factor(precip.dat$year)
 ggplot(precip.dat) + geom_line(aes(x=biwk, y=precip_mm, color=year)) + facet_wrap(provname~.)
 
 head(precip.dat)
 head(temp.dat)
 
-# # remove year 2021 since we don't use it anyway
- precip.dat$year <- as.numeric(as.character(precip.dat$year))
- temp.dat$year <- as.numeric(as.character(temp.dat$year))
- precip.dat = subset(precip.dat, year>2001 & year <2021)
- temp.dat = subset(temp.dat, year>2001 & year <2021)
 
 # and test whether precip and temp are increasing through time
 precip.dat$provname <- as.factor(precip.dat$provname)
@@ -86,17 +46,33 @@ temp.dat$provname <- as.factor(temp.dat$provname)
 # precip.dat = subset(precip.dat, provname!="Tboung Khmum")
 # temp.dat = subset(temp.dat, provname!="Tboung Khmum")
 
+
 # Here, we look at precipitation through time, allowing for 
 # a different intercept for each province
+
+temp.dat$year <- as.numeric(as.character(temp.dat$year))
+precip.dat$year <- as.numeric(as.character(precip.dat$year))
+
 gam1 <- gam(precip_mm~ year:provname + #slope specific by province
                        s(biwk, bs="cc", k=7) + #controls for internal annual cycles
                        s(provname, bs="re"), data=precip.dat) #y-intercept specific by province too
-summary(gam1) #precip not changing over the longer term for an province
+summary(gam1) 
+#no change in precip over time 
 
+#...are there any years that are significant deviations?
+precip.dat$year <- as.factor(precip.dat$year)
+gam1b <- gam(precip_mm~ s(year, bs="re") +
+                        s(biwk, bs="cc", k=7) + #controls for internal annual cycles
+                        s(provname, bs="re"), data=precip.dat) #y-intercept specific by province too
+summary(gam1b)
 
+source(paste0(homewd, "/figure-development/Fig1/mollentze-streicker-2020-functions.R"))
 
-#precip.predict <- cbind.data.frame(provname = rep(unique(precip.dat$provname), each=18), year = rep(unique(precip.dat$year), 24))
-precip.predict <- cbind.data.frame(provname = rep(unique(precip.dat$provname), each=19), year = rep(unique(precip.dat$year), 25))
+year.df <- get_partial_effects(gam1b, var="year")
+plot.partial(df=year.df, var="year", response_var = "precip_mm")
+
+precip.dat$year <- as.numeric(as.character(precip.dat$year))
+precip.predict <- cbind.data.frame(provname = rep(unique(precip.dat$provname), each=18), year = rep(unique(precip.dat$year), 25))
 precip.predict$biwk = 10
 precip.predict$precip_mm <- predict.gam(gam1, newdata = precip.predict, exclude = c("s(biwk)"), type="response", se.fit = TRUE)$fit
 precip.predict$precip_mm_lci <- predict.gam(gam1, newdata = precip.predict, exclude = c("s(biwk)"), type="response", se.fit = TRUE)$fit - 1.96*predict.gam(gam1, newdata = precip.predict, exclude = c("s(biwk)"), type="response", se.fit = TRUE)$se
@@ -113,10 +89,22 @@ gam2 <- gam(temp_C ~ year:provname +
 summary(gam2) 
 # temp is increasing slightly for all provinces
 
+#are there any temperature years that are temperature anomalies?
+temp.dat$year <- as.factor(temp.dat$year)
+gam2b <- gam(temp_C ~ s(year, bs="re") +
+              s(biwk, bs="cc", k=7) + 
+              s(provname, bs="re"),
+            data=temp.dat)
+
+summary(gam2b) 
+year.df.temp <- get_partial_effects(gam2b, var="year")
+plot.partial(df=year.df.temp, var="year", response_var = "temp_C") #2019 and 2012 were hot years but 2007 was not
+temp.dat$year <- as.numeric(as.character(temp.dat$year))
+
+
 
 # here are predictions for best fit model
-#temp.predict <- cbind.data.frame(provname = rep(unique(temp.dat$provname), each=18), year = rep(unique(temp.dat$year), 24))
-temp.predict <- cbind.data.frame(provname = rep(unique(temp.dat$provname), each=19), year = rep(unique(temp.dat$year), 25))
+temp.predict <- cbind.data.frame(provname = rep(unique(temp.dat$provname), each=18), year = rep(unique(temp.dat$year), 25))
 
 temp.predict$biwk = 10
 temp.predict$temp_C <- predict.gam(gam2, newdata = temp.predict, exclude = c("s(biwk)"), type="response", se.fit = TRUE)$fit
@@ -125,10 +113,8 @@ temp.predict$temp_C_uci <- predict.gam(gam2, newdata = temp.predict, exclude = c
 
 
 # and merge with case data
-temp.dat <- dplyr::select(temp.dat, -(X), -(temp_K))
+temp.dat <- dplyr::select(temp.dat, -(temp_K))
 names(temp.dat)[names(temp.dat)=="biwk"] <- "biweek"
-
-precip.dat <- dplyr::select(precip.dat, -(X))
 names(precip.dat)[names(precip.dat)=="biwk"] <- "biweek"
 
 
@@ -204,12 +190,12 @@ ggsave(file = paste0(homewd,"/final-figures/FigS2.png"),
        dpi=300)
 
 
-pS3 <- ggplot(wave.merge) + geom_line(aes(x=biweek, y=temp_C, color=year)) + facet_wrap(provname~.) + 
+pS1 <- ggplot(wave.merge) + geom_line(aes(x=biweek, y=temp_C, color=year)) + facet_wrap(provname~.) + 
         theme_bw() + theme(panel.grid = element_blank(), strip.background = element_rect(fill="white")) +
         ylab(bquote('biweekly mean temperature ('^0~'C)')) + xlab("biweek of year")
 
-ggsave(file = paste0(homewd,"/final-figures/FigS3.png"),
-       plot = pS3,
+ggsave(file = paste0(homewd,"/final-figures/FigS1.png"),
+       plot = pS1,
        units="mm",  
        width=110, 
        height=90, 
@@ -248,14 +234,14 @@ ggsave(file = paste0(homewd,"/final-figures/FigS4.png"),
        dpi=300)
 
 
-pS5 <- ggplot(wave.merge) +
+pS3 <- ggplot(wave.merge) +
     geom_line(aes(x=time, y=temp_C, color=provname), show.legend = F) + facet_wrap(provname~.) + 
     theme_bw() + theme(panel.grid = element_blank(), strip.background = element_rect(fill="white"), axis.title.x = element_blank())+
     geom_ribbon(data=temp.predict, aes(time, ymin=temp_C_lci, ymax=temp_C_uci),alpha=.4) +
     geom_line(data=temp.predict, aes(time, temp_C), size=.8) + ylab(bquote('biweekly mean temperature ('^0~'C)'))
 
-ggsave(file = paste0(homewd,"/final-figures/FigS5.png"),
-       plot = pS5,
+ggsave(file = paste0(homewd,"/final-figures/FigS3.png"),
+       plot = pS3,
        units="mm",  
        width=110, 
        height=90, 
@@ -275,8 +261,22 @@ p2 <- ggplot(temp.predict) +
 print(p2)
 
 
+p3 <- ggplot(precip.predict) +
+  theme_bw() + theme(panel.grid = element_blank(), axis.title.x = element_blank(), legend.title = element_blank(),
+                     axis.title.y = element_text(size=16), axis.text = element_text(size=13),
+                     plot.margin = unit(c(.2,.3,.1,.3), "cm"), legend.position = "bottom")+
+  geom_ribbon(data=precip.predict, aes(time, ymin=precip_mm_lci, ymax=precip_mm_uci, fill=provname),alpha=.4) +
+  geom_line(data=precip.predict, aes(time, precip_mm, color=provname), size=.8) + 
+  ylab("sum biweekly precipitation (mm) prediction by year") #+ 
+#guides(fill=guide_legend(ncol=1), color= guide_legend(ncol=1))
+
+print(p3)
 
 # now, pair with the population data and drop the beta info - send off to the wavelet analysis
+
+#now plot temp and precip as Zscores in next script
+
+
 
 
 # and test for lags now - split by province first
