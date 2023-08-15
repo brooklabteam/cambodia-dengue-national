@@ -6,6 +6,7 @@ library(ggplot2)
 library(lubridate)
 library(WaveletComp)
 library(mgcv)
+library(reshape2)
 
 homewd = "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(homewd)
@@ -57,7 +58,7 @@ get.national.period <- function(nat.dat, popdat){
   #                    periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019))
   #          #
   
-  multi.dat = reconstruct(nat.dat.multi)
+  multi.dat = WaveletComp::reconstruct(nat.dat.multi, only.sig=T)
   
   nat.dat$reconstructed_multi_period <- multi.dat$series$cases_per_1000.r
   
@@ -88,7 +89,7 @@ get.national.period <- function(nat.dat, popdat){
 
 
 
-dat <- read.csv(file = paste0(homewd, "/data/synchrony_data.csv"), header=T, stringsAsFactors = F)
+dat <- read.csv(file = paste0(homewd, "/data/synchrony_data_aug12.csv"), header=T, stringsAsFactors = F)
 head(dat)
 names(dat)
 
@@ -163,14 +164,14 @@ p3 <- ggplot(dat) + theme_bw() + ylab("mean period duration,\ndengue incidence p
 
 p3
 
-
-p3b <- ggplot(dat) + theme_bw() + ylab("dominant period duration,\ndengue incidence peri 1000 ppl") +
-  theme(panel.grid = element_blank(), legend.position = "bottom", axis.title.x = element_blank(), axis.title.y = element_text(size=16),
-        axis.text = element_text(size=14)) +
-  geom_line(aes(x=time,y=multi_period_max, color=provname)) +
-  geom_line(data=nat.dat, aes(x=time, y= multi_period_max), linewidth=1.5)
-
-p3b
+# 
+# p3b <- ggplot(dat) + theme_bw() + ylab("dominant period duration,\ndengue incidence peri 1000 ppl") +
+#   theme(panel.grid = element_blank(), legend.position = "bottom", axis.title.x = element_blank(), axis.title.y = element_text(size=16),
+#         axis.text = element_text(size=14)) +
+#   geom_line(aes(x=time,y=multi_period_max, color=provname)) +
+#   geom_line(data=nat.dat, aes(x=time, y= multi_period_max), linewidth=1.5)
+# 
+# p3b
 
 
 p3c <- ggplot(dat) + theme_bw() + ylab("mean period duration,\ndengue incidence per 1000 ppl") +
@@ -181,6 +182,16 @@ p3c <- ggplot(dat) + theme_bw() + ylab("mean period duration,\ndengue incidence 
   facet_wrap(~provname, ncol=4)
 
 p3c
+
+
+library(lme4)
+library(lmerTest)
+dat$provname
+m1 <- lmer(multi_period_mean~time:provname + (1|provname), data=dat)
+summary(m1)   
+m2 <- lmer(multi_period_mean~year:provname + (1|provname), data=dat)
+summary(m2)   
+
 
 #less here - power
 p4 <- ggplot(data=dat) + theme_bw() +
@@ -205,14 +216,17 @@ p5 <- ggplot(data=dat) + theme_bw() +
 p4 | p5
 
 #and coherence
-# p6 <- ggplot(data=dat) + theme_bw() +
-#   theme(panel.grid = element_blank(), axis.title = element_blank(),
-#         panel.background = element_rect(fill="gray30"),
-#         axis.text = element_text(size=14),legend.position = "bottom") +
-#   scale_fill_viridis_c( option="inferno", name="Proportion of provinces\nwith coherent annual cycles") +# scale_color_manual(values=epicolz) +
-#   scale_color_viridis_c( option="inferno", name="Proportion of provinces\nwith coherent annual cycles") +# scale_color_manual(values=epicolz) 
-#   geom_tile(aes(x=time, y=provname, fill=proportion_coherence_annual))#, color=epiyear))
-# 
+vert.df <- cbind.data.frame(xint = c(2007, 2008, 2012, 2013, 2019,2020))
+ p6 <- ggplot(data=dat) + theme_bw() +
+   theme(panel.grid = element_blank(), axis.title = element_blank(),
+         panel.background = element_rect(fill="gray30"),
+         axis.text = element_text(size=14),legend.position = "bottom") +
+   scale_fill_viridis_c( option="inferno", name="Proportion of provinces\nwith coherent annual cycles") +# scale_color_manual(values=epicolz) +
+   scale_color_viridis_c( option="inferno", name="Proportion of provinces\nwith coherent annual cycles") +# scale_color_manual(values=epicolz) 
+   geom_tile(aes(x=time, y=provname, fill=proportion_coherence_annual))+ 
+   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1)
+p6
+ # 
 # # p7 <- ggplot(data=dat) + theme_bw() +
 #   theme(panel.grid = element_blank(), axis.title = element_blank(),
 #         panel.background = element_rect(fill="gray30"),
@@ -280,7 +294,8 @@ p4 | p5
          axis.text = element_text(size=14),legend.position = "bottom") +
    scale_fill_viridis_c( option="inferno", name="Coherence (annual):\ndengue IR and\ntemperature") +# scale_color_manual(values=epicolz) +
    scale_color_viridis_c( option="inferno", name="Coherence (annual):\ndengue IR and\ntemperature") +# scale_color_manual(values=epicolz) 
-   geom_tile(aes(x=time, y=provname, fill=avg_wave_coherency_temp))#, color=epiyear))
+   geom_tile(aes(x=time, y=provname, fill=avg_wave_coherency_temp))+
+   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1)
 # 
 # 
 # #precip
@@ -291,7 +306,8 @@ p4 | p5
          axis.text = element_text(size=14),legend.position = "bottom") +
    scale_fill_viridis_c( option="inferno", name="Coherence (annual):\ndengue IR and\nprecipitation") +# scale_color_manual(values=epicolz) +
    scale_color_viridis_c( option="inferno", name="Coherence (annual):\ndengue IR and\nprecipitation") +# scale_color_manual(values=epicolz) 
-   geom_tile(aes(x=time, y=provname, fill=avg_wave_coherency_precip))#, color=epiyear))
+   geom_tile(aes(x=time, y=provname, fill=avg_wave_coherency_precip))+
+   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1)
 # 
  p14 | p15
 
@@ -304,7 +320,8 @@ p16 <- ggplot(data=dat) + theme_bw() +
         axis.text = element_text(size=14),legend.position = "bottom") +
   scale_fill_viridis_c( option="inferno", name="Average cross-wavelet\npower (annual): dengue IR\nand temperature", trans="sqrt") +# scale_color_manual(values=epicolz) +
   scale_color_viridis_c( option="inferno", name="Average cross-wavelet\npower (annual): dengue IR\nand temperature", trans="sqrt") +# scale_color_manual(values=epicolz) 
-  geom_tile(aes(x=time, y=provname, fill=avg_cross_power_temp))#, color=epiyear))
+  geom_tile(aes(x=time, y=provname, fill=avg_cross_power_temp))+
+  geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1)
 
 
 #precip
@@ -315,7 +332,8 @@ p17 <- ggplot(data=dat) + theme_bw() +
         axis.text = element_text(size=14),legend.position = "bottom") +
   scale_fill_viridis_c( option="inferno", name="Average cross-wavelet\npower (annual): dengue IR\nand precipitation", trans="sqrt") +# scale_color_manual(values=epicolz) +
   scale_color_viridis_c( option="inferno", name="Average cross-wavelet\npower (annual): dengue IR\nand precipitation", trans="sqrt") +# scale_color_manual(values=epicolz) 
-  geom_tile(aes(x=time, y=provname, fill=avg_cross_power_precip))#, color=epiyear))
+  geom_tile(aes(x=time, y=provname, fill=avg_cross_power_precip))+
+  geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1)
 
 p16 | p17
 
@@ -325,5 +343,34 @@ p16 | p17
 
 p4 | p16  | p17
 
+#and coherence with oni
+
+oni.dat <- read.csv(file = paste0(homewd, "/data/oni_coherence.csv"), header=T, stringsAsFactors = F)
+head(oni.dat)
+
+#and plot
+p18 <- ggplot(data=oni.dat) + theme_bw() +
+  theme(panel.grid = element_blank(), axis.title = element_blank(),
+        panel.background = element_rect(fill="gray30"),
+        axis.text = element_text(size=14),legend.position = "bottom") +
+  scale_fill_viridis_c( option="inferno", name="Average cross-wavelet\npower (multiannual):\ndengue IR and ONI", trans="sqrt") +# scale_color_manual(values=epicolz) +
+  scale_color_viridis_c( option="inferno", name="Average cross-wavelet\npower (multiannual):\ndengue IR and ONI", trans="sqrt") +# scale_color_manual(values=epicolz) 
+  geom_tile(aes(x=time, y=provname, fill=avg_cross_power_oni))+
+  geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1)
+
+p18
+
+#and coherence
+
+p19 <- ggplot(data=oni.dat) + theme_bw() +
+  theme(panel.grid = element_blank(), axis.title = element_blank(),
+        panel.background = element_rect(fill="gray30"),
+        axis.text = element_text(size=14),legend.position = "bottom") +
+  scale_fill_viridis_c( option="inferno", name="Average wavelet\ncoherence (multiannual): dengue IR\nand ONI", trans="sqrt") +# scale_color_manual(values=epicolz) +
+  scale_color_viridis_c( option="inferno", name="Average wavelet\ncoherence (multiannual): dengue IR\nand ONI", trans="sqrt") +# scale_color_manual(values=epicolz) 
+  geom_tile(aes(x=time, y=provname, fill=avg_wave_coherence_oni))+
+  geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1)
+
+p19
 
 
