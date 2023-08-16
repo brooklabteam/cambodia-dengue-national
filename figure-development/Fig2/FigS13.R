@@ -7,6 +7,7 @@ library(ggplot2)
 library(lubridate)
 library(epitools)
 library(reshape2)
+library(ggh4x)
 
 #this one is just the plot of coherence with ONI (or lack thereof)
 
@@ -51,12 +52,14 @@ strip <- strip_themed(background_y = elem_list_rect(fill = colz))
 #and coherence
 vert.df <- cbind.data.frame(xint = c(2007, 2008, 2012, 2013, 2019,2020))
 
+#ggplot(subset(oni.dat, provname=="Battambang")) + geom_line(aes(x=time, y=avg_wave_coherence_oni))
 
-FigS13b <- ggplot(data=oni.dat) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+#cross wavelet power
+FigS13Bb <- ggplot(data=oni.dat) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=time, y=provname, fill=avg_cross_power_oni, color=avg_cross_power_oni)) + 
-  scale_fill_viridis_c( option="inferno", name="Average cross-wavelet\npower (multiannual):\ndengue IR and ONI", trans="sqrt") +
-  scale_color_viridis_c( option="inferno", name="Average cross-wavelet\npower (multiannual):\ndengue IR and ONI", trans="sqrt") +
+  scale_fill_viridis_c( option="inferno", name="Average cross-wavelet\npower (multiannual):\ndengue IR and ONI", trans="sqrt") +# limits=c(0.5,1)) +
+  scale_color_viridis_c( option="inferno", name="Average cross-wavelet\npower (multiannual):\ndengue IR and ONI", trans="sqrt")+#, limits=c(0.5,1)) +
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
                      plot.margin = unit(c(.1,.5,.1,1), "cm"),
                      strip.text = element_text(size=8), legend.position = "bottom",
@@ -69,42 +72,62 @@ FigS13b <- ggplot(data=oni.dat) +  coord_cartesian(xlim=c(2001.9, 2020.1), expan
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) 
 
 
-#and the distribution by biweek
+#coherence
+FigS13Ab <- ggplot(data=oni.dat) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+  facet_nested(provname~., scales = "free", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
+  geom_tile(aes(x=time, y=provname, fill=avg_wave_coherence_oni, color=avg_wave_coherence_oni)) + 
+  scale_fill_viridis_c( option="inferno", name="Average wave coherence\n (multiannual): dengue IR and ONI", trans="sqrt")+#, limits=c(0.5,1)) +
+  scale_color_viridis_c( option="inferno", name="Average wave coherence\n (multiannual): dengue IR and ONI", trans="sqrt")+#, limits=c(0.5,1)) +
+  theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+                     plot.margin = unit(c(.1,.5,.1,1), "cm"),
+                     strip.text = element_text(size=8), legend.position = "bottom",
+                     panel.spacing = unit(c(0), "cm"),
+                     legend.title = element_text(size=9),
+                     strip.text.y.left = element_text(angle=0, size=6),
+                     panel.border = element_rect(linewidth=0),
+                     panel.grid = element_blank(), axis.title = element_blank(),
+                     axis.text = element_text(size=14)) +
+  geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) 
 
-dist.dat <- ddply(oni.dat, .(time, year, month), summarise, median_oni = quantile(avg_cross_power_oni)["50%"],  min_oni = quantile(avg_cross_power_oni)["25%"], max_oni = quantile(avg_cross_power_oni)["75%"])
+
+#and the distribution by month
+dist.dat <- ddply(oni.dat, .(time, year, month), summarise, median_oni_cross = quantile(avg_cross_power_oni, na.rm=T)["50%"],  min_oni_cross = quantile(avg_cross_power_oni, na.rm=T)["25%"], max_oni_cross = quantile(avg_cross_power_oni, na.rm=T)["75%"], median_oni_coherence = quantile(avg_wave_coherence_oni, na.rm=T)["50%"],  min_oni_coherence = quantile(avg_wave_coherence_oni, na.rm=T)["25%"], max_oni_coherence = quantile(avg_wave_coherence_oni, na.rm=T)["75%"])
 head(dist.dat)
 
-
 #and plot
-FigS13a <- ggplot(data=dist.dat) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+FigS13Ba <- ggplot(data=dist.dat) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
   theme(panel.grid = element_blank(), axis.title.x = element_blank(), 
         axis.title.y = element_text(size=8), axis.text.y = element_text(size=8),
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         plot.margin = unit(c(.3,.5,.1,1), "cm")) +
-  geom_ribbon(aes(x=time, ymin=min_oni, ymax=max_oni), alpha=.3) + ylab("distribution monthly\nmulti-annual dengue cycle cross\nwavelet power with ONI") +
-  geom_line(aes(x=time, y=median_oni), size=1) +
+  geom_ribbon(aes(x=time, ymin=min_oni_cross, ymax=max_oni_cross), alpha=.3) + ylab("distribution monthly\nmulti-annual dengue cycle cross\nwavelet power with ONI") +
+  geom_line(aes(x=time, y=median_oni_cross), size=1) +
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) +
   geom_hline(aes(yintercept=0), linetype=2)
 
-FigS13 <- cowplot::plot_grid(FigS13a, FigS13b, ncol=1, nrow=2, rel_heights = c(.25,1))
+
+FigS13Aa <- ggplot(data=dist.dat) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2020.1), ylim=c(.7,.9), expand = F)+
+  theme(panel.grid = element_blank(), axis.title.x = element_blank(), 
+        axis.title.y = element_text(size=8), axis.text.y = element_text(size=8),
+        axis.text.x = element_blank(), axis.ticks.x = element_blank(),
+        plot.margin = unit(c(.3,.5,.1,1), "cm")) +
+  geom_ribbon(aes(x=time, ymin=min_oni_coherence, ymax=max_oni_coherence), alpha=.3) + ylab("distribution monthly\nmulti-annual dengue cycle\ncoherence with ONI") +
+  geom_line(aes(x=time, y=median_oni_coherence), size=1) +
+  geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) +
+  geom_hline(aes(yintercept=0), linetype=2)
 
 
 
-#and another panel to show that multi-annual cycles between provinces are weak as well
+FigS13A <- cowplot::plot_grid(FigS13Aa, FigS13Ab, ncol=1, nrow=2, rel_heights = c(.25,1))
+FigS13B <- cowplot::plot_grid(FigS13Ba, FigS13Bb, ncol=1, nrow=2, rel_heights = c(.25,1))
 
-
-
-
-
-
-
-
+FigS13 <- cowplot::plot_grid(FigS13A, FigS13B, ncol=2, nrow=1, labels = c("A", "B"), label_size = 22)
 
 
 ggsave(file = paste0(homewd, "/final-figures/FigS13.png"),
        plot= FigS13,
        units="mm",  
-       width=65, 
+       width=110, 
        height=70, 
        scale=3, 
        dpi=300)

@@ -35,6 +35,8 @@ tsir.dat <- merge(tsir.dat, centroid.merge, by = "provname")
 tsir.dat$cases[tsir.dat$time<2016 & tsir.dat$provname=="Tboung Khmum"] <- NA
 tsir.dat <- tsir.dat[complete.cases(tsir.dat),]
 
+tsir.dat$cases_per_1000 <- (tsir.dat$cases/tsir.dat$pop)*1000
+
 cross.corr <- function(df){
   out.df <- cbind.data.frame(year=unique(df$year), corr=cor(df$cases_this_prov, df$cases_other_prov))
   return(out.df)
@@ -46,8 +48,8 @@ assess.corr.annual <- function(df2, df1){
   df2.hold = df2
   
   #first, join the two series for the full length that they match up
-  df1 <- dplyr::select(df1, time, year, cases)
-  df2 <- dplyr::select(df2, time, year, cases)
+  df1 <- dplyr::select(df1, time, year, cases_per_1000)
+  df2 <- dplyr::select(df2, time, year, cases_per_1000)
   names(df1) <- c("time", "year", "cases_this_prov")
   names(df2) <- c("time", "year", "cases_other_prov")
   df.join <- merge(df1,df2, by = c("time", "year"))

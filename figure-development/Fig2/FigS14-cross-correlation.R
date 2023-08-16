@@ -83,62 +83,9 @@ vert.df <- cbind.data.frame(xint = c(2006.5, 2007.5, 2011.5, 2012.5,  2018.5, 20
 # Only colour strips in x-direction
 strip <- strip_themed(background_y = elem_list_rect(fill = colz))
 
-# plot as heatmap - FigS14
+# plot as heatmap - fig 2
 
-FigS14b <- ggplot(data=pearsons.avg.year) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
-  facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
-  geom_tile(aes(x=year, y=provname, fill=mean_corr, color=mean_corr)) +
-  scale_fill_viridis_c( option="inferno", name="Average annual\npairwise province Pearson's\ncorrelation coefficients", na.value = "black") +
-  scale_color_viridis_c( option="inferno", name="Average annual\npairwise province Pearson's\ncorrelation coefficients", na.value = "black") +
-  theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-                     plot.margin = unit(c(.1,.5,.1,1), "cm"),
-                     strip.text = element_text(size=8), legend.position = "bottom",
-                     panel.spacing = unit(c(0), "cm"),
-                     legend.title = element_text(size=9),
-                     strip.text.y.left = element_text(angle=0, size=6),
-                     panel.border = element_rect(linewidth=0),
-                     panel.background = element_rect(fill="gray50"),
-                     panel.grid = element_blank(), axis.title = element_blank(),
-                     axis.text = element_text(size=14)) +
-  geom_vline(data=vert.df, aes(xintercept=xint), color="black", size=.8) 
-
-#and the annual distribution
-
-dist.dat <- ddply(pearsons.df, .(year), summarise, median_corr = quantile(corr, na.rm=T)["50%"],  min_corr = quantile(corr, na.rm=T)["25%"], max_corr = quantile(corr, na.rm=T)["75%"])
-head(dist.dat)
-dist.dat$year <- as.numeric(as.character(dist.dat$year))
-
-#and plot
-FigS14a <- ggplot(data=dist.dat) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
-  theme(panel.grid = element_blank(), axis.title.x = element_blank(), 
-        axis.title.y = element_text(size=8), axis.text.y = element_text(size=8),
-        axis.text.x = element_blank(), axis.ticks.x = element_blank(),
-        plot.margin = unit(c(.3,.5,.1,1), "cm")) +
-  geom_ribbon(aes(x=year, ymin=min_corr, ymax=max_corr), alpha=.3) + ylab("annual distribution\npairwise province Pearson's\ncorrelation coefficients") +
-  geom_line(aes(x=year, y=median_corr), size=1) +
-  geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) +
-  geom_hline(aes(yintercept=0), linetype=2)
-
-
-FigS14 <- cowplot::plot_grid(FigS14a, FigS14b, ncol=1, nrow=2, rel_heights = c(.25,1))
-
-
-#now add some GAM plots
-
-
-ggsave(file = paste0(homewd, "/final-figures/FigS14.png"),
-       plot= FigS14,
-       units="mm",  
-       width=65, 
-       height=70, 
-       scale=3, 
-       dpi=300)
-
-p3 <-  ggplot(pearsons.df) + 
-  geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) +
-  geom_point(aes(x=year, y=corr, color=comp_prov)) + facet_wrap(~provname)
-
-p3
+#now add some GAM plots for FigS14
 
 # add pop size, mean temp, mean precip, and elevation as covariates in this
 # and calculate predictors of the correlation coefficient
@@ -180,41 +127,123 @@ pearsons.df$log10_pop <- log10(pearsons.df$pop)
 pearsons.df$log10_precip <- log10(pearsons.df$sum_precip)
 pearsons.df$provname <- as.factor(pearsons.df$provname)
 pearsons.df$year <- as.factor(pearsons.df$year)
+#pearsons.df$year <- as.numeric(as.character(pearsons.df$year))
 
 gam1 <- gam(corr ~ dist_m:provname +
                   s(log10_temp_C, bs="tp") +
-                  #s(sum_precip, bs="tp") +
-                  #s(log10_elevation_m, bs="tp") +
                   s(log10_pop, bs="tp") +
                   s(log10_precip, bs="tp") +
-                  #s(pop, bs="tp") +
                   s(year, bs="re") +
                   s(provname, bs="re"), #different y-intercept for each province
-            data = pearsons.df)
+                  data = pearsons.df)
 
 summary(gam1) 
+
+
 #strong negative correlation with increasing distance and correlation, sig for most provinces
 source(paste0(homewd, "/figure-development/Fig1/mollentze-streicker-2020-functions.R"))
 
 year.df <- get_partial_effects(fit=gam1, var="year")
-prov.df <- get_partial_effects(fit=gam1, var="provname")
-temp.df <- get_partial_effects_continuous(gamFit=gam1, var="log10_temp_C")
-precip.df <- get_partial_effects_continuous(gamFit=gam1, var="log10_precip")
-pop.df <- get_partial_effects_continuous(gamFit=gam1, var="log10_pop")
+year.df <- year.df[[1]]
+prov.df <- get_partial_effects(fit=gam1, var="provname") 
+prov.df <- prov.df[[1]]
 
-plot.partial(year.df, var="year", response_var = "corr") #all epi years significantly positive
-plot.partial(prov.df, var="provname", response_var = "corr") #some provs more or less correlated
-plot.partial.cont(df=temp.df, log=T, var="log10_temp_C", response_var = "corr", alt_var = "log10(temp (*C))")
-plot.partial.cont(df=precip.df, log=T, var="log10_precip", response_var = "corr", alt_var ="sum precip (mm)")
-plot.partial.cont(df=pop.df, log=T, var="log10_pop", response_var = "corr", alt_var = "pop")
+out.temp <- plot(gam1)[[1]]
+temp.df <- cbind.data.frame(log10_temp_C=out.temp$x, y=out.temp$fit, ylower = (out.temp$fit - 1.96*out.temp$se),  yupper = (out.temp$fit + 1.96*out.temp$se))
+temp.df$IsSig <- "Pos"
+temp.df$temp_C <- 10^(temp.df$log10_temp_C)
 
-#and 
+out.precip <- plot(gam1)[[3]]
+precip.df <- cbind.data.frame(log10_precip_mm=out.precip$x, y=out.precip$fit, ylower = (out.precip$fit - 1.96*out.precip$se),  yupper = (out.precip$fit + 1.96*out.precip$se))
+precip.df$IsSig <- "Pos"
+precip.df$precip_mm <- 10^(precip.df$log10_precip_mm)
 
-#   
+out.pop <- plot(gam1)[[2]]
+pop.df <- cbind.data.frame(log10_pop=out.pop$x, y=out.pop$fit, ylower = (out.pop$fit - 1.96*out.pop$se),  yupper = (out.pop$fit + 1.96*out.pop$se))
+pop.df$IsSig <- "Pos"
+pop.df$pop <- 10^(pop.df$log10_pop)
+
+
+#and the fixed effects
+out <- summary(gam1)
+fixed.df <- cbind.data.frame(provname = c("intercept", sort(as.character(unique(pearsons.df$provname)))), y = out$p.coeff, ylower=(out$p.coeff -1.96*out$p.table[,2]), yupper=(out$p.coeff +1.96*out$p.table[,2]), pval =out$p.pv)
+rownames(fixed.df) <- c()
+fixed.df$IsSig <- "NotSig"
+fixed.df$IsSig[fixed.df$y>0 & fixed.df$pval<0.01] <- "Pos"
+fixed.df$IsSig[fixed.df$y<0 & fixed.df$pval<0.01] <- "Neg"
+
+year.df$IsSig <- "NotSig"
+year.df$IsSig[year.df$IsSignificant=="Yes" & year.df$y<0] <- "Pos"
+year.df$IsSig[year.df$IsSignificant=="Yes" & year.df$y>0] <- "Neg"
+
+#and plot
+colz = c('Pos' = "red", 'Neg'="blue", 'NotSig' = "gray50" )
+
+fixed.df = subset(fixed.df, provname!="intercept")
+FigS14A <- ggplot(data=fixed.df) + theme_bw() + coord_flip() +
+           theme(panel.grid = element_blank(), axis.title.y = element_blank()) +
+           ylab(bquote(atop("fixed effect of province and geographic distance", "interaction on pairwise correlation coefficient,"~rho)))+
+           geom_hline(aes(yintercept=0))+ 
+           geom_point(aes(x=provname, y=y, color=IsSig), show.legend = F, size=3) +
+           geom_linerange(aes(x=provname, ymin=ylower, ymax=yupper, color=IsSig), show.legend = F) +
+           scale_color_manual(values=colz) 
 # 
-# 
-# p2 <- ggplot(pearsons.sum) + theme_bw() + ylab("full time series pearson's correlation between provinces") +
-#   xlab("distance from Phnom Penh (km)") + coord_cartesian(ylim=c(0,1))+
-#   geom_point(aes(x=dist_from_PP_km, y=full_ts_corr, color=comp_prov), size=3) +
-#   scale_color_manual(values=colz) +theme(panel.grid = element_blank(), legend.title = element_blank(),
-#                                          legend.position = "bottom") +facet_wrap(~provname)
+# FigS14B <- ggplot(data=year.df) + theme_bw() + coord_flip() +
+#            theme(panel.grid = element_blank(), axis.title.y = element_blank()) +
+#            ylab(bquote(atop("partial effect of year on", "pairwise correlation coefficient,"~rho)))+
+#            geom_hline(aes(yintercept=0))+ 
+#            geom_point(aes(x=year, y=y, color=IsSig), show.legend = F, size=3) +
+#            geom_linerange(aes(x=year, ymin=ylower, ymax=yupper, color=IsSig), show.legend = F) +
+#            scale_color_manual(values=colz) 
+
+
+FigS14B <- ggplot(data=year.df) + theme_bw() + 
+  theme(panel.grid = element_blank(), axis.title.x = element_blank(), axis.text.x = element_text(angle=300, vjust = 0)) +
+  ylab(bquote(atop("partial effect of year on", "pairwise correlation coefficient,"~rho)))+
+  geom_hline(aes(yintercept=0))+ 
+  geom_point(aes(x=year, y=y, color=IsSig), show.legend = F, size=3) +
+  geom_linerange(aes(x=year, ymin=ylower, ymax=yupper, color=IsSig), show.legend = F) +
+  scale_color_manual(values=colz) 
+
+
+FigS14C <- ggplot(data=temp.df) + theme_bw() + scale_x_log10() +
+          theme(panel.grid = element_blank()) +
+          ylab(bquote(atop("partial effect of temperature on", "pairwise correlation coefficient,"~rho)))+
+          xlab(bquote("mean biweekly temperature ("^0~"C)"))+
+          geom_hline(aes(yintercept=0))+ 
+          geom_line(aes(x=temp_C, y=y, color=IsSig), show.legend = F, size=3) +
+          geom_ribbon(aes(x=temp_C, ymin=ylower, ymax=yupper, fill=IsSig),alpha=.3,  show.legend = F) +
+          scale_color_manual(values=colz) +scale_fill_manual(values=colz) 
+
+FigS14D <- ggplot(data=precip.df) + theme_bw() + scale_x_log10() +
+  theme(panel.grid = element_blank()) +
+  ylab(bquote(atop("partial effect of precipitation on", "pairwise correlation coefficient,"~rho)))+
+  xlab("sum biweekly precipitation (mm)")+
+  geom_hline(aes(yintercept=0))+ 
+  geom_line(aes(x=precip_mm, y=y, color=IsSig), show.legend = F, size=3) +
+  geom_ribbon(aes(x=precip_mm, ymin=ylower, ymax=yupper, fill=IsSig),alpha=.3,  show.legend = F) +
+  scale_color_manual(values=colz) +scale_fill_manual(values=colz) 
+
+    
+
+FigS14E <- ggplot(data=pop.df) + theme_bw() + scale_x_log10() +
+           theme(panel.grid = element_blank()) +
+           ylab(bquote(atop("partial effect of province population on", "pairwise correlation coefficient,"~rho)))+
+           xlab("mean population size")+
+           geom_hline(aes(yintercept=0))+ 
+           geom_line(aes(x=pop, y=y, color=IsSig), show.legend = F, size=3) +
+           geom_ribbon(aes(x=pop, ymin=ylower, ymax=yupper, fill=IsSig),alpha=.3,  show.legend = F) +
+           scale_color_manual(values=colz) +scale_fill_manual(values=colz)       
+
+
+FigS14BCDE  <- cowplot::plot_grid(FigS14B, FigS14C, FigS14D, FigS14E, ncol=2, nrow = 2, align = "hv", labels = c("B", "C", "D", "E"), label_size = 22)
+
+FigS14 <- cowplot::plot_grid(FigS14A, FigS14BCDE, ncol=2, nrow=1, labels = c("A", ""), rel_widths = c(1.05,2), label_size = 22, label_x = -.02)
+
+ggsave(file = paste0(homewd, "/final-figures/FigS14.png"),
+       plot= FigS14,
+       units="mm",  
+       width=110, 
+       height=70, 
+       scale=3, 
+       dpi=300)

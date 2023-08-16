@@ -40,7 +40,7 @@ oni.dat = subset(oni.dat, year!=2023)
 
 prov.split <- dlply(climdat, .(provname))
 
-prov.rank.multi <- function(df2, df1){
+prov.rank.multi <- function(df2, df1, pval.cut){
   
   df1a <-  df1
   df2a <- df2
@@ -61,32 +61,32 @@ prov.rank.multi <- function(df2, df1){
                                  dt = 1/26, dj = 1/100,
                                  window.type.t = 1, window.type.s = 1,
                                  #window.size.t = (1), #examine coherence year-by-year
-                                 window.size.t = (26), #examine coherence year-by-year
+                                 window.size.t = (26*5), #examine coherence year-by-year - here 5 years
                                  #window.size.t = (26*5), #examine coherence year-by-year
                                  window.size.s = (1/4), #periods on the order of 
                                  lowerPeriod = 2, #shortest possible period in years (multi)
-                                 upperPeriod = 10, #largest possible period (in weeks; here, 10 years)
+                                 upperPeriod = 7, #largest possible period (in weeks; here, 7 years)
                                  make.pval = TRUE, n.sim = 100)
   
   
-  # # 
-       wc.image(corr.prov, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
-                periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019), which.arrow.sig = "wt", color.key = "interval")
+  # # # 
+  #      wc.image(corr.prov, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
+  #               periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019), which.arrow.sig = "wt", color.key = "interval")
+  # # # # # # 
+  # # # # 
+  #     wc.image(corr.prov,which.image = "wc",  
+  #              color.key = "interval", n.levels = 250,
+  #              siglvl.contour = 0.1, siglvl.arrow = 0.01,
+  #              legend.params = list(lab = "wavelet coherence levels"),
+  #              spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
+  #              periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019))
   # # # # # 
   # # # 
-      wc.image(corr.prov,which.image = "wc",  
-               color.key = "interval", n.levels = 250,
-               siglvl.contour = 0.1, siglvl.arrow = 0.05,
-               legend.params = list(lab = "wavelet coherence levels"),
-               spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
-               periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019))
-  # # # # 
-  # # 
   # 
   #is there a statistically significant coherence through time?
   coherence.mat <- corr.prov$Coherence
   pval.mat <- corr.prov$Coherence.pval
-  pval.mat <- pval.mat<0.05
+  pval.mat <- pval.mat< pval.cut
   
   out.mat <- coherence.mat*pval.mat
   out.mat[out.mat==0] <- NA
@@ -111,7 +111,7 @@ prov.rank.multi <- function(df2, df1){
   #add in cross wavelet power
   power.mat <- corr.prov$Power.xy
   pval.mat <- corr.prov$Power.xy.pval
-  pval.mat <- pval.mat<0.05
+  pval.mat <- pval.mat< pval.cut
   
   power.mat <- power.mat*pval.mat
   power.mat[power.mat==0] <- NA
@@ -124,7 +124,7 @@ prov.rank.multi <- function(df2, df1){
   
   
 }
-prov.rank.annual <- function(df2, df1){
+prov.rank.annual <- function(df2, df1, pval.cut){
   
   df1a <-  df1
   df2a <- df2
@@ -146,29 +146,29 @@ prov.rank.annual <- function(df2, df1){
                                  window.type.t = 1, window.type.s = 1,
                                  window.size.t = 26, #examine coherence year-by-year
                                  window.size.s = (1/4), #periods on the order of 
-                                 lowerPeriod = 1/26, #shortest possible period in years (annual)
+                                 lowerPeriod = 13/26, #shortest possible period in years (annual)
                                  upperPeriod = 2, #largest possible period (2 years)
                                  make.pval = TRUE, n.sim = 100)
   
   
   # 
-  #    wc.image(corr.prov, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
-  #             periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019), which.arrow.sig = "wt", color.key = "interval")
+  #     wc.image(corr.prov, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
+  #              periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019), which.arrow.sig = "wt", color.key = "interval")
+  # # # # # 
   # # # # 
-  # # 
-  #   wc.image(corr.prov,which.image = "wc",  
-  #            color.key = "interval", n.levels = 250,
-  #            siglvl.contour = 0.1, siglvl.arrow = 0.05,
-  #            legend.params = list(lab = "wavelet coherence levels"),
-  #            spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
-  #            periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019))
+  #     wc.image(corr.prov,which.image = "wc",  
+  #              color.key = "interval", n.levels = 250,
+  #              siglvl.contour = 0.1, siglvl.arrow = 0.05,
+  #              legend.params = list(lab = "wavelet coherence levels"),
+  #              spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
+  #              periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019))
+  # # # # # 
   # # # 
   # 
-  
   #is there a statistically significant coherence through time?
   coherence.mat <- corr.prov$Coherence
   pval.mat <- corr.prov$Coherence.pval
-  pval.mat <- pval.mat<0.05
+  pval.mat <- pval.mat< pval.cut
   
   out.mat <- coherence.mat*pval.mat
   out.mat[out.mat==0] <- NA
@@ -193,7 +193,7 @@ prov.rank.annual <- function(df2, df1){
   #add in cross wavelet power
   power.mat <- corr.prov$Power.xy
   pval.mat <- corr.prov$Power.xy.pval
-  pval.mat <- pval.mat<0.05
+  pval.mat <- pval.mat< pval.cut
   
   power.mat <- power.mat*pval.mat
   power.mat[power.mat==0] <- NA
@@ -579,7 +579,7 @@ get.wavelet.dat <- function(dat, dat.all){
   return(dat)
   
 }
-get.wavelet.oni <- function(dat, dat.all, oni.df){
+get.wavelet.oni <- function(dat, dat.all, oni.df, pval.cut.coherence, pval.cut.power){
   
   dat.all = subset(dat.all, provname !=unique(dat$provname))
   #first, get reconstructed period for annual and multiannual using the biweekly case data
@@ -600,7 +600,7 @@ get.wavelet.oni <- function(dat, dat.all, oni.df){
   case.sum <- arrange(case.sum, provname, time)
   
   corr.oni <- analyze.coherency(case.sum, my.pair = c("oni_anomaly","cases_per_1000"),
-                                loess.span = 0.75,
+                                loess.span = 0,
                                 dt = 1/12, 
                                 dj = 1/100,
                                 window.type.t = 1, window.type.s = 1,
@@ -610,24 +610,25 @@ get.wavelet.oni <- function(dat, dat.all, oni.df){
                                 lowerPeriod = 2, #shortest possible period in years
                                 upperPeriod = 7, #largest possible period (in weeks; here, 7 years)
                                 make.pval = TRUE, n.sim = 100)
-  # # 
-  #    wc.image(corr.oni, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
-  #             periodlab= "period (in years)", spec.time.axis = list(at = seq(1,12*18, 12), labels = 2002:2019))
-  # # # # 
   # # # 
-  #    wc.image(corr.oni,which.image = "wc",  
-  #            color.key = "interval", n.levels = 250,
-  #             siglvl.contour = 0.1, siglvl.arrow = 0.05, #contours around associations significant by pval =0.1. arrows at pval=0.05
-  #             legend.params = list(lab = "wavelet coherence levels"),
-  #             spec.period.axis = list(at = c(2:10), labels = c(2:10)),
-  #             periodlab= "period (in years)", spec.time.axis = list(at = seq(1,12*18, 12), labels = 2002:2019))
-  # # # # 
-  # 
+  #      wc.image(corr.oni, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),siglvl.contour = 0.01,
+  #               periodlab= "period (in years)", spec.time.axis = list(at = seq(1,12*18, 12), labels = 2002:2019), which.arrow.sig = "wt", color.key = "interval")
+  #               
+  # # # # # # 
+  # # # # # 
+  #      wc.image(corr.oni,which.image = "wc",  
+  #              color.key = "interval", n.levels = 250,
+  #               siglvl.contour = 0.1, siglvl.arrow = 0.05, #contours around associations significant by pval =0.1. arrows at pval=0.05
+  #               legend.params = list(lab = "wavelet coherence levels"),
+  #               spec.period.axis = list(at = c(2:10), labels = c(2:10)),
+  #               periodlab= "period (in years)", spec.time.axis = list(at = seq(1,12*18, 12), labels = 2002:2019))
+  # # # # # # 
+  # # # 
   #monthly average significant coherence
   #remove those not significant
   coherence.mat <- corr.oni$Coherence
   pval.mat <- corr.oni$Coherence.pval
-  pval.mat <- pval.mat<0.1
+  pval.mat <- pval.mat< pval.cut.coherence
   
   out.mat <- coherence.mat*pval.mat
   out.mat[out.mat==0] <- NA
@@ -643,7 +644,7 @@ get.wavelet.oni <- function(dat, dat.all, oni.df){
   
   power.table <- corr.oni$Power.xy
   power.table.pval <- corr.oni$Power.xy.pval
-  power.table.pval <- power.table.pval<0.05
+  power.table.pval <- power.table.pval< pval.cut.power
   
   power.mat <- power.table*power.table.pval
   power.mat[power.mat==0] <- NA
@@ -681,7 +682,7 @@ write.csv(prov.split.df, file = paste0(homewd, "/data/synchrony_data_aug12.csv")
 
 
 #and oni correlations
-oni.split.out <- lapply(prov.split, get.wavelet.oni, dat.all=climdat, oni.df = oni.dat)
+oni.split.out <- lapply(prov.split, get.wavelet.oni, dat.all=climdat, oni.df = oni.dat, pval.cut.coherence=.1, pval.cut.power=0.01)
 
 oni.split.df <- data.table::rbindlist(oni.split.out)
 head(oni.split.df)
@@ -721,7 +722,7 @@ get.multi.coherence <- function(dat, dat.all){
   
   return(dat)
 }
-get.both.coherence <- function(dat, dat.all){
+get.both.coherence <- function(dat, dat.all, pval.cut1){
   dat.all = subset(dat.all, provname !=unique(dat$provname))
   
   
@@ -731,9 +732,9 @@ get.both.coherence <- function(dat, dat.all){
   df.split <- dlply(dat.all, .(provname))
   
   
-  dat.prov.coherence.multi <- lapply(X=df.split, FUN=prov.rank.multi, df1=dat)
+  dat.prov.coherence.multi <- lapply(X=df.split, FUN=prov.rank.multi, df1=dat, pval.cut=pval.cut1)
   dat.prov.coherence.multi <- data.table::rbindlist(dat.prov.coherence.multi)
-  dat.prov.coherence.annual <- lapply(X=df.split, FUN=prov.rank.annual, df1=dat)
+  dat.prov.coherence.annual <- lapply(X=df.split, FUN=prov.rank.annual, df1=dat,  pval.cut=pval.cut1)
   dat.prov.coherence.annual <- data.table::rbindlist(dat.prov.coherence.annual)
   #head(dat.prov.coherence.multi)
   #head(dat.prov.coherence.annual)
@@ -750,20 +751,16 @@ get.both.coherence <- function(dat, dat.all){
   return(dat.out)
 }
 
+# 
+# multi.split.out <- lapply(prov.split, get.multi.coherence, dat.all=climdat)
+# 
+# multi.split.df <- data.table::rbindlist(multi.split.out)
+# head(multi.split.df)
+# write.csv(multi.split.df, file = paste0(homewd, "/data/multi_cycle_coherence_aug15.csv"), row.names = F)
+# 
 
-multi.split.out <- lapply(prov.split, get.multi.coherence, dat.all=climdat)
-
-multi.split.df <- data.table::rbindlist(multi.split.out)
-head(multi.split.df)
-write.csv(multi.split.df, file = paste0(homewd, "/data/multi_cycle_coherence.csv"), row.names = F)
-
-
-
-
-
-all.coherence.out <- lapply(prov.split, get.both.coherence, dat.all=climdat)
-
+all.coherence.out <- lapply(prov.split, get.both.coherence, dat.all=climdat, pval.cut1=0.01)
 coherence.df <- data.table::rbindlist(all.coherence.out)
 
-write.csv(coherence.df, file = paste0(homewd, "/data/annual_multi_coherence.csv"), row.names = F)
+write.csv(coherence.df, file = paste0(homewd, "/data/annual_multi_coherence_aug15.csv"), row.names = F)
 
