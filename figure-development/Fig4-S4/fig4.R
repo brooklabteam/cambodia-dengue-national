@@ -127,7 +127,7 @@ pB2 <- ggtree(tree2, mrsd=mrsd.denv2, color="navy")  + theme_tree2() +
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1) +
   scale_fill_continuous(low="yellow", high="red", limits=c(0,1)) +
   scale_x_continuous(breaks=c(1950, 1975, 2000, 2020))+
-  theme(legend.position = c(.1,.85), 
+  theme(legend.position = c(.15,.85), 
         legend.key.size = unit(.4, units="cm"),
         legend.text = element_text(size=9),
         legend.title = element_text(size=10))
@@ -427,7 +427,7 @@ pD <- ggplot(data=salje.dat) +
         axis.text = element_text(size=14),
         plot.margin = unit(c(.3,.2,.1,.5), "cm"),
         #legend.background = element_rect(color="black"),
-        legend.position = c(.3,.88)) +
+        legend.position = c(.35,.88)) +
   ylab("Effective # Chains") +
   xlab("Population Size (x1000)") +
   geom_point(data=all.denv.mean,aes(x=877523., y=N_chains, fill=DENV.subtype, shape=study, color=study), size=5,  stroke=2) +
