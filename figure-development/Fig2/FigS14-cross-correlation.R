@@ -234,7 +234,7 @@ FigS14E <- ggplot(data=pop.df) + theme_bw() + scale_x_log10() +
            geom_line(aes(x=pop, y=y, color=IsSig), show.legend = F, size=3) +
            geom_ribbon(aes(x=pop, ymin=ylower, ymax=yupper, fill=IsSig),alpha=.3,  show.legend = F) +
            scale_color_manual(values=colz) +scale_fill_manual(values=colz)       
-
+ 
 
 FigS14BCDE  <- cowplot::plot_grid(FigS14B, FigS14C, FigS14D, FigS14E, ncol=2, nrow = 2, align = "hv", labels = c("B", "C", "D", "E"), label_size = 22)
 
