@@ -84,7 +84,7 @@ est.df$p.stars[est.df$p.stars==""] <- "."
 
 colz <- c('pos' = "red3", 'neg'="cornflowerblue", 'notsig'="gray50")
 
-if(unique(dat.epi$year)==2007 | unique(dat.epi$year)==2019){
+if( unique(dat.epi$year)==2019){
   
 
 pA <- ggplot(data=est.df) + scale_color_manual(values=colz) + coord_cartesian(ylim=c(0,0.086)) + 
@@ -103,8 +103,8 @@ pA
 
 }else{
   
-  pA <- ggplot(data=est.df) + scale_color_manual(values=colz) + coord_cartesian(ylim=c(0,0.13)) + 
-  geom_label(aes(x=predictor, y=0.125, label=p.stars), label.size = 0, size=8) + 
+  pA <- ggplot(data=est.df) + scale_color_manual(values=colz) + coord_cartesian(ylim=c(0,0.15)) + 
+  geom_label(aes(x=predictor, y=0.145, label=p.stars), label.size = 0, size=8) + 
   facet_grid(~predictor, labeller = label_parsed,  switch = "x", scales = "free") +
   geom_point(aes(x=predictor, y = estimate, color=posneg), show.legend = F, size=3) +
   ylab(bquote('coefficients on'~beta)) + geom_hline(aes(yintercept=0), linetype=2)+ theme_bw() +
@@ -113,7 +113,7 @@ pA
         strip.background = element_blank(), axis.text = element_text(siz=16), strip.text = element_text(size=16),
         axis.title.x = element_blank(), axis.text.y = element_text(size = 13), axis.text.x = element_blank(),
         plot.margin = unit(c(.2,1.2,.2,.2), "cm"), panel.spacing = unit(c(0), "cm")) +
-  scale_y_continuous(breaks=c(0, 0.04,0.08, 0.12))
+  scale_y_continuous(breaks=c(0, 0.05,0.10, 0.15))
 
 pA
   
@@ -156,7 +156,7 @@ ex.dat$beta_coeff_high <- est.df$conf.high[est.df$predictor=="'lagged temp ('^0~
 
 #plot
 
-if(unique(dat.epi$year)==2007 | unique(dat.epi$year)==2019){
+if(unique(dat.epi$year)==2019){
 p2a <- ggplot(data=subset(est.df, predictor=="atop(' ','lagged precip (mm)')")) +  
   scale_color_manual(values=colz) + coord_cartesian(ylim=c(-.007,0.018)) +
   geom_label(aes(x=predictor, y=0.0165, label=p.stars), label.size = 0, size=8) + 
@@ -246,7 +246,7 @@ AIC(gam1, gam1b)#gam1 much better
 #linear response GAM
 summary(gam1)# R-sq.(adj) =  0.994.  Deviance explained = 99.5%
 
-test.df = cbind.data.frame(temp_C_lag=20:34)
+test.df = cbind.data.frame(temp_C_lag=25:34)
 test.df$precip_mm_lag <- 20
 test.df$biweek <- 10
 test.df$year <- 2005
@@ -254,14 +254,14 @@ test.df$provname = "Kandal"
 test.df$epiyr = 2007
 
 #ignore province level effects for plotting
-temp.df <- cbind.data.frame(x=20:34, beta_coeff=c(predict.gam(gam1b, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname)"), type = "terms")))
+temp.df <- cbind.data.frame(x=25:34, beta_coeff=c(predict.gam(gam1b, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname)"), type = "terms")))
 temp.df$beta_coeff_low <- c(predict.gam(gam1b, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname)"), type = "terms")-1.96*predict.gam(gam1b, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname)"), type = "terms", se.fit = TRUE)$se.fit)
 temp.df$beta_coeff_high <-c(predict.gam(gam1b, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname)"), type = "terms")+1.96*predict.gam(gam1b, newdata = test.df, exclude = c("s(precip_mm_lag)", "s(provname)"), type = "terms", se.fit = TRUE)$se.fit)
 temp.df$predictor <- "'lagged temp ('^0~'C)'"
 
 
 
-test.df = cbind.data.frame(precip_mm_lag = 0:30)
+test.df = cbind.data.frame(precip_mm_lag = 50:80)
 test.df$temp_C_lag = 25
 test.df$biweek <- 10
 test.df$year <- 2005
@@ -269,7 +269,7 @@ test.df$provname = "Kandal"
 test.df$epiyr = 2007
 
 
-precip.df <- cbind.data.frame(x=0:30, beta_coeff=c(predict.gam(gam1b, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname)"), type = "terms")))
+precip.df <- cbind.data.frame(x=50:80, beta_coeff=c(predict.gam(gam1b, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname)"), type = "terms")))
 precip.df$beta_coeff_low <- c(predict.gam(gam1b, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname)"), type = "terms")-1.96*predict.gam(gam1b, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname)"), type = "terms", se.fit = TRUE)$se.fit)
 precip.df$beta_coeff_high <-c(predict.gam(gam1b, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname)"), type = "terms")+1.96*predict.gam(gam1b, newdata = test.df, exclude = c("s(temp_C_lag)", "s(provname)"), type = "terms", se.fit = TRUE)$se.fit)
 precip.df$predictor <- "'lagged precip (mm)'"
@@ -280,6 +280,8 @@ gam.df.linear <- rbind(temp.df, precip.df)
 
 star.df <- cbind.data.frame(x=c(15,27), y=c(0.145,0.145), label=c("***", "**"), predictor = c("'lagged precip (mm)'", "'lagged temp ('^0~'C)'"))
 star.df <- cbind.data.frame(x=c(15,27), y=c(0.45,0.45), label=c("***", "**"), predictor = c("'lagged precip (mm)'", "'lagged temp ('^0~'C)'"))
+star.df <- cbind.data.frame(x=c(45,27), y=c(0.45,0.45), label=c("***", "**"), predictor = c("'lagged precip (mm)'", "'lagged temp ('^0~'C)'"))
+star.df <- cbind.data.frame(x=c(65,29.5), y=c(0.45,0.45), label=c("***", "**"), predictor = c("'lagged precip (mm)'", "'lagged temp ('^0~'C)'"))
 
 
 pC <- ggplot(data = gam.df.linear) + coord_cartesian(ylim=c(-0.1, 0.5)) +
@@ -374,6 +376,8 @@ out.epiyr.regression = mapply(fit.climate.regression, dat = dat.epi.year.split, 
 #and subset compile and save 
 epiyr.beta.df = data.table::rbindlist(out.epiyr.regression)
 epiyr.beta.df =subset(epiyr.beta.df , year == 2007 | year== 2012| year==2019)
+
+epiyr.beta.df <- arrange(epiyr.beta.df, provname, time)
 
 write.csv(epiyr.beta.df, paste0(homewd, "/data/tsir_dat_beta_climate_province.csv"), row.names = F)
 

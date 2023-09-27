@@ -202,7 +202,7 @@ run.increased.S <- function(fracincS, data.series, epiyr1, simfitted1, fittedpar
   
 }
 wrap.pipeline.TSIR <- function(df, epiyr1, sbar1, sus.dat, epi.beta.df){
-  
+  print(unique(df$provname))
   #first, identify the right susceptible reconstruction
   prov.choose = subset(sus.dat, provname == unique(df$provname) & epiyr == epiyr1)
   
@@ -513,11 +513,11 @@ wrap.pipeline.TSIR <- function(df, epiyr1, sbar1, sus.dat, epi.beta.df){
   df.merge = subset(df, time<=(epiyr1+1))
   all.dat.merge <- merge(df.merge, IPred, by="time", all.x = T, sort=F)
   
-   # ggplot(data=all.dat.merge) + 
-   #   geom_line(aes(x=time, y=cases),linetype=2) +
-   #   geom_line(aes(x=time, y=model_predicted_reported_cases, color=sim_type)) 
+   #  ggplot(data=all.dat.merge) + 
+   #    geom_line(aes(x=time, y=cases),linetype=2) +
+   #    geom_line(aes(x=time, y=model_predicted_reported_cases, color=sim_type)) 
+   # # 
    # 
-   
    #and return both sets of data
    
    return(list(incS.df, all.dat.merge))
@@ -542,11 +542,14 @@ beta.df <- read.csv(file = paste0(homewd, "/data/beta_TSIR_fit_province.csv"), h
 sus.merge <- ddply(beta.df, .(provname, epiyr), summarise, rsquared=unique(rsquared), sus_reconstruction=unique(sus_reconstruction))
 head(sus.merge)
 sus.merge <- arrange(sus.merge, provname, epiyr)
+unique(sus.merge$provname)
 
 #and load the epiyear beta predictions using climate (these are GAM predictions)
 clim.dat <- read.csv(file= paste0(homewd, "/data/tsir_dat_beta_climate_province.csv"), header = T, stringsAsFactors = F)
+unique(clim.dat$provname)
+clim.dat$provname[clim.dat$provname=="Oddar Meanchey"] <- "Otdar Meanchey"
 clim.dat <- arrange(clim.dat, provname, time)
-
+head(clim.dat)
 
 #split by province and pre-epidemic period
 tsir.split.2007 <- dlply(tsir.dat,.(provname))
