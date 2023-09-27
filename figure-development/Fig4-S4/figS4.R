@@ -207,8 +207,8 @@ dat.plot$new_label = paste(dat.plot$accession_num, dat.plot$date, sep = " ")
 head(dat.plot)
 
 #now build the same trees as before, except select out the lineages of interest and color based on cluster instead
-tree1 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv1-out/DENV1avg.tree"))
-tree2 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv2-out/DENV2avg.tree"))
+tree1 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv1-out-final/DENV1avg.tree"))
+tree2 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv2-out-final/DENV2avg.tree"))
 
 tree1dat <- cbind.data.frame(tip_name = tree1@phylo$tip.label)
 tree2dat <- cbind.data.frame(tip_name = tree2@phylo$tip.label)
@@ -228,10 +228,10 @@ dat$date <- as.Date(dat$date)#, format = "%m/%d/%y")
 mrsd.denv1 <- max(dat$date[dat$DENV.serotype=="DENV-1"]) #"2020-07-13"
 mrsd.denv2 <- max(dat$date[dat$DENV.serotype=="DENV-2"])#"2020-09-23"
 
-#node.tree1 <- MRCA(tree1, which(tree1@phylo$tip.label== "OL412678_2019-07-15" ),which(tree1@phylo$tip.label == "GQ357692_2008-07-31"))
-node.tree1 <- MRCA(tree1, which(tree1@phylo$tip.label== "OL412678_2019-07-25" ),which(tree1@phylo$tip.label == "GQ357692_2008-07-31"))
 
-#this is the large tree in panel B, Figure 4
+node.tree1 <- MRCA(tree1, which(tree1@phylo$tip.label== "OL412678_2019-07-25" ),which(tree1@phylo$tip.label == "ON046271_2004-11-20"))
+
+#this is the large tree in panel A, Figure 4
 pB1 <- ggtree(tree1, mrsd=mrsd.denv1, color="forestgreen")  + 
   geom_cladelab(node=node.tree1, label="Genotype I", textcolor="seagreen", barcolor="seagreen", fontsize=6,
                 offset =-37, angle=270, offset.text = -12, vjust=2, hjust=.5)  +
@@ -246,18 +246,18 @@ pB1 <- ggtree(tree1, mrsd=mrsd.denv1, color="forestgreen")  +
         legend.title = element_text(size=8))# + geom_tiplab() 
 
 
-#and here is panel C, Figure 4
+#and here is panel B, Figure 4
+
 #node.tree2.1 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414741_2019-07-15" ),which(tree2@phylo$tip.label == "KU509277_2010-07-31"))
-node.tree2.1 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414741_2019-07-23" ),which(tree2@phylo$tip.label == "KU509277_2010-07-31"))
+node.tree2 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414741_2019-07-23" ),which(tree2@phylo$tip.label == "KU509277_2010-07-31"))
 #node.tree2.2 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414721_2019-07-15"),which(tree2@phylo$tip.label == "KF744400_2000-07-31"))
-node.tree2.2 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414721_2019-07-25" ),which(tree2@phylo$tip.label == "KF744400_2000-07-31"))
-#node.tree2.2 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414721_2019-07-25" ),which(tree2@phylo$tip.label == "FM210227_2002-07-31"))
+node.tree2.1 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414721_2019-07-25" ),which(tree2@phylo$tip.label == "KF744400_2000-07-31"))
 
 pC2 <- ggtree(tree2, mrsd=mrsd.denv2, color="navy")  + theme_tree2() + 
   coord_cartesian(xlim=c(1930,2030),  ylim=c(0,300))+
-  geom_cladelab(node=node.tree2.1, label="Cosmopolitan I", textcolor="tomato",barcolor="tomato",
+  geom_cladelab(node=node.tree2, label="Cosmopolitan I", textcolor="tomato",barcolor="tomato",
                 offset =-37, angle=270, offset.text = -12, fontsize=6, vjust=2, hjust=.5)  +
-  geom_cladelab(node=node.tree2.2, label="Asian I", textcolor="navy", barcolor="navy", fontsize=6,vjust=2, hjust=.5,
+  geom_cladelab(node=node.tree2.1, label="Asian I", textcolor="navy", barcolor="navy", fontsize=6,vjust=2, hjust=.5,
                 offset =-37, angle=270, offset.text = -12)  +
   #geom_tiplab(size=1)+
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1) +
@@ -321,12 +321,12 @@ pB <- pB1 %<+% tree1merge +
 node1mrca <-MRCA(tree1, which(tree1@phylo$tip.label== "OL412140_2019-08-28" ),which(tree1@phylo$tip.label == "MW265679_2015-10-06"))
 
 node.dat.denv1 <- pB$data
-subset(node.dat.denv1, node==node1mrca) #node height is 7.64 years
-mrsd.denv1 - (7.64*365) # "2012-11-23"
-node.dat.denv1$height_0.95_HPD[[node1mrca]] #6.908226 8.286716
+subset(node.dat.denv1, node==node1mrca) #node height is 7.86 years
+mrsd.denv1 - (7.86*365) # "2013-02-06"
+node.dat.denv1$height_0.95_HPD[[node1mrca]] #7.290718 8.450780
 
-mrsd.denv1 - (6.908226*365) # "2013-08-17"
-mrsd.denv1 - (8.286716*365) # "2012-04-01"
+mrsd.denv1 - (7.290718*365) # "2013-09-01"
+mrsd.denv1 - (8.450780*365) # "2012-07-05"
 
 
 tree1.tiplabel<-tree1@phylo[["tip.label"]]
@@ -344,6 +344,10 @@ pC <-pC2 %<+% tree2merge +
   #coord_cartesian(c(2000,2021)) +
   scale_shape_manual(values=shapez) +scale_fill_manual(values=colorz)
 
+
+####################################################################
+###########################RECHECK HERE!############################
+####################################################################
 
 #now we subset the tree to just the recent Cambodia clades for analysis
 #node2_sub <-MRCA(tree2, which(tree2@phylo$tip.label== "OL414746_2019-06-15" ),which(tree2@phylo$tip.label == "OL414724_2019-08-15"))
@@ -363,7 +367,7 @@ tree2merge <- merge(tree2merge, dat.clust.save, by = "tip_name", all.x = T)
 
 #Fig S3 B.1
 pS3B1 <- ggtree(tree1sub, mrsd=mrsd.denv1, color="forestgreen")  + 
-  theme_tree2() + coord_cartesian(xlim=c(2015,2021.3), ylim=c(0,49), expand = T) + 
+  theme_tree2() + coord_cartesian(xlim=c(2016.5,2021.4), ylim=c(0,73), expand = T) + 
   #geom_range(range='length_0.95_HPD', color='red', alpha=.6, size=2) +
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1, show.legend = F) +
   #scale_x_continuous(breaks=c(1950, 1975, 2000, 2020))+
@@ -375,7 +379,7 @@ pS3B1 <- ggtree(tree1sub, mrsd=mrsd.denv1, color="forestgreen")  +
 
 #Fig S3C.1
 pS3C1 <- ggtree(tree2sub, mrsd=mrsd.denv2, color="navy")  + theme_tree2() + # nodelab() +
-  coord_cartesian(xlim=c(2015,2021.3), ylim=c(0,49), expand = T) + 
+  coord_cartesian(xlim=c(2016.5,2021.4), ylim=c(0,53), expand = T) + 
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1, show.legend = F) +
   scale_fill_continuous(low="yellow", high="red") +
   #scale_x_continuous(breaks=c(1950, 1975, 2000, 2020))+
@@ -428,20 +432,20 @@ pS3C <- pS3C1 %<+% tree2merge +
 node2cosmomrca <-MRCA(tree2, which(tree2@phylo$tip.label== "OL414736_2020-06-17" ),which(tree2@phylo$tip.label == "FJ639707_2004-07-31"))
 
 node.dat.denv2 <- pC$data
-subset(node.dat.denv2, node==node2cosmomrca) #node height is 83.8 years
-mrsd.denv2 - (83.8 *365) # "1936-12-26"
-node.dat.denv2$height_0.95_HPD[[node2cosmomrca]] #79.61524 88.16610
+subset(node.dat.denv2, node==node2cosmomrca) #node height is 88.5 years
+mrsd.denv2 - (88.5 *365) # "1932-04-15"
+node.dat.denv2$height_0.95_HPD[[node2cosmomrca]] #83.60570 93.28363
 
-mrsd.denv2 - (79.61524*365) # "1941-03-02"
-mrsd.denv2 - (88.16610*365) # "1932-08-15"
-
-
-
-pBC <- cowplot::plot_grid(pS3B,  pS3C, labels=c("B", "C"), nrow=2, ncol=1, label_size = 20)
+mrsd.denv2 - (83.6057*365) # "1937-03-06"
+mrsd.denv2 - (93.28363*365) # "1927-07-05"
 
 
 
-pS3_KPS<- cowplot::plot_grid(pKPS,  nrow=1, ncol=1, labels = c("A"), label_size = 20)
+pBC <- cowplot::plot_grid(pS3B,  pS3C, labels=c("B", "C"), nrow=2, ncol=1, label_size = 22)
+
+
+
+pS3_KPS<- cowplot::plot_grid(pKPS,  nrow=1, ncol=1, labels = c("A"), label_size = 22)
 
 
 pALL <- cowplot::plot_grid(pS3_KPS, pBC, nrow=2, ncol = 1, rel_widths = c(1), rel_heights = c(1,2))
@@ -456,7 +460,7 @@ pALL<-pALL+ theme_classic()+  theme(axis.line=element_blank(),axis.text.x=elemen
                                     axis.title.y=element_blank())
 
 
-ggsave(file = paste0(homewd, "/final-figures/figS4.png"),
+ggsave(file = paste0(homewd, "/final-figures/figSuppPhyloTrees.png"),
        plot= pALL,
        units="mm",  
        width=55, 

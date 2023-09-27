@@ -17,7 +17,7 @@ homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(homewd)
 
 #get tree
-tree1 <- read.annot.beast(file =  paste0(homewd, "/BEAST-tree/denv1-out-final/DENV1avg.tree"))
+tree1 <- read.annot.beast(file = paste0(homewd, "/BEAST-tree/denv1-out/DENV1avg.tree"))
 
 #plot(tree)
 #and load the metadata
@@ -66,7 +66,7 @@ head(combine.df)
 #now add in the gis data
 tree.dat.merge = subset(dat, !is.na(lat) & DENV.serotype=="DENV-1")
 #tree.dat.merge <- dplyr::select(tree.dat.merge, -(X))
-tree.dat.merge = tree.dat.merge[tree.dat.merge$date>"2018-12-31",]#49  sequences
+tree.dat.merge = tree.dat.merge[tree.dat.merge$date>"2018-12-31",]#48  sequences
 head(tree.dat.merge)
 #and distance matrix - here, we just choose Jess's sequences
 xy.dat <- dplyr::select(tree.dat.merge, long, lat)
@@ -180,7 +180,7 @@ homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(homewd)
 
 #get tree
-tree2 <- read.annot.beast(file = paste0(homewd, "/BEAST-tree/denv2-out-final/DENV2avg.tree"))
+tree2 <- read.annot.beast(file = paste0(homewd, "/BEAST-tree/denv2-out/DENV2avg.tree"))
 
 #and load the metadata
 dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = T, stringsAsFactors = F)
@@ -305,7 +305,7 @@ pair.df <- pair.df1[!duplicated(pair.df1$merge_name),]
 pair.df <- dplyr::select(pair.df, -(merge_name))
 ##then link all the metadata for the early sequence and save to make transmission trees
 head(pair.df)
-length(unique(pair.df$pairseq1)) #49
+length(unique(pair.df$pairseq1)) #50
 
 head(dat)
 merge.dat <- dplyr::select(dat, accession_num, age, sex, DENV.serotype, DENV.subtype)
