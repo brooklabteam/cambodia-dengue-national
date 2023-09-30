@@ -33,8 +33,8 @@ FigS10 <- ggplot(data=subset(beta.dat, provname!="Mondul Kiri" & provname!="Rata
   geom_line(data=legend.dummy, aes(x=x,y=y,linetype=fit_type)) +
   scale_linetype_manual(name = "transmission type",  labels = scales::parse_format(), values = c(1,6))+
   geom_ribbon(aes(x=biweek, ymin= betalow, ymax=betahigh, fill=epiyr), alpha=.2) + 
-  geom_ribbon(data = epi.dat, aes(x=biweek, ymin= betalow, ymax=betahigh, fill=epiyr), alpha=.2) + 
-  geom_line(data = epi.dat, aes(x=biweek, y= beta, color=epiyr), size=.8, linetype="twodash") +
+  geom_ribbon(data = subset(epi.dat,provname!="Mondul Kiri" & provname!="Ratanak Kiri"), aes(x=biweek, ymin= betalow, ymax=betahigh, fill=epiyr), alpha=.2) + 
+  geom_line(data = subset(epi.dat, provname!="Mondul Kiri" & provname!="Ratanak Kiri"), aes(x=biweek, y= beta, color=epiyr), size=.8, linetype="twodash") +
   geom_line(aes(x=biweek, y= beta, color=epiyr), size=.8) + scale_fill_manual(name="epidemic year", values=c("tomato", "cornflowerblue", "seagreen")) +
   scale_color_manual(name="epidemic year", values=c("tomato", "cornflowerblue", "seagreen")) +
   facet_wrap(provname~., scales = "free_y")+ylab(bquote(beta~', biweekly transmission')) +

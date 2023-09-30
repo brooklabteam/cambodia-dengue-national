@@ -24,7 +24,7 @@ tree1 <- read.annot.beast(file =  paste0(homewd, "/BEAST-tree/denv1-out-final/DE
 
 #and load the metadata
 dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = T, stringsAsFactors = F)
-dat$date <- as.Date(dat$date)#, format="%m/%d/%y")
+dat$date <- as.Date(dat$date, format="%m/%d/%y")
 mrsd.denv1 <- max(dat$date[dat$DENV.serotype=="DENV-1"]) #"2020-07-13"
 
 #plot timetree
@@ -112,7 +112,8 @@ get.tMRCA <- function(df){
   }
   
   df <- dplyr::select(df, -(merge_name), -(beast_name1), -(beast_name2), -(time1), -(time2))
-  
+  #and hold structure
+  df <- dplyr::select(df,distance, node, nodetime, early_time, early_seq, late_time, late_seq)
   df$accession_early <- sapply(strsplit(df$early_seq, split="_"), "[",1)
   names(df) <-c("distance", "mrca_node", "mrcatime", "pairtime1", "pairseq1", "pairtime2", "pairseq2", "accession_early")
   df <- dplyr::select(df, accession_early, pairseq1, pairtime1, pairseq2, pairtime2,distance,  mrca_node, mrcatime)
@@ -123,7 +124,7 @@ get.tMRCA <- function(df){
   df$g2 <- df$pairtime2-df$mrcatime
   #df$g2 <- round(df$g2,0)
   df$g1[df$g2<1]<- 0
-  df$evol_time = ((df$g2-df$g1)/2) +df$g1
+  df$evol_time = (df$g1+df$g2)/2#((df$g2-df$g1)/2) +df$g1
   
   #but if the cases are not in the same season, should throw them out
   if(df$pairtime2-df$pairtime1>.5){
@@ -143,7 +144,7 @@ pair.df <- dplyr::select(pair.df, -(merge_name))
 head(pair.df)
 
 #redo seq
-length(unique(pair.df$pairseq1)) #48
+length(unique(pair.df$pairseq1)) #56 now
 ##then link all the metadata for the early sequence and save to make transmission trees
 
 
@@ -184,7 +185,7 @@ tree2 <- read.annot.beast(file = paste0(homewd, "/BEAST-tree/denv2-out-final/DEN
 
 #and load the metadata
 dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = T, stringsAsFactors = F)
-dat$date <- as.Date(dat$date)#, format="%m/%d/%y")
+dat$date <- as.Date(dat$date, format="%m/%d/%y")
 mrsd.denv2 <- max(dat$date[dat$DENV.serotype=="DENV-2"]) #"2020-09-23"
 
 #plot timetree
@@ -225,8 +226,9 @@ length(combine.df$node[is.na(combine.df$nodetime)])#0
 
 #now add in the gis data
 tree.dat.merge = subset(dat, !is.na(lat) & DENV.serotype=="DENV-2")
-tree.dat.merge = tree.dat.merge[tree.dat.merge$date>"2018-12-31",]#50  sequences. all but one have coord
-
+tree.dat.merge = tree.dat.merge[tree.dat.merge$date>"2018-12-31",]#61  sequences now. 
+unique(tree.dat.merge$country)#Cambodia
+unique(tree.dat.merge$DENV.subtype)#"Asian-1"      "Cosmopolitan"
 
 
 #and distance matrix - here, we just choose Jess's sequences
@@ -277,7 +279,11 @@ get.tMRCA <- function(df){
   
   df <- dplyr::select(df, -(merge_name), -(beast_name1), -(beast_name2), -(time1), -(time2))
   
+  #and rearrange 
+  df <- dplyr::select(df,distance, node, nodetime, early_time, early_seq, late_time, late_seq)
+  
   df$accession_early <- sapply(strsplit(df$early_seq, split="_"), "[",1)
+  
   names(df) <-c("distance", "mrca_node", "mrcatime", "pairtime1", "pairseq1", "pairtime2", "pairseq2", "accession_early")
   df <- dplyr::select(df, accession_early, pairseq1, pairtime1, pairseq2, pairtime2,distance,  mrca_node, mrcatime)
   df$tMRCA <- df$pairtime1-df$mrcatime
@@ -287,7 +293,7 @@ get.tMRCA <- function(df){
   df$g2 <- df$pairtime2-df$mrcatime
   #df$g2 <- round(df$g2,0)
   df$g1[df$g2<1]<- 0
-  df$evol_time = ((df$g2-df$g1)/2) +df$g1
+  df$evol_time = (df$g1+df$g2)/2#((df$g2-df$g1)/2) +df$g1
   
   #but if the cases are not in the same season, should throw them out
   if(df$pairtime2-df$pairtime1>.5){
@@ -305,27 +311,32 @@ pair.df <- pair.df1[!duplicated(pair.df1$merge_name),]
 pair.df <- dplyr::select(pair.df, -(merge_name))
 ##then link all the metadata for the early sequence and save to make transmission trees
 head(pair.df)
-length(unique(pair.df$pairseq1)) #49
+length(unique(pair.df$pairseq1)) #60
 
 head(dat)
 merge.dat <- dplyr::select(dat, accession_num, age, sex, DENV.serotype, DENV.subtype)
 names(merge.dat)[names(merge.dat)=="accession_num"] <- "accession_early"
-merge.dat <- merge.dat[!is.na(merge.dat$sex),]
+#merge.dat <- merge.dat[!is.na(merge.dat$sex),]
 head(merge.dat)
+merge.dat = subset(merge.dat, DENV.serotype=="DENV-2")
+unique(merge.dat$DENV.subtype)# NA             "Asian-1"      "DENV-2"       "Cosmopolitan"
 
-#and add in the subtype of the second strain too
 
 #and merge with pairs
+setdiff(unique(pair.df$accession_early), unique(merge.dat$accession_early))
+setdiff( unique(merge.dat$accession_early), unique(pair.df$accession_early))
 pair.DENV2 <- merge(pair.df, merge.dat, by="accession_early", all.x=T, sort=F)
 head(pair.DENV2)
 tail(pair.DENV2)
+unique(pair.DENV2$DENV.subtype) #"Asian-1"      "Cosmopolitan"
+unique(pair.DENV2$accession_early[is.na(pair.DENV2$DENV.subtype)])
 
 #and the pair subtype
 id.sub <- dplyr::select(dat, tip_name, DENV.subtype)
 names(id.sub) <- c("pairseq2", "pair_subtype")
 
 pair.DENV2 <- merge(pair.DENV2, id.sub, by="pairseq2", all.x=T, sort=F)
-
+unique(pair.DENV2$pair_subtype) #"Asian-1"      "Cosmopolitan"
 write.csv(pair.DENV2, file =paste0(homewd, "/data/DENV2transTreeDat.csv"), row.names = F)
 
 #and join together 
@@ -339,11 +350,21 @@ denv2 <- read.csv(file=paste0(homewd, "/data/DENV2transTreeDat.csv"), header = T
 
 all.denv <- rbind(denv1, denv2)
 unique(all.denv$DENV.serotype)
+subset(all.denv, is.na(DENV.serotype))
+all.denv$DENV.serotype[is.na(all.denv$DENV.serotype)] <- "DENV-1"
+
 unique(all.denv$DENV.subtype)
+unique(all.denv$DENV.subtype[all.denv$DENV.serotype=="DENV-2"])#"Asian-1"      "Cosmopolitan"
+unique(all.denv$pair_subtype[all.denv$DENV.serotype=="DENV-2"])#"Asian-1"      "Cosmopolitan"
+
+all.denv$DENV.subtype[all.denv$DENV.serotype=="DENV-1"] <- "DENV-1"
+all.denv$pair_subtype[all.denv$DENV.serotype=="DENV-1"] <- "DENV-1"
+
 all.denv$DENV.subtype[all.denv$DENV.subtype=="Cosmopolitan"]<- "DENV-2-Cosmopolitan"
 all.denv$pair_subtype[all.denv$pair_subtype=="Cosmopolitan"]<- "DENV-2-Cosmopolitan"
 all.denv$DENV.subtype[all.denv$DENV.subtype=="Asian-1"]<- "DENV-2-Asian-1"
 all.denv$pair_subtype[all.denv$pair_subtype=="Asian-1"]<- "DENV-2-Asian-1"
+
 all.denv$paired <- paste0(all.denv$DENV.subtype, "/", all.denv$pair_subtype)
 unique(all.denv$paired)
 #subset(all.denv, is.na(DENV.serotype))

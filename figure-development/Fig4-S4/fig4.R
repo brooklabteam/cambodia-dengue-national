@@ -86,7 +86,7 @@ dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = 
 head(dat)
 
 #check the format
-dat$date <- as.Date(dat$date)#, format = "%m/%d/%y")
+dat$date <- as.Date(dat$date, format = "%m/%d/%y")
 #dat$date <- as.Date(dat$date, format = "%m/%d/%y")
 
 
@@ -98,7 +98,7 @@ node.tree1 <- MRCA(tree1, which(tree1@phylo$tip.label== "OL412678_2019-07-25" ),
 
 pA1 <- ggtree(tree1, mrsd=mrsd.denv1, color="forestgreen")  + 
   geom_cladelab(node=node.tree1, label="Genotype I", textcolor="seagreen", barcolor="seagreen", fontsize=6,
-              offset =-37, angle=270, offset.text = -12, vjust=2, hjust=.5)  +
+                offset =-37, angle=270, offset.text = -12, vjust=2, hjust=.5)  +
   theme_tree2() + coord_cartesian(xlim=c(1930,2030), ylim=c(0,390)) + 
   #geom_range(range='length_0.95_HPD', color='red', alpha=.6, size=2) +
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1, show.legend = F) +
@@ -122,7 +122,7 @@ pB2 <- ggtree(tree2, mrsd=mrsd.denv2, color="navy")  + theme_tree2() +
   geom_cladelab(node=node.tree2, label="Cosmopolitan I", textcolor="tomato",barcolor="tomato",
                 offset =-37, angle=270, offset.text = -12, fontsize=6, vjust=2, hjust=.5)  +
   geom_cladelab(node=node.tree2.1, label="Asian I", textcolor="navy", barcolor="navy", fontsize=6,vjust=2, hjust=.5,
-                  offset =-37, angle=270, offset.text = -12)  +
+                offset =-37, angle=270, offset.text = -12)  +
   #geom_tiplab(size=1)+
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1) +
   scale_fill_continuous(low="yellow", high="red", limits=c(0,1)) +
@@ -187,7 +187,7 @@ pA <- pA1 %<+% tree1merge +
         axis.text = element_text(size=18)) +
   scale_fill_manual(values=colorz) +
   scale_shape_manual(values=shapez) 
-  
+
 
 
 
@@ -206,9 +206,9 @@ pB <-pB2 %<+% tree2merge +
   ggnewscale::new_scale_fill()  +
   geom_tippoint(aes(fill=country, shape=new_seq), size = 2, show.legend = F, stroke=.1, color="black") +
   theme(axis.text = element_text(size=18)) + 
-        #plot.background  = element_rect(size=3, fill = NULL, color = "black"),
-        #legend.position = "none",
-        #legend.title = element_blank()) + 
+  #plot.background  = element_rect(size=3, fill = NULL, color = "black"),
+  #legend.position = "none",
+  #legend.title = element_blank()) + 
   #coord_cartesian(c(2000,2021)) +
   scale_shape_manual(values=shapez) +scale_fill_manual(values=colorz)
 
@@ -228,18 +228,22 @@ pAB <-cowplot::plot_grid(pA,pB,nrow=2,ncol=1,labels=c("A", "B"),label_size=22)+
 all.denv <- read.csv(file=paste0(homewd, "/data/AllDENVtransTreeDat.csv"), header = T, stringsAsFactors = F)
 all.denv$distance <- all.denv$distance/1000 #convert to km
 
+#ggplot(dat) + geom_point(aes(x=evol_time,y=distance)) + facet_grid(~DENV.subtype) 
+
 #are they in the same season?
 all.denv$season <- "yes"
 all.denv$season[all.denv$pairtime2-all.denv$pairtime1>.5] <- "no"
 
 #now, only look at those within a season
 all.denv <- subset(all.denv, season=="yes")
+unique(all.denv$paired)
+
 
 #dat=subset(all.denv,DENV.serotype=="DENV-1")
 mrca_thresh=.5
 #and write over to get the transmission trees
+#geothresh <- list(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15) 
 geothresh <- list(.2,.4,.6,.8,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15) 
-geothresh <- list(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15) 
 #here's the threshold list of distances over which to compute
 
 #here, decides whether each pair is in a transmission chain, based on the mrca_thresh (in years)
@@ -249,7 +253,35 @@ is.trans.chain <- function(dat, mrca_thresh){
   return(dat)
   
 }
-get.prop.chain<- function(thresh, dat){
+get.prop.chain.discrete<- function(thresh, dat, thresh.bin){
+  if(which(thresh.bin==thresh)==1){
+    min.dist = 0
+  }else{
+    min.dist = thresh.bin[[(which(thresh.bin==thresh)-1)]]  
+  }
+  tot.chain <- sum(subset(dat, distance<=thresh & distance>min.dist)$trans_chain)
+  N.pairs <- length(subset(dat, distance<=thresh& distance>min.dist)$trans_chain)
+  if(N.pairs==0){
+    prop.chain <-NA
+    dat.new <- cbind.data.frame(distance = thresh, prop=NA, prop_lci = NA, prop_uci= NA, tot_pairs_in_chain=NA, tot_pairs=NA)
+  }else{
+    prop.chain <- tot.chain/N.pairs
+    CI <- binom.test(x=tot.chain, n=N.pairs, alternative = "two.sided", conf.level = .95)
+    dat.new <- cbind.data.frame(distance = thresh, prop=prop.chain, prop_lci = CI$conf.int[1], prop_uci= CI$conf.int[2], tot_pairs_in_chain=tot.chain, tot_pairs=N.pairs)
+    
+  }
+  
+  
+  
+  
+  
+  #and get CIs
+  
+  
+  return(dat.new)
+}
+get.prop.chain.max <- function(thresh, dat){
+  
   tot.chain <- sum(subset(dat, distance<=thresh)$trans_chain)
   N.pairs <- length(subset(dat, distance<=thresh)$trans_chain)
   prop.chain <- tot.chain/N.pairs
@@ -267,7 +299,8 @@ make.trans.chains <- function(dat, geothresh, mrca_thresh, character){
   dat1 = is.trans.chain(dat=dat, mrca_thresh = mrca_thresh)
   
   #and proportion of transmission chains
-  dat.prop = lapply(geothresh, get.prop.chain, dat=dat1)
+  dat.prop = lapply(geothresh, get.prop.chain.max, dat=dat1)
+  #dat.prop = lapply(geothresh, get.prop.chain.discrete, dat=dat1, thresh.bin=geothresh)
   prop.df = data.table::rbindlist( dat.prop)
   prop.df$character = character
   prop.df$DENV.serotype=unique(dat$DENV.serotype)
@@ -279,19 +312,23 @@ make.trans.chains <- function(dat, geothresh, mrca_thresh, character){
 
 combine.chain.prop<-function(mrca.thresh){
   out.prop1 <- make.trans.chains(dat=subset(all.denv,DENV.serotype=="DENV-1"), geothresh = geothresh, mrca_thresh = mrca.thresh, character = "whole-dataset")
-  out.prop3 <- make.trans.chains(dat=subset(all.denv,DENV.serotype=="DENV-2" & paired=="DENV-2-Cosmopolitan/DENV-2-Cosmopolitan"), geothresh = geothresh, mrca_thresh = mrca.thresh, character = "whole-dataset")
+  #out.prop3 <- make.trans.chains(dat=subset(all.denv,DENV.serotype=="DENV-2" & paired=="DENV-2-Cosmopolitan/DENV-2-Cosmopolitan"), geothresh = geothresh, mrca_thresh = mrca.thresh, character = "whole-dataset")
+  #out.prop5 <- make.trans.chains(dat=subset(all.denv,DENV.serotype=="DENV-2" & paired=="DENV-2-Asian-1/DENV-2-Asian-1"), geothresh = geothresh, mrca_thresh = mrca.thresh, character = "whole-dataset")
   out.prop7 <- make.trans.chains(dat=subset(all.denv,DENV.serotype=="DENV-2"), geothresh = geothresh, mrca_thresh = mrca.thresh, character = "whole-dataset")
   #head(out.prop1)
   out.prop1$DENV.subtype <- "DENV-1"
-  out.prop3$DENV.subtype <- "DENV-2-Cosmopolitan"
+  #out.prop3$DENV.subtype <- "DENV-2-Cosmopolitan"
   out.prop7$DENV.subtype <- "DENV-2-All"
-  out.all <-rbind(out.prop1, out.prop3, out.prop7)
+  #out.prop5$DENV.subtype <- "DENV-2-Asian-1"
+  #out.all <-rbind(out.prop1, out.prop3, out.prop5, out.prop7)
+  out.all <-rbind(out.prop1, out.prop7)
   return(out.all)
   
 }
 make.chain.diff <- function(mrca.thresh){
   out.prop1 <- make.trans.chains(dat=subset(all.denv,DENV.serotype=="DENV-1"), geothresh = geothresh, mrca_thresh = mrca.thresh, character = "whole-dataset")
   out.prop3 <- make.trans.chains(dat=subset(all.denv,DENV.serotype=="DENV-2" & paired=="DENV-2-Cosmopolitan/DENV-2-Cosmopolitan"), geothresh = geothresh, mrca_thresh = mrca.thresh, character = "whole-dataset")
+  out.prop5 <- make.trans.chains(dat=subset(all.denv,DENV.serotype=="DENV-2" & paired=="DENV-2-Asian-1/DENV-2-Asian-1"), geothresh = geothresh, mrca_thresh = mrca.thresh, character = "whole-dataset")
   out.prop7 <- make.trans.chains(dat=subset(all.denv,DENV.serotype=="DENV-2"), geothresh = geothresh, mrca_thresh = mrca.thresh, character = "whole-dataset")
   head(out.prop1)
   
@@ -339,22 +376,27 @@ mean.trans.chains <- function(dat, geothresh, mrca_thresh){
 }
 
 
-out.pt5 = make.chain.diff(.5)
+#out.pt5 = make.chain.diff(.5)
 out.pt5 = combine.chain.prop(mrca.thresh=.5)
 head(out.pt5)
 tail(out.pt5)
 #out.prop = rbind(out.pt3, out.pt5, out.1)#, out.3)
 #head(out.prop)
-out.pt5$DENV.subtype<- factor(out.pt5$DENV.subtype, levels = c("DENV-1", "DENV-2-All", "DENV-2-Cosmopolitan"))
+#out.pt5$DENV.subtype<- factor(out.pt5$DENV.subtype, levels = c("DENV-1", "DENV-2-All", "DENV-2-Cosmopolitan"))
+#out.pt5$DENV.subtype<- factor(out.pt5$DENV.subtype, levels = c("DENV-1", "DENV-2-All", "DENV-2-Asian-1", "DENV-2-Cosmopolitan"))
+out.pt5$DENV.serotype<- factor(out.pt5$DENV.serotype, levels = c("DENV-1", "DENV-2"))
 
 
-colzB=c("DENV-1"="mediumseagreen", "DENV-2-All"="navy", "DENV-2-Cosmopolitan"="dodgerblue")
+#colzB=c("DENV-1"="mediumseagreen", "DENV-2-All"="navy", "DENV-2-Cosmopolitan"="dodgerblue")
+#colzB=c("DENV-1"="mediumseagreen", "DENV-2-All"="navy", "DENV-2-Asian-1"="cyan",  "DENV-2-Cosmopolitan"="dodgerblue")
+colzB=c("DENV-1"="mediumseagreen", "DENV-2"="navy")
+
 
 pC <- ggplot(data=out.pt5) + theme_bw()+
   #facet_grid(dummy_label~.) +
   #geom_line(aes(x=distance, y=prop, color=sex),show.legend = F) +
-  geom_ribbon(aes(x=distance, ymin=prop_lci, ymax=prop_uci, fill=DENV.subtype, group=DENV.subtype), alpha=.3) +
-  geom_line(aes(x=distance, y=prop, color=DENV.subtype, group=DENV.subtype)) +
+  geom_ribbon(aes(x=distance, ymin=prop_lci, ymax=prop_uci, fill=DENV.serotype, group=DENV.serotype), alpha=.3) +
+  geom_line(aes(x=distance, y=prop, color=DENV.serotype, group=DENV.serotype)) +
   theme(panel.grid = element_blank(), axis.title = element_text(size=16), 
         #axis.title.x = element_blank(), axis.text.x = element_blank(), 
         #axis.ticks.x = element_blank(),
@@ -362,13 +404,13 @@ pC <- ggplot(data=out.pt5) + theme_bw()+
         legend.title = element_blank(),
         strip.background = element_rect(fill="white"), strip.text = element_text(size = 18),
         axis.text = element_text(size=14), legend.text = element_text(size=12),
-        legend.position = c(.73,.84)) + coord_cartesian(ylim=c(0,.8), xlim=c(1,5), expand = F)+
+        legend.position = c(.73,.84)) + coord_cartesian(ylim=c(0,1), xlim=c(0,5), expand = F)+
   scale_color_manual(values=colzB) + 
   scale_fill_manual(values=colzB) + 
   #scale_color_manual(values=colz, name = "transmission chain\nthreshold (yrs)") + 
   #scale_fill_manual(values=colz, name = "transmission chain\nthreshold (yrs)") + 
   ylab("Proportion same transmission chain")  +
-  xlab("Distance between cases (km)")
+  xlab("Max distance between cases (km)")
 
 
 ######################################################################
@@ -390,9 +432,9 @@ denv.2$DENV.subtype <- "DENV-2"
 denv.2.mean = mean.trans.chains(dat=denv.2, geothresh, mrca_thresh)
 
 
-denv.cosmo.2 = subset(all.denv, DENV.serotype=="DENV-2" & DENV.subtype=="DENV-2-Cosmopolitan")
-denv.cosmo.2$DENV.subtype <- "DENV-2-Cosmopolitan"
-denv.cosmo.2.mean = mean.trans.chains(dat=denv.cosmo.2, geothresh, mrca_thresh)
+# denv.cosmo.2 = subset(all.denv, DENV.serotype=="DENV-2" & DENV.subtype=="DENV-2-Cosmopolitan")
+# denv.cosmo.2$DENV.subtype <- "DENV-2-Cosmopolitan"
+# denv.cosmo.2.mean = mean.trans.chains(dat=denv.cosmo.2, geothresh, mrca_thresh)
 
 #all.denv.mean <- rbind(denv.1.mean, denv.2.mean, denv.cosmo.2.mean)
 all.denv.mean <- rbind(denv.1.mean, denv.2.mean)
@@ -402,7 +444,7 @@ all.denv.mean <- rbind(denv.1.mean, denv.2.mean)
 #salje.dat$locale[salje.dat$locale=="Bangkok"] <- "Salje et al. Bangkok"
 salje.dat$locale[salje.dat$locale=="Thai_Countryside"] <- "Rural Thailand"# "Salje et al.\nThai rural"
 all.denv.mean$DENV.subtype[all.denv.mean$DENV.subtype=="DENV-1"] <- "Cambodia DENV-1"
-all.denv.mean$DENV.subtype[all.denv.mean$DENV.subtype=="DENV-2"] <- "Cambodia All-DENV-2"
+all.denv.mean$DENV.subtype[all.denv.mean$DENV.subtype=="DENV-2"] <- "Cambodia DENV-2"
 #all.denv.mean$DENV.subtype[all.denv.mean$DENV.subtype=="DENV-2-Cosmopolitan"] <- "Cambodia\nDENV-2-Cosmopolitan"
 
 salje.dat$study <- "Salje et al. 2017"
@@ -410,7 +452,7 @@ all.denv.mean$study <- "Kampong Speu 2019-2020"
 
 #colznew <- c('Bangkok' = "black", 'Rural Thailand' = "gray60", 'Cambodia DENV-1' = "forestgreen", 'Cambodia All-DENV-2' = "navy")
 shapeznew <- c('Salje et al. 2017' = 21, "Kampong Speu 2019-2020" = 24)
-colznew <- c('Bangkok' = "black", 'Rural Thailand' = "gray60", 'Cambodia DENV-1' = "forestgreen", 'Cambodia All-DENV-2' = "navy", 'Salje et al. 2017' = "black", "Kampong Speu 2019-2020" = "red")
+colznew <- c('Bangkok' = "black", 'Rural Thailand' = "gray60", 'Cambodia DENV-1' = "forestgreen", 'Cambodia DENV-2' = "navy", 'Salje et al. 2017' = "black", "Kampong Speu 2019-2020" = "red")
 
 #and plot
 pD <- ggplot(data=salje.dat) + 
