@@ -72,7 +72,7 @@ sub = subset(cam, name=="Kampong Speu")
 
 dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = T, stringsAsFactors = F)
 
-dat$date <- as.Date(dat$date)#, format = "%m/%d/%y")
+dat$date <- as.Date(dat$date, format = "%m/%d/%y")
 dat$year <- year(dat$date)
 #dat = subset(dat, DENV.serotype=="DENV-2")
 #names(dat)
@@ -152,9 +152,11 @@ get.spatial.object <- function(dat1, dist.thresh, denv.serotype){
 }
 
 #now select those used for geospatial analysis
-dat.plot = subset(dat.plot, !is.na(lat) & year >2018)
+dat.plot = subset(dat.plot, !is.na(lat) & year >2018)#118 sequences
+length(dat.plot$DENV.serotype[dat.plot$DENV.serotype=="DENV-1"]) #57
+length(dat.plot$DENV.serotype[dat.plot$DENV.serotype=="DENV-2"]) #61
 
-all.denv <- get.spatial.object(dat1=dat.plot, dist.thresh = 12000, denv.serotype = "all")
+all.denv <- get.spatial.object(dat1=dat.plot, dist.thresh = 5000, denv.serotype = "all")
 denv.map <- all.denv[[1]]
 dat.plot.cluster <- all.denv[[2]]
 dat.plot.cluster <- dplyr::select(dat.plot.cluster,new_label, cluster_ID)
@@ -222,7 +224,7 @@ dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = 
 head(dat)
 
 #check the format
-dat$date <- as.Date(dat$date)#, format = "%m/%d/%y")
+dat$date <- as.Date(dat$date, format = "%m/%d/%y")
 
 
 mrsd.denv1 <- max(dat$date[dat$DENV.serotype=="DENV-1"]) #"2020-07-13"
@@ -280,6 +282,7 @@ tree1merge$new_label <- paste0(tree1merge$new_label, " ", as.character(tree1merg
 
 tree1merge$new_seq = "no"
 tree1merge$new_seq[tree1merge$country=="Cambodia" & !is.na(tree1merge$sex)] <- "yes"
+tree1merge$new_seq[tree1merge$country=="Cambodia" & !is.na(tree1merge$lat)] <- "yes"
 tree1merge$new_seq <- as.factor(tree1merge$new_seq)
 
 tree1merge$CambodiaSeq <- "no"
@@ -292,6 +295,7 @@ tree2merge$new_label <- paste0(tree2merge$new_label, " ", as.character(tree2merg
 
 tree2merge$new_seq = "no"
 tree2merge$new_seq[tree2merge$country=="Cambodia" & !is.na(tree2merge$sex)] <- "yes"
+tree2merge$new_seq[tree2merge$country=="Cambodia" & !is.na(tree2merge$lat)] <- "yes"
 tree2merge$new_seq <- as.factor(tree2merge$new_seq)
 
 tree2merge$CambodiaSeq <- "no"
@@ -346,7 +350,7 @@ pC <-pC2 %<+% tree2merge +
 
 
 ####################################################################
-###########################RECHECK HERE!############################
+####################################################################
 ####################################################################
 
 #now we subset the tree to just the recent Cambodia clades for analysis
@@ -379,7 +383,7 @@ pS3B1 <- ggtree(tree1sub, mrsd=mrsd.denv1, color="forestgreen")  +
 
 #Fig S3C.1
 pS3C1 <- ggtree(tree2sub, mrsd=mrsd.denv2, color="navy")  + theme_tree2() + # nodelab() +
-  coord_cartesian(xlim=c(2016.5,2021.4), ylim=c(0,53), expand = T) + 
+  coord_cartesian(xlim=c(2016.5,2021.4), ylim=c(0,55), expand = T) + 
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1, show.legend = F) +
   scale_fill_continuous(low="yellow", high="red") +
   #scale_x_continuous(breaks=c(1950, 1975, 2000, 2020))+
