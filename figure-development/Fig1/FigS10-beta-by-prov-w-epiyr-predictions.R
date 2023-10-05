@@ -52,6 +52,34 @@ ggsave(file = paste0(homewd, "/final-figures/FigS10.png"),
        scale=3, 
        dpi=300)
 
+
+legend.dummy$provname<- "Battambang"
+FigS10sub <- ggplot(data=subset(beta.dat, provname=="Battambang")) + theme_bw() +
+  geom_line(data=legend.dummy, aes(x=x,y=y,linetype=fit_type)) +
+  scale_linetype_manual(name = "transmission type",  labels = scales::parse_format(), values = c(1,6))+
+  geom_ribbon(aes(x=biweek, ymin= betalow, ymax=betahigh, fill=epiyr), alpha=.2) + 
+  geom_ribbon(data = subset(epi.dat,provname=="Battambang"), aes(x=biweek, ymin= betalow, ymax=betahigh, fill=epiyr), alpha=.2) + 
+  geom_line(data = subset(epi.dat, provname=="Battambang"), aes(x=biweek, y= beta, color=epiyr), size=.8, linetype="twodash") +
+  geom_line(aes(x=biweek, y= beta, color=epiyr), size=.8) + scale_fill_manual(name="epidemic year", values=c("tomato", "cornflowerblue", "seagreen")) +
+  scale_color_manual(name="epidemic year", values=c("tomato", "cornflowerblue", "seagreen")) +
+  facet_wrap(provname~., scales = "free_y")+ylab(bquote(beta~', biweekly transmission')) +
+  xlab("biweek of year") +
+  theme(panel.grid = element_blank(), #legend.position = c(.86,.06),
+        strip.background = element_rect(fill="white"), 
+        legend.box = "vertical", strip.text = element_text(size=18),
+        axis.title = element_text(size=18), 
+        axis.text = element_text(size=13))
+
+
+ggsave(file = paste0(homewd, "/final-figures/poster/Beta-Fig.png"),
+       plot = FigS10sub,
+       units="mm",  
+       width=60, 
+       height=40, 
+       scale=3, 
+       dpi=300)
+
+
 #plot together by province to see
 p1 <- ggplot(data = epi.dat) + theme_bw() + 
   geom_ribbon(aes(x=biweek, ymin= betalow, ymax=betahigh, fill=provname), alpha=.2) + 
