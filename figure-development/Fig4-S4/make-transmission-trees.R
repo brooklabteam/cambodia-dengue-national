@@ -66,7 +66,7 @@ head(combine.df)
 #now add in the gis data
 tree.dat.merge = subset(dat, !is.na(lat) & DENV.serotype=="DENV-1")
 #tree.dat.merge <- dplyr::select(tree.dat.merge, -(X))
-tree.dat.merge = tree.dat.merge[tree.dat.merge$date>"2018-12-31",]#49  sequences
+tree.dat.merge = tree.dat.merge[tree.dat.merge$date>"2018-12-31",]#57  sequences
 head(tree.dat.merge)
 #and distance matrix - here, we just choose Jess's sequences
 xy.dat <- dplyr::select(tree.dat.merge, long, lat)

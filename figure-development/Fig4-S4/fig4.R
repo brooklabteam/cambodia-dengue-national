@@ -151,7 +151,7 @@ tree1merge$new_label = sapply(strsplit(tree1merge$tip_name, "_"), function(x) x[
 tree1merge$new_label <- paste0(tree1merge$new_label, " ", as.character(tree1merge$date))
 
 tree1merge$new_seq = "no"
-tree1merge$new_seq[tree1merge$country=="Cambodia" & !is.na(tree1merge$sex)] <- "yes"
+tree1merge$new_seq[tree1merge$country=="Cambodia" & !is.na(tree1merge$lat) & tree1merge$date>"2018-01-01"] <- "yes"
 tree1merge$new_seq <- as.factor(tree1merge$new_seq)
 
 tree1merge$CambodiaSeq <- "no"
@@ -164,7 +164,7 @@ tree2merge$new_label = sapply(strsplit(tree2merge$tip_name, "_"), function(x) x[
 tree2merge$new_label <- paste0(tree2merge$new_label, " ", as.character(tree2merge$date))
 
 tree2merge$new_seq = "no"
-tree2merge$new_seq[tree2merge$country=="Cambodia" & !is.na(tree2merge$sex)] <- "yes"
+tree2merge$new_seq[tree2merge$country=="Cambodia" &  !is.na(tree2merge$lat) & tree2merge$date>"2018-01-01"] <- "yes"
 tree2merge$new_seq <- as.factor(tree2merge$new_seq)
 
 tree2merge$CambodiaSeq <- "no"
@@ -392,7 +392,7 @@ out.pt5$DENV.serotype<- factor(out.pt5$DENV.serotype, levels = c("DENV-1", "DENV
 colzB=c("DENV-1"="mediumseagreen", "DENV-2"="navy")
 
 
-pC <- ggplot(data=out.pt5) + theme_bw()+
+pD <- ggplot(data=out.pt5) + theme_bw()+
   #facet_grid(dummy_label~.) +
   #geom_line(aes(x=distance, y=prop, color=sex),show.legend = F) +
   geom_ribbon(aes(x=distance, ymin=prop_lci, ymax=prop_uci, fill=DENV.serotype, group=DENV.serotype), alpha=.3) +
@@ -455,7 +455,7 @@ shapeznew <- c('Salje et al. 2017' = 21, "Kampong Speu 2019-2020" = 24)
 colznew <- c('Bangkok' = "black", 'Rural Thailand' = "gray60", 'Cambodia DENV-1' = "forestgreen", 'Cambodia DENV-2' = "navy", 'Salje et al. 2017' = "black", "Kampong Speu 2019-2020" = "red")
 
 #and plot
-pD <- ggplot(data=salje.dat) + 
+pC <- ggplot(data=salje.dat) + 
   geom_point(aes(x=pop_size, y=eff_chains, fill=locale, 
                  shape=study, color=locale), size=4, color="black", show.legend = F) +
   geom_errorbar(aes(x=pop_size, ymin=lci, ymax=uci, color=locale)) +
