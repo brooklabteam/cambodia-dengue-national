@@ -119,7 +119,7 @@ node.tree2.1 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414721_2019-07-25" 
 
 pB2 <- ggtree(tree2, mrsd=mrsd.denv2, color="navy")  + theme_tree2() + 
   coord_cartesian(xlim=c(1930,2030),  ylim=c(0,350))+
-  geom_cladelab(node=node.tree2, label="Cosmopolitan I", textcolor="tomato",barcolor="tomato",
+  geom_cladelab(node=node.tree2, label="Cosmopolitan III", textcolor="tomato",barcolor="tomato",
                 offset =-37, angle=270, offset.text = -12, fontsize=6, vjust=2, hjust=.5)  +
   geom_cladelab(node=node.tree2.1, label="Asian I", textcolor="navy", barcolor="navy", fontsize=6,vjust=2, hjust=.5,
                 offset =-37, angle=270, offset.text = -12)  +
