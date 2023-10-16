@@ -65,6 +65,7 @@ gam1b <- gam(precip_mm~ s(year, bs="re") +
                         s(biwk, bs="cc", k=7) + #controls for internal annual cycles
                         s(provname, bs="re"), data=precip.dat) #y-intercept specific by province too
 summary(gam1b)
+AIC(gam1, gam1b)
 
 source(paste0(homewd, "/figure-development/Fig1/mollentze-streicker-2020-functions.R"))
 

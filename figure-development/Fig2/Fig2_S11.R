@@ -69,7 +69,7 @@ get.national.period <- function(nat.dat, popdat){
 }
 
 
-dat <- read.csv(file = paste0(homewd, "/data/synchrony_data_aug12.csv"), header=T, stringsAsFactors = F)
+dat <- read.csv(file = paste0(homewd, "/data/synchrony_case_data_oct15.csv"), header=T, stringsAsFactors = F)
 head(dat)
 names(dat)
 
@@ -94,15 +94,15 @@ dat$provname <- factor(dat$provname, levels=unique(dat$provname))
 # define jet colormap
 jet.colors <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
 
-
-Fig2Ab <- ggplot(data=dat) + theme_bw() +
-  theme(panel.grid = element_blank(), axis.title = element_blank(),
-        panel.background = element_rect(fill="gray30"),
-        axis.text = element_text(size=14), legend.position = "bottom") +
-  scale_fill_gradientn(colors = jet.colors(7), name="Reconstructed\nannual cycles", limits=c(-2,4)) +
-  scale_color_gradientn(colors = jet.colors(7), name="Reconstructed\nannual cycles", limits=c(-2,4)) +
-  geom_tile(aes(x=time, y=provname, fill=reconstructed_annual_period, color=reconstructed_annual_period))#, color=epiyear))
-
+# 
+# Fig2Ab <- ggplot(data=dat) + theme_bw() +
+#   theme(panel.grid = element_blank(), axis.title = element_blank(),
+#         panel.background = element_rect(fill="gray30"),
+#         axis.text = element_text(size=14), legend.position = "bottom") +
+#   scale_fill_gradientn(colors = jet.colors(7), name="Reconstructed\nannual cycles", limits=c(-2,4)) +
+#   scale_color_gradientn(colors = jet.colors(7), name="Reconstructed\nannual cycles", limits=c(-2,4)) +
+#   geom_tile(aes(x=time, y=provname, fill=reconstructed_annual_period, color=reconstructed_annual_period))#, color=epiyear))
+# 
 
 
 colz = scales::hue_pal()(length(unique((dat$provname)))) #25
@@ -124,11 +124,11 @@ strip <- strip_themed(background_y = elem_list_rect(fill = colz))
 vert.df <- cbind.data.frame(xint = c(2007, 2008, 2012, 2013, 2019,2020))
 
 
-Fig2Ab <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+Fig2Ab <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=time,  y=provname, fill=reconstructed_annual_period, color=reconstructed_annual_period), show.legend = FALSE) + 
-  scale_fill_gradientn(colors = jet.colors(7), name="Reconstructed\nannual cycles", limits=c(-2,4)) +
-  scale_color_gradientn(colors = jet.colors(7), name="Reconstructed\nannual cycles", limits=c(-2,4)) +
+  scale_fill_gradientn(colors = jet.colors(7), name="Reconstructed\nannual cycles", limits=c(-100,280)) +
+  scale_color_gradientn(colors = jet.colors(7), name="Reconstructed\nannual cycles", limits=c(-100,280)) +
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
                      plot.margin = unit(c(.1,.5,.1,1), "cm"),
                      strip.text = element_text(size=8), legend.position = "bottom",
@@ -141,11 +141,11 @@ Fig2Ab <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand = F
   geom_vline(data=vert.df, aes(xintercept=xint), color="black", size=1) 
 
 
-Fig2Bb <- ggplot(data=dat) + coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+Fig2Bb <- ggplot(data=dat) + coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=time,  y=provname, fill=reconstructed_multi_period, color=reconstructed_multi_period)) + 
-  scale_fill_gradientn(colors = jet.colors(7), name="Reconstructed cycles\n(top: annual; bottom: multi-annual)", limits=c(-2,4)) +
-  scale_color_gradientn(colors = jet.colors(7), name="Reconstructed cycles\n(top: annual; bottom: multi-annual)", limits=c(-2,4)) +
+  scale_fill_gradientn(colors = jet.colors(7), name="Reconstructed cycles\n(top: annual; bottom: multi-annual)",limits=c(-100,280)) +
+  scale_color_gradientn(colors = jet.colors(7), name="Reconstructed cycles\n(top: annual; bottom: multi-annual)",limits=c(-100,280)) +
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
                      plot.margin = unit(c(.1,.5,.1,1), "cm"),
                      strip.text = element_text(size=8),
@@ -170,19 +170,19 @@ head(dist.dat)
 
 
 #and plot
-Fig2Aa <- ggplot(data=dist.dat) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2020.1), ylim=c(-.2,.5), expand = F)+
+Fig2Aa <- ggplot(data=dist.dat) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2021.1), ylim=c(-15,40), expand = F)+
   theme(panel.grid = element_blank(), axis.title.x = element_blank(), 
         axis.title.y = element_text(size=8), axis.text.y = element_text(size=8),
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         plot.margin = unit(c(.3,.5,0,.9), "cm")) +
   geom_ribbon(aes(x=time, ymin=min_annual, ymax=max_annual), alpha=.3) + ylab("biweekly annual\nreconstructed\ncycle distribution") +
   geom_line(aes(x=time, y=median_annual), size=1) +
-  scale_y_continuous(breaks=c(-.1,0,.2,.4)) +
+  #scale_y_continuous(breaks=c(-.1,0,.2,.4)) +
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) +
   geom_hline(aes(yintercept=0), linetype=2)
 
 
-Fig2Ba <- ggplot(data=dist.dat) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+Fig2Ba <- ggplot(data=dist.dat) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   theme(panel.grid = element_blank(), axis.title.x = element_blank(), 
         axis.title.y = element_text(size=8), axis.text.y = element_text(size=8),
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
@@ -222,7 +222,7 @@ strip <- strip_themed(background_y = elem_list_rect(fill = colz))
 #plot as heatmap
 pearsons.avg.year$year_plot=pearsons.avg.year$year + .5
 
-Fig2Cb <- ggplot(data=pearsons.avg.year) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+Fig2Cb <- ggplot(data=pearsons.avg.year) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=year_plot, y=provname, fill=mean_corr, color=mean_corr), show.legend = F) +
   scale_fill_viridis_c( option="inferno", name="Average annual pairwise province Pearson's correlation coefficient", na.value = "black", limits=c(0,1)) +
@@ -246,9 +246,11 @@ dist.dat.D <- ddply(pearsons.df, .(year, year_plot), summarise, median_corr = qu
 head(dist.dat.D)
 dist.dat.D$year <- as.numeric(as.character(dist.dat.D$year))
 dist.dat.D$year_plot <- as.numeric(as.character(dist.dat.D$year_plot))
-
+dist.dat.D <- rbind(dist.dat.D, dist.dat.D[nrow(dist.dat.D),])
+dist.dat.D$year[length(dist.dat.D$year)] <- 2021
+dist.dat.D$year_plot[length(dist.dat.D$year_plot)] <- 2021
 #and plot
-Fig2Ca <- ggplot(data=dist.dat.D) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+Fig2Ca <- ggplot(data=dist.dat.D) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   theme(panel.grid = element_blank(), axis.title.x = element_blank(), 
         axis.title.y = element_text(size=8), axis.text.y = element_text(size=8),
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
@@ -265,6 +267,7 @@ Fig2C <- cowplot::plot_grid(Fig2Ca, Fig2Cb, ncol=1, nrow=2, rel_heights = c(.25,
 # and now pearsons for 5-year moving multi-annual cycles
 pearsons.df.multi <- read.csv(file = paste0(homewd, "/data/pearsons_correlations_provinces_multi.csv"), header = T, stringsAsFactors = F)
 head(pearsons.df.multi)
+tail(pearsons.df.multi)
 
 #then, look at avg synchrony per province per mid_year
 pearsons.avg.year.multi <- ddply(pearsons.df.multi, .(provname, mid_year, year_range), summarise, mean_corr=mean(corr, na.rm=T))
@@ -281,12 +284,13 @@ strip <- strip_themed(background_y = elem_list_rect(fill = colz))
 #plot as heatmap with overlapping years
 pearsons.avg.year.multi$min_year <- as.numeric(sapply(strsplit(pearsons.avg.year.multi$year_range, "-"), '[', 1))
 pearsons.avg.year.multi$max_year <- as.numeric(sapply(strsplit(pearsons.avg.year.multi$year_range, "-"), '[', 2))
+pearsons.avg.year.multi$max_year <- pearsons.avg.year.multi$max_year +1
 #and get the two other years in the series
 pearsons.avg.year.multi$year_2 <- pearsons.avg.year.multi$min_year +1
 pearsons.avg.year.multi$year_4 <- pearsons.avg.year.multi$mid_year +1
 
 
-Fig2Db <- ggplot(data=pearsons.avg.year.multi) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+Fig2Db <- ggplot(data=pearsons.avg.year.multi) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=min_year, y=provname, fill=mean_corr, color=mean_corr), alpha=.5) +
   geom_tile(aes(x=year_2, y=provname, fill=mean_corr, color=mean_corr), alpha=.5) +
@@ -317,6 +321,7 @@ expand.df <- function(df){
   
   df$min_year <- as.numeric(sapply(strsplit(df$year_range, "-"), '[', 1))
   df$max_year <- as.numeric(sapply(strsplit(df$year_range, "-"), '[', 2))
+  df$max_year <- df$max_year +1
   
   year_range = unique(df$min_year):unique(df$max_year)
   
@@ -340,9 +345,12 @@ pearsons.ex <- data.table::rbindlist(lapply(pearsons.df.multi.split, expand.df))
 head(pearsons.ex)
 dist.dat.multi <- ddply(pearsons.ex, .(plot_year), summarise, median_corr = quantile(corr, na.rm=T)["50%"],  min_corr = quantile(corr, na.rm=T)["25%"], max_corr = quantile(corr, na.rm=T)["75%"])
 head(dist.dat.multi)
+tail(dist.dat.multi)
+dist.dat.multi <- rbind(dist.dat.multi, dist.dat.multi[nrow(dist.dat.multi),])
+dist.dat.multi$plot_year[length(dist.dat.multi$plot_year)] <- 2021
 
 #and plot
-Fig2Da <- ggplot(data=dist.dat.multi) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+Fig2Da <- ggplot(data=dist.dat.multi) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   theme(panel.grid = element_blank(), axis.title.x = element_blank(), 
         axis.title.y = element_text(size=8), axis.text.y = element_text(size=8),
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
@@ -378,13 +386,13 @@ ggsave(file = paste0(homewd, "/final-figures/Fig2.png"),
 #and Fig S11 with wavelet power for annual and multiannual cycles 
 #(another way to support the results from above)
 
-FigS11Ab <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+FigS11Ab <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=time,  y=provname, fill=avg_wave_power_annual, color=avg_wave_power_annual)) + 
   scale_fill_viridis_c(trans="sqrt", option="inferno", name="Average power\nannual cycles") +
   scale_color_viridis_c(trans="sqrt", option="inferno", name="Average power\nannual cycles") +
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-                     plot.margin = unit(c(0,.5,.1,.5), "cm"),
+                     plot.margin = unit(c(0,.5,.1,.7), "cm"),
                      strip.text = element_text(size=8), legend.position = "bottom",
                      strip.text.y.left = element_text(angle=0, size=6),
                      panel.spacing = unit(c(0), "cm"),
@@ -393,13 +401,13 @@ FigS11Ab <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand =
                      axis.text = element_text(size=14)) +
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) 
 
-FigS11Bb <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+FigS11Bb <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=time,  y=provname, fill=avg_wave_power_multi, color=avg_wave_power_multi)) + 
-  scale_fill_viridis_c(trans="sqrt", option="inferno", name="Average power\nmulti-annual cycles") +
-  scale_color_viridis_c(trans="sqrt", option="inferno", name="Average power\nmulti-annual cycles") +
+  scale_fill_viridis_c(trans="sqrt", option="inferno", name="Average power\nmulti-annual cycles",  breaks=c(3,6,9,12)) +
+  scale_color_viridis_c(trans="sqrt", option="inferno", name="Average power\nmulti-annual cycles", breaks=c(3,6,9,12)) +
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-                     plot.margin = unit(c(0,.4,.1,.5), "cm"),
+                     plot.margin = unit(c(0,.4,.1,.7), "cm"),
                      strip.text = element_text(size=8), legend.position = "bottom",
                      panel.spacing = unit(c(0), "cm"),
                      strip.text.y.left = element_text(angle=0, size=6),
@@ -414,27 +422,28 @@ FigS11Bb <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand =
 
 dist.power.dat <- ddply(dat, .(time, year, biweek), summarise, median_annual = quantile(avg_wave_power_annual, na.rm=T)["50%"],  min_annual = quantile(avg_wave_power_annual, na.rm=T)["25%"], max_annual = quantile(avg_wave_power_annual, na.rm=T)["75%"], median_multi = quantile(avg_wave_power_multi, na.rm=T)["50%"], min_multi = quantile(avg_wave_power_multi, na.rm=T)["25%"], max_multi = quantile(avg_wave_power_multi, na.rm=T)["75%"])
 head(dist.power.dat)
+tail(dist.power.dat)
 
 
 
 #and plot
-FigS11Aa <- ggplot(data=dist.power.dat) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+FigS11Aa <- ggplot(data=dist.power.dat) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   theme(panel.grid = element_blank(), axis.title.x = element_blank(), 
         axis.title.y = element_text(size=9), axis.text.y = element_text(size=8),
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
-        plot.margin = unit(c(.5,.5,0,.8), "cm")) +
-  geom_ribbon(aes(x=time, ymin=min_annual, ymax=max_annual), alpha=.3) + ylab("biweekly annual\nwavelet power distribution") +
+        plot.margin = unit(c(.5,.6,0,.8), "cm")) +
+  geom_ribbon(aes(x=time, ymin=min_annual, ymax=max_annual), alpha=.3) + ylab("biweekly annual\nwavelet power\ndistribution") +
   geom_line(aes(x=time, y=median_annual), size=1) +
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) +
   geom_hline(aes(yintercept=0), linetype=2)
 
 
-FigS11Ba <- ggplot(data=dist.power.dat) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+FigS11Ba <- ggplot(data=dist.power.dat) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   theme(panel.grid = element_blank(), axis.title.x = element_blank(), 
         axis.title.y = element_text(size=9), axis.text.y = element_text(size=8),
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
-        plot.margin = unit(c(.5,.4,0,.9), "cm")) +
-  geom_ribbon(aes(x=time, ymin=min_multi, ymax=max_multi), alpha=.3) + ylab("biweekly multi-annual\nwavelet power distribution") +
+        plot.margin = unit(c(.5,.5,0,.9), "cm")) +
+  geom_ribbon(aes(x=time, ymin=min_multi, ymax=max_multi), alpha=.3) + ylab("biweekly multi-\nannual wavelet\npower distribution") +
   geom_line(aes(x=time, y=median_multi), size=1) +
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) +
   geom_hline(aes(yintercept=0), linetype=2)
@@ -447,7 +456,7 @@ FigS11B <- cowplot::plot_grid(FigS11Ba, FigS11Bb, ncol=1, nrow=2, rel_heights = 
 
 
 # Now and add in the proportion of other provinces with significant annual cross wavelet power per timestep
-new.dat <-  read.csv(file = paste0(homewd, "/data/annual_multi_coherence_aug15.csv"), header=T, stringsAsFactors = F)
+new.dat <-  read.csv(file = paste0(homewd, "/data/annual_multi_coherence_oct15.csv"), header=T, stringsAsFactors = F)
 head(new.dat)
 
 #first, test that annual is the same as above - this was done with a threshold p.value of 0.01
@@ -461,13 +470,13 @@ new.sum <- ddply(new.dat, .(cycle_type, provname, time), summarise, avgCoherence
 head(new.sum)
 new.sum$proportion_coherent <- new.sum$NposCoherence/new.sum$NtotCoherence
 new.sum$proportion_coherent_power <- new.sum$NPosPower/new.sum$NtotPower
+unique(new.sum$cycle_type)
 
-
-FigS11Cb <- ggplot(data=subset(new.sum, cycle_type=="annual")) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+FigS11Cb <- ggplot(data=subset(new.sum, cycle_type=="annual_cases")) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=time, y=provname, fill=proportion_coherent_power, color=proportion_coherent_power))+ 
-  scale_fill_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent annual cycles", limits=c(0,1)) +
-  scale_color_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent annual cycles", limits=c(0,1)) +
+  scale_fill_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent annual cases", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
+  scale_color_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent annual cases", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
                      plot.margin = unit(c(.1,.5,.1,1), "cm"),
                      strip.text = element_text(size=8), legend.position = "bottom",
@@ -480,13 +489,14 @@ FigS11Cb <- ggplot(data=subset(new.sum, cycle_type=="annual")) +  coord_cartesia
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) 
 
 dist.dat.annual.multi <-  ddply(new.sum, .(cycle_type, time), summarise, median_prop = quantile(proportion_coherent_power)["50%"],  min_prop = quantile(proportion_coherent_power)["25%"], max_prop = quantile(proportion_coherent_power)["75%"])
+unique(dist.dat.annual.multi$cycle_type)
 
-FigS11Ca <- ggplot(data=subset(dist.dat.annual.multi, cycle_type=="annual")) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2020.1), ylim = c(0,1), expand = F)+
+FigS11Ca <- ggplot(data=subset(dist.dat.annual.multi, cycle_type=="annual_cases")) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2021.1), ylim = c(0,1), expand = F)+
   theme(panel.grid = element_blank(), axis.title.x = element_blank(), 
         axis.title.y = element_text(size=8), axis.text.y = element_text(size=8),
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         plot.margin = unit(c(.3,.5,0,.8), "cm")) +
-  geom_ribbon(aes(x=time, ymin=min_prop, ymax=max_prop), alpha=.3) + ylab("biweekly distribution\n(% provinces w/coherent\nannual cycles)") +
+  geom_ribbon(aes(x=time, ymin=min_prop, ymax=max_prop), alpha=.3) + ylab("biweekly distribution\n(% provinces w/coherent\nannual cases)") +
   geom_line(aes(x=time, y=median_prop), size=1) +
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) +
   geom_hline(aes(yintercept=0), linetype=2)
@@ -496,11 +506,11 @@ FigS11C <- cowplot::plot_grid(FigS11Ca, FigS11Cb, ncol=1, nrow=2, rel_heights = 
 
 #and multi
 
-FigS11Db <- ggplot(data=subset(new.sum, cycle_type=="multi")) +  coord_cartesian(xlim=c(2001.9, 2020.1), expand = F)+
+FigS11Db <- ggplot(data=subset(new.sum, cycle_type=="multi_cycles")) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=time, y=provname, fill=proportion_coherent_power, color=proportion_coherent_power))+ 
-  scale_fill_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent multi-annual cycles\n", limits=c(0,1)) +
-  scale_color_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent multi-annual cycles\n", limits=c(0,1)) +
+  scale_fill_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent multi-annual cycles\n", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
+  scale_color_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent multi-annual cycles\n", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
                      plot.margin = unit(c(.1,.5,.1,1), "cm"),
                      strip.text = element_text(size=8), legend.position = "bottom",
@@ -513,12 +523,14 @@ FigS11Db <- ggplot(data=subset(new.sum, cycle_type=="multi")) +  coord_cartesian
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) 
 
 
-FigS11Da <- ggplot(data=subset(dist.dat.annual.multi, cycle_type=="multi")) +theme_bw() + coord_cartesian(xlim=c(2001.9, 2020.1), ylim = c(0,1), expand = F)+
+FigS11Da <- ggplot(data=subset(dist.dat.annual.multi, cycle_type=="multi_cycles")) +theme_bw() + 
+  coord_cartesian(xlim=c(2001.9, 2021.1), ylim = c(0,1), expand = F)+
   theme(panel.grid = element_blank(), axis.title.x = element_blank(), 
         axis.title.y = element_text(size=8), axis.text.y = element_text(size=8),
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         plot.margin = unit(c(.3,.5,0,.8), "cm")) +
-  geom_ribbon(aes(x=time, ymin=min_prop, ymax=max_prop), alpha=.3) + ylab("biweekly distribution\n(% provinces w/coherent\nmulti-annual cycles)") +
+  geom_ribbon(aes(x=time, ymin=min_prop, ymax=max_prop), alpha=.3) + 
+  ylab("biweekly distribution\n(% provinces w/coherent\nmulti-annual cycles)") +
   geom_line(aes(x=time, y=median_prop), size=1) +
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) +
   geom_hline(aes(yintercept=0), linetype=2)
