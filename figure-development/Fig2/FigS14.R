@@ -61,7 +61,7 @@ dat.all$source[dat.all$year>=2002] <- "with-dataset"
 
 #dat.all = subset(dat.all, year>=2002)
 #and plot
-FigS12A <- ggplot(data=dat.all) + 
+FigS14A <- ggplot(data=dat.all) + 
   facet_grid(metric~source, scales = "free", switch = "y") +
   geom_line(aes(x=year, y=value, color=metric), show.legend = F, size=1) + 
   theme_bw() + scale_color_manual(values=c( "darkcyan", "darkorchid3", "navy")) +
@@ -140,7 +140,7 @@ get.national.period <- function(nat.dat, popdat){
   return(nat.dat)
 }
 
-wave.dat <- read.csv(file = paste0(homewd, "/data/synchrony_data_aug12.csv"), header=T, stringsAsFactors = F)
+wave.dat <- read.csv(file = paste0(homewd, "/data/synchrony_case_data_oct15.csv"), header=T, stringsAsFactors = F)
 head(wave.dat)
 
 nat.dat <- ddply(wave.dat, .(time), summarise, cases=sum(cases))
@@ -159,7 +159,7 @@ name.list <- c(name.list[name.list!="Ratanak Kiri" & name.list!="Mondul Kiri" & 
 names(colz) <- name.list
 
 
-FigS12B <- ggplot(wave.dat) + theme_bw() + ylab("mean period duration for multi-annual cycles\nin dengue incidence per 1000 ppl (years)") +
+FigS14B <- ggplot(wave.dat) + theme_bw() + ylab("mean period duration for multi-annual cycles\nin dengue incidence per 1000 ppl (years)") +
   theme(panel.grid = element_blank(), axis.title.x = element_blank(), axis.title.y = element_text(size=16),
         axis.text = element_text(size=14), legend.title = element_blank(),
         plot.margin = unit(c(.2,.2,.2,.2), "cm")) +
@@ -168,17 +168,17 @@ FigS12B <- ggplot(wave.dat) + theme_bw() + ylab("mean period duration for multi-
   geom_line(data=nat.dat, aes(x=time, y= multi_period_mean), linewidth=1.5) +
   guides(color=guide_legend(ncol=1))
 
-FigS12B
+FigS14B
 
 
-FigS12 <- cowplot::plot_grid(FigS12A, FigS12B, ncol=2, nrow = 1, labels = c("A", "B"), label_size = 22, rel_widths = c(1,1.1))
+FigS14 <- cowplot::plot_grid(FigS14A, FigS14B, ncol=2, nrow = 1, labels = c("A", "B"), label_size = 22, rel_widths = c(1,1.1))
 
 
 
-ggsave(file = paste0(homewd, "/final-figures/FigS12.png"),
-       plot= FigS12,
+ggsave(file = paste0(homewd, "/final-figures/FigS14.png"),
+       plot= FigS14,
        units="mm",  
-       width=110, 
+       width=120, 
        height=55, 
        scale=3, 
        dpi=300)

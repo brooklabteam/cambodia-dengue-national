@@ -338,7 +338,7 @@ expand.df <- function(df){
   df.5$plot_year <- year_range[5]
   
   df.out <- rbind(df.1, df.2, df.3, df.4, df.5)
-return(df.out)  
+  return(df.out)  
 }
 
 pearsons.ex <- data.table::rbindlist(lapply(pearsons.df.multi.split, expand.df))
@@ -496,7 +496,7 @@ FigS11Ca <- ggplot(data=subset(dist.dat.annual.multi, cycle_type=="annual_cases"
         axis.title.y = element_text(size=8), axis.text.y = element_text(size=8),
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         plot.margin = unit(c(.3,.5,0,.8), "cm")) +
-  geom_ribbon(aes(x=time, ymin=min_prop, ymax=max_prop), alpha=.3) + ylab("biweekly distribution\n(% provinces w/coherent\nannual cases)") +
+  geom_ribbon(aes(x=time, ymin=min_prop, ymax=max_prop), alpha=.3) + ylab("biweekly distribution\n% provinces w/coherent\n annual cases") +
   geom_line(aes(x=time, y=median_prop), size=1) +
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) +
   geom_hline(aes(yintercept=0), linetype=2)
@@ -530,7 +530,7 @@ FigS11Da <- ggplot(data=subset(dist.dat.annual.multi, cycle_type=="multi_cycles"
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         plot.margin = unit(c(.3,.5,0,.8), "cm")) +
   geom_ribbon(aes(x=time, ymin=min_prop, ymax=max_prop), alpha=.3) + 
-  ylab("biweekly distribution\n(% provinces w/coherent\nmulti-annual cycles)") +
+  ylab("biweekly distribution\n% provinces w/coherent\n multi-annual cycles") +
   geom_line(aes(x=time, y=median_prop), size=1) +
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) +
   geom_hline(aes(yintercept=0), linetype=2)

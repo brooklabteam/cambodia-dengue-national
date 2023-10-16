@@ -140,6 +140,18 @@ gam1 <- gam(corr ~ dist_m:provname +
 summary(gam1) 
 
 
+gam1b <- gam(corr ~ 
+              s(dist_m, bs="tp")+
+              s(log10_temp_C, bs="tp") +
+              s(log10_pop, bs="tp") +
+              s(log10_precip, bs="tp") +
+              s(year, bs="re") +
+              s(provname, bs="re"), #different y-intercept for each province
+            data = pearsons.df)
+
+summary(gam1b) 
+
+
 #strong negative correlation with increasing distance and correlation, sig for most provinces
 source(paste0(homewd, "/figure-development/Fig1/mollentze-streicker-2020-functions.R"))
 
@@ -180,7 +192,7 @@ year.df$IsSig[year.df$IsSignificant=="Yes" & year.df$y>0] <- "Neg"
 colz = c('Pos' = "red", 'Neg'="blue", 'NotSig' = "gray50" )
 
 fixed.df = subset(fixed.df, provname!="intercept")
-FigS14A <- ggplot(data=fixed.df) + theme_bw() + coord_flip() +
+FigS12A <- ggplot(data=fixed.df) + theme_bw() + coord_flip() +
            theme(panel.grid = element_blank(), axis.title.y = element_blank()) +
            ylab(bquote(atop("fixed effect of province and geographic distance", "interaction on pairwise correlation coefficient,"~rho)))+
            geom_hline(aes(yintercept=0))+ 
@@ -197,7 +209,7 @@ FigS14A <- ggplot(data=fixed.df) + theme_bw() + coord_flip() +
 #            scale_color_manual(values=colz) 
 
 
-FigS14B <- ggplot(data=year.df) + theme_bw() + 
+FigS12B <- ggplot(data=year.df) + theme_bw() + 
   theme(panel.grid = element_blank(), axis.title.x = element_blank(), axis.text.x = element_text(angle=300, vjust = 0)) +
   ylab(bquote(atop("partial effect of year on", "pairwise correlation coefficient,"~rho)))+
   geom_hline(aes(yintercept=0))+ 
@@ -206,7 +218,7 @@ FigS14B <- ggplot(data=year.df) + theme_bw() +
   scale_color_manual(values=colz) 
 
 
-FigS14C <- ggplot(data=temp.df) + theme_bw() + scale_x_log10() +
+FigS12C <- ggplot(data=temp.df) + theme_bw() + scale_x_log10() +
           theme(panel.grid = element_blank()) +
           ylab(bquote(atop("partial effect of temperature on", "pairwise correlation coefficient,"~rho)))+
           xlab(bquote("mean biweekly temperature ("^0~"C)"))+
@@ -215,7 +227,7 @@ FigS14C <- ggplot(data=temp.df) + theme_bw() + scale_x_log10() +
           geom_ribbon(aes(x=temp_C, ymin=ylower, ymax=yupper, fill=IsSig),alpha=.3,  show.legend = F) +
           scale_color_manual(values=colz) +scale_fill_manual(values=colz) 
 
-FigS14D <- ggplot(data=precip.df) + theme_bw() + scale_x_log10() +
+FigS12D <- ggplot(data=precip.df) + theme_bw() + scale_x_log10() +
   theme(panel.grid = element_blank()) +
   ylab(bquote(atop("partial effect of precipitation on", "pairwise correlation coefficient,"~rho)))+
   xlab("sum biweekly precipitation (mm)")+
@@ -226,7 +238,7 @@ FigS14D <- ggplot(data=precip.df) + theme_bw() + scale_x_log10() +
 
     
 
-FigS14E <- ggplot(data=pop.df) + theme_bw() + scale_x_log10() +
+FigS12E <- ggplot(data=pop.df) + theme_bw() + scale_x_log10() +
            theme(panel.grid = element_blank()) +
            ylab(bquote(atop("partial effect of province population on", "pairwise correlation coefficient,"~rho)))+
            xlab("mean population size")+
@@ -236,12 +248,12 @@ FigS14E <- ggplot(data=pop.df) + theme_bw() + scale_x_log10() +
            scale_color_manual(values=colz) +scale_fill_manual(values=colz)       
  
 
-FigS14BCDE  <- cowplot::plot_grid(FigS14B, FigS14C, FigS14D, FigS14E, ncol=2, nrow = 2, align = "hv", labels = c("B", "C", "D", "E"), label_size = 22)
+FigS12BCDE  <- cowplot::plot_grid(FigS12B, FigS12C, FigS12D, FigS12E, ncol=2, nrow = 2, align = "hv", labels = c("B", "C", "D", "E"), label_size = 22)
 
-FigS14 <- cowplot::plot_grid(FigS14A, FigS14BCDE, ncol=2, nrow=1, labels = c("A", ""), rel_widths = c(1.05,2), label_size = 22, label_x = -.02)
+FigS12 <- cowplot::plot_grid(FigS12A, FigS12BCDE, ncol=2, nrow=1, labels = c("A", ""), rel_widths = c(1.05,2), label_size = 22, label_x = -.02)
 
-ggsave(file = paste0(homewd, "/final-figures/FigS14.png"),
-       plot= FigS14,
+ggsave(file = paste0(homewd, "/final-figures/FigS12.png"),
+       plot= FigS12,
        units="mm",  
        width=110, 
        height=70, 
