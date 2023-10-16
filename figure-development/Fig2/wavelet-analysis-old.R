@@ -16,8 +16,7 @@ climdat <- read.csv(file = paste0(homewd, "/data/wavelet_input_dat_prov.csv"), h
 
 head(climdat) 
 
-#incidence per 100,000 pop
-climdat$cases_per_100000 <- (climdat$cases/climdat$pop)*100000
+climdat$cases_per_1000 <- (climdat$cases/climdat$pop)*1000
 
 climdat <- arrange(climdat, provname, time)
 
@@ -34,18 +33,11 @@ oni.dat = subset(oni.dat, year!=2023)
 #(b) and multi-annual
 #(c) the average wavelet power per timestep, for annual
 #(d) and multi-annual
-#(e) the average wavelet coherency and cross wavelet power with temperature for that province (case incidence)
-#(f) the average wavelet coherency and cross wavelet power with temperature for that province (annual cycles)
-#(g) the average wavelet coherency and cross wavelet power with temperature for that province (multiannual cycles)
-#(h) the average wavelet coherency and cross wavelet power with precipitation for that province (case incidence)
-#(i) the average wavelet coherency and cross wavelet power with precipitation for that province (annual cycles)
-#(j) the average wavelet coherency and cross wavelet power with precipitation for that province (multiannual cycles)
-
-
-
-# separately
 #(e) the average wavelet coherency with ONI
+#(f) the average wavelet coherency with temperature for that province
+#(g) the average wavelet cohernecy with precipitation for that province
 #(h) the proportion of other provinces with which it shares a statistically significant coherency
+
 prov.split <- dlply(climdat, .(provname))
 
 prov.rank.multi <- function(df2, df1, pval.cut){
@@ -243,44 +235,44 @@ get.wavelet.dat <- function(dat, dat.all){
   
   #(a) annual
   anal.dat.annual <-  analyze.wavelet(dat,
-                                      my.series = ncol(dat), #cases per 100000
-                                      loess.span = 1, #detrending (e.g. smoothing) over annual timestep
-                                      dt = 1/26,#this allows for annual timestep if biweekly timeseries
-                                      dj = 1/100, #default =1/20. image gets clearer as number on the bottom gets bigger
-                                      lowerPeriod = 1/26,#shortest possible period (one biweek)
-                                      upperPeriod = 2, #largest possible period ( here, 2 years)
-                                      make.pval = TRUE, n.sim = 100)
+                                     my.series = ncol(dat), #cases per 1000
+                                     #loess.span = 0,
+                                     dt = 1/26,#this allows for annual timestep if biweekly timeseries
+                                     dj = 1/100, #default =1/20. image gets clearer as number on the bottom gets bigger
+                                     lowerPeriod = 1/26,#shortest possible period (one biweek)
+                                     upperPeriod = 2, #largest possible period ( here, 2 years)
+                                     make.pval = TRUE, n.sim = 100)
   
-  
-  #   wt.image(anal.dat.annual, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
-  #            periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019))
-  # # # #
+   
+  # wt.image(anal.dat.annual, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
+  #          periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019))
+  # #
   
   
   anal.dat = reconstruct(anal.dat.annual, only.sig = T)
   
   
-  dat$reconstructed_annual_period <- anal.dat$series$cases_per_100000.r
+  dat$reconstructed_annual_period <- anal.dat$series$cases_per_1000.r
   
   # (b) multi
   anal.dat.multi <-  analyze.wavelet(dat,
-                                     my.series = "cases_per_100000", #cases per 1000
-                                     loess.span = 1,
-                                     dt = 1/26,#this allows for annual timestep
-                                     dj = 1/100, #default =1/20. image gets clearer as number on the bottom gets bigger
-                                     lowerPeriod = 2,#shortest possible period (2 years)
-                                     upperPeriod = 7, #largest possible period (in weeks; here, 20 years)
-                                     make.pval = TRUE, n.sim = 100)
+                                    my.series = "cases_per_1000", #cases per 1000
+                                    #loess.span = 0,
+                                    dt = 1/26,#this allows for annual timestep
+                                    dj = 1/100, #default =1/20. image gets clearer as number on the bottom gets bigger
+                                    lowerPeriod = 2,#shortest possible period (2 years)
+                                    upperPeriod = 20, #largest possible period (in weeks; here, 20 years)
+                                    make.pval = TRUE, n.sim = 100)
   
-  #  wt.image(anal.dat.multi, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
-  #           periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019))
-  # # 
+  # wt.image(anal.dat.multi, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
+  #          periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019))
+  # 
   # 
   multi.dat = reconstruct(anal.dat.multi, only.sig = T)
   
   
   #reconstruct(anal.dat.multi, only.ridge = T)
-  dat$reconstructed_multi_period <- multi.dat$series$cases_per_100000.r
+  dat$reconstructed_multi_period <- multi.dat$series$cases_per_1000.r
   
   #and, as bonus, get the average length of the statistically significant multi-annual dengue cycles
   #col.split = as.list(as.data.frame(anal.dat.multi$Power))
@@ -337,7 +329,7 @@ get.wavelet.dat <- function(dat, dat.all){
   
   dat$avg_wave_power_annual <- (colMeans(avg.mat, na.rm = T))
   #ggplot(dat) + geom_line(aes(x=time, y=avg_wave_power_annual)) + geom_vline(aes(xintercept=2007), color="red") + geom_vline(aes(xintercept=2012, color="red")) + geom_vline(aes(xintercept=2019, color="red"))
-  
+
   #(d) average stat sig wavelet power for multiannual
   power.mat <- anal.dat.multi$Power
   pval.mat <- anal.dat.multi$Power.pval
@@ -349,18 +341,86 @@ get.wavelet.dat <- function(dat, dat.all){
   dat$avg_wave_power_multi <- (colMeans(avg.mat, na.rm = T))
   #ggplot(dat) + geom_line(aes(x=time, y=avg_wave_power_multi)) + geom_vline(aes(xintercept=2007), color="red") + geom_vline(aes(xintercept=2012, color="red")) + geom_vline(aes(xintercept=2019, color="red"))
   
+  # #(e) average wavelet coherency with ONI (multi only and must be at the monthly scale)
+  # biwk.month.dat <- cbind.data.frame(biweek=1:26, month=c(1,rep(1:12, each=2),12)) 
+  # dat <- merge(dat, biwk.month.dat, by="biweek")
+  # dat <- arrange(dat, time)
+  # case.sum <- ddply(dat, .(provname, year, month), summarise, time = min(time), cases_per_1000 = sum(cases_per_1000))
+  # 
+  # 
+  # #add oni
+  # 
+  # oni.merge <- dplyr::select(oni.dat, year, oni_anomaly, month)
+  # case.sum <- merge(case.sum, oni.merge, by=c("year", "month"))
+  # 
+  # #and look for the cross correlation
+  # case.sum <- arrange(case.sum, provname, time)
+  # 
+  # corr.oni <- analyze.coherency(case.sum, my.pair = c("oni_anomaly","cases_per_1000"),
+  #                                loess.span = 0,
+  #                                dt = 1/26, dj = 1/100,
+  #                                window.type.t = 1, window.type.s = 1,
+  #                                window.size.t = 12, #examine coherence year-by-year
+  #                                window.size.s = (1/4), #periods on the order of 
+  #                                lowerPeriod = 2, #shortest possible period in years
+  #                                upperPeriod = 10, #largest possible period (in weeks; here, 10 years)
+  #                                make.pval = TRUE, n.sim = 100)
+  # # 
+  # #   wc.image(corr.oni, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
+  # #            periodlab= "period (in years)", spec.time.axis = list(at = seq(1,12*18, 12), labels = 2002:2019))
+  # # # # 
+  # # # 
+  # #   wc.image(corr.oni,which.image = "wc",  
+  # #           color.key = "interval", n.levels = 250,
+  # #            siglvl.contour = 0.1, siglvl.arrow = 0.05,
+  # #            legend.params = list(lab = "wavelet coherence levels"),
+  # #            spec.period.axis = list(at = c(2:10), labels = c(2:10)),
+  # #            periodlab= "period (in years)", spec.time.axis = list(at = seq(1,12*18, 12), labels = 2002:2019))
+  # # # # 
+  # # 
+  # #monthly average significant coherence
+  # #remove those not significant
+  # coherence.mat <- corr.oni$Coherence
+  # pval.mat <- corr.oni$Coherence.pval
+  # pval.mat <- pval.mat<0.05
+  # 
+  # out.mat <- coherence.mat*pval.mat
+  # out.mat[out.mat==0] <- NA
+  # #plot(colMeans(out.mat))
+  # #wc.avg(corr.oni)
+  # 
+  # 
+  # 
+  # case.sum$avg_wave_coherence_oni <- (colMeans(out.mat,na.rm = T))
+  # #ggplot(case.sum) + geom_line(aes(x=time, y=avg_wave_coherence_oni)) + geom_vline(aes(xintercept=2007), color="red") + geom_vline(aes(xintercept=2012, color="red")) + geom_vline(aes(xintercept=2019, color="red"))
+  # 
+  # #with(dat, plot(month_date, avg_cross_power, type="b"))
+  # 
+  # power.table <- corr.oni$Power.xy
+  # power.table.pval <- corr.oni$Power.xy.pval
+  # power.table.pval <- power.table.pval<0.05
+  # 
+  # power.mat <- power.table*power.table.pval
+  # power.mat[power.mat==0] <- NA
+  # 
+  # 
+  # case.sum$avg_cross_power_oni <-  (colMeans(power.mat, na.rm = T))
+  # 
   
-  #(e) the average wavelet coherency with temperature for that province - annual only - this is within a single year
+  #ggplot(case.sum) + geom_line(aes(x=time, y=avg_cross_power_oni)) + geom_vline(aes(xintercept=2007), color="red") + geom_vline(aes(xintercept=2012, color="red")) + geom_vline(aes(xintercept=2019, color="red"))
+  #and also take the average power level across the time series
   
-  corr.temp <- analyze.coherency(dat, my.pair = c("temp_C","cases_per_100000"),
-                                 loess.span = 1,
-                                 dt = 1/26, dj = 1/100,
-                                 window.type.t = 1, window.type.s = 1,
-                                 window.size.t = 26, #examine coherence year-by-year
-                                 window.size.s = (1/4), #periods on the order of 
-                                 lowerPeriod = 1/26, #shortest possible period in years (1 biweek)
-                                 upperPeriod = 2, #largest possible period (2 years)
-                                 make.pval = TRUE, n.sim = 100)
+  #(f) the average wavelet coherency with temperature for that province - annual only - this is within a single year
+  
+  corr.temp <- analyze.coherency(dat, my.pair = c("temp_C","cases_per_1000"),
+                                loess.span = 0,
+                                dt = 1/26, dj = 1/100,
+                                window.type.t = 1, window.type.s = 1,
+                                window.size.t = 26, #examine coherence year-by-year
+                                window.size.s = (1/4), #periods on the order of 
+                                lowerPeriod = 1/26, #shortest possible period in years (1 biweek)
+                                upperPeriod = 2, #largest possible period (2 years)
+                                make.pval = TRUE, n.sim = 100)
   
   #      wc.image(corr.temp, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
   #               periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019), which.arrow.sig = "wt", color.key = "interval")
@@ -376,12 +436,12 @@ get.wavelet.dat <- function(dat, dat.all){
   #           periodlab= "period (in years)", spec.time.axis =  list(at = seq(1,26*18, 26), labels = 2002:2019))
   # # 
   #  # 
-  # wc.phasediff.image(corr.temp, which.contour = "wc", use.sAngle = TRUE,
-  #                    n.levels = 250, siglvl = 0.1,legend.params = list(lab = "phase difference levels",
-  #                                         lab.line = 3),spec.time.axis =  list(at = seq(1,26*18, 26), labels = 2002:2019))
-  #                    
-  # white regions encircle phase differences significant by wavelet coherence
-  
+   # wc.phasediff.image(corr.temp, which.contour = "wc", use.sAngle = TRUE,
+   #                    n.levels = 250, siglvl = 0.1,legend.params = list(lab = "phase difference levels",
+   #                                         lab.line = 3),spec.time.axis =  list(at = seq(1,26*18, 26), labels = 2002:2019))
+   #                    
+   # white regions encircle phase differences significant by wavelet coherence
+   
   #monthly average significant coherence
   #remove those not significant
   coherence.mat <- corr.temp$Coherence
@@ -411,110 +471,23 @@ get.wavelet.dat <- function(dat, dat.all){
   # 
   # 
   dat$avg_cross_power_temp <-  colMeans(power.mat, na.rm = T)
-  
-  
-  #(f) average coherency and cross wavelet power - temp with reconstructed annual
-  
-  corr.temp.rec <- analyze.coherency(dat, my.pair = c("temp_C","reconstructed_annual_period"),
-                                     loess.span = 1,
-                                     dt = 1/26, dj = 1/100,
-                                     window.type.t = 1, window.type.s = 1,
-                                     window.size.t = 26, #examine coherence year-by-year
-                                     window.size.s = (1/4), #periods on the order of 
-                                     lowerPeriod = 1/26, #shortest possible period in years (1 biweek)
-                                     upperPeriod = 2, #largest possible period (2 years)
-                                     make.pval = TRUE, n.sim = 100)
-  
-  
-  coherence.mat <- corr.temp.rec$Coherence
-  pval.mat <- corr.temp.rec$Coherence.pval
-  pval.mat <- pval.mat<0.05
-  
-  
-  
-  #ggplot(power.df.melt) + geom_tile(aes(x=time, y=period, fill=value))
-  
-  out.mat <- coherence.mat*pval.mat
-  out.mat[out.mat==0] <- NA
-  #plot(colMeans(out.mat))
-  #wc.avg(corr.temp)
-  
-  #mean coherence per timestep for statistically significant coherence
-  dat$avg_wave_coherency_temp_annual_recons <- colMeans(out.mat, na.rm = T)
-  
-  # #with(dat, plot(time, avg_wave_coherency_temp_annual_recons, type="b"))
-  # 
-  power.table <- corr.temp.rec$Power.xy
-  power.table.pval <- corr.temp.rec$Power.xy.pval
-  power.table.pval <- power.table.pval<0.05
-  # 
-  power.mat <- power.table*power.table.pval
-  power.mat[power.mat==0] <- NA
-  # 
-  # 
-  dat$avg_cross_power_temp_annual_recons <-  colMeans(power.mat, na.rm = T)
-  
-  # #with(dat, plot(time, avg_cross_power_temp_annual_recons , type="b"))
-  
-  #(g) average coherency and cross wavelet power - temp with reconstructed multi
-  corr.temp.rec.multi <- analyze.coherency(dat, my.pair = c("temp_C","reconstructed_multi_period"),
-                                           loess.span = 1,
-                                           dt = 1/26, dj = 1/100,
-                                           window.type.t = 1, window.type.s = 1,
-                                           window.size.t = 26, #examine coherence year-by-year
-                                           window.size.s = (1/4), #periods on the order of 
-                                           lowerPeriod = 2, #shortest possible period in years (1 biweek)
-                                           upperPeriod = 7, #largest possible period (2 years)
-                                           make.pval = TRUE, n.sim = 100)
-  
-  coherence.mat <- corr.temp.rec.multi$Coherence
-  pval.mat <- corr.temp.rec.multi$Coherence.pval
-  pval.mat <- pval.mat<0.05
-  
-  
-  
-  #ggplot(power.df.melt) + geom_tile(aes(x=time, y=period, fill=value))
-  
-  out.mat <- coherence.mat*pval.mat
-  out.mat[out.mat==0] <- NA
-  #plot(colMeans(out.mat))
-  #wc.avg(corr.temp)
-  
-  #mean coherence per timestep for statistically significant coherence
-  dat$avg_wave_coherency_temp_multi_recons <- colMeans(out.mat, na.rm = T)
-  
-  # #with(dat, plot(time, avg_wave_coherency_temp_annual_recons, type="b"))
-  # 
-  power.table <- corr.temp.rec.multi$Power.xy
-  power.table.pval <- corr.temp.rec.multi$Power.xy.pval
-  power.table.pval <- power.table.pval<0.05
-  # 
-  power.mat <- power.table*power.table.pval
-  power.mat[power.mat==0] <- NA
-  # 
-  # 
-  dat$avg_cross_power_temp_multi_recons <-  colMeans(power.mat, na.rm = T)
-  
-  
-  
-  
   # 
   #ggplot(dat) + geom_line(aes(x=time, y=avg_wave_coherency_temp)) 
   #ggplot(dat) + geom_line(aes(x=time, y=avg_cross_power_temp)) 
   
   
-  #(h) the average wavelet coherency with precip for that province
+  #(g) the average wavelet coherency with precip for that province
   
   
-  corr.precip <- analyze.coherency(dat, my.pair = c("precip_mm","cases_per_100000"),
-                                   loess.span = 1,
-                                   dt = 1/26, dj = 1/100,
-                                   window.type.t = 1, window.type.s = 1,
-                                   window.size.t = 26, #examine coherence year-by-year
-                                   window.size.s = (1/4), #periods on the order of 
-                                   lowerPeriod = 1/26, #shortest possible period in years
-                                   upperPeriod = 2, #largest possible period (in weeks; here, 20 years)
-                                   make.pval = TRUE, n.sim = 100)
+  corr.precip <- analyze.coherency(dat, my.pair = c("precip_mm","cases_per_1000"),
+                                 loess.span = 0,
+                                 dt = 1/26, dj = 1/100,
+                                 window.type.t = 1, window.type.s = 1,
+                                 window.size.t = 26, #examine coherence year-by-year
+                                 window.size.s = (1/4), #periods on the order of 
+                                 lowerPeriod = 1/26, #shortest possible period in years
+                                 upperPeriod = 2, #largest possible period (in weeks; here, 20 years)
+                                 make.pval = TRUE, n.sim = 100)
   
   #  wc.image(corr.precip, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
   #                      periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019))
@@ -554,123 +527,54 @@ get.wavelet.dat <- function(dat, dat.all){
   
   dat$avg_cross_power_precip <-  colMeans(power.mat, na.rm = T)
   
+  #ggplot(dat) + geom_line(aes(x=time, y=avg_wave_coherency_precip))
+  #ggplot(dat) + geom_line(aes(x=time, y=avg_cross_power_precip)) 
   
   
-  #and look at correlation with the reconstruction as well
+  #(h) the proportion of other provinces with which it shares a statistically significant coherency
   
-  #(i) average coherency and cross wavelet power - precip with reconstructed annual
-  corr.precip.rec <- analyze.coherency(dat, my.pair = c("precip_mm","reconstructed_annual_period"),
-                                       loess.span = 1,
-                                       dt = 1/26, dj = 1/100,
-                                       window.type.t = 1, window.type.s = 1,
-                                       window.size.t = 26, #examine coherence year-by-year
-                                       window.size.s = (1/4), #periods on the order of 
-                                       lowerPeriod = 1/26, #shortest possible period in years (1 biweek)
-                                       upperPeriod = 2, #largest possible period (2 years)
-                                       make.pval = TRUE, n.sim = 100)
+  #split all the others and try annual coherence
+  df.split <- dlply(dat.all, .(provname))
   
   
-  coherence.mat <- corr.precip.rec$Coherence
-  pval.mat <- corr.precip.rec$Coherence.pval
-  pval.mat <- pval.mat<0.05
+  dat.prov.coherence.annual <- lapply(X=df.split, FUN=prov.rank.annual, df1=dat)
+  dat.prov.coherence.annual <- data.table::rbindlist(dat.prov.coherence.annual)
+  #head(dat.prov.coherence.annual)
   
+  dat.prov.coherence.annual$sig_notsig <- 0
+  dat.prov.coherence.annual$sig_notsig[!is.na(dat.prov.coherence.annual$cross_wave_power_annual)] <- 1
   
+  prov.coher.sum.annual <- ddply(dat.prov.coherence.annual, .(time), summarise, num_coherence=sum(sig_notsig, na.rm = T), N_tot=length(sig_notsig))
+  prov.coher.sum.annual$proportion_coherence_annual <- prov.coher.sum.annual$num_coherence/prov.coher.sum.annual$N_tot
   
-  #ggplot(power.df.melt) + geom_tile(aes(x=time, y=period, fill=value))
+  #now attach to the rest of the dataset
   
-  out.mat <- coherence.mat*pval.mat
-  out.mat[out.mat==0] <- NA
-  #plot(colMeans(out.mat))
-  #wc.avg(corr.temp)
+  prov.add.annual <- dplyr::select(prov.coher.sum.annual, time, proportion_coherence_annual)
   
-  #mean coherence per timestep for statistically significant coherence
-  dat$avg_wave_coherency_precip_annual_recons <- colMeans(out.mat, na.rm = T)
+  dat <- merge(dat, prov.add.annual, by ="time", all.x = T)
+  dat <- arrange(dat, time)
+  #and multi - skip
+  #dat.prov.coherence.multi <- lapply(X=df.split, FUN=prov.rank.multi, df1=dat)
+  #dat.prov.coherence.multi <- data.table::rbindlist(dat.prov.coherence.multi)
+  #head(dat.prov.coherence.multi)
   
-  # #with(dat, plot(time, avg_wave_coherency_temp_annual_recons, type="b"))
+  # dat.prov.coherence.multi$sig_notsig <- 0
+  # dat.prov.coherence.multi$sig_notsig[dat.prov.coherence.multi$coherence_multi>0] <- 1
+  # dat.prov.coherence.multi$sig_notsig[is.na(dat.prov.coherence.multi$coherence_multi)] <- NA
+  # prov.coher.sum.multi <- ddply(dat.prov.coherence.multi, .(month_date), summarise, num_coherence=sum(sig_notsig, na.rm = T), N_tot=length(unique(coherence_prov)))
+  # prov.coher.sum.multi$proportion_coherence_multi <- prov.coher.sum.multi$num_coherence/prov.coher.sum.multi$N_tot
   # 
-  power.table <- corr.precip.rec$Power.xy
-  power.table.pval <- corr.precip.rec$Power.xy.pval
-  power.table.pval <- power.table.pval<0.05
+  # #now attach to the rest of the dataset
   # 
-  power.mat <- power.table*power.table.pval
-  power.mat[power.mat==0] <- NA
+  # prov.add.multi <- dplyr::select(prov.coher.sum.multi, month_date, proportion_coherence_multi)
   # 
+  # dat <- merge(dat, prov.add.multi, by ="month_date", all.x = T)
   # 
-  dat$avg_cross_power_precip_annual_recons <-  colMeans(power.mat, na.rm = T)
-  
-  # #with(dat, plot(time, avg_cross_power_temp_annual_recons , type="b"))
-  
-  #(j) average coherency and cross wavelet power - precip with reconstructed multi
-  corr.precip.rec.multi <- analyze.coherency(dat, my.pair = c("precip_mm","reconstructed_multi_period"),
-                                             loess.span = 1,
-                                             dt = 1/26, dj = 1/100,
-                                             window.type.t = 1, window.type.s = 1,
-                                             window.size.t = 26, #examine coherence year-by-year
-                                             window.size.s = (1/4), #periods on the order of 
-                                             lowerPeriod = 2, #shortest possible period in years (1 biweek)
-                                             upperPeriod = 7, #largest possible period (2 years)
-                                             make.pval = TRUE, n.sim = 100)
-  
-  coherence.mat <- corr.precip.rec.multi$Coherence
-  pval.mat <- corr.precip.rec.multi$Coherence.pval
-  pval.mat <- pval.mat<0.05
-  
-  
-  
-  #ggplot(power.df.melt) + geom_tile(aes(x=time, y=period, fill=value))
-  
-  out.mat <- coherence.mat*pval.mat
-  out.mat[out.mat==0] <- NA
-  #plot(colMeans(out.mat))
-  #wc.avg(corr.temp)
-  
-  #mean coherence per timestep for statistically significant coherence
-  dat$avg_wave_coherency_precip_multi_recons <- colMeans(out.mat, na.rm = T)
-  
-  # #with(dat, plot(time, avg_wave_coherency_temp_annual_recons, type="b"))
-  # 
-  power.table <- corr.precip.rec.multi$Power.xy
-  power.table.pval <- corr.precip.rec.multi$Power.xy.pval
-  power.table.pval <- power.table.pval<0.05
-  # 
-  power.mat <- power.table*power.table.pval
-  power.mat[power.mat==0] <- NA
-  # 
-  # 
-  dat$avg_cross_power_precip_multi_recons <-  colMeans(power.mat, na.rm = T)
-  
-  # #with(dat, plot(time, avg_cross_power_temp_multi_recons , type="b"))
-  
-  #        wc.image(corr.temp.rec, n.levels = 250, legend.params = list(lab = "cross-wavelet power levels"), spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
-  #                 periodlab= "period (in years)", spec.time.axis = list(at = seq(1,26*18, 26), labels = 2002:2019), which.arrow.sig = "wt", color.key = "interval")
-  # # # #     #epidemic years pop out big time!!!!
-  # # # # # # # when arrows point to the right it suggests that x leads y (so temp precedes cases)
-  # # # 
-  # # 
-  #   wc.image(corr.temp,which.image = "wc",  
-  #            color.key = "interval", n.levels = 250,
-  #            siglvl.contour = 0.1, siglvl.arrow = 0.05,
-  #          legend.params = list(lab = "wavelet coherence levels"), which.arrow.sig = "wt",
-  #            spec.period.axis = list(at = c(2:10,12,14,16), labels = c(2:10,12,14,16)),
-  #            periodlab= "period (in years)", spec.time.axis =  list(at = seq(1,26*18, 26), labels = 2002:2019))
-  # # # 
-  # #  # 
-  # wc.phasediff.image(corr.temp, which.contour = "wc", use.sAngle = TRUE,
-  #                    n.levels = 250, siglvl = 0.1,legend.params = list(lab = "phase difference levels",
-  #                                         lab.line = 3),spec.time.axis =  list(at = seq(1,26*18, 26), labels = 2002:2019))
-  #                    
-  # white regions encircle phase differences significant by wavelet coherence
-  
-  
-  
-  
-  
   # 
   
   #ggplot(dat) + geom_line(aes(x=month_date, y=proportion_coherence_multi)) + geom_vline(aes(xintercept=as.Date("2007-01-01")), color="red") + geom_vline(aes(xintercept=as.Date("2012-01-01")), color="red") + geom_vline(aes(xintercept=as.Date("2019-01-01")), color="red")
   
   #head(dat)
-  dat <- arrange(dat, time)
   
   return(dat)
   
@@ -684,7 +588,7 @@ get.wavelet.oni <- function(dat, dat.all, oni.df, pval.cut.coherence, pval.cut.p
   biwk.month.dat <- cbind.data.frame(biweek=1:26, month=c(1,rep(1:12, each=2),12)) 
   dat <- merge(dat, biwk.month.dat, by="biweek")
   dat <- arrange(dat, time)
-  case.sum <- ddply(dat, .(provname, year, month), summarise, time = min(time), cases_per_100000 = sum(cases_per_1000))
+  case.sum <- ddply(dat, .(provname, year, month), summarise, time = min(time), cases_per_1000 = sum(cases_per_1000))
   
   
   #add oni
@@ -754,18 +658,13 @@ get.wavelet.oni <- function(dat, dat.all, oni.df, pval.cut.coherence, pval.cut.p
   
 }
 
-# run this to get the first set of metrics (a-j) above
+
 prov.split.out <- lapply(prov.split, get.wavelet.dat, dat.all=climdat)
 #prov.split.out <- lapply(prov.split, get.wavelet.dat.sub, dat.all=climdat)
 #prov.split.out <- lapply(prov.split, get.wavelet.sub2, dat.all=climdat)
 prov.split.df <- data.table::rbindlist(prov.split.out)
 head(prov.split.df)
 names(prov.split.df)
-
-
-#then, run again to get province coherency and ONI
-#can't look at raw cases for coherency in multi annual timesteps (only reconstructions)
-
 
 # prov.split.df <- dplyr::select(prov.split.df, provname, month_date, avg_wave_coherency_temp_annual, avg_cross_power_temp_annual, avg_wave_coherency_precip_annual, avg_cross_power_precip_annual)
 # prov.split.df$month_date <- as.Date(prov.split.df$month_date) 
@@ -779,7 +678,7 @@ names(prov.split.df)
 # head(dat)
 # 
 # write.csv(dat, file = paste0(homewd, "/data/synchrony_data.csv"), row.names = F)
-write.csv(prov.split.df, file = paste0(homewd, "/data/synchrony_climate_data_oct15.csv"), row.names = F)
+write.csv(prov.split.df, file = paste0(homewd, "/data/synchrony_data_aug12.csv"), row.names = F)
 
 
 #and oni correlations
@@ -864,50 +763,4 @@ all.coherence.out <- lapply(prov.split, get.both.coherence, dat.all=climdat, pva
 coherence.df <- data.table::rbindlist(all.coherence.out)
 
 write.csv(coherence.df, file = paste0(homewd, "/data/annual_multi_coherence_aug15.csv"), row.names = F)
-
-
-
-#province power #ggplot(dat) + geom_line(aes(x=time, y=avg_wave_coherency_precip))
-#ggplot(dat) + geom_line(aes(x=time, y=avg_cross_power_precip)) 
-
-
-#(h) the proportion of other provinces with which it shares a statistically significant coherency
-
-# # #split all the others and try annual coherence
-# # df.split <- dlply(dat.all, .(provname))
-# # 
-# # 
-# # dat.prov.coherence.annual <- lapply(X=df.split, FUN=prov.rank.annual, df1=dat)
-# # dat.prov.coherence.annual <- data.table::rbindlist(dat.prov.coherence.annual)
-# # #head(dat.prov.coherence.annual)
-# # 
-# # dat.prov.coherence.annual$sig_notsig <- 0
-# # dat.prov.coherence.annual$sig_notsig[!is.na(dat.prov.coherence.annual$cross_wave_power_annual)] <- 1
-# # 
-# # prov.coher.sum.annual <- ddply(dat.prov.coherence.annual, .(time), summarise, num_coherence=sum(sig_notsig, na.rm = T), N_tot=length(sig_notsig))
-# # prov.coher.sum.annual$proportion_coherence_annual <- prov.coher.sum.annual$num_coherence/prov.coher.sum.annual$N_tot
-# # 
-# #now attach to the rest of the dataset
-# 
-# prov.add.annual <- dplyr::select(prov.coher.sum.annual, time, proportion_coherence_annual)
-# 
-# dat <- merge(dat, prov.add.annual, by ="time", all.x = T)
-
-#and multi - skip
-#dat.prov.coherence.multi <- lapply(X=df.split, FUN=prov.rank.multi, df1=dat)
-#dat.prov.coherence.multi <- data.table::rbindlist(dat.prov.coherence.multi)
-#head(dat.prov.coherence.multi)
-
-# dat.prov.coherence.multi$sig_notsig <- 0
-# dat.prov.coherence.multi$sig_notsig[dat.prov.coherence.multi$coherence_multi>0] <- 1
-# dat.prov.coherence.multi$sig_notsig[is.na(dat.prov.coherence.multi$coherence_multi)] <- NA
-# prov.coher.sum.multi <- ddply(dat.prov.coherence.multi, .(month_date), summarise, num_coherence=sum(sig_notsig, na.rm = T), N_tot=length(unique(coherence_prov)))
-# prov.coher.sum.multi$proportion_coherence_multi <- prov.coher.sum.multi$num_coherence/prov.coher.sum.multi$N_tot
-# 
-# #now attach to the rest of the dataset
-# 
-# prov.add.multi <- dplyr::select(prov.coher.sum.multi, month_date, proportion_coherence_multi)
-# 
-# dat <- merge(dat, prov.add.multi, by ="month_date", all.x = T)
-# 
 
