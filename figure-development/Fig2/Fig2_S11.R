@@ -476,8 +476,8 @@ unique(new.sum$cycle_type)
 FigS11Cb <- ggplot(data=subset(new.sum, cycle_type=="annual_cases")) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=time, y=provname, fill=proportion_coherent_power, color=proportion_coherent_power))+ 
-  scale_fill_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent annual cross wavelet power", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
-  scale_color_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent annual cross wavelet power", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
+  scale_fill_viridis_c( option="inferno", name="Proportion of provinces\nwith coherent annual\ncross wavelet power", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
+  scale_color_viridis_c( option="inferno", name="Proportion of provinces\nwith coherent annual\ncross wavelet power", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
                      plot.margin = unit(c(.1,.5,.1,1), "cm"),
                      strip.text = element_text(size=8), legend.position = "bottom",
