@@ -333,7 +333,17 @@ ddply(lag.climate.df, .(variable), summarise, mean_lag=mean(lag), median_lag = m
 #and save lag data
 write.csv(lag.climate.df, file=paste0(homewd,"/data/lags_climate_prov.csv"), row.names = F)
 
+#and manipulate to make table
+library(reshape2)
+melt(lag.climate.df)
+df.list <- dlply(lag.climate.df, .(provname))
+make.table <- function(df){
+  df2 <- cbind.data.frame(provname=unique(df$provname), temp_2007 = df$lag[df$variable=="temp_C"  & df$epiyr==2007], precip_2007 = df$lag[df$variable=="precip_mm"  & df$epiyr==2007], temp_2012 = df$lag[df$variable=="temp_C"  & df$epiyr==2012], precip_2012 = df$lag[df$variable=="precip_mm"  & df$epiyr==2012], temp_2019 = df$lag[df$variable=="temp_C"  & df$epiyr==2019], precip_2019 = df$lag[df$variable=="precip_mm"  & df$epiyr==2019])
+  return(df2)
+}
+tableS3 <- data.table::rbindlist(lapply(df.list, make.table))
 
+write.csv(tableS3, file = paste0(homewd, "/data/tableS3.csv"), row.names = F)
 #make lagged data based on optimal lags by province (here, different from Wagner et al. 2020)
 
 #make shifted dataset and save

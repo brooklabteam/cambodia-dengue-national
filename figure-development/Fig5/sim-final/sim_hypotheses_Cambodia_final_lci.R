@@ -3430,11 +3430,13 @@ out.cam.norm$sim_type <- "normal-demography"
 out.cam.norm$hyp <- "0"
 
 
+foi.3strain.lci <- c(rep(.9,40),fit.dat$lci[fit.dat$provname=="National"])*2/3
+
 #H4 3 endemic strains and tertiary detection (can also plot increasing detectability with time)
 out.cam.intro.3strains = sim.SIR.age.triple.num.intro.clim.endemic(yrs=80,
                                                                     ntyr=26,
                                                                     s=101, 
-                                                                    foi=c(rep(.9,40),fit.dat$lci[fit.dat$provname=="National"]), 
+                                                                    foi=foi.3strain.lci, 
                                                                     births =  c(rep(40,19),birth.dat$value), # these are per 1000
                                                                     pop_vector =(pop.melt$count[pop.melt$year==1950]), 
                                                                     recov=1,

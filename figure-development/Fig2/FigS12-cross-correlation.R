@@ -185,8 +185,8 @@ fixed.df$IsSig[fixed.df$y>0 & fixed.df$pval<0.01] <- "Pos"
 fixed.df$IsSig[fixed.df$y<0 & fixed.df$pval<0.01] <- "Neg"
 
 year.df$IsSig <- "NotSig"
-year.df$IsSig[year.df$IsSignificant=="Yes" & year.df$y<0] <- "Pos"
-year.df$IsSig[year.df$IsSignificant=="Yes" & year.df$y>0] <- "Neg"
+year.df$IsSig[year.df$IsSignificant=="Yes" & year.df$y>0] <- "Pos"
+year.df$IsSig[year.df$IsSignificant=="Yes" & year.df$y<0] <- "Neg"
 
 #and plot
 colz = c('Pos' = "red", 'Neg'="blue", 'NotSig' = "gray50" )
@@ -230,7 +230,7 @@ FigS12C <- ggplot(data=temp.df) + theme_bw() + scale_x_log10() +
 FigS12D <- ggplot(data=precip.df) + theme_bw() + scale_x_log10() +
   theme(panel.grid = element_blank()) +
   ylab(bquote(atop("partial effect of precipitation on", "pairwise correlation coefficient,"~rho)))+
-  xlab("sum biweekly precipitation (mm)")+
+  xlab("mean total annual precipitation (mm)")+
   geom_hline(aes(yintercept=0))+ 
   geom_line(aes(x=precip_mm, y=y, color=IsSig), show.legend = F, size=3) +
   geom_ribbon(aes(x=precip_mm, ymin=ylower, ymax=yupper, fill=IsSig),alpha=.3,  show.legend = F) +

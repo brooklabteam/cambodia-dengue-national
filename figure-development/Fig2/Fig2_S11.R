@@ -72,6 +72,7 @@ get.national.period <- function(nat.dat, popdat){
 dat <- read.csv(file = paste0(homewd, "/data/synchrony_case_data_oct15.csv"), header=T, stringsAsFactors = F)
 head(dat)
 names(dat)
+dat$provname[dat$provname=="Otdar Meanchey"] <- "Oddar Meanchey"
 
 
 #load and attach centroid of each province
@@ -213,7 +214,7 @@ pearsons.avg.year <- merge(pearsons.avg.year, centroid.prov, by="provname")
 
 pearsons.avg.year <- arrange(pearsons.avg.year, latitude, year)
 pearsons.avg.year$provname <- factor(pearsons.avg.year$provname, levels=unique(pearsons.avg.year$provname))
-
+unique(pearsons.avg.year$provname)
 vert.df2 <- cbind.data.frame(xint = c(2006.5, 2007.5, 2011.5, 2012.5,  2018.5, 2019.5))
 
 # Only colour strips in x-direction
@@ -389,8 +390,8 @@ ggsave(file = paste0(homewd, "/final-figures/Fig2.png"),
 FigS11Ab <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=time,  y=provname, fill=avg_wave_power_annual, color=avg_wave_power_annual)) + 
-  scale_fill_viridis_c(trans="sqrt", option="inferno", name="Average power\nannual cycles") +
-  scale_color_viridis_c(trans="sqrt", option="inferno", name="Average power\nannual cycles") +
+  scale_fill_viridis_c(trans="sqrt", option="inferno", name="Average power annual\ncycles from dengue incidence") +
+  scale_color_viridis_c(trans="sqrt", option="inferno", name="Average power annual\ncycles from dengue incidence") +
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
                      plot.margin = unit(c(0,.5,.1,.7), "cm"),
                      strip.text = element_text(size=8), legend.position = "bottom",
@@ -404,8 +405,8 @@ FigS11Ab <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand =
 FigS11Bb <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=time,  y=provname, fill=avg_wave_power_multi, color=avg_wave_power_multi)) + 
-  scale_fill_viridis_c(trans="sqrt", option="inferno", name="Average power\nmulti-annual cycles",  breaks=c(3,6,9,12)) +
-  scale_color_viridis_c(trans="sqrt", option="inferno", name="Average power\nmulti-annual cycles", breaks=c(3,6,9,12)) +
+  scale_fill_viridis_c(trans="sqrt", option="inferno", name="Average power multi-annual\ncycles from dengue incidence",  breaks=c(3,6,9,12)) +
+  scale_color_viridis_c(trans="sqrt", option="inferno", name="Average power multi-annual\ncycles from dengue incidence", breaks=c(3,6,9,12)) +
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
                      plot.margin = unit(c(0,.4,.1,.7), "cm"),
                      strip.text = element_text(size=8), legend.position = "bottom",
@@ -475,8 +476,8 @@ unique(new.sum$cycle_type)
 FigS11Cb <- ggplot(data=subset(new.sum, cycle_type=="annual_cases")) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=time, y=provname, fill=proportion_coherent_power, color=proportion_coherent_power))+ 
-  scale_fill_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent annual cases", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
-  scale_color_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent annual cases", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
+  scale_fill_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent annual cross wavelet power", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
+  scale_color_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent annual cross wavelet power", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
                      plot.margin = unit(c(.1,.5,.1,1), "cm"),
                      strip.text = element_text(size=8), legend.position = "bottom",
@@ -496,7 +497,7 @@ FigS11Ca <- ggplot(data=subset(dist.dat.annual.multi, cycle_type=="annual_cases"
         axis.title.y = element_text(size=8), axis.text.y = element_text(size=8),
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         plot.margin = unit(c(.3,.5,0,.8), "cm")) +
-  geom_ribbon(aes(x=time, ymin=min_prop, ymax=max_prop), alpha=.3) + ylab("biweekly distribution\n% provinces w/coherent\n annual cases") +
+  geom_ribbon(aes(x=time, ymin=min_prop, ymax=max_prop), alpha=.3) + ylab("biweekly distribution %\nprovinces w/coherent annual\ncross wavelet power") +
   geom_line(aes(x=time, y=median_prop), size=1) +
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) +
   geom_hline(aes(yintercept=0), linetype=2)
@@ -509,8 +510,8 @@ FigS11C <- cowplot::plot_grid(FigS11Ca, FigS11Cb, ncol=1, nrow=2, rel_heights = 
 FigS11Db <- ggplot(data=subset(new.sum, cycle_type=="multi_cycles")) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=time, y=provname, fill=proportion_coherent_power, color=proportion_coherent_power))+ 
-  scale_fill_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent multi-annual cycles\n", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
-  scale_color_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent multi-annual cycles\n", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
+  scale_fill_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent multi-annual\ncross-wavelet power", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
+  scale_color_viridis_c( option="inferno", name="Proportion of provinces with\ncoherent multi-annual\ncross-wavelet power", limits=c(0,1), labels=c("0",".25",".5",".75","1")) +
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
                      plot.margin = unit(c(.1,.5,.1,1), "cm"),
                      strip.text = element_text(size=8), legend.position = "bottom",
@@ -530,7 +531,7 @@ FigS11Da <- ggplot(data=subset(dist.dat.annual.multi, cycle_type=="multi_cycles"
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         plot.margin = unit(c(.3,.5,0,.8), "cm")) +
   geom_ribbon(aes(x=time, ymin=min_prop, ymax=max_prop), alpha=.3) + 
-  ylab("biweekly distribution\n% provinces w/coherent\n multi-annual cycles") +
+  ylab("biweekly distribution %\nprovinces w/coherent multi-\nannual cross-wavelet power") +
   geom_line(aes(x=time, y=median_prop), size=1) +
   geom_vline(data=vert.df, aes(xintercept=xint), color="red", size=1) +
   geom_hline(aes(yintercept=0), linetype=2)

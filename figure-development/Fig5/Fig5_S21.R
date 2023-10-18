@@ -233,7 +233,7 @@ column.2 <- function(dat, dat.lci, dat.uci, year.start, perc.obs){
   p1 <- ggplot(dat.ts) + theme_bw() + facet_grid(hyp~plot_type) +
     #geom_vline(aes(xintercept=2012), linetype=2)+
     #geom_vline(aes(xintercept=2019), linetype=2) +
-    geom_ribbon(aes(x=year, ymin=lci_new, ymax=uci_new),alpha=.8) +
+    geom_ribbon(aes(x=year, ymin=lci_new, ymax=uci_new),alpha=.3) +
     geom_line(aes(x=year, y=count), size=.3) + 
     theme(panel.grid = element_blank(), 
           strip.background.y  = element_blank(),
@@ -630,7 +630,7 @@ column.2.2007 <- function(dat, dat.lci, dat.uci, year.start, perc.obs){
   p1 <- ggplot(dat.ts) + theme_bw() + facet_grid(hyp~plot_type) +
     #geom_vline(aes(xintercept=2012), linetype=2)+
     #geom_vline(aes(xintercept=2019), linetype=2) +
-    geom_ribbon(aes(x=year, ymin=lci_new, ymax=uci_new),alpha=.8) +
+    geom_ribbon(aes(x=year, ymin=lci_new, ymax=uci_new),alpha=.3) +
     geom_line(aes(x=year, y=count), size=.3) + 
     theme(panel.grid = element_blank(), 
           strip.background.y  = element_blank(),

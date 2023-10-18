@@ -579,7 +579,15 @@ sus.clim.df <- rbind.data.frame(sus.df.2007, sus.df.2012, sus.df.2019)
 #in 2012, - values for 14 provinces, + values for 3 provinces, 0 values for 5 provinces
 #in 2019, - values for 12 provinces, + values for 7 provinces, 0 values for 3 provinces
 write.csv(sus.clim.df, paste0(homewd,"/data/sus_increase_by_clim_by_prov.csv"), row.names = F)
-#save 
+
+#and compare by t test
+t.test(sus.clim.df$frac_incS_noclim[sus.clim.df$epidemic_year==2007], sus.clim.df$frac_incS_clim[sus.clim.df$epidemic_year==2007], paired = T, alternative = "greater")
+t.test(sus.clim.df$frac_incS_noclim[sus.clim.df$epidemic_year==2012], sus.clim.df$frac_incS_clim[sus.clim.df$epidemic_year==2012], paired = T, alternative = "greater")
+t.test(sus.clim.df$frac_incS_noclim[sus.clim.df$epidemic_year==2019], sus.clim.df$frac_incS_clim[sus.clim.df$epidemic_year==2019], paired = T, alternative = "greater")
+
+#and write to table s5
+tableS5 <- dplyr::select(sus.clim.df, epidemic_year, frac_incS_noclim, frac_incS_clim, provname)
+write.csv(tableS5, file=paste0(homewd,"/data/tableS5.csv"), row.names=F)
 
 # and save the second element from each, which are the projection outputs for plotting
 project.df.2007 <-data.table::rbindlist(sapply(clim.project.tsir.2007,'[', 2))
