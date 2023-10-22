@@ -62,6 +62,16 @@ m1 <- gam(age~year:provname +
               data=dat)
 summary(m1)
 
+#and save this for Table S7
+TableS7 <- cbind.data.frame(province=c("intercept", unique(as.character(dat$provname))), slope = signif(summary(m1)$p.table[,1],3), CI= paste0("[", signif((summary(m1)$p.table[,1]-1.96*summary(m1)$p.table[,2]),3),"-", signif((summary(m1)$p.table[,1]+1.96*summary(m1)$p.table[,2]),3), "]"), statistic = signif(summary(m1)$p.table[,3],2), p_val = signif(summary(m1)$p.table[,4],3))
+TableS7  <- TableS7 [2:nrow(TableS7),]
+rownames(TableS7 ) <- c()
+write.csv(TableS7 , file = paste0(homewd,"/data/TableS7.csv"), row.names = F)
+
+
+
+
+
 #and get a prediction for each province
 pred.df <- cbind.data.frame(provname=rep(unique(dat$provname), each = length(unique(dat$year))) , year=rep(sort(unique(dat$year)), length(unique(dat$provname))))
 #eliminate Tboung Khmum before data starts
