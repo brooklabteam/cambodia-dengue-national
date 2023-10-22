@@ -540,6 +540,7 @@ fit_tsir_gaussian <- function(df, epiyr, sbar){
   rownames(beta.df) <- c()
   beta.df$epiyr <- epiyr
   beta.df$rsquared <- simfitted$rsquared
+  beta.df$alpha <- simfitted$alpha
   
   return(beta.df)
   
@@ -604,6 +605,9 @@ fit_tsir <- function(df, epiyr, sbar){
   rownames(beta.df) <- c()
   beta.df$epiyr <- epiyr
   beta.df$rsquared <- simfitted$rsquared
+  #attach alpha
+  beta.df$alpha <- simfitted$alpha
+  
   
   return(beta.df)
   
@@ -852,7 +856,7 @@ tsir.split.2019 <- dlply(tsir.dat.2019,.(provname))
 
 
 
-#Run this to test all the time series
+#Run this to test all the time series and choose the optimal susceptible reconstruction by province
 fit.2007.plot <- lapply(tsir.split.2007, plot.test.tsir, epiyr = 2007, sbar=NULL)
 fit.2007.plot <- data.table::rbindlist(fit.2007.plot)
 fit.2007.plot$epiyr = 2007
@@ -950,6 +954,17 @@ head(subset(out.merge, year==2007))
 
 write.csv(out.merge, file = paste0(homewd, "/data/beta_TSIR_fit_province.csv"), row.names = F)
 
+#add in the alpha estimate and save
+#and for table S2
+TableS2 <- ddply(out.merge,.(provname, epiyr, biweek), summarize, sus_reconstruction = unique(sus_reconstruction), rsquared=unique(rsquared), beta=unique(beta), betalow=unique(betalow), betahigh=unique(betahigh), alpha=unique(alpha))
+head(TableS2)
+
+# round and make the betas into a CI
+TableS2$beta <- signif(TableS2$beta, 2)
+TableS2$CI <- paste0("[", signif(TableS2$betalow, 2), "-",signif(TableS2$betahigh, 2),"]")
+TableS2$alpha <- round(TableS2$alpha,3)
+TableS2 <- dplyr::select(TableS2, provname, epiyr, biweek, sus_reconstruction, rsquared, beta, CI, alpha)
+write.csv(TableS2, file = paste0(homewd, "/data/tableS2.csv"), row.names = F)
 # And in another script attach this beta to the climate data,
 # do a climate regression with beta, and use this regression to 
 # predict beta for the epidemic years

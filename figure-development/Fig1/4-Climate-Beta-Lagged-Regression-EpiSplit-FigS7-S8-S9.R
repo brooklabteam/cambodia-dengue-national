@@ -8,6 +8,7 @@ library(lme4)
 library(lmerTest)
 library(sjPlot)
 library(mgcv)
+library(MuMIn)
 
 
 homewd = "/Users/carabrook/Developer/cambodia-dengue-national"
@@ -245,6 +246,11 @@ gam1b <- gam(log_beta~s(temp_C_lag, k=7, bs='tp') +
 AIC(gam1, gam1b)#gam1 much better
 #linear response GAM
 summary(gam1)# R-sq.(adj) =  0.994.  Deviance explained = 99.5%
+
+tableS4 <- cbind.data.frame(climate_var = c(rep("temp", 24), rep("precip",24), "random_province"), province=sapply(strsplit(rownames(summary(gam1)$s.table), "provname"),"[",2), degrees_of_freedom= round(summary(gam1)$s.table[,1],2), stat= round(summary(gam1)$s.table[,3],2), p_val=round(summary(gam1)$s.pv,3))
+tableS4 <- tableS4[1:(nrow(tableS4)-1),]
+rownames(tableS4) <- c()
+write.csv(tableS4, file = paste0(homewd,"/data/tableS4C_", unique(dat$epiyr),".csv"), row.names = F)
 
 test.df = cbind.data.frame(temp_C_lag=25:34)
 test.df$precip_mm_lag <- 20

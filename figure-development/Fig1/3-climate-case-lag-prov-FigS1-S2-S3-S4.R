@@ -59,6 +59,10 @@ gam1 <- gam(precip_mm~ year:provname + #slope specific by province
 summary(gam1) 
 #no change in precip over time 
 
+#send to tables
+tableS1b <- cbind.data.frame(GAM =rep("interannual_precip", length(summary(gam1)$p.coeff)), provname=sapply(strsplit(names(summary(gam1)$p.coeff), "provname"), "[", 2), slope = round(summary(gam1)$p.coeff, 3), CI= paste0("[",round(summary(gam1)$p.coeff-1.96*summary(gam1)$se[1:length(summary(gam1)$p.coeff)], 3), "-", round(summary(gam1)$p.coeff+1.96*summary(gam1)$se[1:length(summary(gam1)$p.coeff)], 3), "]"),  stat=round(summary(gam1)$p.t,2), p_val=round(summary(gam1)$p.pv,3))
+tableS1b$dev_explained <- round(summary(gam1)$dev.expl,3)*100
+
 #...are there any years that are significant deviations?
 precip.dat$year <- as.factor(precip.dat$year)
 gam1b <- gam(precip_mm~ s(year, bs="re") +
@@ -66,6 +70,10 @@ gam1b <- gam(precip_mm~ s(year, bs="re") +
                         s(provname, bs="re"), data=precip.dat) #y-intercept specific by province too
 summary(gam1b)
 AIC(gam1, gam1b)
+
+tableS1D <- cbind.data.frame(GAM = rep("anomaly_precip",3), smooth = c("year", "biweek", "province"), deg_freedom = round(summary(gam1b)$s.table[,1], 2), stat = round(summary(gam1b)$s.table[,3], 1), p_val = round(summary(gam1b)$s.table[,4], 3))
+
+
 
 source(paste0(homewd, "/figure-development/Fig1/mollentze-streicker-2020-functions.R"))
 
@@ -89,6 +97,11 @@ gam2 <- gam(temp_C ~ year:provname +
 
 summary(gam2) 
 # temp is increasing slightly for all provinces
+tableS1 <- cbind.data.frame(GAM =rep("interannual_temp", length(summary(gam2)$p.coeff)), provname=sapply(strsplit(names(summary(gam2)$p.coeff), "provname"), "[", 2), slope = round(summary(gam2)$p.coeff, 3), CI= paste0("[",round(summary(gam2)$p.coeff-1.96*summary(gam2)$se[1:length(summary(gam2)$p.coeff)], 3), "-", round(summary(gam2)$p.coeff+1.96*summary(gam2)$se[1:length(summary(gam2)$p.coeff)], 3), "]"),  stat=round(summary(gam2)$p.t,2), p_val=round(summary(gam2)$p.pv,3))
+tableS1$dev_explained <- round(summary(gam2)$dev.expl,3)*100
+
+
+
 
 #are there any temperature years that are temperature anomalies?
 temp.dat$year <- as.factor(temp.dat$year)
@@ -102,8 +115,13 @@ year.df.temp <- get_partial_effects(gam2b, var="year")
 plot.partial(df=year.df.temp, var="year", response_var = "temp_C") #2019 and 2012 were hot years but 2007 was not
 temp.dat$year <- as.numeric(as.character(temp.dat$year))
 
+tableS1C <- cbind.data.frame(GAM = rep("anomaly_temp",3), smooth = c("year", "biweek", "province"), deg_freedom = round(summary(gam2b)$s.table[,1], 2), stat = round(summary(gam2b)$s.table[,3], 1), p_val = round(summary(gam2b)$s.table[,4], 3))
 
+tableS1A <- rbind(tableS1, tableS1b)
+tableS1B <- rbind(tableS1C,tableS1D) 
 
+write.csv(tableS1A, file = paste0(homewd, "/data/tableS1_part1.csv"), row.names = F)
+write.csv(tableS1B, file = paste0(homewd, "/data/tableS1_part2.csv"), row.names = F)
 # here are predictions for best fit model
 temp.predict <- cbind.data.frame(provname = rep(unique(temp.dat$provname), each=18), year = rep(unique(temp.dat$year), 25))
 

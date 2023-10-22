@@ -139,6 +139,16 @@ gam1 <- gam(corr ~ dist_m:provname +
 
 summary(gam1) 
 
+#and write to table S6
+TableS6A <- cbind.data.frame(province=c("intercept", unique(as.character(pearsons.df$provname))), slope = signif(summary(gam1)$p.table[,1],3), CI= paste0("[", signif((summary(gam1)$p.table[,1]-1.96*summary(gam1)$p.table[,2]),3),"-", signif((summary(gam1)$p.table[,1]+1.96*summary(gam1)$p.table[,2]),3), "]"), statistic = signif(summary(gam1)$p.table[,3],2), p_val = signif(summary(gam1)$p.table[,4],3))
+TableS6A <- TableS6A[2:nrow(TableS6A),]
+rownames(TableS6A) <- c()
+write.csv(TableS6A, file = paste0(homewd,"/data/TableS6_part1.csv"), row.names = F)
+
+#and the smoother table
+TableS6B <- cbind.data.frame(smoother=c("log10_temp", "log10_pop", "log10_precip", "year", "province_random"), degrees_of_freedom = signif(summary(gam1)$s.table[,1],2), statistic = signif(summary(gam1)$s.table[,3],3), p_value = signif(summary(gam1)$s.table[,4],3))
+rownames(TableS6B) <- c()
+write.csv(TableS6B, file = paste0(homewd,"/data/TableS6_part2.csv"), row.names = F)
 
 gam1b <- gam(corr ~ 
               s(dist_m, bs="tp")+
