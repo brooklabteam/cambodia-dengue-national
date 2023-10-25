@@ -75,11 +75,15 @@ print(p1)
 load("hyp0-fit-wane.Rdata")
 load("hyp1-fit-wane.Rdata")
 load("hyp2-fit-wane.Rdata")
-load("hyp3-fit-wane.Rdata")
+load("hyp3-fit-wane-profile.Rdata")
 load("hyp4-fit-wane.Rdata")
 #fit.dat <- read.csv(file="prov-fits-FOI.csv", header = T, stringsAsFactors = F)
 
-hyp.fit <- rbind(hyp0.fit.wane, hyp1.fit.wane, hyp2.fit.wane, hyp3.fit.wane, hyp4.fit.wane)
+hyp.fit <- rbind(hyp0.fit.wane, hyp1.fit.wane, hyp2.fit.wane,  hyp4.fit.wane)
+hyp.fit <- dplyr::select(hyp.fit, year, sigma, convergence,lci_sigma, uci_sigma, sim_type)
+hyp3.fit.wane <- dplyr::select(hyp3.fit.wane, year, sigma, convergence,lci_sigma, uci_sigma, sim_type)
+hyp.fit<-rbind(hyp.fit, hyp3.fit.wane)
+
 unique(hyp.fit$convergence)
 
 
