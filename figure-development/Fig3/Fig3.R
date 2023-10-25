@@ -316,16 +316,17 @@ ggsave(filename = paste0(homewd, "/final-figures/FigS16.png"),
 
 
 #now, the age multiplier becomes panel D
-load(paste0(homewd,"/figure-development/Fig3/age-fit-alt-two-short/fit-many-age-mult.Rdata"))#this is the age modification
+age.mult.profile <- read.csv(file = paste0(homewd, "/data/age-mult-profile.csv"), header=T,stringsAsFactors = F)
+
 # embed the age multiplier
-age.long <- melt(age.fit, id.vars = c("age_mult", "lci_mult", "uci_mult", "year_range"), measure.vars = c("age_min", "age_max"))
+age.long <- melt(age.mult.profile, id.vars = c("age_mult", "lci_mult", "uci_mult", "year_range"), measure.vars = c("age_min", "age_max"))
 head(age.long)
 names(age.long)[names(age.long)=="value"] <- "age"
 
 Fig3D <- ggplot(age.long) + theme_bw() + facet_grid(~year_range) + theme_bw()+
-  geom_hline(aes(yintercept=1), linetype=2, color="gray85") +
+  geom_hline(aes(yintercept=1), linetype=2, color="gray85") + coord_cartesian(ylim = c(0,3.5))+
   geom_line(aes(x=age, y=age_mult), size=1)  + ylab(bquote("age multiplier for"~lambda))+ 
-  #geom_ribbon(aes(x=age, ymin=lci_mult, ymax=uci_mult), alpha=.3) +
+  geom_ribbon(aes(x=age, ymin=lci_mult, ymax=uci_mult), alpha=.2) +
   theme(panel.grid = element_blank(), axis.title = element_text(size=16), 
         plot.margin = unit(c(.2,.2,.2,.7), "cm"), 
         strip.background = element_rect(fill="white"), strip.text = element_text(size=16),
@@ -672,7 +673,7 @@ run.model.data.all <- function(dat,par.dat, sigma.fit, age.mult.df){
 }
 
 #run the model and arrange the data
-out.plot <- run.model.data.all(par.dat = fit.dat, dat = dat, age.mult.df = age.fit, sigma.fit = sigma.fit)
+out.plot <- run.model.data.all(par.dat = fit.dat, dat = dat, age.mult.df = age.mult.profile, sigma.fit = sigma.fit)
 head(out.plot)
 out.plot <- arrange(out.plot, provname, year)
 out.plot$provname <- factor(out.plot$provname, levels = unique(out.plot$provname))
