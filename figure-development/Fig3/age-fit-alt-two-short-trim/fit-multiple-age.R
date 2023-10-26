@@ -341,7 +341,7 @@ fit.age.mult.LBFGSB.all <- function(dat,par.dat, fit.CI){
   
   
   #now take a guess at 10 age-specific multiplicative factors for 3 different eras:
-  age.guess <- rep(1,26)
+  age.guess <- rep(1,19)
   
   #lambda.guess <- par.dat$lambda
   
