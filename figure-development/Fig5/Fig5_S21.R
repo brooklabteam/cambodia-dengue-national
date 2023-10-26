@@ -317,7 +317,7 @@ column.3 <- function (dat, year.start,perc.obs){
   
   dat.age <- data.table::rbindlist(lapply(df.age, replicate.data, slim.quant=1))
   
-  dat.age$plot_type <- "age distribution\nof cases by year"
+  dat.age$plot_type <- "age distribution of\nreported cases by year"
   #then, evenly slim the dataset to 10% of its current values, evenly by age and year
   
   colz = c('secondary'="black", "tertiary"="royalblue3")
@@ -445,6 +445,14 @@ col4 <- column.4(dat=cam.2019, year.start = 2000, perc.obs = .1)
 Fig5 <- cowplot::plot_grid(col1, col2, col3, col4, nrow = 1, ncol=4, labels=c("A", "B", "C", "D"),rel_widths = c(1.15,1.05,1,1),  label_size = 22, align = "hv", label_x = c(0,0,-.03,0))
 
 ggsave(filename = paste0(homewd, "/final-figures/Fig5.png"),
+       plot = Fig5,
+       units="mm",  
+       width=125, 
+       height=90, 
+       scale=3, 
+       dpi=300)
+
+ggsave(filename = paste0(homewd, "/final-figures/Fig5.pdf"),
        plot = Fig5,
        units="mm",  
        width=125, 
@@ -713,7 +721,7 @@ column.3.2007 <- function (dat, year.start,perc.obs){
   
   dat.age <- data.table::rbindlist(lapply(df.age, replicate.data, slim.quant=1))
   
-  dat.age$plot_type <- "age distribution\nof cases by year"
+  dat.age$plot_type <- "age distribution of\nreported cases by year"
   #then, evenly slim the dataset to 10% of its current values, evenly by age and year
   
   colz = c('secondary'="black", "tertiary"="royalblue3")

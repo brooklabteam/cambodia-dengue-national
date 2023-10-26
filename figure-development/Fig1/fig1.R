@@ -213,6 +213,15 @@ ggsave(file = paste0(homewd, "/final-figures/Fig1.png"),
        scale=3, 
        dpi=300)
 
+
+ggsave(file = paste0(homewd, "/final-figures/Fig1.pdf"),
+       plot= Fig1Final,
+       units="mm",  
+       width=110, 
+       height=100, 
+       scale=3, 
+       dpi=300)
+
 #and save
 
 ############################################################################

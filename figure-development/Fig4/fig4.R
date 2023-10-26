@@ -490,7 +490,7 @@ Fig4 <- cowplot::plot_grid(pAB, pCD, nrow=1, ncol = 2) + theme(plot.background =
   theme_classic()+  theme(axis.line=element_blank(),axis.text.x=element_blank(), axis.text.y=element_blank(),
                           axis.ticks=element_blank(), axis.title.x=element_blank(),axis.title.y=element_blank())
 
-ggsave(file = paste0(homewd, "/final-figures/fig4.png"),
+ggsave(file = paste0(homewd, "/final-figures/Fig4.png"),
        plot= Fig4,
        units="mm",  
        width=100, 
@@ -499,5 +499,11 @@ ggsave(file = paste0(homewd, "/final-figures/fig4.png"),
        dpi=300)
 
 
-
+ggsave(file = paste0(homewd, "/final-figures/Fig4.pdf"),
+       plot= Fig4,
+       units="mm",  
+       width=100, 
+       height=85, 
+       scale=3, 
+       dpi=300)
 

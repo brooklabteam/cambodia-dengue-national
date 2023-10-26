@@ -377,6 +377,14 @@ ggsave(file = paste0(homewd, "/final-figures/Fig2.png"),
        scale=3, 
        dpi=300)
 
+ggsave(file = paste0(homewd, "/final-figures/Fig2.pdf"),
+       plot= Fig2,
+       units="mm",  
+       width=120, 
+       height=110, 
+       scale=3, 
+       dpi=300)
+
 
 #and now for the supplementary figure S11!
 

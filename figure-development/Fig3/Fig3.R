@@ -757,6 +757,13 @@ ggsave(filename = paste0(homewd, "/final-figures/Fig3.png"),
 
 
 
+ggsave(filename = paste0(homewd, "/final-figures/Fig3.pdf"),
+       plot = Fig3,
+       units="mm",  
+       width=120, 
+       height=110, 
+       scale=3, 
+       dpi=300)
 
 
 
