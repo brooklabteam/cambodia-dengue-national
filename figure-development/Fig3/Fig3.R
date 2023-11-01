@@ -316,10 +316,15 @@ ggsave(filename = paste0(homewd, "/final-figures/FigS16.png"),
 
 
 #now, the age multiplier becomes panel D
-age.mult.profile <- read.csv(file = paste0(homewd, "/data/age-mult-profile.csv"), header=T,stringsAsFactors = F)
+#age.mult.profile <- read.csv(file = paste0(homewd, "/data/age-mult-profile.csv"), header=T,stringsAsFactors = F)
+
+
+#now, the age multiplier becomes panel D
+load(paste0(homewd, "/figure-development/Fig3/age-fit-alt-two-short-trim/refit-many-age-mult.Rdata"))
 
 # embed the age multiplier
-age.long <- melt(age.mult.profile, id.vars = c("age_mult", "lci_mult", "uci_mult", "year_range"), measure.vars = c("age_min", "age_max"))
+#age.long <- melt(age.mult.profile, id.vars = c("age_mult", "lci_mult", "uci_mult", "year_range"), measure.vars = c("age_min", "age_max"))
+age.long <- melt(age.refit, id.vars = c("age_mult", "lci_mult", "uci_mult", "year_range"), measure.vars = c("age_min", "age_max"))
 head(age.long)
 names(age.long)[names(age.long)=="value"] <- "age"
 
@@ -435,14 +440,26 @@ model.age.incidence.series.age.mult.wane <- function(par.dat, age_vect, year.sta
       
       #1-2,3-4,5-6,7-9,10-12,13-15,16-19,20-29,30-39,40+
       #1-2,3-4,5-6,7-9,10-12,13-15,16-19,20-29,30-39,40+
+      # if(year.now <=2010){
+      #   age.mult.df <- cbind.data.frame(mult=age_mult[1:13], 
+      #                                   age_min=c(1,3,5,7,10,13,16,20,30,40,50,60,70),
+      #                                   age_max=c(2,4,6,9,12,15,19,29,39,49,59,69,90))  
+      # }else if (year.now >2010){
+      #   age.mult.df <- cbind.data.frame(mult=age_mult[14:26], 
+      #                                   age_min=c(1,3,5,7,10,13,16,20,30,40,50,60,70),
+      #                                   age_max=c(2,4,6,9,12,15,19,29,39,49,59,69,90))  
+      # }
+      # 
+      
+      
       if(year.now <=2010){
-        age.mult.df <- cbind.data.frame(mult=age_mult[1:13], 
-                                        age_min=c(1,3,5,7,10,13,16,20,30,40,50,60,70),
-                                        age_max=c(2,4,6,9,12,15,19,29,39,49,59,69,90))  
+        age.mult.df <- cbind.data.frame(mult=age_mult[1:8], 
+                                        age_min=c(1,3,5,7,10,13,16,20),
+                                        age_max=c(2,4,6,9,12,15,19,90))  
       }else if (year.now >2010){
-        age.mult.df <- cbind.data.frame(mult=age_mult[14:26], 
-                                        age_min=c(1,3,5,7,10,13,16,20,30,40,50,60,70),
-                                        age_max=c(2,4,6,9,12,15,19,29,39,49,59,69,90))  
+        age.mult.df <- cbind.data.frame(mult=age_mult[9:19], 
+                                        age_min=c(1,3,5,7,10,13,16,20,30,40,50),
+                                        age_max=c(2,4,6,9,12,15,19,29,39,49,90))  
       }
       
       age.mult.df$dur = (age.mult.df$age_max-age.mult.df$age_min)+1
@@ -673,7 +690,8 @@ run.model.data.all <- function(dat,par.dat, sigma.fit, age.mult.df){
 }
 
 #run the model and arrange the data
-out.plot <- run.model.data.all(par.dat = fit.dat, dat = dat, age.mult.df = age.mult.profile, sigma.fit = sigma.fit)
+#out.plot <- run.model.data.all(par.dat = fit.dat, dat = dat, age.mult.df = age.mult.profile, sigma.fit = sigma.fit)
+out.plot <- run.model.data.all(par.dat = fit.dat, dat = dat, age.mult.df = age.refit, sigma.fit = sigma.fit)
 head(out.plot)
 out.plot <- arrange(out.plot, provname, year)
 out.plot$provname <- factor(out.plot$provname, levels = unique(out.plot$provname))
