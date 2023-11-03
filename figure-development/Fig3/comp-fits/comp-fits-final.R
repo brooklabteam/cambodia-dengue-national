@@ -381,9 +381,15 @@ model.age.incidence.series.age <- function(par.dat, age_vect, year.start, age_mu
       
       #1-2,3-4,5-6,7-9,10-12,13-15,16-19,20-29,30-39,40+
       
-      age.mult.df <- cbind.data.frame(mult=age_mult, 
-                                      age_min=c(1,3,5,7,10,13,16,20,30,40,50,60,70,80),
-                                      age_max=c(2,4,6,9,12,15,19,29,39,49,59,69,79,90))
+        if(year.now <=2010){
+          age.mult.df <- cbind.data.frame(mult=age_mult[1:8], 
+                                          age_min=c(1,3,5,7,10,13,16,20),
+                                          age_max=c(2,4,6,9,12,15,19,90))  
+        }else if (year.now >2010){
+          age.mult.df <- cbind.data.frame(mult=age_mult[9:19], 
+                                          age_min=c(1,3,5,7,10,13,16,20,30,40,50),
+                                          age_max=c(2,4,6,9,12,15,19,29,39,49,90))  
+        }
       age.mult.df$dur = (age.mult.df$age_max-age.mult.df$age_min)+1
       
       #rep it as a multiplier by year
@@ -594,13 +600,13 @@ model.age.incidence.series.age.mult.wane <- function(par.dat, age_vect, year.sta
       #1-2,3-4,5-6,7-9,10-12,13-15,16-19,20-29,30-39,40+
       
       if(year.now <=2010){
-        age.mult.df <- cbind.data.frame(mult=age_mult[1:13], 
-                                        age_min=c(1,3,5,7,10,13,16,20,30,40,50,60,70),
-                                        age_max=c(2,4,6,9,12,15,19,29,39,49,59,69,90))  
+        age.mult.df <- cbind.data.frame(mult=age_mult[1:8], 
+                                        age_min=c(1,3,5,7,10,13,16,20),
+                                        age_max=c(2,4,6,9,12,15,19,90))  
       }else if (year.now >2010){
-        age.mult.df <- cbind.data.frame(mult=age_mult[14:26], 
-                                        age_min=c(1,3,5,7,10,13,16,20,30,40,50,60,70),
-                                        age_max=c(2,4,6,9,12,15,19,29,39,49,59,69,90))  
+        age.mult.df <- cbind.data.frame(mult=age_mult[9:19], 
+                                        age_min=c(1,3,5,7,10,13,16,20,30,40,50),
+                                        age_max=c(2,4,6,9,12,15,19,29,39,49,90))  
       }
       age.mult.df$dur = (age.mult.df$age_max-age.mult.df$age_min)+1
       
