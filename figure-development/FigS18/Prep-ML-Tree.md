@@ -9,7 +9,7 @@ rm(list=ls())
 homewd="/Users/carabrook/Developer/cambodia-dengue-national/"
 setwd(homewd)
 
-dat.new <- read.csv(file = paste0(homewd, "figure-development/FigS3/ML-Sequences.csv"))
+dat.new <- read.csv(file = paste0(homewd, "figure-development/FigS18/ML-Sequences.csv"))
 denv1 <- paste(dat.new$Accession[dat.new$Serotype=="DENV-1"], collapse=", ")
 denv2 <- paste(dat.new$Accession[dat.new$Serotype=="DENV-2"], collapse=", ")
 
@@ -38,11 +38,11 @@ library(seqinr)
 homewd="/Users/carabrook/Developer/cambodia-dengue-national/"
 setwd(homewd)
 
-denv1.seq <- read.fasta(file = paste0(homewd, "figure-development/FigS3/dengueML/all-DENV1-ML.fasta"), as.string=T, forceDNAtolower=F)
+denv1.seq <- read.fasta(file = paste0(homewd, "figure-development/FigS18/dengueML/all-DENV1-ML.fasta"), as.string=T, forceDNAtolower=F)
 
-denv2.seq <- read.fasta(file = paste0(homewd, "figure-development/FigS3/dengueML/all-DENV2-ML.fasta"), as.string=T, forceDNAtolower=F)
+denv2.seq <- read.fasta(file = paste0(homewd, "figure-development/FigS18/dengueML/all-DENV2-ML.fasta"), as.string=T, forceDNAtolower=F)
 
-dat.new <- read.csv(file = paste0(homewd, "figure-development/FigS3/ML-Sequences.csv"))
+dat.new <- read.csv(file = paste0(homewd, "figure-development/FigS18/ML-Sequences.csv"))
 dat.new$rename <- paste(paste(dat.new$Accession, dat.new$Locality, sep = "_"), dat.new$Year, sep="_")
 
 #and rename
@@ -52,9 +52,12 @@ denv2.names <- dat.new$rename[dat.new$Serotype=="DENV-2"]
 denv1.names <- c(denv1.names, "NC_002640_DENV4")
 denv2.names <- c(denv2.names, "NC_002640_DENV4")
 
-write.fasta(denv1.seq, names = denv1.names, file.out = paste0(homewd, "figure-development/FigS3/all-DENV1-ML.fasta"), as.string=T)
 
-write.fasta(denv2.seq, names = denv2.names, file.out = paste0(homewd, "figure-development/FigS3/all-DENV2-ML.fasta"), as.string=T)
+
+
+write.fasta(denv1.seq, names = denv1.names, file.out = paste0(homewd, "figure-development/FigS18/all-DENV1-ML.fasta"), as.string=T)
+
+write.fasta(denv2.seq, names = denv2.names, file.out = paste0(homewd, "figure-development/FigS18/all-DENV2-ML.fasta"), as.string=T)
 
 ```
 
