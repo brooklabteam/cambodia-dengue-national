@@ -1,42 +1,42 @@
 
-RAxML-NG v. 1.1.0 released on 29.11.2021 by The Exelixis Lab.
+RAxML-NG v. 1.1.0-master released on 22.06.2022 by The Exelixis Lab.
 Developed by: Alexey M. Kozlov and Alexandros Stamatakis.
 Contributors: Diego Darriba, Tomas Flouri, Benoit Morel, Sarah Lutteropp, Ben Bettisworth.
 Latest version: https://github.com/amkozlov/raxml-ng
 Questions/problems/suggestions? Please visit: https://groups.google.com/forum/#!forum/raxml
 
-System: Apple M1 Pro, 10 cores, 32 GB RAM
+System: Intel(R) Xeon(R) CPU E5-2680 v4 @ 2.40GHz, 28 cores, 251 GB RAM
 
-RAxML-NG was called at 26-May-2022 13:33:01 as follows:
+RAxML-NG was called at 10-May-2023 11:34:41 as follows:
 
-/Applications/raxml-ng/raxml-ng --check --msa /Users/carabrook/Developer/cambodia-dengue-national/figure-development/FigS4/denv2ML/align-DENV2-ML.fasta --model GTR+I+G4 --prefix T1
+/project2/cbrook/software/raxml-ng/bin/raxml-ng-mpi --check --msa DENV2alignedML.fasta --model GTR+I+G4 --prefix T1
 
 Analysis options:
   run mode: Alignment validation
   start tree(s): 
-  random seed: 1653589981
-  SIMD kernels: SSE3
+  random seed: 1683736482
+  SIMD kernels: AVX2
   parallelization: coarse-grained (auto), PTHREADS (auto)
 
-[00:00:00] Reading alignment from file: /Users/carabrook/Developer/cambodia-dengue-national/figure-development/FigS4/denv2ML/align-DENV2-ML.fasta
-[00:00:00] Loaded alignment with 150 taxa and 11082 sites
+[00:00:00] Reading alignment from file: DENV2alignedML.fasta
+[00:00:00] Loaded alignment with 157 taxa and 11082 sites
 
 Alignment comprises 1 partitions and 11082 sites
 
 Partition 0: noname
 Model: GTR+FO+I+G4m
 Alignment sites: 11082
-Gaps: 4.04 %
-Invariant sites: 55.15 %
+Gaps: 4.06 %
+Invariant sites: 55.10 %
 
 
 
 Alignment can be successfully read by RAxML-NG.
 
 
-Execution log saved to: /Users/carabrook/Developer/cambodia-dengue-national/figure-development/FigS4/denv2ML/T1.raxml.log
+Execution log saved to: /home/cbrook/denv2ML/T1.raxml.log
 
-Analysis started: 26-May-2022 13:33:01 / finished: 26-May-2022 13:33:01
+Analysis started: 10-May-2023 11:34:41 / finished: 10-May-2023 11:34:42
 
-Elapsed time: 0.038 seconds
+Elapsed time: 0.317 seconds
 
