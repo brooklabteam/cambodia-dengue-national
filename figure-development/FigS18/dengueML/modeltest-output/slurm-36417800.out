@@ -1,0 +1,364 @@
+Loading openmpi/3.1.2
+  ERROR: Module cannot be loaded due to a conflict.
+    HINT: Might try "module unload openmpi" first.
+                             _      _ _            _      _   _  _____ 
+                            | |    | | |          | |    | \ | |/ ____|
+         _ __ ___   ___   __| | ___| | |_ ___  ___| |_   |  \| | |  __ 
+        | '_ ` _ \ / _ \ / _` |/ _ \ | __/ _ \/ __| __|  | . ` | | |_ |
+        | | | | | | (_) | (_| |  __/ | ||  __/\__ \ |_   | |\  | |__| |
+        |_| |_| |_|\___/ \__,_|\___|_|\__\___||___/\__|  |_| \_|\_____|
+--------------------------------------------------------------------------------
+ModelTest-NG v0.1.7 released on 17.03.2021 by The Exelixis Lab.
+Written by Diego Darriba.
+Contributors: Tomas Flouri, Alexey Kozlov, Benoit Morel, David Posada, 
+              Alexandros Stamatakis.
+Latest version: https://github.com/ddarriba/modeltest
+--------------------------------------------------------------------------------
+
+Physical cores: 14
+Logical cores:  28
+Memory:         54.4GB
+Extensions:     AVX
+
+WARNING: Partition DATA: There are undetermined columns in the alignment (only gaps)
+WARNING: Partition DATA: There are undetermined columns in the alignment (only gaps)
+WARNING: MSA has not enough sites to infer reliable results
+Creating new checkpoint file: /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta.ckp
+--------------------------------------------------------------------------------
+ModelTest-NG v0.1.7
+
+Input data:
+  MSA:        /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta
+  Tree:       Maximum likelihood
+    file:           -
+  #taxa:            226
+  #sites:           11131
+  #patterns:        3638
+  Max. thread mem:  405 MB
+
+Output:
+  Log:           /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta.log
+  Starting tree: /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta.tree
+  Results:       /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta.out
+
+Selection options:
+  # dna schemes:      11
+  # dna models:       88
+  include model parameters:
+    Uniform:         true
+    p-inv (+I):      true
+    gamma (+G):      true
+    both (+I+G):     true
+    free rates (+R): false
+    fixed freqs:     true
+    estimated freqs: true
+    #categories:     4
+  gamma rates mode:   mean
+  asc bias:           none
+  epsilon (opt):      0.01
+  epsilon (par):      0.05
+  keep branches:      false
+
+Additional options:
+  verbosity:        very low
+  threads:          1/14
+  RNG seed:         12345
+  subtree repeats:  enabled
+--------------------------------------------------------------------------------
+modeltest-ng was called as follows: 
+>> /home/cbrook/modeltest-ng/modeltest-ng-static -i /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta -t ml -p 1 
+
+
+modeltest-ng: Warning: You are using one single thread out of 14 physical cores.
+modeltest-ng:          You can set the number of threads with -p argument.
+modeltest-ng: Try 'modeltest-ng --help' or 'modeltest-ng --usage' for more information
+
+Partition 1/1
+
+    1/88   JC             0h:00:11   0h:00:12          -88607.3051       -       -
+    2/88   JC+I           0h:00:56   0h:01:08          -85862.4719       -  0.4793
+    3/88   JC+G4          0h:01:56   0h:03:04          -85095.9806  0.3154       -
+    4/88   JC+I+G4        0h:02:15   0h:05:19          -85086.7435  0.6147  0.2716
+    5/88   F81            0h:00:51   0h:06:10          -88519.4741       -       -
+    6/88   F81+I          0h:00:56   0h:07:06          -85785.8760       -  0.4793
+    7/88   F81+G4         0h:01:56   0h:09:02          -85039.9707  0.3152       -
+    8/88   F81+I+G4       0h:02:18   0h:11:20          -85030.2879  0.6143  0.2719
+    9/88   K80            0h:00:13   0h:11:33          -84000.7058       -       -
+   10/88   K80+I          0h:01:00   0h:12:33          -80463.8207       -  0.4762
+   11/88   K80+G4         0h:01:57   0h:14:30          -79881.6720  0.2875       -
+   12/88   K80+I+G4       0h:02:25   0h:16:55          -79767.6949  0.8910  0.4029
+   13/88   HKY            0h:00:55   0h:17:50          -83876.0082       -       -
+   14/88   HKY+I          0h:01:02   0h:18:52          -80303.8484       -  0.4754
+   15/88   HKY+G4         0h:01:58   0h:20:50          -79764.4221  0.2875       -
+   16/88   HKY+I+G4       0h:03:14   0h:24:04          -79642.3815  0.8910  0.4035
+   17/88   TrNef          0h:00:13   0h:24:17          -83438.6464       -       -
+   18/88   TrNef+I        0h:01:10   0h:25:27          -79945.6703       -  0.4651
+   19/88   TrNef+G4       0h:02:43   0h:28:10          -79600.9413  0.3194       -
+   20/88   TrNef+I+G4     0h:02:17   0h:30:27          -79470.4438  1.3542  0.4223
+   21/88   TrN            0h:00:55   0h:31:22          -83196.8855       -       -
+   22/88   TrN+I          0h:01:03   0h:32:25          -79694.8430       -  0.4632
+   23/88   TrN+G4         0h:02:00   0h:34:25          -79374.1883  0.3194       -
+   24/88   TrN+I+G4       0h:03:18   0h:37:43          -79225.5881  1.3785  0.4232
+   25/88   TPM2           0h:00:15   0h:37:58          -83928.6299       -       -
+   26/88   TPM2+I         0h:01:10   0h:39:08          -80439.6088       -  0.4759
+   27/88   TPM2+G4        0h:02:02   0h:41:10          -79829.0200  0.2875       -
+   28/88   TPM2+I+G4      0h:03:15   0h:44:25          -79727.0282  0.8910  0.4008
+   29/88   TPM2uf         0h:00:14   0h:44:39          -83844.7478       -       -
+   30/88   TPM2uf+I       0h:01:00   0h:45:39          -80295.6118       -  0.4755
+   31/88   TPM2uf+G4      0h:02:48   0h:48:27          -79748.5215  0.2875       -
+   32/88   TPM2uf+I+G4    0h:06:50   0h:55:17          -79630.8480  0.8910  0.4039
+   33/88   TPM3           0h:00:13   0h:55:30          -83999.3968       -       -
+   34/88   TPM3+I         0h:01:25   0h:56:55          -80456.5691       -  0.4762
+   35/88   TPM3+G4        0h:02:01   0h:58:56          -79876.3333  0.2875       -
+   36/88   TPM3+I+G4      0h:02:19   1h:01:15          -79760.0262  0.8910  0.4042
+   37/88   TPM3uf         0h:00:14   1h:01:29          -83894.9379       -       -
+   38/88   TPM3uf+I       0h:01:02   1h:02:31          -80296.9081       -  0.4753
+   39/88   TPM3uf+G4      0h:02:01   1h:04:32          -79758.9565  0.2875       -
+   40/88   TPM3uf+I+G4    0h:03:02   1h:07:34          -79631.4479  1.0105  0.4264
+   41/88   TPM1           0h:00:12   1h:07:46          -84000.7027       -       -
+   42/88   TPM1+I         0h:00:59   1h:08:45          -80462.7440       -  0.4762
+   43/88   TPM1+G4        0h:01:48   1h:10:33          -79881.0968  0.2875       -
+   44/88   TPM1+I+G4      0h:02:21   1h:12:54          -79766.7392  0.8910  0.4035
+   45/88   TPM1uf         0h:00:14   1h:13:08          -83899.8386       -       -
+   46/88   TPM1uf+I       0h:01:02   1h:14:10          -80302.6827       -  0.4752
+   47/88   TPM1uf+G4      0h:02:02   1h:16:12          -79763.5651  0.2875       -
+   48/88   TPM1uf+I+G4    0h:03:16   1h:19:28          -79638.8770  1.0090  0.4256
+   49/88   TIM2ef         0h:00:14   1h:19:42          -83363.8575       -       -
+   50/88   TIM2ef+I       0h:01:09   1h:20:51          -79918.5166       -  0.4643
+   51/88   TIM2ef+G4      0h:02:43   1h:23:34          -79548.7512  0.3194       -
+   52/88   TIM2ef+I+G4    0h:03:15   1h:26:49          -79432.1327  1.3440  0.4192
+   53/88   TIM2           0h:01:16   1h:28:05          -83139.1925       -       -
+   54/88   TIM2+I         0h:01:15   1h:29:20          -79682.1081       -  0.4623
+   55/88   TIM2+G4        0h:07:22   1h:36:42          -79351.0956  0.3194       -
+   56/88   TIM2+I+G4      0h:03:15   1h:39:57          -79209.1770  1.3501  0.4200
+   57/88   TIM3ef         0h:00:14   1h:40:11          -83437.9978       -       -
+   58/88   TIM3ef+I       0h:02:17   1h:42:28          -79937.6506       -  0.4653
+   59/88   TIM3ef+G4      0h:02:48   1h:45:16          -79595.5198  0.3194       -
+   60/88   TIM3ef+I+G4    0h:03:16   1h:48:32          -79462.9476  1.3395  0.4233
+   61/88   TIM3           0h:00:59   1h:49:31          -83194.0101       -       -
+   62/88   TIM3+I         0h:01:32   1h:51:03          -79684.3035       -  0.4646
+   63/88   TIM3+G4        0h:03:10   1h:54:13          -79367.0634  0.3194       -
+   64/88   TIM3+I+G4      0h:02:34   1h:56:47          -79215.2175  1.3804  0.4239
+   65/88   TIM1ef         0h:00:15   1h:57:02          -83438.6340       -       -
+   66/88   TIM1ef+I       0h:02:35   1h:59:37          -79944.6015       -  0.4651
+   67/88   TIM1ef+G4      0h:03:17   2h:02:54          -79600.6504  0.3194       -
+   68/88   TIM1ef+I+G4    0h:02:32   2h:05:26          -79469.3512  1.3560  0.4229
+   69/88   TIM1           0h:01:02   2h:06:28          -83196.9130       -       -
+   70/88   TIM1+I         0h:01:10   2h:07:38          -79693.5001       -  0.4632
+   71/88   TIM1+G4        0h:02:13   2h:09:51          -79373.4477  0.3194       -
+   72/88   TIM1+I+G4      0h:03:36   2h:13:27          -79224.4342  1.3783  0.4230
+   73/88   TVMef          0h:00:15   2h:13:42          -83927.4649       -       -
+   74/88   TVMef+I        0h:01:27   2h:15:09          -80432.1666       -  0.4760
+   75/88   TVMef+G4       0h:02:11   2h:17:20          -79824.0804  0.2875       -
+   76/88   TVMef+I+G4     0h:02:19   2h:19:39          -79719.0174  0.8910  0.4020
+   77/88   TVM            0h:01:00   2h:20:39          -83816.3215       -       -
+   78/88   TVM+I          0h:01:08   2h:21:47          -80288.3831       -  0.4757
+   79/88   TVM+G4         0h:02:12   2h:23:59          -79742.9420  0.2875       -
+   80/88   TVM+I+G4       0h:03:29   2h:27:28          -79622.8490  0.8910  0.4051
+   81/88   SYM            0h:00:16   2h:27:44          -83363.2454       -       -
+   82/88   SYM+I          0h:01:12   2h:28:56          -79910.2573       -  0.4644
+   83/88   SYM+G4         0h:03:00   2h:31:56          -79543.4508  0.3194       -
+   84/88   SYM+I+G4       0h:03:15   2h:35:11          -79424.9989  1.3465  0.4197
+   85/88   GTR            0h:01:01   2h:36:12          -83136.4062       -       -
+   86/88   GTR+I          0h:01:09   2h:37:21          -79671.9274       -  0.4633
+   87/88   GTR+G4         0h:02:13   2h:39:34          -79343.3591  0.3194       -
+   88/88   GTR+I+G4       0h:03:33   2h:43:07          -79198.8064  1.3572  0.4211
+ ----ID---  ----MODEL---- ---Time--- -Elapsed--- -------LnL------- -Alpha- -P-inv-
+
+Computation of likelihood scores completed. It took 2h:43:07
+
+BIC       model              K            lnL          score          delta    weight
+--------------------------------------------------------------------------------
+       1  GTR+I+G4          10    -79198.8064    162674.3404         0.0000    0.7409
+       2  TIM2+I+G4          8    -79209.1770    162676.4466         2.1063    0.2585
+       3  TIM3+I+G4          8    -79215.2175    162688.5276        14.1872    0.0006
+       4  TrN+I+G4           7    -79225.5881    162699.9513        25.6110    0.0000
+       5  TIM1+I+G4          8    -79224.4342    162706.9611        32.6207    0.0000
+       6  TIM2+G4            7    -79351.0956    162950.9663       276.6259    0.0000
+       7  GTR+G4             9    -79343.3591    162954.1282       279.7878    0.0000
+       8  TIM3+G4            7    -79367.0634    162982.9019       308.5615    0.0000
+       9  TrN+G4             6    -79374.1883    162987.8342       313.4939    0.0000
+      10  TIM1+G4            7    -79373.4477    162995.6705       321.3302    0.0000
+--------------------------------------------------------------------------------
+Best model according to BIC
+---------------------------
+Model:              GTR+I+G4
+lnL:                -79198.8064
+Frequencies:        0.3193 0.2195 0.2508 0.2104
+Subst. Rates:       1.0279 7.8650 1.4344 0.7273 23.9257 1.0000 
+Inv. sites prop:    0.4211
+Gamma shape:        1.3572
+Score:              162674.3404
+Weight:             0.7409
+---------------------------
+Parameter importances
+---------------------------
+P.Inv:              0.0000
+Gamma:              0.0000
+Gamma-Inv:          1.0000
+Frequencies:        1.0000
+---------------------------
+Model averaged estimates
+---------------------------
+P.Inv:              0.4631
+Alpha:              0.3194
+Alpha-P.Inv:        1.3554
+P.Inv-Alpha:        0.4208
+Frequencies:        0.3192 0.2189 0.2508 0.2111 
+
+Commands:
+  > phyml  -i /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta -m 012345 -f m -v e -a e -c 4 -o tlr
+  > raxmlHPC-SSE3 -s /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta -m GTRGAMMAIX -n EXEC_NAME -p PARSIMONY_SEED
+  > raxml-ng --msa /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta --model GTR+I+G4
+  > paup -s /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta
+  > iqtree -s /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta -m GTR+I+G4
+
+AIC       model              K            lnL          score          delta    weight
+--------------------------------------------------------------------------------
+       1  GTR+I+G4          10    -79198.8064    159315.6128         0.0000    0.9998
+       2  TIM2+I+G4          8    -79209.1770    159332.3540        16.7412    0.0002
+       3  TIM3+I+G4          8    -79215.2175    159344.4350        28.8222    0.0000
+       4  TIM1+I+G4          8    -79224.4342    159362.8685        47.2557    0.0000
+       5  TrN+I+G4           7    -79225.5881    159363.1762        47.5634    0.0000
+       6  GTR+G4             9    -79343.3591    159602.7181       287.1053    0.0000
+       7  TIM2+G4            7    -79351.0956    159614.1912       298.5784    0.0000
+       8  TIM3+G4            7    -79367.0634    159646.1268       330.5140    0.0000
+       9  TrN+G4             6    -79374.1883    159658.3766       342.7638    0.0000
+      10  TIM1+G4            7    -79373.4477    159658.8954       343.2826    0.0000
+--------------------------------------------------------------------------------
+Best model according to AIC
+---------------------------
+Model:              GTR+I+G4
+lnL:                -79198.8064
+Frequencies:        0.3193 0.2195 0.2508 0.2104
+Subst. Rates:       1.0279 7.8650 1.4344 0.7273 23.9257 1.0000 
+Inv. sites prop:    0.4211
+Gamma shape:        1.3572
+Score:              159315.6128
+Weight:             0.9998
+---------------------------
+Parameter importances
+---------------------------
+P.Inv:              0.0000
+Gamma:              0.0000
+Gamma-Inv:          1.0000
+Frequencies:        1.0000
+---------------------------
+Model averaged estimates
+---------------------------
+P.Inv:              0.4633
+Alpha:              0.3194
+Alpha-P.Inv:        1.3572
+P.Inv-Alpha:        0.4211
+Frequencies:        0.3193 0.2195 0.2508 0.2104 
+
+Commands:
+  > phyml  -i /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta -m 012345 -f m -v e -a e -c 4 -o tlr
+  > raxmlHPC-SSE3 -s /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta -m GTRGAMMAIX -n EXEC_NAME -p PARSIMONY_SEED
+  > raxml-ng --msa /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta --model GTR+I+G4
+  > paup -s /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta
+  > iqtree -s /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta -m GTR+I+G4
+
+AICc      model              K            lnL          score          delta    weight
+--------------------------------------------------------------------------------
+       1  GTR+I+G4          10    -79198.8064    159354.6128         0.0000    0.9998
+       2  TIM2+I+G4          8    -79209.1770    159371.3540        16.7412    0.0002
+       3  TIM3+I+G4          8    -79215.2175    159383.4350        28.8222    0.0000
+       4  TIM1+I+G4          8    -79224.4342    159401.8685        47.2557    0.0000
+       5  TrN+I+G4           7    -79225.5881    159402.1762        47.5634    0.0000
+       6  GTR+G4             9    -79343.3591    159641.7181       287.1053    0.0000
+       7  TIM2+G4            7    -79351.0956    159653.1912       298.5784    0.0000
+       8  TIM3+G4            7    -79367.0634    159685.1268       330.5140    0.0000
+       9  TrN+G4             6    -79374.1883    159696.3766       341.7638    0.0000
+      10  TIM1+G4            7    -79373.4477    159697.8954       343.2826    0.0000
+--------------------------------------------------------------------------------
+Best model according to AICc
+---------------------------
+Model:              GTR+I+G4
+lnL:                -79198.8064
+Frequencies:        0.3193 0.2195 0.2508 0.2104
+Subst. Rates:       1.0279 7.8650 1.4344 0.7273 23.9257 1.0000 
+Inv. sites prop:    0.4211
+Gamma shape:        1.3572
+Score:              159354.6128
+Weight:             0.9998
+---------------------------
+Parameter importances
+---------------------------
+P.Inv:              0.0000
+Gamma:              0.0000
+Gamma-Inv:          1.0000
+Frequencies:        1.0000
+---------------------------
+Model averaged estimates
+---------------------------
+P.Inv:              0.4633
+Alpha:              0.3194
+Alpha-P.Inv:        1.3572
+P.Inv-Alpha:        0.4211
+Frequencies:        0.3193 0.2195 0.2508 0.2104 
+
+Commands:
+  > phyml  -i /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta -m 012345 -f m -v e -a e -c 4 -o tlr
+  > raxmlHPC-SSE3 -s /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta -m GTRGAMMAIX -n EXEC_NAME -p PARSIMONY_SEED
+  > raxml-ng --msa /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta --model GTR+I+G4
+  > paup -s /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta
+  > iqtree -s /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta -m GTR+I+G4
+
+There are 37 different topologies
+Topologies written to /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta.topos
+
+topo_id   models_count   bic_support   aic_support   aicc_support
+-----------------------------------------------------------------
+     31              2       0.99938       1.00000       1.00000
+     34              1       0.00062       0.00000       0.00000
+     21              2       0.00000       0.00000       0.00000
+     30              1       0.00000       0.00000       0.00000
+     20              3       0.00000       0.00000       0.00000
+     17              3       0.00000       0.00000       0.00000
+     29              2       0.00000       0.00000       0.00000
+     33              1       0.00000       0.00000       0.00000
+     18              2       0.00000       0.00000       0.00000
+     28              2       0.00000       0.00000       0.00000
+     32              1       0.00000       0.00000       0.00000
+     23              3       0.00000       0.00000       0.00000
+     25              1       0.00000       0.00000       0.00000
+     14              1       0.00000       0.00000       0.00000
+     27              7       0.00000       0.00000       0.00000
+     16              3       0.00000       0.00000       0.00000
+     22              1       0.00000       0.00000       0.00000
+     11              4       0.00000       0.00000       0.00000
+     13              3       0.00000       0.00000       0.00000
+     24              2       0.00000       0.00000       0.00000
+     10              3       0.00000       0.00000       0.00000
+     36              1       0.00000       0.00000       0.00000
+     26              1       0.00000       0.00000       0.00000
+     35              1       0.00000       0.00000       0.00000
+     37              1       0.00000       0.00000       0.00000
+     19              5       0.00000       0.00000       0.00000
+      1              1       0.00000       0.00000       0.00000
+     15              5       0.00000       0.00000       0.00000
+     12              3       0.00000       0.00000       0.00000
+      9              6       0.00000       0.00000       0.00000
+      8              8       0.00000       0.00000       0.00000
+      7              1       0.00000       0.00000       0.00000
+      6              1       0.00000       0.00000       0.00000
+      5              1       0.00000       0.00000       0.00000
+      4              2       0.00000       0.00000       0.00000
+      3              1       0.00000       0.00000       0.00000
+      2              2       0.00000       0.00000       0.00000
+
+extended majority-rule consensus: ((GU131921_Cambodia_2008,GQ868635_Cambodia_2008)[1.00000],(KF921932_Cambodia_2007,(HM181954_Cambodia_2007,(HM631853_Cambodia_2007,HM181950_Cambodia_2007)[1.00000])[1.00000])[1.00000],(GU131919_Cambodia_2008,((((((GU131920_Cambodia_2008,((MW265668_Cambodia_2011,(GU131895_Cambodia_2009,((MW265667_Cambodia_2016,((MW265678_Cambodia_2015,MW265672_Cambodia_2013)[1.00000],(MW265675_Cambodia_2014,(MW265677_Cambodia_2015,MW265673_Cambodia_2014)[1.00000])[1.00000])[1.00000])[1.00000],(MW265669_Cambodia_2011,(MW265674_Cambodia_2014,MW265670_Cambodia_2012)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(GU131894_Cambodia_2008,GQ868633_Cambodia_2008)[1.00000])[1.00000])[1.00000],(MW265671_Cambodia_2012,GU131922_Cambodia_2008)[1.00000])[1.00000],(GQ868632_Cambodia_2008,HM181937_Cambodia_2006)[1.00000])[1.00000],((HM181948_Cambodia_2007,(HM488255_Cambodia_2007,(HM181949_Cambodia_2007,(HM181943_Cambodia_2007,(KF955444_Cambodia_2007,HM181940_Cambodia_2006)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(HM181958_Cambodia_2007,GU131925_Cambodia_2006)[1.00000])[1.00000])[1.00000],(((HM181938_Cambodia_2006,HM181936_Cambodia_2006)[1.00000],(HM181953_Cambodia_2007,GU131892_Cambodia_2006)[1.00000])[1.00000],(JF937651_Cambodia_2008,KF921933_Cambodia_2007)[1.00000])[1.00000])[1.00000],((GU131893_Cambodia_2007,FJ639695_Cambodia_2007)[1.00000],((FJ639679_Cambodia_2003,((GU131923_Cambodia_2005,(((((FJ639675_Cambodia_2003,(FJ639684_Cambodia_2005,(((FJ639696_Cambodia_2007,FJ639691_Cambodia_2007)[1.00000],((HQ624983_Cambodia_2007,(JQ287665_Cambodia_2007,HM181942_Cambodia_2006)[1.00000])[1.00000],((HM181945_Cambodia_2007,HM181939_Cambodia_2006)[1.00000],(HM181951_Cambodia_2007,HM181944_Cambodia_2007)[1.00000])[1.00000])[1.00000])[1.00000],(FJ639693_Cambodia_2007,((GQ868630_Cambodia_2006,(GU131890_Cambodia_2006,FJ639687_Cambodia_2006)[1.00000])[1.00000],(GU131926_Cambodia_2006,GQ868639_Cambodia_2006)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(GQ868618_Cambodia_2003,FJ639674_Cambodia_2002)[1.00000])[1.00000],((FJ639678_Cambodia_2003,(GQ868637_Cambodia_2000,((FJ850069_Cambodia_2003,(JQ287664_Cambodia_2004,(FJ639676_Cambodia_2003,KF955406_Cambodia_2001)[1.00000])[1.00000])[1.00000],(FJ639673_Cambodia_2001,(JN819423_Cambodia_2001,FJ639671_Cambodia_2001)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(GQ868636_Cambodia_2008,((((((AF226685_Brazil_1990,(FJ639735_Venezuela_1997,(GU131834_Venezuela_2001,(FJ639740_Venezuela_1998,(GU131837_Venezuela_2005,FJ850104_Venezuela_2008)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(((AF226687_Brazil_1989,(EF122232_French_Guiana_2006,EF122231_French_Guiana_2006)[1.00000])[1.00000],(FJ547086_Puerto_Rico_1995,(FJ547087_Puerto_Rico_1992,FJ562106_Puerto_Rico_1986)[1.00000])[1.00000])[1.00000],(FJ478457_Puerto_Rico_1996,FJ410188_Puerto_Rico_1996)[1.00000])[1.00000])[1.00000],((EU081258_Singapore_2005,DQ285559_Reunion_2004)[1.00000],(GQ868601_British_Virgin_Islands_1985,(((FJ850087_Brazil_2006,GU131863_Brazil_2008)[1.00000],(FJ850070_Brazil_2000,(FJ850075_Brazil_2002,FJ850081_Brazil_2004)[1.00000])[1.00000])[1.00000],(FJ850071_Brazil_2000,(FJ850084_Brazil_2005,FJ850090_Brazil_2007)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(((NC_002640_DENV4,(DQ285562_Comoros_1993,(AY762084_Singapore_1993,(EU179860_Brunei_2005,(JN903579_India_2008,(JN903581_India_2009,JN903580_India_2009)[1.00000])[1.00000])[1.00000])[0.99938])[0.99938])[1.00000],(AY732474_Thailand_1980,AY732476_Thailand_1980)[1.00000])[1.00000],(AY713473_Myanmar_1971,AY722801_Myanmar_1976)[1.00000])[1.00000])[1.00000],(AB204803_Micronesia_2004,(DQ285561_Seychelles_2004,(AB195673_Seychelles_2003,DQ285560_Reunion_2004)[1.00000])[1.00000])[1.00000])[1.00000],(AY726550_Myanmar_2001,(AY713475_Myanmar_2001,(AY713474_Myanmar_2001,AY726552_Myanmar_2002)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],((((AB178040_Japan_2004,((DQ193572_China_2004,(OQ683856_Cambodia_2019,(OL411495_Cambodia_2020,((OK159946_Cambodia_2019,(OK159968_Cambodia_2019,(OQ678061_Cambodia_2019,(OK159957_Cambodia_2019,(OQ678252_Cambodia_2019,OQ678099_Cambodia_2019)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(DENS-OB-067_Cambodia_2021,(DENS-OB-068_Cambodia_2021,DENS-OB-070_Cambodia_2021)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],((EU081280_Singapore_2006,EU081281_Singapore_2006)[1.00000],(EU081273_Singapore_2005,EU081262_Singapore_2005)[1.00000])[1.00000])[1.00000])[1.00000],(((FJ639677_Cambodia_2003,(FJ639682_Cambodia_2004,(FJ639681_Cambodia_2003,FJ639680_Cambodia_2003)[1.00000])[1.00000])[1.00000],(GQ868619_Cambodia_2003,FJ639670_Cambodia_2001)[1.00000])[1.00000],(FJ639672_Cambodia_2001,FJ639669_Cambodia_2000)[1.00000])[1.00000])[1.00000],(AY713476_Myanmar_2001,(AY708047_Myanmar_2001,(AY726551_Myanmar_2001,AY726553_Myanmar_2002)[1.00000])[1.00000])[1.00000])[1.00000],(KU509260_Cambodia_2008,HM181952_Cambodia_2007)[1.00000])[1.00000])[1.00000],(FJ639688_Cambodia_2007,(((MW265666_Cambodia_2016,MW265664_Cambodia_2016)[1.00000],(MW265665_Cambodia_2016,MW265676_Cambodia_2014)[1.00000])[1.00000],(MW265679_Cambodia_2015,((((((OK159947_Cambodia_2019,OK159975_Cambodia_2019)[1.00000],(OQ683880_Cambodia_2020,OK159976_Cambodia_2019)[1.00000])[1.00000],(OK159954_Cambodia_2019,((OK159956_Cambodia_2019,(OM033409_Cambodia_2019,(OQ678244_Cambodia_2019,OK159965_Cambodia_2019)[1.00000])[1.00000])[1.00000],(OK159950_Cambodia_2019,((OK159938_Cambodia_2019,OK159958_Cambodia_2019)[1.00000],(OL412140_Cambodia_2019,(OK159962_Cambodia_2019,OK159937_Cambodia_2019)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(OQ678060_Cambodia_2019,(OK159942_Cambodia_2019,(OK159948_Cambodia_2019,(((OK159967_Cambodia_2019,(OK159966_Cambodia_2019,OK159936_Cambodia_2019)[1.00000])[0.99938],(OK159972_Cambodia_2019,OK159935_Cambodia_2019)[0.99938])[1.00000],(OK159943_Cambodia_2019,OK159944_Cambodia_2019)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],((((OK159973_Cambodia_2019,OK159959_Cambodia_2019)[1.00000],((OQ678009_Cambodia_2019,OK159964_Cambodia_2019)[1.00000],(OK159955_Cambodia_2019,OK159945_Cambodia_2019)[1.00000])[1.00000])[1.00000],((OK159952_Cambodia_2019,OK159949_Cambodia_2019)[1.00000],(OK159970_Cambodia_2019,OK159974_Cambodia_2019)[1.00000])[1.00000])[1.00000],(OK159951_Cambodia_2019,((OK159939_Cambodia_2019,(OK159941_Cambodia_2019,OL411499_Cambodia_2019)[1.00000])[1.00000],((OL411498_Cambodia_2019,(OL412678_Cambodia_2019,OK159953_Cambodia_2019)[1.00000])[1.00000],((OK159969_Cambodia_2019,(OL412703_Cambodia_2019,OK159971_Cambodia_2019)[1.00000])[1.00000],(OK159940_Cambodia_2019,OL411496_Cambodia_2019)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(OK159963_Cambodia_2019,((OQ678018_Cambodia_2020,OL411497_Cambodia_2020)[1.00000],(OK159960_Cambodia_2020,OK159961_Cambodia_2020)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(FJ639683_Cambodia_2005,(FJ639685_Cambodia_2005,(((FJ639690_Cambodia_2007,FJ639689_Cambodia_2007)[1.00000],(HM181956_Cambodia_2007,(HM181957_Cambodia_2007,FJ639694_Cambodia_2007)[1.00000])[1.00000])[1.00000],((FJ744702_Cambodia_2006,(GU131889_Cambodia_2006,(GU131891_Cambodia_2006,(HM631852_Cambodia_2006,(HM181941_Cambodia_2006,(GU131887_Cambodia_2006,HM181947_Cambodia_2007)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(HM181946_Cambodia_2007,FJ639686_Cambodia_2006)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],((GU131888_Cambodia_2006,(HQ624984_Cambodia_2007,FJ639692_Cambodia_2007)[1.00000])[1.00000],(HM181959_Cambodia_2007,HM181955_Cambodia_2007)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000]);
+strict consensus: ((GU131921_Cambodia_2008,GQ868635_Cambodia_2008)[1.00000],(KF921932_Cambodia_2007,(HM181954_Cambodia_2007,(HM631853_Cambodia_2007,HM181950_Cambodia_2007)[1.00000])[1.00000])[1.00000],(GU131919_Cambodia_2008,((((((GU131920_Cambodia_2008,((MW265668_Cambodia_2011,(GU131895_Cambodia_2009,((MW265667_Cambodia_2016,((MW265678_Cambodia_2015,MW265672_Cambodia_2013)[1.00000],(MW265675_Cambodia_2014,(MW265677_Cambodia_2015,MW265673_Cambodia_2014)[1.00000])[1.00000])[1.00000])[1.00000],(MW265669_Cambodia_2011,(MW265674_Cambodia_2014,MW265670_Cambodia_2012)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(GU131894_Cambodia_2008,GQ868633_Cambodia_2008)[1.00000])[1.00000])[1.00000],(MW265671_Cambodia_2012,GU131922_Cambodia_2008)[1.00000])[1.00000],(GQ868632_Cambodia_2008,HM181937_Cambodia_2006)[1.00000])[1.00000],((HM181948_Cambodia_2007,(HM488255_Cambodia_2007,(HM181949_Cambodia_2007,(HM181943_Cambodia_2007,(KF955444_Cambodia_2007,HM181940_Cambodia_2006)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(HM181958_Cambodia_2007,GU131925_Cambodia_2006)[1.00000])[1.00000])[1.00000],(((HM181938_Cambodia_2006,HM181936_Cambodia_2006)[1.00000],(HM181953_Cambodia_2007,GU131892_Cambodia_2006)[1.00000])[1.00000],(JF937651_Cambodia_2008,KF921933_Cambodia_2007)[1.00000])[1.00000])[1.00000],((GU131893_Cambodia_2007,FJ639695_Cambodia_2007)[1.00000],((FJ639679_Cambodia_2003,((GU131923_Cambodia_2005,(((((FJ639675_Cambodia_2003,(FJ639684_Cambodia_2005,(((FJ639696_Cambodia_2007,FJ639691_Cambodia_2007)[1.00000],((HQ624983_Cambodia_2007,(JQ287665_Cambodia_2007,HM181942_Cambodia_2006)[1.00000])[1.00000],((HM181945_Cambodia_2007,HM181939_Cambodia_2006)[1.00000],(HM181951_Cambodia_2007,HM181944_Cambodia_2007)[1.00000])[1.00000])[1.00000])[1.00000],(FJ639693_Cambodia_2007,((GQ868630_Cambodia_2006,(GU131890_Cambodia_2006,FJ639687_Cambodia_2006)[1.00000])[1.00000],(GU131926_Cambodia_2006,GQ868639_Cambodia_2006)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(GQ868618_Cambodia_2003,FJ639674_Cambodia_2002)[1.00000])[1.00000],((FJ639678_Cambodia_2003,(GQ868637_Cambodia_2000,((FJ850069_Cambodia_2003,(JQ287664_Cambodia_2004,(FJ639676_Cambodia_2003,KF955406_Cambodia_2001)[1.00000])[1.00000])[1.00000],(FJ639673_Cambodia_2001,(JN819423_Cambodia_2001,FJ639671_Cambodia_2001)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(GQ868636_Cambodia_2008,((((((AF226685_Brazil_1990,(FJ639735_Venezuela_1997,(GU131834_Venezuela_2001,(FJ639740_Venezuela_1998,(GU131837_Venezuela_2005,FJ850104_Venezuela_2008)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(((AF226687_Brazil_1989,(EF122232_French_Guiana_2006,EF122231_French_Guiana_2006)[1.00000])[1.00000],(FJ547086_Puerto_Rico_1995,(FJ547087_Puerto_Rico_1992,FJ562106_Puerto_Rico_1986)[1.00000])[1.00000])[1.00000],(FJ478457_Puerto_Rico_1996,FJ410188_Puerto_Rico_1996)[1.00000])[1.00000])[1.00000],((EU081258_Singapore_2005,DQ285559_Reunion_2004)[1.00000],(GQ868601_British_Virgin_Islands_1985,(((FJ850087_Brazil_2006,GU131863_Brazil_2008)[1.00000],(FJ850070_Brazil_2000,(FJ850075_Brazil_2002,FJ850081_Brazil_2004)[1.00000])[1.00000])[1.00000],(FJ850071_Brazil_2000,(FJ850084_Brazil_2005,FJ850090_Brazil_2007)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(((NC_002640_DENV4,AY762084_Singapore_1993,DQ285562_Comoros_1993,(EU179860_Brunei_2005,(JN903579_India_2008,(JN903581_India_2009,JN903580_India_2009)[1.00000])[1.00000])[1.00000])[1.00000],(AY732474_Thailand_1980,AY732476_Thailand_1980)[1.00000])[1.00000],(AY713473_Myanmar_1971,AY722801_Myanmar_1976)[1.00000])[1.00000])[1.00000],(AB204803_Micronesia_2004,(DQ285561_Seychelles_2004,(AB195673_Seychelles_2003,DQ285560_Reunion_2004)[1.00000])[1.00000])[1.00000])[1.00000],(AY726550_Myanmar_2001,(AY713475_Myanmar_2001,(AY713474_Myanmar_2001,AY726552_Myanmar_2002)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],((((AB178040_Japan_2004,((DQ193572_China_2004,(OQ683856_Cambodia_2019,(OL411495_Cambodia_2020,((OK159946_Cambodia_2019,(OK159968_Cambodia_2019,(OQ678061_Cambodia_2019,(OK159957_Cambodia_2019,(OQ678252_Cambodia_2019,OQ678099_Cambodia_2019)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(DENS-OB-067_Cambodia_2021,(DENS-OB-068_Cambodia_2021,DENS-OB-070_Cambodia_2021)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],((EU081280_Singapore_2006,EU081281_Singapore_2006)[1.00000],(EU081273_Singapore_2005,EU081262_Singapore_2005)[1.00000])[1.00000])[1.00000])[1.00000],(((FJ639677_Cambodia_2003,(FJ639682_Cambodia_2004,(FJ639681_Cambodia_2003,FJ639680_Cambodia_2003)[1.00000])[1.00000])[1.00000],(GQ868619_Cambodia_2003,FJ639670_Cambodia_2001)[1.00000])[1.00000],(FJ639672_Cambodia_2001,FJ639669_Cambodia_2000)[1.00000])[1.00000])[1.00000],(AY713476_Myanmar_2001,(AY708047_Myanmar_2001,(AY726551_Myanmar_2001,AY726553_Myanmar_2002)[1.00000])[1.00000])[1.00000])[1.00000],(KU509260_Cambodia_2008,HM181952_Cambodia_2007)[1.00000])[1.00000])[1.00000],(FJ639688_Cambodia_2007,(((MW265666_Cambodia_2016,MW265664_Cambodia_2016)[1.00000],(MW265665_Cambodia_2016,MW265676_Cambodia_2014)[1.00000])[1.00000],(MW265679_Cambodia_2015,((((((OK159947_Cambodia_2019,OK159975_Cambodia_2019)[1.00000],(OQ683880_Cambodia_2020,OK159976_Cambodia_2019)[1.00000])[1.00000],(OK159954_Cambodia_2019,((OK159956_Cambodia_2019,(OM033409_Cambodia_2019,(OQ678244_Cambodia_2019,OK159965_Cambodia_2019)[1.00000])[1.00000])[1.00000],(OK159950_Cambodia_2019,((OK159938_Cambodia_2019,OK159958_Cambodia_2019)[1.00000],(OL412140_Cambodia_2019,(OK159962_Cambodia_2019,OK159937_Cambodia_2019)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(OQ678060_Cambodia_2019,(OK159942_Cambodia_2019,(OK159948_Cambodia_2019,((OK159972_Cambodia_2019,OK159935_Cambodia_2019,OK159967_Cambodia_2019,(OK159966_Cambodia_2019,OK159936_Cambodia_2019)[1.00000])[1.00000],(OK159943_Cambodia_2019,OK159944_Cambodia_2019)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],((((OK159973_Cambodia_2019,OK159959_Cambodia_2019)[1.00000],((OQ678009_Cambodia_2019,OK159964_Cambodia_2019)[1.00000],(OK159955_Cambodia_2019,OK159945_Cambodia_2019)[1.00000])[1.00000])[1.00000],((OK159952_Cambodia_2019,OK159949_Cambodia_2019)[1.00000],(OK159970_Cambodia_2019,OK159974_Cambodia_2019)[1.00000])[1.00000])[1.00000],(OK159951_Cambodia_2019,((OK159939_Cambodia_2019,(OK159941_Cambodia_2019,OL411499_Cambodia_2019)[1.00000])[1.00000],((OL411498_Cambodia_2019,(OL412678_Cambodia_2019,OK159953_Cambodia_2019)[1.00000])[1.00000],((OK159969_Cambodia_2019,(OL412703_Cambodia_2019,OK159971_Cambodia_2019)[1.00000])[1.00000],(OK159940_Cambodia_2019,OL411496_Cambodia_2019)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(OK159963_Cambodia_2019,((OQ678018_Cambodia_2020,OL411497_Cambodia_2020)[1.00000],(OK159960_Cambodia_2020,OK159961_Cambodia_2020)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(FJ639683_Cambodia_2005,(FJ639685_Cambodia_2005,(((FJ639690_Cambodia_2007,FJ639689_Cambodia_2007)[1.00000],(HM181956_Cambodia_2007,(HM181957_Cambodia_2007,FJ639694_Cambodia_2007)[1.00000])[1.00000])[1.00000],((FJ744702_Cambodia_2006,(GU131889_Cambodia_2006,(GU131891_Cambodia_2006,(HM631852_Cambodia_2006,(HM181941_Cambodia_2006,(GU131887_Cambodia_2006,HM181947_Cambodia_2007)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],(HM181946_Cambodia_2007,FJ639686_Cambodia_2006)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000],((GU131888_Cambodia_2006,(HQ624984_Cambodia_2007,FJ639692_Cambodia_2007)[1.00000])[1.00000],(HM181959_Cambodia_2007,HM181955_Cambodia_2007)[1.00000])[1.00000])[1.00000])[1.00000])[1.00000])[1.00000]);
+
+Summary:
+
+Partition 1/1:
+                         Model         Score        Weight
+----------------------------------------------------------
+       BIC            GTR+I+G4   162674.3404        0.7409
+       AIC            GTR+I+G4   159315.6128        0.9998
+      AICc            GTR+I+G4   159354.6128        0.9998
+
+Execution results written to /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta.out
+Starting tree written to /home/cbrook/modeltest-ng/dengueML/DENV1alignedML.fasta.tree
