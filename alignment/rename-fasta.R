@@ -19,7 +19,7 @@ names(denv2.pre)
 all.dat <- read.csv(file = paste0(homewd, "/gather-sequences/All_Seq_SE_Asia.csv"), header = T, stringsAsFactors = F)
 head(all.dat)
 
-all.dat$Collection_Date <- as.Date(all.dat$Collection_Date)
+all.dat$Collection_Date <- as.Date(all.dat$Collection_Date, format = "%m/%d/%y")
 
 #replace the dates on our  cambodia sequences with the more accurate (more precise) ones from our database
 new.dat <- read.csv(file = paste0(homewd, "/gather-sequences/cambodia-seq-details.csv"))
@@ -50,7 +50,9 @@ name.dat.denv2 <- cbind.data.frame(name = names(denv2.pre))
 
 #and lose the points
 name.dat.denv1$Accession <- sapply(strsplit(gsub("\\.", "_", name.dat.denv1$name),split = "_"), function(x) x[[1]])
-name.dat.denv2$Accession <- sapply(strsplit(gsub("\\.", "_", name.dat.denv2$name),split = "_"), function(x) x[[1]])
+name.dat.denv2$Accession <- NA
+name.dat.denv2$Accession[1:(length(name.dat.denv2$name)-63)] <- sapply(strsplit(gsub("\\.", "_", name.dat.denv2$name[1:(length(name.dat.denv2$name)-63)]),split = "_"), function(x) x[[1]])
+name.dat.denv2$Accession[is.na(name.dat.denv2$Accession)] <- name.dat.denv2$name[is.na(name.dat.denv2$Accession)] 
 
 #and merge on accession
 merge.denv1 <- merge(name.dat.denv1, all.denv1, by = "Accession", all.x = T, sort = F)
