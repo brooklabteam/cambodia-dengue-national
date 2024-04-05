@@ -1,0 +1,11 @@
+NIH.ID,Site,age,sex,date,DENV.Ct,DENV.serotype,Reference Accession,Reference Accession ID,Reference Length,% Genome Called,%id,GC Content,ERCC Reads,Total Reads,Mapped Reads,SNPs,Informative Nucleotides,Missing Bases,Ambiguous Bases,Coverage Depth
+DENS-093,Kompong Speu,3,F,10-Jun-22,19.84,DEN2,"Dengue virus 2 isolate 19XN17542 polyprotein (POLY) gene, complete cds; and sfRNA1 lncRNA gene, partial sequence",MN923109.1,10572,100,99.6,45.7,,4916,4354,44,10569,,,57.48751419
+DENS-177,Kompong Speu,11,F,15-Aug-22,16.25,DEN2,"Dengue virus 2 strain ZS01/01, complete genome",KR920365.1,10723,98.6,96.4,45.8,,6106,4136,377,10572,108,,52.92819174
+DENS-174,Kompong Speu,27,F,6-Aug-22,20.09,DEN2,"Dengue virus 2 isolate D17013, complete genome",MN018344.1,10724,78.2,99.2,45,,1146,517,68,8391,2214,1,6.737877658
+DENS-OB-145,Pursat,17,M,1-Jul-22,24.06,DEN2,"Dengue virus 2 isolate D2/China/GDgz/GD17013/2017(Thailand), complete genome",MH827546.1,10724,98.8,99.2,45.8,18,2826,2103,83,10596,49,3,27.30958598
+DENS-OB-067,Ratanakiri,2.5,F,29-May-21,21.08,DEN1,"Dengue virus 1 isolate DENV1-HMU-HKU-2, complete genome",MT447147.1,10737,92.7,99.6,46.5,10,1596,1121,38,9950,642,8,14.21514389
+DENS-OB-068,Ratanakiri,30,M,29-May-21,23.44,DEN1,"Dengue virus 1 isolate DENV1-HMU-HKU-2, complete genome",MT447147.1,10737,97.8,99.6,46.5,565,3664,2167,42,10502,112,7,27.5559281
+DENS-OB-070,Ratanakiri,16,M,30-May-21,25.3,DEN1,"Dengue virus 1 isolate DENV1-HMU-HKU-2, complete genome",MT447147.1,10737,95.6,99.6,46.7,18,3484,1107,40,10262,355,12,14.13355686
+DENS-124,Svay Reang,18,M,2-Jun-22,22.36,DEN2,"Dengue virus 2 isolate D2/China/GDgz/GD17013/2017(Thailand), complete genome",MH827546.1,10724,99.3,99.2,45.8,,10970,9695,84,10651,42,,126.7015106
+DENS-187,Svay Reang,16,M,4-Aug-22,15.25,DEN2,"Dengue virus 2 isolate D2/China/GDgz/GD17013/2017(Thailand), complete genome",MH827546.1,10724,99.6,99.1,45.7,20,29494,25725,92,10676,1,,321.502611
+DENS-167,Svay Reang,16,M,23-Jul-22,17.27,DEN2,"Dengue virus 2 isolate SG(EHI)D2/09087Y15, complete genome",KY921905.1,10723,95,99,45.5,,1466,1034,101,10184,422,,13.36519631
