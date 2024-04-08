@@ -17,7 +17,7 @@ homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(homewd)
 
 #get tree
-tree1 <- read.annot.beast(file =  paste0(homewd, "/BEAST-tree/denv1-out-final/DENV1avg.tree"))
+tree1 <- read.annot.beast(file =  paste0(homewd, "/BEAST-tree/denv-out/denv-beast/denv1/denv1Avg.tree"))
 
 #plot(tree)
 #and load the metadata
@@ -66,7 +66,7 @@ head(combine.df)
 #now add in the gis data
 tree.dat.merge = subset(dat, !is.na(lat) & DENV.serotype=="DENV-1")
 #tree.dat.merge <- dplyr::select(tree.dat.merge, -(X))
-tree.dat.merge = tree.dat.merge[tree.dat.merge$date>"2018-12-31",]#57  sequences
+tree.dat.merge = tree.dat.merge[tree.dat.merge$date>"2018-12-31",]#60 sequences
 head(tree.dat.merge)
 #and distance matrix - here, we just choose Jess's sequences
 xy.dat <- dplyr::select(tree.dat.merge, long, lat)
@@ -144,7 +144,7 @@ pair.df <- dplyr::select(pair.df, -(merge_name))
 head(pair.df)
 
 #redo seq
-length(unique(pair.df$pairseq1)) #56 now
+length(unique(pair.df$pairseq1)) #59 now
 ##then link all the metadata for the early sequence and save to make transmission trees
 
 
@@ -181,13 +181,15 @@ homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(homewd)
 
 #get tree
-tree2 <- read.annot.beast(file = paste0(homewd, "/BEAST-tree/denv2-out-final/DENV2avg.tree"))
+tree2 <- read.annot.beast(file =  paste0(homewd, "/BEAST-tree/denv-out/denv-beast/denv2/denv2Avg.tree"))
+
+
 
 #and load the metadata
 dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = T, stringsAsFactors = F)
 dat$date <- as.Date(dat$date, format="%m/%d/%y")
-mrsd.denv2 <- max(dat$date[dat$DENV.serotype=="DENV-2"]) #"2020-09-23"
-
+mrsd.denv2 <- max(dat$date[dat$DENV.serotype=="DENV-2"]) # "2022-10-10"
+dat = subset(dat, DENV.serotype=="DENV-2")
 #plot timetree
 p1 <- ggtree(tree2, mrsd= mrsd.denv2) + theme_tree2()
 #extract the dates of the internal nodes
@@ -218,6 +220,7 @@ combine.df$self <- 0
 combine.df$self[which(combine.df$beast_name1==combine.df$beast_name2)] <-1
 combine.df <- combine.df[combine.df$self<1,]
 combine.df <- dplyr::select(combine.df, -(self), -(index))
+
 #now add node date
 combine.df <- merge(combine.df, node.sub, by="node", all.x=T, sort=F)
 combine.df$merge_name <- paste(combine.df$beast_name1, combine.df$beast_name2, sep="_")
@@ -226,9 +229,9 @@ length(combine.df$node[is.na(combine.df$nodetime)])#0
 
 #now add in the gis data
 tree.dat.merge = subset(dat, !is.na(lat) & DENV.serotype=="DENV-2")
-tree.dat.merge = tree.dat.merge[tree.dat.merge$date>"2018-12-31",]#61  sequences now. 
+tree.dat.merge = tree.dat.merge[tree.dat.merge$date>"2018-12-31",]#124  sequences now. 
 unique(tree.dat.merge$country)#Cambodia
-unique(tree.dat.merge$DENV.subtype)#"Asian-1"      "Cosmopolitan"
+unique(tree.dat.merge$DENV.subtype)#"Asian-1"      "Cosmopolitan" - also "DENV2
 
 
 #and distance matrix - here, we just choose Jess's sequences
@@ -252,8 +255,32 @@ next.df <- dplyr::select(next.df, -(self), -(index))
 
 next.df$merge_name <- paste(next.df$beast_name1, next.df$beast_name2, sep="_")
 
-#now merge on merge name
-next.df <- dplyr::select(next.df, -(beast_name2), -(beast_name1))
+#only look at transmission chains within the same season, however.
+next.df$year1 <- year(as.Date(sapply(strsplit(next.df$beast_name1, "_"), function(x) x[[length(x)]])))
+next.df$year2 <- year(as.Date(sapply(strsplit(next.df$beast_name2, "_"), function(x) x[[length(x)]])))
+
+
+next.df$season <- 1
+next.df$season[next.df$year1!=next.df$year2] <- 0
+next.df = subset(next.df, season==1)
+
+
+#now merge on merge na
+next.df <- dplyr::select(next.df, -(beast_name2), -(beast_name1), -(year1), -(year2), -(season))
+
+#only look at transmission chains within the same season, however.
+combine.df$year1 <- trunc(combine.df$time1)
+combine.df$year2 <- trunc(combine.df$time2)
+combine.df$season <- 1
+combine.df$season[combine.df$year1!=combine.df$year2] <- 0
+combine.df = subset(combine.df, season==1)
+combine.df <- dplyr::select(combine.df, -(year1), -(year2), -(season))
+
+head(next.df)
+
+
+setdiff(unique(next.df$merge_name), unique(combine.df$merge_name)) 
+setdiff(combine.df$merge_name, next.df$merge_name)#these are all outside of Cambodia pairs
 
 new.dat <- merge(next.df, combine.df, by="merge_name", all.x=T, sort=F)
 head(new.dat)
@@ -265,6 +292,8 @@ length(unique(new.dat$beast_name2))
 ##now that you have all pairs, find the earlier date for each and compute the time to mrca
 split.pairs <- dlply(new.dat, .(rownames(new.dat)))
 get.tMRCA <- function(df){
+  #print(names(df))
+  #print(df$merge_name)
   if(df$time1>df$time2){
     df$early_time <- df$time2
     df$early_seq <- df$beast_name2
@@ -311,7 +340,7 @@ pair.df <- pair.df1[!duplicated(pair.df1$merge_name),]
 pair.df <- dplyr::select(pair.df, -(merge_name))
 ##then link all the metadata for the early sequence and save to make transmission trees
 head(pair.df)
-length(unique(pair.df$pairseq1)) #60
+length(unique(pair.df$pairseq1)) #120
 
 head(dat)
 merge.dat <- dplyr::select(dat, accession_num, age, sex, DENV.serotype, DENV.subtype)
@@ -328,7 +357,7 @@ setdiff( unique(merge.dat$accession_early), unique(pair.df$accession_early))
 pair.DENV2 <- merge(pair.df, merge.dat, by="accession_early", all.x=T, sort=F)
 head(pair.DENV2)
 tail(pair.DENV2)
-unique(pair.DENV2$DENV.subtype) #"Asian-1"      "Cosmopolitan"
+unique(pair.DENV2$DENV.subtype) #"Asian-1"      "Cosmopolitan" NA
 unique(pair.DENV2$accession_early[is.na(pair.DENV2$DENV.subtype)])
 
 #and the pair subtype
@@ -337,6 +366,8 @@ names(id.sub) <- c("pairseq2", "pair_subtype")
 
 pair.DENV2 <- merge(pair.DENV2, id.sub, by="pairseq2", all.x=T, sort=F)
 unique(pair.DENV2$pair_subtype) #"Asian-1"      "Cosmopolitan"
+length(unique(pair.DENV2$pairseq1)) #120
+length(unique(pair.DENV2$pairseq2)) #120
 write.csv(pair.DENV2, file =paste0(homewd, "/data/DENV2transTreeDat.csv"), row.names = F)
 
 #and join together 

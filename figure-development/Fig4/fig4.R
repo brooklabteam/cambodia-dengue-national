@@ -16,7 +16,7 @@ library(ape)
 library(sp)
 library(dismo)
 library(geosphere)
-library(rgeos)
+#library(rgeos)
 library(sf)
 
 
@@ -68,8 +68,8 @@ psub<-pSEA+
 
 
 #now add the trees
-tree1 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv1-out-final/DENV1avg.tree"))
-tree2 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv2-out-final/DENV2avg.tree"))
+tree1 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv-out/denv-beast/denv1/denv1Avg.tree"))
+tree2 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv-out/denv-beast/denv2/denv2Avg.tree"))
 
 tree1dat <- cbind.data.frame(tip_name = tree1@phylo$tip.label)
 
@@ -81,17 +81,22 @@ head(tree2dat)
 
 #and load the metadata
 
+ 
 
 dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = T, stringsAsFactors = F)
 head(dat)
+
+setdiff(tree1dat$tip_name, dat$tip_name)
+setdiff(tree2dat$tip_name, dat$tip_name)
+
 
 #check the format
 dat$date <- as.Date(dat$date, format = "%m/%d/%y")
 #dat$date <- as.Date(dat$date, format = "%m/%d/%y")
 
 
-mrsd.denv1 <- max(dat$date[dat$DENV.serotype=="DENV-1"]) #"2020-12-15"
-mrsd.denv2 <- max(dat$date[dat$DENV.serotype=="DENV-2"])#"2020-09-23"
+mrsd.denv1 <- max(dat$date[dat$DENV.serotype=="DENV-1"]) #"2021-05-29"
+mrsd.denv2 <- max(dat$date[dat$DENV.serotype=="DENV-2"])#"2022-10-10"
 
 node.tree1 <- MRCA(tree1, which(tree1@phylo$tip.label== "OL412678_2019-07-25" ),which(tree1@phylo$tip.label == "ON046271_2004-11-20"))
 
@@ -99,9 +104,10 @@ node.tree1 <- MRCA(tree1, which(tree1@phylo$tip.label== "OL412678_2019-07-25" ),
 pA1 <- ggtree(tree1, mrsd=mrsd.denv1, color="forestgreen")  + 
   geom_cladelab(node=node.tree1, label="Genotype I", textcolor="seagreen", barcolor="seagreen", fontsize=6,
                 offset =-37, angle=270, offset.text = -12, vjust=2, hjust=.5)  +
-  theme_tree2() + coord_cartesian(xlim=c(1930,2030), ylim=c(0,390)) + 
+  theme_tree2() + coord_cartesian(xlim=c(1930,2030), ylim=c(0,400)) + 
   #geom_range(range='length_0.95_HPD', color='red', alpha=.6, size=2) +
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1, show.legend = F) +
+  scale_fill_continuous(low="yellow", high="red", limits=c(0,1)) +
   scale_x_continuous(breaks=c(1950, 1975, 2000, 2020))+
   #scale_fill_continuous(low="yellow", high="red", limits=c(0,1))+
   theme(legend.position = c(.2,.8), 
@@ -115,10 +121,10 @@ pA1 <- ggtree(tree1, mrsd=mrsd.denv1, color="forestgreen")  +
 #node.tree2.1 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414741_2019-07-15" ),which(tree2@phylo$tip.label == "KU509277_2010-07-31"))
 node.tree2 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414741_2019-07-23" ),which(tree2@phylo$tip.label == "KU509277_2010-07-31"))
 #node.tree2.2 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414721_2019-07-15"),which(tree2@phylo$tip.label == "KF744400_2000-07-31"))
-node.tree2.1 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414721_2019-07-25" ),which(tree2@phylo$tip.label == "KF744400_2000-07-31"))
+node.tree2.1 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414721_2019-07-25" ),which(tree2@phylo$tip.label == "MW946582_2000-07-31"))
 
 pB2 <- ggtree(tree2, mrsd=mrsd.denv2, color="navy")  + theme_tree2() + 
-  coord_cartesian(xlim=c(1930,2030),  ylim=c(0,350))+
+  coord_cartesian(xlim=c(1930,2030),  ylim=c(0,400))+
   geom_cladelab(node=node.tree2, label="Cosmopolitan III", textcolor="tomato",barcolor="tomato",
                 offset =-37, angle=270, offset.text = -12, fontsize=6, vjust=2, hjust=.5)  +
   geom_cladelab(node=node.tree2.1, label="Asian I", textcolor="navy", barcolor="navy", fontsize=6,vjust=2, hjust=.5,
@@ -170,7 +176,7 @@ tree2merge$new_seq <- as.factor(tree2merge$new_seq)
 tree2merge$CambodiaSeq <- "no"
 tree2merge$CambodiaSeq[tree2merge$country=="Cambodia"] <- "yes"
 
-shapez = c("yes"=21, "no"=24)
+shapez = c("yes"=24, "no"=21)
 
 
 pA <- pA1 %<+% tree1merge +
@@ -498,12 +504,12 @@ ggsave(file = paste0(homewd, "/final-figures/Fig4.png"),
        scale=3, 
        dpi=300)
 
-
-ggsave(file = paste0(homewd, "/final-figures/Fig4.pdf"),
-       plot= Fig4,
-       units="mm",  
-       width=100, 
-       height=85, 
-       scale=3, 
-       dpi=300)
-
+# 
+# ggsave(file = paste0(homewd, "/final-figures/Fig4.pdf"),
+#        plot= Fig4,
+#        units="mm",  
+#        width=100, 
+#        height=85, 
+#        scale=3, 
+#        dpi=300)
+# 
