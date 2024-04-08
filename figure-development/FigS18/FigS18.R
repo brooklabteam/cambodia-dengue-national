@@ -31,15 +31,28 @@ plot(rooted.D2)
 #load tree data prepared from elsewhere
 dat <-read.csv(file = paste0(homewd, "figure-development/FigS18/ML-Sequences.csv"))
 head(dat)
+
+
+
+#and load and attach the actual accession numbers
+acc.dat <- read.csv(file = paste0(homewd, "/data/new_accession.csv"), header = T, stringsAsFactors = F)
+names(acc.dat) <- c("Accession", "New_Accession")
+head(acc.dat)
+
+dat.merge <- merge(dat, acc.dat, by ="Accession", all.x=T, sort=F)
+
+head(dat.merge)
+tail(dat.merge)
+
 #check subgroup names
 unique(dat$Subclade[dat$Serotype=="DENV-1"])
 unique(dat$Subclade[dat$Serotype=="DENV-2"])
 
 #add denv4
-dat.add <- c("NC_002640", NA, NA, "DENV-4", "outgroup")
-dat <- rbind(dat, dat.add)
+dat.add <- c("NC_002640", NA, NA, "DENV-4", "outgroup", NA)
+dat.merge <- rbind(dat.merge, dat.add)
 
-dat.denv1 <- subset(dat, Serotype!="DENV-2")
+dat.denv1 <- subset(dat.merge, Serotype!="DENV-2")
 
 tree.denv1 <- cbind.data.frame(tip_label = rooted.D1$tip.label)
 tree.denv1$Accession <- sapply(strsplit(tree.denv1$tip_label, split = "_"), function(x) x[[1]])
@@ -48,7 +61,7 @@ dat.all.denv1 <- merge(tree.denv1, dat.denv1, by ="Accession", all.x = T, sort=F
 dat.all.denv1$Accession[dat.all.denv1$tip_label=="NC_002640_DENV4"] <- "NC_002640"
 dat.all.denv1$Serotype[dat.all.denv1$tip_label=="NC_002640_DENV4"] <- "DENV-4"
 
-dat.all.denv1 <- dplyr::select(dat.all.denv1, tip_label, Accession, Locality, Serotype, Subclade)
+dat.all.denv1 <- dplyr::select(dat.all.denv1, tip_label, Accession, Locality, Serotype, Subclade, New_Accession)
 unique(dat.all.denv1$Subclade)
 subset(dat.all.denv1, is.na(Subclade))
 dat.all.denv1$Subclade[dat.all.denv1$Serotype=="DENV-4"] <- "Outgroup"
@@ -59,6 +72,8 @@ colz1 = c('Genotype-I' = "tomato",
           'Old-Cambodia'= "magenta", 
           'New-Cambodia' = "darkorchid1", 
           'Outgroup' = "black")
+
+
 
 #take a glance
 p1 <- ggtree(rooted.D1) %<+% dat.all.denv1 + geom_tippoint(aes(fill=Subclade), shape=21 ) +
@@ -85,6 +100,23 @@ dat.all.denv1$Subclade <- factor(dat.all.denv1$Subclade,
                                  levels=c("Genotype-I", "Genotype-II", "Genotype-III",
                                           "Old-Cambodia", "New-Cambodia", "Outgroup")) 
 
+
+#and make new tip labels
+names(dat.all.denv1)[names(dat.all.denv1)=="tip_label"] <- "old_tip_label"
+dat.all.denv1$year <- sapply(strsplit(dat.all.denv1$old_tip_label, "_"),  function(x) x[[length(x)]] )
+dat.all.denv1$New_Accession[is.na(dat.all.denv1$New_Accession)] <- dat.all.denv1$Accession[is.na(dat.all.denv1$New_Accession)]
+dat.all.denv1$tip_label <- paste0(dat.all.denv1$New_Accession,"_",  dat.all.denv1$Locality, "_", dat.all.denv1$year)
+
+#and overwrite
+names(tree.denv1)[names(tree.denv1)=="tip_label"] <- "old_tip_label"
+new.dat <- merge(tree.denv1, dat.all.denv1, by = "old_tip_label", all.x=T, sort=F)
+
+rooted.D1$tip.label <- new.dat$tip_label
+
+dat.all.denv1 <- dplyr::select(dat.all.denv1, tip_label, Accession, Locality, Serotype, Subclade)
+
+
+
 #take a glance
 pA <- ggtree(rooted.D1) %<+% dat.all.denv1 + geom_tippoint(aes(fill=Subclade), shape=21 ) +
   geom_tiplab(size=1, hjust=-.1) + #geom_nodelab(size=1, hjust=2) +
@@ -110,7 +142,7 @@ pA2 <- pA  %<+% A.dat +
         ggnewscale::new_scale_fill() + geom_tippoint(aes(fill=Subclade), shape=21 ) + scale_fill_manual(values=colz1, name=NULL)
 #and do DENV2
 
-dat.denv2 <- subset(dat, Serotype!="DENV-1")
+dat.denv2 <- subset(dat.merge, Serotype!="DENV-1")
 
 tree.denv2 <- cbind.data.frame(tip_label = rooted.D2$tip.label)
 tree.denv2$Accession <- NA
@@ -123,7 +155,7 @@ dat.all.denv2$Accession[dat.all.denv2$tip_label=="NC_002640_DENV4"] <- "NC_00264
 dat.all.denv2$Serotype[dat.all.denv2$tip_label=="NC_002640_DENV4"] <- "DENV-4"
 dat.all.denv2$Subclade[dat.all.denv2$tip_label=="NC_002640_DENV4"] <- "Outgroup"
 
-dat.all.denv2 <- dplyr::select(dat.all.denv2, tip_label, Accession, Locality, Serotype, Subclade)
+dat.all.denv2 <- dplyr::select(dat.all.denv2, tip_label, Accession, Locality, Serotype, Subclade, New_Accession)
 
 
 #take a glance
@@ -177,6 +209,24 @@ Asian1 <- MRCA(rooted.D2, which(rooted.D2$tip.label == "GQ868591_Thailand_1964" 
 Asian2 <- MRCA(rooted.D2, which(rooted.D2$tip.label == "HQ891024_Taiwan_2008" ),which(rooted.D2$tip.label == "JF730050_Puerto_Rico_2007"))
 
 #rooted.D2$node.label[as.numeric(rooted.D2$node.label)<80] <- ""
+
+
+#and make new tip labels
+names(dat.all.denv2)[names(dat.all.denv2)=="tip_label"] <- "old_tip_label"
+dat.all.denv2$year <- sapply(strsplit(dat.all.denv2$old_tip_label, "_"),  function(x) x[[length(x)]] )
+dat.all.denv2$New_Accession[is.na(dat.all.denv2$New_Accession)] <- dat.all.denv2$Accession[is.na(dat.all.denv2$New_Accession)]
+dat.all.denv2$tip_label <- paste0(dat.all.denv2$New_Accession,"_",  dat.all.denv2$Locality, "_", dat.all.denv2$year)
+
+
+#and overwrite
+names(tree.denv2)[names(tree.denv2)=="tip_label"] <- "old_tip_label"
+new.dat <- merge(tree.denv2, dat.all.denv2, by = "old_tip_label", all.x=T, sort=F)
+
+rooted.D2$tip.label <- new.dat$tip_label
+
+dat.all.denv2 <- dplyr::select(dat.all.denv2, tip_label, Accession, Locality, Serotype, Subclade)
+
+
 
 #take a glance
 pB <- ggtree(rooted.D2) %<+% dat.all.denv2 + geom_tippoint(aes(fill=Subclade), shape=21 ) +
