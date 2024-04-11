@@ -22,10 +22,10 @@ head(all.dat)
 all.dat$Collection_Date <- as.Date(all.dat$Collection_Date, format = "%m/%d/%y")
 
 #replace the dates on our  cambodia sequences with the more accurate (more precise) ones from our database
-new.dat <- read.csv(file = paste0(homewd, "/gather-sequences/cambodia-seq-details.csv"))
+new.dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"))
 
 head(new.dat)
-new.dat <- dplyr::select(new.dat, accession_num, date)
+new.dat <- dplyr::select(new.dat, Accession, date)
 new.dat$date <- as.Date(new.dat$date, format = "%m/%d/%y")
 names(new.dat) <- c("Accession", "precise_date")
 
@@ -41,8 +41,8 @@ all.dat$Collection_Date[all.dat$Country=="Cambodia"]
 
 #generate a beast appropriate name for each sequence
 all.dat$beast_name <- paste0(all.dat$Accession, "_", all.dat$Collection_Date)
-all.denv1 = subset(all.dat, Serotype==1)
-all.denv2 = subset(all.dat, Serotype==2)
+all.denv1 = subset(all.dat, Serotype=="DENV-1")
+all.denv2 = subset(all.dat, Serotype=="DENV-2")
 
 #now collect names from the sequences as is
 name.dat.denv1 <- cbind.data.frame(name = names(denv1.pre))
@@ -50,9 +50,10 @@ name.dat.denv2 <- cbind.data.frame(name = names(denv2.pre))
 
 #and lose the points
 name.dat.denv1$Accession <- sapply(strsplit(gsub("\\.", "_", name.dat.denv1$name),split = "_"), function(x) x[[1]])
-name.dat.denv2$Accession <- NA
-name.dat.denv2$Accession[1:(length(name.dat.denv2$name)-63)] <- sapply(strsplit(gsub("\\.", "_", name.dat.denv2$name[1:(length(name.dat.denv2$name)-63)]),split = "_"), function(x) x[[1]])
-name.dat.denv2$Accession[is.na(name.dat.denv2$Accession)] <- name.dat.denv2$name[is.na(name.dat.denv2$Accession)] 
+name.dat.denv2$Accession <- sapply(strsplit(gsub("\\.", "_", name.dat.denv2$name),split = "_"), function(x) x[[1]])
+#name.dat.denv2$Accession <- NA
+#name.dat.denv2$Accession[1:(length(name.dat.denv2$name)-63)] <- sapply(strsplit(gsub("\\.", "_", name.dat.denv2$name[1:(length(name.dat.denv2$name)-63)]),split = "_"), function(x) x[[1]])
+#name.dat.denv2$Accession[is.na(name.dat.denv2$Accession)] <- name.dat.denv2$name[is.na(name.dat.denv2$Accession)] 
 
 #and merge on accession
 merge.denv1 <- merge(name.dat.denv1, all.denv1, by = "Accession", all.x = T, sort = F)
