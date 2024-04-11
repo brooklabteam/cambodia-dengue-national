@@ -9,14 +9,19 @@ homewd = "/Users/carabrook/Developer/cambodia-dengue-national"
 dat <- read.csv(file=paste0(homewd, "/gather-sequences/allSEasiadengue.csv"), header = T, stringsAsFactors = F)
 head(dat)
 names(dat)
+names(dat)[names(dat)=="Organism_Name"] <- "Serotype"
+names(dat)[names(dat)=="Geo_Location"] <- "Country"
+dat$Serotype[dat$Serotype=="dengue virus type 1" |dat$Serotype=="dengue virus type I" | dat$Serotype=="dengue virus 1" ] <- "DENV-1"
+dat$Serotype[dat$Serotype=="Dengue virus type 2" | dat$Serotype=="dengue virus type 2" |dat$Serotype=="dengue virus 2" ] <- "DENV-2"
+unique(dat$Serotype)
 #choose
-dat <- dplyr::select(dat, Accession, Serotype, Geo_Location, Collection_Date, Host)
+dat <- dplyr::select(dat, Accession, Serotype, Country, Collection_Date, Host)
 head(dat)
 unique(dat$Host)
-unique(dat$Geo_Location)
-dat$Country <- sapply(strsplit(dat$Geo_Location, split=":"), "[",1)
+#unique(dat$Geo_Location)
+#dat$Country <- sapply(strsplit(dat$Geo_Location, split=":"), "[",1)
 unique(dat$Country)
-dat$Country[dat$Country=="Viet Nam"] <- "Vietnam"
+#dat$Country[dat$Country=="Viet Nam"] <- "Vietnam"
 
 #and edit dates
 unique(dat$Collection_Date)
@@ -73,8 +78,8 @@ dat.sub <- data.table::rbindlist(dat.out)
 head(dat.sub)
 
 
-length(dat.cambodia$Accession[dat.cambodia$Serotype==1])#192
-length(dat.cambodia$Accession[dat.cambodia$Serotype==2])#116
+length(dat.cambodia$Accession[dat.cambodia$Serotype=="DENV-1"])#197
+length(dat.cambodia$Accession[dat.cambodia$Serotype=="DENV-2"])#179
 dat.sub <- rbind(dat.sub, dat.cambodia)
 names(dat.sub)[names(dat.sub)=="year"] <- "Year"
 
@@ -84,20 +89,30 @@ dat.sub <- arrange(dat.sub, Serotype, Country, Year)
 #dat.sub.add = subset(dat.sub, Country=="Indonesia")
 head(dat.sub)
 
+#and remove the three duplicate cambodia sequences (DENV2)
+dat.sub$flag <- 0
+dat.sub$flag[dat.sub$Accession=="OQ000263"] <- 1
+dat.sub$flag[dat.sub$Accession=="OL414731"] <- 1
+dat.sub$flag[dat.sub$Accession=="OP999339"] <- 1
+
+dat.sub = subset(dat.sub, flag==0)
+
+dat.sub <- dplyr::select(dat.sub, -(flag))
+
 write.csv(dat.sub, file = paste0(homewd, "/gather-sequences/All_Seq_SE_Asia.csv"), row.names = F)
 
 #and get the piece to call from genbank
 #separate for dengue 1 and 2
-denv1 = subset(dat.sub, Serotype==1)
-denv2 = subset(dat.sub, Serotype==2)
+denv1 = subset(dat.sub, Serotype=="DENV-1")
+denv2 = subset(dat.sub, Serotype=="DENV-2")
 
 fileConn<-file(paste0(homewd,"/gather-sequences/DENV1-NCBI.txt"))
-writeLines(paste0("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta&retmode=text&id=",paste(denv1$Accession, collapse = ", ")), fileConn)
+writeLines(paste0("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta&retmode=text&id=",paste(denv1$Accession, collapse = ",")), fileConn)
 close(fileConn)
 
 #and dengue 2
 fileConn<-file(paste0(homewd,"/gather-sequences/DENV2-NCBI.txt"))
-writeLines(paste0("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta&retmode=text&id=",paste(denv2$Accession, collapse = ", ")), fileConn)
+writeLines(paste0("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta&retmode=text&id=",paste(denv2$Accession, collapse = ",")), fileConn)
 close(fileConn)
 
 #then 
