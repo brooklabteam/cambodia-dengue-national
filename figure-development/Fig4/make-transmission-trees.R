@@ -66,7 +66,7 @@ head(combine.df)
 #now add in the gis data
 tree.dat.merge = subset(dat, !is.na(lat) & DENV.serotype=="DENV-1")
 #tree.dat.merge <- dplyr::select(tree.dat.merge, -(X))
-tree.dat.merge = tree.dat.merge[tree.dat.merge$date>"2018-12-31",]#60 sequences
+tree.dat.merge = tree.dat.merge[tree.dat.merge$date>"2018-12-31",]#60 sequences - there are 3 DENV-1 sequences from our dataset that are missing lat/long (OQ678060, OQ683880, OK159947)
 head(tree.dat.merge)
 #and distance matrix - here, we just choose Jess's sequences
 xy.dat <- dplyr::select(tree.dat.merge, long, lat)
@@ -174,7 +174,7 @@ write.csv(pair.DENV1, file =paste0(homewd, "/data/DENV1transTreeDat.csv"), row.n
 
 
 #now do the same for DENV2
-
+ 
 #get tree
 rm(list=ls())
 homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
