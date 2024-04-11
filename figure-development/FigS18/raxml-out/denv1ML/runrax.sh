@@ -16,4 +16,4 @@ module load gcc/10.2.0
 module load emacs/26
 module load java/1.8
 
-/project2/cbrook/software/raxml-ng/bin/raxml-ng-mpi --all --msa DENV1alignedML.fasta --model GTR+I+G4 --prefix T3  --seed 12 --threads 7  --bs-metric fbp,tbe
+/project2/cbrook/software/raxml-ng/bin/raxml-ng-mpi --all --msa DENV1alignedML.fasta --model GTR+I+G4 --prefix T3  --seed 12 --threads 7  --bs-metric fbp,tbe --blopt nr_safe

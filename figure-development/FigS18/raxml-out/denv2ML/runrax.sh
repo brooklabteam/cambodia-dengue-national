@@ -3,7 +3,7 @@
 #SBATCH --account=pi-cbrook
 #SBATCH --partition=broadwl
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=7
+#SBATCH --ntasks-per-node=8
 #SBATCH --time=36:00:00
 
 
@@ -16,4 +16,4 @@ module load gcc/10.2.0
 module load emacs/26
 module load java/1.8
 
-/project2/cbrook/software/raxml-ng/bin/raxml-ng-mpi --all --msa DENV2alignedML.fasta --model GTR+I+G4 --prefix T3  --seed 12 --threads 7 --bs-metric fbp,tbe
+/project2/cbrook/software/raxml-ng/bin/raxml-ng-mpi --all --msa DENV2alignedML.fasta --model GTR+I+G4 --prefix T3  --seed 12 --threads 8 --bs-metric fbp,tbe --blopt nr_safe
