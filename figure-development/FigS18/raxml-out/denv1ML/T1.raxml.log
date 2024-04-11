@@ -7,19 +7,19 @@ Questions/problems/suggestions? Please visit: https://groups.google.com/forum/#!
 
 System: Intel(R) Xeon(R) CPU E5-2680 v4 @ 2.40GHz, 28 cores, 251 GB RAM
 
-RAxML-NG was called at 06-Mar-2024 17:28:44 as follows:
+RAxML-NG was called at 10-Apr-2024 11:13:17 as follows:
 
 /project2/cbrook/software/raxml-ng/bin/raxml-ng-mpi --check --msa DENV1alignedML.fasta --model GTR+I+G4 --prefix T1
 
 Analysis options:
   run mode: Alignment validation
   start tree(s): 
-  random seed: 1709767727
+  random seed: 1712765598
   SIMD kernels: AVX2
   parallelization: coarse-grained (auto), PTHREADS (auto)
 
-[00:00:02] Reading alignment from file: DENV1alignedML.fasta
-[00:00:02] Loaded alignment with 226 taxa and 11131 sites
+[00:00:01] Reading alignment from file: DENV1alignedML.fasta
+[00:00:01] Loaded alignment with 226 taxa and 11131 sites
 
 WARNING: Fully undetermined columns found: 2
 
@@ -41,7 +41,7 @@ Alignment can be successfully read by RAxML-NG.
 
 Execution log saved to: /home/cbrook/denv1ML/T1.raxml.log
 
-Analysis started: 06-Mar-2024 17:28:44 / finished: 06-Mar-2024 17:28:47
+Analysis started: 10-Apr-2024 11:13:17 / finished: 10-Apr-2024 11:13:19
 
-Elapsed time: 2.576 seconds
+Elapsed time: 2.030 seconds
 
