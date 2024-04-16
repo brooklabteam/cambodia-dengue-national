@@ -195,14 +195,10 @@ Fig3A <- ggplot(cam.merge) +
 Fig3AB <- cowplot::plot_grid(Fig3A, Fig3B, nrow=1, ncol=2, labels = c("A", "B"), label_size = 22)
 
 
-
-
 # Now lambda and sigma
-load(paste0(homewd,"/figure-development/Fig3/comp-fits/prov-fits-FOI.Rdata")) #these are the fitted pars
-load(paste0(homewd,"/figure-development/Fig3/comp-fits/sigma-fit-all-time-var.Rdata"))#this is the age modification)
-
-# first, the FOI plot - include birth rates
-# then, embed the age multiplier
+fit.dat <- read.csv(file = paste0(homewd,"/data/prov-fits-FOI.csv"), header = T, stringsAsFactors = F)
+age.fit <- read.csv(file = paste0(homewd,"/data/age-mult-profile.csv"), header = T, stringsAsFactors = F)
+sigma.fit <- read.csv(file = paste0(homewd,"/data/sigma-fit.csv"), header = T, stringsAsFactors = F)
 
 fit.dat$provname[fit.dat$provname=="Otdar Meanchey"] <- "Oddar Meanchey"
 colz = scales::hue_pal()((length(unique(fit.dat$provname))-1))
@@ -210,9 +206,14 @@ names(colz) <- sort(unique(fit.dat$provname[fit.dat$provname!="National"]))
 colz <- c(colz, "black")
 names(colz)[length(colz)] <- "National"
 
+#mult by 4?
+# fit.dat$all_lambda <- fit.dat$N_sero*fit.dat$lambda
+# fit.dat$all_lci <- fit.dat$N_sero*fit.dat$lci
+# fit.dat$all_uci <- fit.dat$N_sero*fit.dat$uci
+
 Fig3Cc <- ggplot(subset(fit.dat, provname!="Tboung Khmum")) + 
   geom_point(aes(x=year, y=lambda, color=provname), show.legend = F) +
-  ylab(bquote("annual force of infection, per capita,"~lambda)) +
+  ylab(bquote("annual force of infection, per serotype, per capita,"~lambda)) +
   geom_ribbon(aes(x=year, ymin=lci, ymax=uci, fill=provname), alpha=.3, show.legend = F) +    
   geom_line(aes(x=year, y=lambda, color=provname), show.legend = F) +theme_bw() + 
   geom_point(data = subset(fit.dat, provname=="National"), aes(x=year, y=lambda), color="black") +
@@ -224,6 +225,21 @@ Fig3Cc <- ggplot(subset(fit.dat, provname!="Tboung Khmum")) +
   geom_vline(xintercept = 2007, linetype=2) + 
   geom_vline(xintercept = 2012, linetype=2) +
   geom_vline(xintercept = 2019, linetype=2) 
+
+# Fig3Cc <- ggplot(subset(fit.dat, provname!="Tboung Khmum")) + 
+#   geom_point(aes(x=year, y=lambda, color=provname), show.legend = F) +
+#   ylab(bquote("annual force of infection, per capita,"~lambda)) +
+#   geom_ribbon(aes(x=year, ymin=all_lci, ymax=all_uci, fill=provname), alpha=.3, show.legend = F) +    
+#   geom_line(aes(x=year, y=all_lambda, color=provname), show.legend = F) +theme_bw() + 
+#   geom_point(data = subset(fit.dat, provname=="National"), aes(x=year, y=all_lambda), color="black") +
+#   geom_ribbon(data = subset(fit.dat, provname=="National"),aes(x=year, ymin=all_lci, ymax=all_uci), alpha=.3, fill="black") +    
+#   geom_line(data = subset(fit.dat, provname=="National"),aes(x=year, y=all_lambda), size =1, color="black") +
+#   theme(panel.grid = element_blank(), axis.title.x = element_blank(), axis.title.y = element_text(size=16),
+#         axis.text = element_text(size=13), plot.margin = unit(c(0,.2,.6,.4), "cm")) + #coord_cartesian(ylim = c(0,1)) +
+#   scale_color_manual(values=colz) + scale_fill_manual(values=colz) +
+#   geom_vline(xintercept = 2007, linetype=2) + 
+#   geom_vline(xintercept = 2012, linetype=2) +
+#   geom_vline(xintercept = 2019, linetype=2) 
 
 
 # now add the birth rate panel to it at the top
@@ -312,19 +328,16 @@ ggsave(filename = paste0(homewd, "/final-figures/FigS16.png"),
        dpi=300)
 
 
-
-
-
-#now, the age multiplier becomes panel D
-#age.mult.profile <- read.csv(file = paste0(homewd, "/data/age-mult-profile.csv"), header=T,stringsAsFactors = F)
-
-
-#now, the age multiplier becomes panel D
-load(paste0(homewd, "/figure-development/Fig3/age-fit-alt-two-short-trim/refit-many-age-mult.Rdata"))
+# #now, the age multiplier becomes panel D
+# #age.mult.profile <- read.csv(file = paste0(homewd, "/data/age-mult-profile.csv"), header=T,stringsAsFactors = F)
+# 
+# 
+# #now, the age multiplier becomes panel D
+# load(paste0(homewd, "/figure-development/Fig3/age-fit-alt-two-short-trim/refit-many-age-mult.Rdata"))
 
 # embed the age multiplier
 #age.long <- melt(age.mult.profile, id.vars = c("age_mult", "lci_mult", "uci_mult", "year_range"), measure.vars = c("age_min", "age_max"))
-age.long <- melt(age.refit, id.vars = c("age_mult", "lci_mult", "uci_mult", "year_range"), measure.vars = c("age_min", "age_max"))
+age.long <- melt(age.fit, id.vars = c("age_mult", "lci_mult", "uci_mult", "year_range"), measure.vars = c("age_min", "age_max"))
 head(age.long)
 names(age.long)[names(age.long)=="value"] <- "age"
 
@@ -691,7 +704,7 @@ run.model.data.all <- function(dat,par.dat, sigma.fit, age.mult.df){
 
 #run the model and arrange the data
 #out.plot <- run.model.data.all(par.dat = fit.dat, dat = dat, age.mult.df = age.mult.profile, sigma.fit = sigma.fit)
-out.plot <- run.model.data.all(par.dat = fit.dat, dat = dat, age.mult.df = age.refit, sigma.fit = sigma.fit)
+out.plot <- run.model.data.all(par.dat = fit.dat, dat = dat, age.mult.df = age.fit, sigma.fit = sigma.fit)
 head(out.plot)
 out.plot <- arrange(out.plot, provname, year)
 out.plot$provname <- factor(out.plot$provname, levels = unique(out.plot$provname))
@@ -740,7 +753,7 @@ head(sigma.fit)
 
 Fig3Eb <- ggplot(sigma.fit) + theme_bw() + 
   geom_line(aes(x=year, y=sigma), size=1)  + ylab(bquote(atop("annual rate of waning","multitypic immunity,"~sigma)))+ 
-  geom_ribbon(aes(x=year, ymin=lci_sigma, ymax=uci_sigma), alpha=.3) +
+  geom_ribbon(aes(x=year, ymin=lci, ymax=uci), alpha=.3) +
   theme(panel.grid = element_blank(), axis.title = element_text(size=16), axis.title.x = element_blank(),
         axis.text = element_text(size=11))
 print(Fig3Eb)
@@ -773,16 +786,16 @@ ggsave(filename = paste0(homewd, "/final-figures/Fig3.png"),
        scale=3, 
        dpi=300)
 
-
-
-ggsave(filename = paste0(homewd, "/final-figures/Fig3.pdf"),
-       plot = Fig3,
-       units="mm",  
-       width=120, 
-       height=110, 
-       scale=3, 
-       dpi=300)
-
+# 
+# 
+# ggsave(filename = paste0(homewd, "/final-figures/Fig3.pdf"),
+#        plot = Fig3,
+#        units="mm",  
+#        width=120, 
+#        height=110, 
+#        scale=3, 
+#        dpi=300)
+# 
 
 
 
