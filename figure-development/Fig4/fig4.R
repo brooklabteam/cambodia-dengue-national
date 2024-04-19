@@ -68,8 +68,8 @@ psub<-pSEA+
 
 
 #now add the trees
-tree1 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv-out/denv-beast/denv1/denv1Avg.tree"))
-tree2 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv-out/denv-beast/denv2/denv2Avg.tree"))
+tree1 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv-beast/beast-out/denv1/denv1Avg.tree"))
+tree2 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv-beast/beast-out/denv2/denv2Avg.tree"))
 
 tree1dat <- cbind.data.frame(tip_name = tree1@phylo$tip.label)
 
@@ -86,13 +86,16 @@ head(tree2dat)
 dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = T, stringsAsFactors = F)
 head(dat)
 
-setdiff(tree1dat$tip_name, dat$tip_name)
+
+setdiff(tree1dat$tip_name, dat$tip_name) #these get edited down below
 setdiff(tree2dat$tip_name, dat$tip_name)
+
 
 
 #check the format
 dat$date <- as.Date(dat$date, format = "%m/%d/%y")
 #dat$date <- as.Date(dat$date, format = "%m/%d/%y")
+
 
 
 mrsd.denv1 <- max(dat$date[dat$DENV.serotype=="DENV-1"]) #"2021-05-29"
@@ -119,16 +122,16 @@ pA1 <- ggtree(tree1, mrsd=mrsd.denv1, color="forestgreen")  +
 
 
 #node.tree2.1 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414741_2019-07-15" ),which(tree2@phylo$tip.label == "KU509277_2010-07-31"))
-node.tree2 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414741_2019-07-23" ),which(tree2@phylo$tip.label == "KU509277_2010-07-31"))
+node.tree2 <- MRCA(tree2, which(tree2@phylo$tip.label== "PP411229_2022-06-01" ),which(tree2@phylo$tip.label == "MK506264_2007-06-15"))
 #node.tree2.2 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414721_2019-07-15"),which(tree2@phylo$tip.label == "KF744400_2000-07-31"))
-node.tree2.1 <- MRCA(tree2, which(tree2@phylo$tip.label== "OL414721_2019-07-25" ),which(tree2@phylo$tip.label == "MW946582_2000-07-31"))
+node.tree2.1 <- MRCA(tree2, which(tree2@phylo$tip.label== "OQ426897_2019-03-06" ),which(tree2@phylo$tip.label == "KF921930_2002-07-31"))
 
 pB2 <- ggtree(tree2, mrsd=mrsd.denv2, color="navy")  + theme_tree2() + 
   coord_cartesian(xlim=c(1930,2030),  ylim=c(0,400))+
   geom_cladelab(node=node.tree2, label="Cosmopolitan III", textcolor="tomato",barcolor="tomato",
-                offset =-37, angle=270, offset.text = -12, fontsize=6, vjust=2, hjust=.5)  +
+              offset =-37, angle=270, offset.text = -12, fontsize=6, vjust=2, hjust=.5)  +
   geom_cladelab(node=node.tree2.1, label="Asian I", textcolor="navy", barcolor="navy", fontsize=6,vjust=2, hjust=.5,
-                offset =-37, angle=270, offset.text = -12)  +
+               offset =-37, angle=270, offset.text = -12)  +
   #geom_tiplab(size=1)+
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1) +
   scale_fill_continuous(low="yellow", high="red", limits=c(0,1)) +
@@ -165,9 +168,9 @@ tree1merge$CambodiaSeq[tree1merge$country=="Cambodia"] <- "yes"
 
 
 
-unique(tree2merge$country)
-tree2merge$new_label = sapply(strsplit(tree2merge$tip_name, "_"), function(x) x[[1]])
-tree2merge$new_label <- paste0(tree2merge$new_label, " ", as.character(tree2merge$date))
+#unique(tree2merge$country)
+#tree2merge$new_label = sapply(strsplit(tree2merge$tip_name, "_"), function(x) x[[1]])
+#tree2merge$new_label <- paste0(tree2merge$new_label, " ", as.character(tree2merge$date))
 
 tree2merge$new_seq = "no"
 tree2merge$new_seq[tree2merge$country=="Cambodia" &  !is.na(tree2merge$lat) & tree2merge$date>"2018-01-01"] <- "yes"
