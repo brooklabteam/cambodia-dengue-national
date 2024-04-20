@@ -71,6 +71,13 @@ psub<-pSEA+
 tree1 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv-beast/beast-out/denv1/denv1Avg.tree"))
 tree2 <- read.beast(file = paste0(homewd, "/BEAST-tree/denv-beast/beast-out/denv2/denv2Avg.tree"))
 
+
+#replace these (did not have accession numbers yet when first made tree)
+tree1@phylo$tip.label[tree1@phylo$tip.label=="DENS-OB-067_2021-05-29"] <- "PP470671_2021-05-29" 
+tree1@phylo$tip.label[tree1@phylo$tip.label=="DENS-OB-068_2021-05-29"] <- "PP470672_2021-05-29" 
+tree1@phylo$tip.label[tree1@phylo$tip.label=="DENS-OB-070_2021-05-30"] <- "PP470673_2021-05-30" 
+
+
 tree1dat <- cbind.data.frame(tip_name = tree1@phylo$tip.label)
 
 tree2dat <- cbind.data.frame(tip_name = tree2@phylo$tip.label)
@@ -160,7 +167,7 @@ tree1merge$new_label = sapply(strsplit(tree1merge$tip_name, "_"), function(x) x[
 tree1merge$new_label <- paste0(tree1merge$new_label, " ", as.character(tree1merge$date))
 
 tree1merge$new_seq = "no"
-tree1merge$new_seq[tree1merge$country=="Cambodia" & !is.na(tree1merge$lat) & tree1merge$date>"2018-01-01"] <- "yes"
+tree1merge$new_seq[tree1merge$country=="Cambodia" & !is.na(tree1merge$NIH.ID)] <- "yes"
 tree1merge$new_seq <- as.factor(tree1merge$new_seq)
 
 tree1merge$CambodiaSeq <- "no"
@@ -173,7 +180,7 @@ tree1merge$CambodiaSeq[tree1merge$country=="Cambodia"] <- "yes"
 #tree2merge$new_label <- paste0(tree2merge$new_label, " ", as.character(tree2merge$date))
 
 tree2merge$new_seq = "no"
-tree2merge$new_seq[tree2merge$country=="Cambodia" &  !is.na(tree2merge$lat) & tree2merge$date>"2018-01-01"] <- "yes"
+tree2merge$new_seq[tree2merge$country=="Cambodia" &  !is.na(tree2merge$NIH.ID)] <- "yes"
 tree2merge$new_seq <- as.factor(tree2merge$new_seq)
 
 tree2merge$CambodiaSeq <- "no"
@@ -516,3 +523,83 @@ ggsave(file = paste0(homewd, "/final-figures/Fig4.png"),
 #        scale=3, 
 #        dpi=300)
 # 
+
+#and, the reviewer asked us to consider other thresholds for shared MRCA (Fig 4D)
+
+# replot at several thresholds and store as a supplementary figure
+
+
+
+#out.pt5 = make.chain.diff(.5)
+out.1 = combine.chain.prop(mrca.thresh=1)
+out.pt08 = combine.chain.prop(mrca.thresh=(1/12))
+out.pt3 = combine.chain.prop(mrca.thresh=.25)
+out.pt9 = combine.chain.prop(mrca.thresh=.75)
+head(out.1)
+head(out.pt3)
+head(out.pt9)
+
+out.prop = rbind(out.pt08, out.pt3, out.pt5, out.1)#, out.3)
+#head(out.prop)
+#out.pt5$DENV.subtype<- factor(out.pt5$DENV.subtype, levels = c("DENV-1", "DENV-2-All", "DENV-2-Cosmopolitan"))
+#out.pt5$DENV.subtype<- factor(out.pt5$DENV.subtype, levels = c("DENV-1", "DENV-2-All", "DENV-2-Asian-1", "DENV-2-Cosmopolitan"))
+out.prop$DENV.serotype<- factor(out.prop$DENV.serotype, levels = c("DENV-1", "DENV-2"))
+out.prop$differentiate <- NA
+out.prop$differentiate[out.prop$DENV.serotype=="DENV-1" & out.prop$transchain_threshold==(1/12)] <- "DENV-1: 1 mon"
+out.prop$differentiate[out.prop$DENV.serotype=="DENV-1" & out.prop$transchain_threshold==0.25] <- "DENV-1: 3 mon"
+out.prop$differentiate[out.prop$DENV.serotype=="DENV-1" & out.prop$transchain_threshold==0.5] <- "DENV-1: 6 mon"
+#out.prop$differentiate[out.prop$DENV.serotype=="DENV-1" & out.prop$transchain_threshold==0.75] <- "DENV-1: 9 months"
+out.prop$differentiate[out.prop$DENV.serotype=="DENV-1" & out.prop$transchain_threshold==1] <- "DENV-1: 12 mon"
+
+out.prop$differentiate[out.prop$DENV.serotype=="DENV-2" & out.prop$transchain_threshold==(1/12)] <- "DENV-2: 1 mon"
+out.prop$differentiate[out.prop$DENV.serotype=="DENV-2" & out.prop$transchain_threshold==0.25] <- "DENV-2: 3 mon"
+out.prop$differentiate[out.prop$DENV.serotype=="DENV-2" & out.prop$transchain_threshold==0.5] <- "DENV-2: 6 mon"
+#out.prop$differentiate[out.prop$DENV.serotype=="DENV-2" & out.prop$transchain_threshold==0.75] <- "DENV-2: 9 months"
+out.prop$differentiate[out.prop$DENV.serotype=="DENV-2" & out.prop$transchain_threshold==1] <- "DENV-2: 12 mon"
+
+out.prop$differentiate <- factor(out.prop$differentiate, levels = c("DENV-1: 1 mon", "DENV-1: 3 mon", "DENV-1: 6 mon", "DENV-1: 12 mon",
+                                                                    "DENV-2: 1 mon", "DENV-2: 3 mon", "DENV-2: 6 mon", "DENV-2: 12 mon"))
+
+
+#colzB=c("DENV-1"="mediumseagreen", "DENV-2-All"="navy", "DENV-2-Cosmopolitan"="dodgerblue")
+#colzB=c("DENV-1"="mediumseagreen", "DENV-2-All"="navy", "DENV-2-Asian-1"="cyan",  "DENV-2-Cosmopolitan"="dodgerblue")
+#colzB=c("DENV-1"="mediumseagreen", "DENV-2"="navy")
+# colzC=c("DENV-1: 3 mon. MRCA" = "lightgreen" , "DENV-1: 6 mon. MRCA" = "green2", "DENV-1: 9 mon. MRCA"="green3", "DENV-1: 12 mon. MRCA"="forestgreen",
+#         "DENV-2: 3 mon. MRCA"="lightblue1", "DENV-2: 6 mon. MRCA"="cornflowerblue", "DENV-2: 9 mon. MRCA"="blue", "DENV-2: 12 mon. MRCA"="navy")
+
+colzC=c("DENV-1: 1 mon" = "lightgreen" , "DENV-1: 3 mon" = "green2", "DENV-1: 6 mon"="green3", "DENV-1: 12 mon"="forestgreen",
+        "DENV-2: 1 mon"="lightblue1", "DENV-2: 3 mon"="cornflowerblue", "DENV-2: 6 mon"="blue", "DENV-2: 12 mon"="navy")
+
+
+pSX <- ggplot(data=out.prop) + theme_bw()+ #facet_wrap(~transchain_threshold) +
+  facet_grid(~DENV.serotype) +  
+  #geom_line(aes(x=distance, y=prop, color=sex),show.legend = F) +
+  geom_ribbon(aes(x=distance, ymin=prop_lci, ymax=prop_uci, fill=differentiate, group=differentiate), alpha=.3) +
+  geom_line(aes(x=distance, y=prop, color=differentiate, group=differentiate)) +
+  theme(panel.grid = element_blank(), axis.title = element_text(size=16), 
+        #axis.title.x = element_blank(), axis.text.x = element_blank(), 
+        #axis.ticks.x = element_blank(),
+        plot.margin = unit(c(.2,.3,.1,.5), "cm"),
+        #panel.spacing = unit(c(.3), "cm"),
+        #legend.title = element_blank(),
+        strip.background = element_rect(fill="white"), strip.text = element_text(size = 18),
+        axis.text = element_text(size=14), legend.text = element_text(size=10),
+        legend.title = element_text(size=11),
+        legend.position = c(.19,.8)) + coord_cartesian(ylim=c(0,1), xlim=c(0,5), expand = F)+
+  scale_color_manual(values=colzC, name="MRCA threshold") + scale_x_continuous(breaks=c(1,2,3,4,5)) +
+  scale_fill_manual(values=colzC, name="MRCA threshold") + 
+  #scale_color_manual(values=colz, name = "transmission chain\nthreshold (yrs)") + 
+  #scale_fill_manual(values=colz, name = "transmission chain\nthreshold (yrs)") + 
+  ylab("Proportion same transmission chain")  +
+  xlab("Max distance between cases (km)") + guides(fill=guide_legend(ncol=2), color=guide_legend(ncol=2))
+
+
+ggsave(file = paste0(homewd, "/final-figures/FigS_transThresh.png"),
+       plot= pSX,
+       units="mm",  
+       width=80, 
+       height=40, 
+       scale=3, 
+       dpi=300)
+
+

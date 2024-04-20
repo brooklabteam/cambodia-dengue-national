@@ -17,7 +17,11 @@ homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(homewd)
 
 #get tree
-tree1 <- read.annot.beast(file =  paste0(homewd, "/BEAST-tree/denv-out/denv-beast/denv1/denv1Avg.tree"))
+tree1 <- read.annot.beast(file =  paste0(homewd, "/BEAST-tree/denv-beast/beast-out/denv1/denv1Avg.tree"))
+
+tree1$tip.label[tree1$tip.label=="DENS-OB-067_2021-05-29"] <- "PP470671_2021-05-29" 
+tree1$tip.label[tree1$tip.label=="DENS-OB-068_2021-05-29"] <- "PP470672_2021-05-29" 
+tree1$tip.label[tree1$tip.label=="DENS-OB-070_2021-05-30"] <- "PP470673_2021-05-30" 
 
 #plot(tree)
 #and load the metadata
@@ -25,7 +29,9 @@ tree1 <- read.annot.beast(file =  paste0(homewd, "/BEAST-tree/denv-out/denv-beas
 #and load the metadata
 dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = T, stringsAsFactors = F)
 dat$date <- as.Date(dat$date, format="%m/%d/%y")
-mrsd.denv1 <- max(dat$date[dat$DENV.serotype=="DENV-1"]) #"2020-07-13"
+mrsd.denv1 <- max(dat$date[dat$DENV.serotype=="DENV-1"]) #"2021-05-30"
+
+setdiff(tree1$tip.label, dat$tip_name)
 
 #plot timetree
 p1 <- ggtree(tree1, mrsd= mrsd.denv1) + theme_tree2()
@@ -150,8 +156,8 @@ length(unique(pair.df$pairseq1)) #59 now
 
 
 head(dat)
-merge.dat <- dplyr::select(dat, accession_num, age, sex,  DENV.serotype, DENV.subtype)
-names(merge.dat)[names(merge.dat)=="accession_num"] <- "accession_early"
+merge.dat <- dplyr::select(dat, Accession, age, sex,  DENV.serotype, DENV.subtype)
+names(merge.dat)[names(merge.dat)=="Accession"] <- "accession_early"
 merge.dat <- merge.dat[!is.na(merge.dat$sex),]
 head(merge.dat)
 head(pair.df)
@@ -181,14 +187,14 @@ homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
 setwd(homewd)
 
 #get tree
-tree2 <- read.annot.beast(file =  paste0(homewd, "/BEAST-tree/denv-out/denv-beast/denv2/denv2Avg.tree"))
+tree2 <- read.annot.beast(file =  paste0(homewd, "/BEAST-tree/denv-beast/beast-out/denv2/denv2Avg.tree"))
 
 
 
 #and load the metadata
 dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = T, stringsAsFactors = F)
 dat$date <- as.Date(dat$date, format="%m/%d/%y")
-mrsd.denv2 <- max(dat$date[dat$DENV.serotype=="DENV-2"]) # "2022-10-10"
+mrsd.denv2 <- max(dat$date[dat$DENV.serotype=="DENV-2"]) # "2022-12-01"
 dat = subset(dat, DENV.serotype=="DENV-2")
 #plot timetree
 p1 <- ggtree(tree2, mrsd= mrsd.denv2) + theme_tree2()
@@ -231,7 +237,7 @@ length(combine.df$node[is.na(combine.df$nodetime)])#0
 tree.dat.merge = subset(dat, !is.na(lat) & DENV.serotype=="DENV-2")
 tree.dat.merge = tree.dat.merge[tree.dat.merge$date>"2018-12-31",]#124  sequences now. 
 unique(tree.dat.merge$country)#Cambodia
-unique(tree.dat.merge$DENV.subtype)#"Asian-1"      "Cosmopolitan" - also "DENV2
+unique(tree.dat.merge$DENV.subtype)#"Asian-1"      "Cosmopolitan" 
 
 
 #and distance matrix - here, we just choose Jess's sequences
@@ -286,8 +292,8 @@ new.dat <- merge(next.df, combine.df, by="merge_name", all.x=T, sort=F)
 head(new.dat)
 #new.dat <- new.dat[!duplicated(new.dat),]
 
-length(unique(new.dat$beast_name1))
-length(unique(new.dat$beast_name2))
+length(unique(new.dat$beast_name1))#120
+length(unique(new.dat$beast_name2))#120
 
 ##now that you have all pairs, find the earlier date for each and compute the time to mrca
 split.pairs <- dlply(new.dat, .(rownames(new.dat)))
@@ -340,11 +346,11 @@ pair.df <- pair.df1[!duplicated(pair.df1$merge_name),]
 pair.df <- dplyr::select(pair.df, -(merge_name))
 ##then link all the metadata for the early sequence and save to make transmission trees
 head(pair.df)
-length(unique(pair.df$pairseq1)) #120
+length(unique(pair.df$pairseq1)) #116
 
 head(dat)
-merge.dat <- dplyr::select(dat, accession_num, age, sex, DENV.serotype, DENV.subtype)
-names(merge.dat)[names(merge.dat)=="accession_num"] <- "accession_early"
+merge.dat <- dplyr::select(dat, Accession, age, sex, DENV.serotype, DENV.subtype)
+names(merge.dat)[names(merge.dat)=="Accession"] <- "accession_early"
 #merge.dat <- merge.dat[!is.na(merge.dat$sex),]
 head(merge.dat)
 merge.dat = subset(merge.dat, DENV.serotype=="DENV-2")
@@ -357,7 +363,7 @@ setdiff( unique(merge.dat$accession_early), unique(pair.df$accession_early))
 pair.DENV2 <- merge(pair.df, merge.dat, by="accession_early", all.x=T, sort=F)
 head(pair.DENV2)
 tail(pair.DENV2)
-unique(pair.DENV2$DENV.subtype) #"Asian-1"      "Cosmopolitan" NA
+unique(pair.DENV2$DENV.subtype) #"Asian-1"      "Cosmopolitan"
 unique(pair.DENV2$accession_early[is.na(pair.DENV2$DENV.subtype)])
 
 #and the pair subtype
@@ -366,8 +372,8 @@ names(id.sub) <- c("pairseq2", "pair_subtype")
 
 pair.DENV2 <- merge(pair.DENV2, id.sub, by="pairseq2", all.x=T, sort=F)
 unique(pair.DENV2$pair_subtype) #"Asian-1"      "Cosmopolitan"
-length(unique(pair.DENV2$pairseq1)) #120
-length(unique(pair.DENV2$pairseq2)) #120
+length(unique(pair.DENV2$pairseq1)) #116
+length(unique(pair.DENV2$pairseq2)) #116
 write.csv(pair.DENV2, file =paste0(homewd, "/data/DENV2transTreeDat.csv"), row.names = F)
 
 #and join together 
@@ -382,7 +388,7 @@ denv2 <- read.csv(file=paste0(homewd, "/data/DENV2transTreeDat.csv"), header = T
 all.denv <- rbind(denv1, denv2)
 unique(all.denv$DENV.serotype)
 subset(all.denv, is.na(DENV.serotype))
-all.denv$DENV.serotype[is.na(all.denv$DENV.serotype)] <- "DENV-1"
+#all.denv$DENV.serotype[is.na(all.denv$DENV.serotype)] <- "DENV-1"
 
 unique(all.denv$DENV.subtype)
 unique(all.denv$DENV.subtype[all.denv$DENV.serotype=="DENV-2"])#"Asian-1"      "Cosmopolitan"
