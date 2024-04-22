@@ -534,9 +534,9 @@ pC <-pC2 %<+% tree2merge +
 #and put it all together
 
 
-pTop <- cowplot::plot_grid(pKPS.1, pB,  pC, labels=c("A", "B"), nrow=1, ncol=2, label_size = 22)
+pMid<- cowplot::plot_grid(pKPS.1, pB,  pC, labels=c("D", "E"), nrow=1, ncol=2, label_size = 22)
 
-pMid <- cowplot::plot_grid(pKPS.2, pC,  pC, labels=c("C", "D"), nrow=1, ncol=2, label_size = 22)
+pBottom <- cowplot::plot_grid(pKPS.2, pC,  pC, labels=c("F", "G"), nrow=1, ncol=2, label_size = 22)
 
 
 #and get map of all the serotypes and locations
@@ -619,20 +619,20 @@ pBar <- ggplot(data=df.sum) + scale_fill_manual(values=sero.cols, name="DENV-ser
               axis.text = element_text(size=14)) +
   guides(fill=guide_legend(ncol=2))
 
-pBottom <- cowplot::plot_grid(pCamSummary, pBar, ncol = 2, nrow = 1, labels=c("E", "F"), label_size = 22)
+pTop <- cowplot::plot_grid(pCamSummary, pBar, ncol = 2, nrow = 1, labels=c("E", "F"), label_size = 22)
 #pS3_KPS<- cowplot::plot_grid(pKPS,  nrow=1, ncol=1, labels = c("A"), label_size = 22)
 
 
 pALL <- cowplot::plot_grid(pTop, pMid, pBottom,  nrow=3, ncol = 1) + theme_bw() + theme(panel.background = element_rect(fill="white"), plot.background = element_rect(fill="white")) 
-
-
-ggsave(file = paste0(homewd, "/final-figures/FigS19.png"),
-       plot= pALL,
-       units="mm",  
-       width=100, 
-       height=120, 
-       scale=3, 
-       dpi=300)
+# 
+# 
+# ggsave(file = paste0(homewd, "/final-figures/FigS19.png"),
+#        plot= pALL,
+#        units="mm",  
+#        width=100, 
+#        height=120, 
+#        scale=3, 
+#        dpi=300)
 
 
 
@@ -665,72 +665,106 @@ tree2sub <- tree_subset(tree=tree2, node =  node2_sub, levels_back=0)
 node2cosmomrca <-MRCA(tree2, which(tree2@phylo$tip.label== "PP411228_2022-06-01" ),which(tree2@phylo$tip.label == "FJ639698_2002-07-31"))
 
 node.dat.denv2 <- pC$data #from above
-subset(node.dat.denv2, node==node2cosmomrca) #node height is 77.0  years
+subset(node.dat.denv2, node==node2cosmomrca) #node height is 77.1  years
 mrsd.denv2 - (77.0  *365) # "1945-12-20"
-node.dat.denv2$height_0.95_HPD[[node2cosmomrca]] #73.49189 80.66360
+node.dat.denv2$height_0.95_HPD[[node2cosmomrca]] #73.51945 80.88328
 
-mrsd.denv2 - (node.dat.denv2$height_0.95_HPD[[node2cosmomrca]][1]*365) # "1949-06-22"
-mrsd.denv2 - (node.dat.denv2$height_0.95_HPD[[node2cosmomrca]][2]*365) # "1942-04-22"
-
-
+mrsd.denv2 - (node.dat.denv2$height_0.95_HPD[[node2cosmomrca]][1]*365) # "1949-06-12"
+mrsd.denv2 - (node.dat.denv2$height_0.95_HPD[[node2cosmomrca]][2]*365) # "1942-02-01"
 
 
-# pS3B1 <- ggtree(tree1sub, mrsd=mrsd.denv1, color="forestgreen")  + 
-#   theme_tree2() + coord_cartesian(xlim=c(2016.5,2025), ylim=c(0,73), expand = T) + 
-#   #geom_range(range='length_0.95_HPD', color='red', alpha=.6, size=2) +
-#   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1, show.legend = F) +
-#   #scale_x_continuous(breaks=c(1950, 1975, 2000, 2020))+
-#   scale_fill_continuous(low="yellow", high="red")+
-#   theme(legend.position = c(.2,.8), 
-#         legend.key.size = unit(.3, units="cm"),
-#         legend.text = element_text(size=6),
-#         legend.title = element_text(size=8))
-# 
-# #Fig S3C.1
-# pS3C1 <- ggtree(tree2sub, mrsd=mrsd.denv2, color="navy")  + theme_tree2() + # nodelab() +
-#   coord_cartesian(xlim=c(2016.5,2025), ylim=c(0,115), expand = T) + 
-#   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1, show.legend = F) +
-#   scale_fill_continuous(low="yellow", high="red") +
-#   #scale_x_continuous(breaks=c(1950, 1975, 2000, 2020))+
-#   theme(legend.position = c(.2,.8), 
-#         legend.key.size = unit(.3, units="cm"),
-#         legend.text = element_text(size=6),
-#         legend.title = element_text(size=8))
-# 
-# 
-# pS3B <- pS3B1 %<+% tree1merge +
-#   ggnewscale::new_scale_fill() +
-#   geom_label(aes(label=new_label), label.size = NA, size=1.5, hjust=-.1, fill=NA) +
-#   #geom_tippoint(aes(shape=CambodiaSeq), color="black", fill="black", size = 4)+#,show.legend = F) +
-#   geom_tippoint(aes(fill=cluster_ID, shape=new_seq), 
-#                 size = 2, show.legend = F, stroke=1, color="#9590FF") +
-#   theme(legend.position = c(.1,.75), 
-#         legend.key.size = unit(.4, units="cm"),
-#         legend.text = element_text(size=8),
-#         legend.title = element_text(size=10),
-#         #plot.margin = unit(c(.2,5,.1,.1),"lines"), 
-#         # plot.background  = element_rect(size=3, fill = NULL, color = "black"),
-#         axis.text = element_text(size=18)) +
-#   scale_x_continuous(breaks=c(2017, 2018, 2019, 2020)) +
-#   scale_fill_manual(values=colorz1) +
-#   scale_shape_manual(values=shapez) #+
-# 
-# #and the second half
+#and look at age distribution of cases 
+head(df.sum)
 
-# 
-# pS3C <- pS3C1 %<+% tree2merge + 
-#   ggnewscale::new_scale_fill() +
-#   geom_label(aes(label=new_label), label.size = NA, size=1.5, hjust=-.1, fill=NA) +
-#   #geom_label(aes(label=new_label), label.size = NA, size=4, hjust=-.06) +
-#   #geom_tippoint(aes(shape=CambodiaSeq), color="black", fill="black", size = 4)+#,show.legend = F) +
-#   geom_tippoint(aes(fill=cluster_ID, shape=new_seq), size = 2, 
-#                 show.legend = F, stroke=1, color="#9590FF") +
-#   theme(axis.text = element_text(size=18), 
-#         #plot.background  = element_rect(size=3, fill = NULL, color = "black"),
-#         legend.position = "none",
-#         #plot.margin = unit(c(.1,5,.1,.1),"lines"), 
-#         legend.title = element_blank()) + 
-#   scale_x_continuous(breaks=c( 2017, 2018, 2019, 2020)) +
-#   scale_shape_manual(values=shapez) +scale_fill_manual(values=colorz1)#
+#get the sum of cases per year
+#2019: 94 genotypes. 59.6% (56/94) are DENV-1 and 37.2% (35/94) are DENV-2. of those DENV-2, 74.3% (26/35) are Cosmo
+#2020: 32 genotypes. 18.8% (6/32) are DENV-1 and 78.1% (25/32) are DENV-2. of those DENV-2, 92%% (25/32) are Cosmo
+#2021: 28 genotypes. 10.7% (3/28) are DENV-1 and 89.3% (25/28) are DENV-2. of those DENV-2, 100% are Cosmo
+#2022: 118 genotypes. 0.85% (1/118) are DENV-1 and 91.5% (108/118) are DENV-2. of those DENV-2, 99.1%% (107/108) are Cosmo
+
+#and ages
+head(df1)
+ggplot(data=df1) + geom_jitter(aes(x=DENV.serotype, y=age), width=.1, size=.1, alpha=.3) + 
+  geom_violin(aes(x=DENV.serotype, y=age,  color=DENV.serotype), draw_quantiles = c(0,.25,.5,.75), show.legend=F, fill=NA) #+ 
+  #facet_grid(~year)
 
 
+m1 <- lm(log10(age)~DENV.serotype, data = df1)
+summary(m1)
+
+# histogram
+hist(m1$residuals)#pretty normal
+
+
+# QQ-plot
+library(car)
+qqPlot(m1$residuals,
+       id = FALSE # id = FALSE to remove point identification
+)
+
+library(sjPlot)
+plot_model(m1, type="est") #denv cosmopolitand and DENV-4 are both older in age than DENV-1
+summary(m1)
+
+df1$DENV.serotype[df1$DENV.serotype=="DENV-2-Asian-1"] <- "DENV-2\n(Asian-1)"
+df1$DENV.serotype[df1$DENV.serotype=="DENV-2-Cosmopolitan"] <- "DENV-2\n(Cosmopolitan)"
+label.dat = cbind.data.frame(DENV.serotype=sort(unique(df1$DENV.serotype)), text = c("", "", "***", "***"))
+
+sero.cols = c("DENV-1"="forestgreen", "DENV-2\n(Asian-1)"="dodgerblue", "DENV-2\n(Cosmopolitan)" = "navy", "DENV-4"="tomato")
+
+##nicer plot
+pS <- ggplot(data=df1) + ylab("age distribution\ngenotyped cases") +
+      geom_jitter(aes(x=DENV.serotype, y=age), width=.1, size=.1, alpha=.3) + theme_bw() + 
+      theme(panel.grid = element_blank(), axis.text.x  = element_text(size=14), 
+            axis.ticks = element_blank(),axis.text.y  = element_text(size=14), 
+            plot.margin =  unit(c(.3,.3,.1,.35), units="cm"),
+            axis.title = element_text(size=18), axis.title.x = element_blank())+ coord_cartesian(ylim=c(0,55)) +
+      geom_violin(aes(x=DENV.serotype, y=age,  color=DENV.serotype), draw_quantiles = c(0,.25,.5,.75), show.legend=F, fill=NA) +
+      geom_label(data = label.dat, aes(x=DENV.serotype, y= 53, label=text), label.size = 0, size=5) +
+      scale_y_continuous(breaks = seq(0,50, by=10)) + scale_x_discrete(position="top") +
+      scale_color_manual(values = sero.cols)
+
+
+
+sero.cols2 = c("DENV-1"="forestgreen", "DENV-2-Asian-1"="dodgerblue", "DENV-2-Cosmopolitan" = "navy", "DENV-4"="tomato")
+
+pBar2 <- ggplot(data=df.sum) + scale_fill_manual(values=sero.cols2) +
+  geom_bar(aes(x=year, y=N, fill=DENV.serotype), 
+           position = "stack", stat = "identity", show.legend = F) +
+  theme_bw() + ylab("number of\ngenotyped cases") + #coord_cartesian(ylim=c(0,130)) +
+  scale_y_continuous(breaks= c(30,60,90,120)) +
+  theme(#panel.background = element_blank(),
+    panel.grid = element_blank(),
+    #legend.position = c(.27,.87),
+    #legend.text = element_text(size=8),
+    #legend.direction = "horizontal",
+    #legend.title = element_text(size=10),
+    #legend.box.background = element_rect(color="black"),
+    axis.title.x = element_blank(), 
+    plot.margin =  unit(c(.1,.3,.3,.1), units="cm"),
+    axis.title.y = element_text(size=18),
+    axis.text = element_text(size=14)) #+
+  #guides(fill=guide_legend(ncol=2))
+
+
+
+#remake
+pTopRight <- cowplot::plot_grid(pS, pBar2, ncol=1, nrow =2,  labels = c("B", "C"), label_size = 22, label_x = c(-.03,-.03) )
+
+
+
+pTop <- cowplot::plot_grid(pCamSummary, pTopRight, ncol = 2, nrow = 1, labels=c("A", ""), label_size = 22)
+
+#and all together
+
+
+pALL <- cowplot::plot_grid(pTop, pMid, pBottom,  nrow=3, ncol = 1, rel_heights = c(1.2,1,1)) + theme_bw() + theme(panel.background = element_rect(fill="white"), plot.background = element_rect(fill="white")) 
+
+
+ggsave(file = paste0(homewd, "/final-figures/FigS19.png"),
+       plot= pALL,
+       units="mm",  
+       width=100, 
+       height=120, 
+       scale=3, 
+       dpi=300)

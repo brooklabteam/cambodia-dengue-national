@@ -500,20 +500,24 @@ model.age.incidence.series.age.mult.wane <- function(par.dat, age_vect, year.sta
       
       # now, we integrate the hazard of becoming infected over all the years in each
       
+      
       #First, integrand A (hazard of exposure to all strains )
-      inte_A = (sum(dur*lambda.age*(N_sero)))
+      inte_A = (sum(dur*lambda*(N_sero)))
       
       #Then, hazard of exposure to strain i only
-      inte_B = (sum(dur*lambda.age))
+      inte_B = (sum(dur*lambda))
+      
+      #Then, probability of exposure to strain i and then strain k (where k does not equal i)
+      inte_C = (sum(dur*lambda*(2)))
+      
       
       #Then, cumulative waning immunity hazard for one strain
-      inte_C = sum(sigma*dur) 
+      inte_E = sum(sigma*dur) 
       
-      #And cumulative waning hazard for all the others
+      #And cumulative waning hazard for all the other strains
       inte_D = (sum((N_sero-1)*sigma*dur))
       
-      #Then, probability of exposure to any other strains besides i
-      inte_E = (sum(dur*lambda.age*(N_sero-1)))
+      
       
       #could also write as sigma[1]*(a-1) (since a starts at class 2 we need to subtract 1 from a)
       
@@ -529,7 +533,7 @@ model.age.incidence.series.age.mult.wane <- function(par.dat, age_vect, year.sta
       # here, this is expressed for just a single target strain 
       # (would need to multiply by the number of circulating strains if you wanted 
       # the probability of a primary infection with ANY strain)
-      pprim[[i]][[a]] <- exp(-inte_A)*(exp(inte_B)-1) + (exp(-inte_A)*(exp(inte_B)-1)*(1-exp(-inte_E))*(1-exp(-inte_C))*(exp(-inte_D)))
+      pprim[[i]][[a]] <- exp(-inte_A)*(exp(inte_B)-1) + (1-exp(-inte_C))*(exp(-inte_D))*(1-exp(-inte_E))
       
       
       # if not primarily infected or naive, this should be a multitypic infection
@@ -676,7 +680,7 @@ run.model.data.all <- function(dat,par.dat, sigma.fit, age.mult.df){
   # and bind
   
   out.mod.df <- data.table::rbindlist(out.mod.list)
-  
+  #ggplot(out.mod.df) + geom_line(aes(x=age, y=cum_prop_cases, color=year)) + facet_wrap(~provname)
   #head(out.mod.df)
   out.mod.df <- arrange(out.mod.df, provname, year, age)
   
@@ -753,7 +757,7 @@ head(sigma.fit)
 
 Fig3Eb <- ggplot(sigma.fit) + theme_bw() + 
   geom_line(aes(x=year, y=sigma), size=1)  + ylab(bquote(atop("annual rate of waning","multitypic immunity,"~sigma)))+ 
-  geom_ribbon(aes(x=year, ymin=lci, ymax=uci), alpha=.3) +
+  geom_ribbon(aes(x=year, ymin=lci_sigma, ymax=uci_sigma), alpha=.3) +
   theme(panel.grid = element_blank(), axis.title = element_text(size=16), axis.title.x = element_blank(),
         axis.text = element_text(size=11))
 print(Fig3Eb)
