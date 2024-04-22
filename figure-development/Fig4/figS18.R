@@ -19,7 +19,7 @@ library(sf)
 library(lubridate)
 
 
-
+#20 genotypes from NDCP
 
 #make three timetrees and one map all together
 #read in tree from beast
@@ -345,6 +345,7 @@ pB1 <- ggtree(tree1, mrsd=mrsd.denv1, color="forestgreen")  +
    #             offset =-37, angle=270, offset.text = -12, vjust=2, hjust=.5)  +
   theme_tree2() + coord_cartesian(xlim=c(1930,2030), ylim=c(0,400)) + 
   #geom_range(range='length_0.95_HPD', color='red', alpha=.6, size=2) +
+  #geom_tiplab(size=1) +
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1, show.legend = F) +
   scale_x_continuous(breaks=c(2018, 2020,  2022))+
   scale_fill_manual(values=postz)+
@@ -429,27 +430,29 @@ tree2merge <- merge(tree2merge, dat.clust.save.2, by = "tip_name", all.x = T)
 
 #
 colorz2.1 = c("no"="white","yes"="black")
+alphaz = c("no"=0,"yes"=1)
 
 #colorz2.1 = c("no"="#RRGGBBAA","yes"="black")
 #Fig 4B
-pB <- pB1 %<+% tree1merge +
-  ggnewscale::new_scale_fill() +
-  geom_tiplab(size=.8, aes(alpha=new_seq, color=new_seq), hjust = .8) +
-  #geom_tiplab(size=1) +
-  #geom_label(aes(label=new_label), label.size = NA, size=4, hjust=-.06) +
-  #geom_tippoint(aes(shape=CambodiaSeq), color="black", fill="black", size = 4)+#,show.legend = F) +
-  geom_tippoint(aes(fill=country, shape=new_seq), 
-                size = 2, show.legend = F, stroke=.1, color="black") +
-  theme(legend.position = c(.1,.75), 
-        legend.key.size = unit(.4, units="cm"),
-        legend.text = element_text(size=8),
-        legend.title = element_text(size=10),
-        #plot.background  = element_rect(size=3, fill = NULL, color = "black"),
-        axis.text = element_text(size=18)) +
-  scale_fill_manual(values=colorz) +
-  scale_shape_manual(values=shapez) +
-  scale_color_manual(values=colorz2.1)#+
-
+# pB <- pB1 %<+% tree1merge +
+#   ggnewscale::new_scale_fill() +
+#   geom_tiplab(size=.8, aes(alpha=new_seq, color=new_seq), hjust = .8, show.legend=F) +
+#   #geom_tiplab(size=1) +
+#   #geom_label(aes(label=new_label), label.size = NA, size=4, hjust=-.06) +
+#   #geom_tippoint(aes(shape=CambodiaSeq), color="black", fill="black", size = 4)+#,show.legend = F) +
+#   geom_tippoint(aes(fill=country, shape=new_seq), 
+#                 size = 2, show.legend = F, stroke=.1, color="black") +
+#   theme(legend.position = c(.1,.75), 
+#         legend.key.size = unit(.4, units="cm"),
+#         legend.text = element_text(size=8),
+#         legend.title = element_text(size=10),
+#         #plot.background  = element_rect(size=3, fill = NULL, color = "black"),
+#         axis.text = element_text(size=18)) +
+#   scale_fill_manual(values=colorz) +
+#   scale_shape_manual(values=shapez) +
+#   scale_alpha_manual(values=alphaz) +
+#   scale_color_manual(values=colorz2.1)#+
+# 
 
 #and mrca for cambodia with previously reported cambodian sequences
 node1mrca <-MRCA(tree1, which(tree1@phylo$tip.label== "OL412703_2019-08-09"),which(tree1@phylo$tip.label == "MW265666_2016-08-22"))
@@ -465,35 +468,39 @@ node1mrca <-MRCA(tree1, which(tree1@phylo$tip.label== "OL412703_2019-08-09"),whi
 
 tree1.tiplabel<-tree1@phylo[["tip.label"]]
 
-
-#Fig 4C
-pC <-pC2 %<+% tree2merge + 
-  ggnewscale::new_scale_fill()  +
-  #geom_tiplab(size=1) +
-  geom_tippoint(aes(fill=country, shape=new_seq), size = 2, show.legend = F, stroke=.1, color="black") +
-  theme(axis.text = element_text(size=18), 
-        #plot.background  = element_rect(size=3, fill = NULL, color = "black"),
-        legend.position = "none",
-        plot.margin =  unit(c(.2,.2,.2,.2), units="cm"),
-        legend.title = element_blank()) + 
-  #coord_cartesian(c(2000,2021)) +
-  scale_shape_manual(values=shapez) +scale_fill_manual(values=colorz)
-
-
+# 
+# #Fig 4C
+# pC <-pC2 %<+% tree2merge + 
+#   ggnewscale::new_scale_fill()  +
+#   #geom_tiplab(size=1) +
+#   geom_tippoint(aes(fill=country, shape=new_seq), size = 2, show.legend = F, stroke=.1, color="black") +
+#   theme(axis.text = element_text(size=18), 
+#         #plot.background  = element_rect(size=3, fill = NULL, color = "black"),
+#         legend.position = "none",
+#         plot.margin =  unit(c(.2,.2,.2,.2), units="cm"),
+#         legend.title = element_blank()) + 
+#   #coord_cartesian(c(2000,2021)) +
+#   scale_shape_manual(values=shapez) +scale_fill_manual(values=colorz)
+# 
+# 
 
 
 #what about a version that is the whole tree with only cambodia colored?
 
-alphaz = c("no"=0,"yes"=1)
+
+
 
 pB <- pB1 %<+% tree1merge +
   ggnewscale::new_scale_fill() +
-  #geom_tiplab(size=.6, aes(color=new_seq,alpha=new_seq), nudge_x=-9.5, show.legend=F) +
+  #geom_tiplab(size=.8, aes(color=new_seq,alpha=new_seq), nudge_x=-9.5, show.legend=F) +
   coord_cartesian(xlim=c(2017.5,2023), ylim=c(185,375)) +
   #geom_tiplab(size=1, aes(alpha=new_seq, color=new_seq), hjust=-3) +
   #geom_label(aes(label=new_label), label.size = NA, size=4, hjust=-.06) +
   #geom_tippoint(aes(shape=CambodiaSeq), color="black", fill="black", size = 4)+#,show.legend = F) +
-  geom_tippoint(aes(fill=cluster_ID, shape=new_seq, alpha=new_seq, color=new_seq), 
+  geom_tippoint(aes(fill=cluster_ID, 
+                    shape=new_seq, 
+                    alpha=new_seq, 
+                    color=new_seq), 
                 size = 2, show.legend = F, stroke=.5) +
   theme(legend.position = c(.1,.75), 
         legend.key.size = unit(.4, units="cm"),
@@ -504,7 +511,8 @@ pB <- pB1 %<+% tree1merge +
         axis.text = element_text(size=18)) +
   scale_color_manual(values=colorz2.1) +
   scale_fill_manual(values=colorz1) +
-  scale_shape_manual(values=shapez)
+  scale_shape_manual(values=shapez) +
+  scale_alpha_manual(values=alphaz) 
 #scale_color_manual(values=colorz)#+
 
 
@@ -515,7 +523,7 @@ pB <- pB1 %<+% tree1merge +
 pC <-pC2 %<+% tree2merge + 
   ggnewscale::new_scale_fill()  + 
   coord_cartesian(xlim=c(2017.5,2023), ylim=c(125,400)) +
-  #geom_tiplab(size=.6, aes(color=new_seq, alpha=new_seq), nudge_x=-3, show.legend=F) +
+  #geom_tiplab(size=.8, aes(color=new_seq, alpha=new_seq), nudge_x=-3, show.legend=F) +
   #geom_tiplab(size=1) +
   geom_tippoint(aes(fill=cluster_ID, shape=new_seq, alpha=new_seq, color=new_seq), 
                 size = 2, show.legend = F, stroke=.5) +
@@ -553,6 +561,16 @@ df1$DENV.serotype[df1$DENV.serotype=="Asian-1"] <- "DENV-2-Asian-1"
 #df1.hold = df1
 df1 = subset(df1, !is.na(lat))
 df1 = subset(df1, !is.na(long))
+
+
+#total
+ddply(df1,.(study, province), summarise, N_tot=length(sample_name))
+#IDSeq or PAGODAs: 193+13+45 = 251 with 238 from KS
+#NDCP = 21 with 7 from KS
+
+#27 sequences not from KS
+#21 sequences from NDCP 
+
 
 #and make your spatial object
 all.denv.partial <- get.spatial.object(dat1=df1, dist.thresh = 50000, denv.serotype = "merge", perc_jitter = 0.1)
@@ -622,71 +640,11 @@ pBar <- ggplot(data=df.sum) + scale_fill_manual(values=sero.cols, name="DENV-ser
 pTop <- cowplot::plot_grid(pCamSummary, pBar, ncol = 2, nrow = 1, labels=c("E", "F"), label_size = 22)
 #pS3_KPS<- cowplot::plot_grid(pKPS,  nrow=1, ncol=1, labels = c("A"), label_size = 22)
 
-
-pALL <- cowplot::plot_grid(pTop, pMid, pBottom,  nrow=3, ncol = 1) + theme_bw() + theme(panel.background = element_rect(fill="white"), plot.background = element_rect(fill="white")) 
-# 
-# 
-# ggsave(file = paste0(homewd, "/final-figures/FigS19.png"),
-#        plot= pALL,
-#        units="mm",  
-#        width=100, 
-#        height=120, 
-#        scale=3, 
-#        dpi=300)
-
-
-
-####################################################################
-####################################################################
-####################################################################
-
-#finally now we subset the tree to just the recent Cambodia clades for analysis
-node2_sub <-MRCA(tree2, which(tree2@phylo$tip.label== "PP411228_2022-06-01" ),which(tree2@phylo$tip.label == "OL414746_2020-06-16"))
-
-#take the upper DENV-1 clade (there is also a lower clade)
-node1_sub <-MRCA(tree1, which(tree1@phylo$tip.label== "OL412703_2019-08-09"),which(tree1@phylo$tip.label == "OK159963_2019-07-21"))
-
-
-
-#get
-library(ape)
-library(treeio)
-library(ggplot2)
-library(ggtree)
-library(tidytree)
-
-tree1sub <- tree_subset(tree=tree1, node =  node1_sub, levels_back=0)
-tree2sub <- tree_subset(tree=tree2, node =  node2_sub, levels_back=0)
-
-
-#and the cosmo 2 sequences
-
-#and mrca for cambodia with previously reported cambodian sequences
-node2cosmomrca <-MRCA(tree2, which(tree2@phylo$tip.label== "PP411228_2022-06-01" ),which(tree2@phylo$tip.label == "FJ639698_2002-07-31"))
-
-node.dat.denv2 <- pC$data #from above
-subset(node.dat.denv2, node==node2cosmomrca) #node height is 77.1  years
-mrsd.denv2 - (77.0  *365) # "1945-12-20"
-node.dat.denv2$height_0.95_HPD[[node2cosmomrca]] #73.51945 80.88328
-
-mrsd.denv2 - (node.dat.denv2$height_0.95_HPD[[node2cosmomrca]][1]*365) # "1949-06-12"
-mrsd.denv2 - (node.dat.denv2$height_0.95_HPD[[node2cosmomrca]][2]*365) # "1942-02-01"
-
-
-#and look at age distribution of cases 
-head(df.sum)
-
-#get the sum of cases per year
-#2019: 94 genotypes. 59.6% (56/94) are DENV-1 and 37.2% (35/94) are DENV-2. of those DENV-2, 74.3% (26/35) are Cosmo
-#2020: 32 genotypes. 18.8% (6/32) are DENV-1 and 78.1% (25/32) are DENV-2. of those DENV-2, 92%% (25/32) are Cosmo
-#2021: 28 genotypes. 10.7% (3/28) are DENV-1 and 89.3% (25/28) are DENV-2. of those DENV-2, 100% are Cosmo
-#2022: 118 genotypes. 0.85% (1/118) are DENV-1 and 91.5% (108/118) are DENV-2. of those DENV-2, 99.1%% (107/108) are Cosmo
-
 #and ages
 head(df1)
 ggplot(data=df1) + geom_jitter(aes(x=DENV.serotype, y=age), width=.1, size=.1, alpha=.3) + 
   geom_violin(aes(x=DENV.serotype, y=age,  color=DENV.serotype), draw_quantiles = c(0,.25,.5,.75), show.legend=F, fill=NA) #+ 
-  #facet_grid(~year)
+#facet_grid(~year)
 
 
 m1 <- lm(log10(age)~DENV.serotype, data = df1)
@@ -714,15 +672,15 @@ sero.cols = c("DENV-1"="forestgreen", "DENV-2\n(Asian-1)"="dodgerblue", "DENV-2\
 
 ##nicer plot
 pS <- ggplot(data=df1) + ylab("age distribution\ngenotyped cases") +
-      geom_jitter(aes(x=DENV.serotype, y=age), width=.1, size=.1, alpha=.3) + theme_bw() + 
-      theme(panel.grid = element_blank(), axis.text.x  = element_text(size=14), 
-            axis.ticks = element_blank(),axis.text.y  = element_text(size=14), 
-            plot.margin =  unit(c(.3,.3,.1,.35), units="cm"),
-            axis.title = element_text(size=18), axis.title.x = element_blank())+ coord_cartesian(ylim=c(0,55)) +
-      geom_violin(aes(x=DENV.serotype, y=age,  color=DENV.serotype), draw_quantiles = c(0,.25,.5,.75), show.legend=F, fill=NA) +
-      geom_label(data = label.dat, aes(x=DENV.serotype, y= 53, label=text), label.size = 0, size=5) +
-      scale_y_continuous(breaks = seq(0,50, by=10)) + scale_x_discrete(position="top") +
-      scale_color_manual(values = sero.cols)
+  geom_jitter(aes(x=DENV.serotype, y=age), width=.1, size=.1, alpha=.3) + theme_bw() + 
+  theme(panel.grid = element_blank(), axis.text.x  = element_text(size=14), 
+        axis.ticks = element_blank(),axis.text.y  = element_text(size=14), 
+        plot.margin =  unit(c(.3,.3,.1,.35), units="cm"),
+        axis.title = element_text(size=16), axis.title.x = element_blank())+ coord_cartesian(ylim=c(0,55)) +
+  geom_violin(aes(x=DENV.serotype, y=age,  color=DENV.serotype), draw_quantiles = c(0,.25,.5,.75), show.legend=F, fill=NA) +
+  geom_label(data = label.dat, aes(x=DENV.serotype, y= 53, label=text), label.size = 0, size=5) +
+  scale_y_continuous(breaks = seq(0,50, by=10)) + scale_x_discrete(position="top") +
+  scale_color_manual(values = sero.cols)
 
 
 
@@ -742,9 +700,9 @@ pBar2 <- ggplot(data=df.sum) + scale_fill_manual(values=sero.cols2) +
     #legend.box.background = element_rect(color="black"),
     axis.title.x = element_blank(), 
     plot.margin =  unit(c(.1,.3,.3,.1), units="cm"),
-    axis.title.y = element_text(size=18),
+    axis.title.y = element_text(size=16),
     axis.text = element_text(size=14)) #+
-  #guides(fill=guide_legend(ncol=2))
+#guides(fill=guide_legend(ncol=2))
 
 
 
@@ -758,13 +716,79 @@ pTop <- cowplot::plot_grid(pCamSummary, pTopRight, ncol = 2, nrow = 1, labels=c(
 #and all together
 
 
-pALL <- cowplot::plot_grid(pTop, pMid, pBottom,  nrow=3, ncol = 1, rel_heights = c(1.2,1,1)) + theme_bw() + theme(panel.background = element_rect(fill="white"), plot.background = element_rect(fill="white")) 
+pALL <- cowplot::plot_grid(pTop, pMid, pBottom,  nrow=3, ncol = 1, rel_heights = c(1,1,1)) + theme_bw() + theme(panel.background = element_rect(fill="white"), plot.background = element_rect(fill="white")) 
 
 
-ggsave(file = paste0(homewd, "/final-figures/FigS19.png"),
+ggsave(file = paste0(homewd, "/final-figures/FigS18.png"),
        plot= pALL,
        units="mm",  
        width=100, 
        height=120, 
        scale=3, 
        dpi=300)
+
+
+
+
+
+####################################################################
+####################################################################
+####################################################################
+
+#finally now we subset the tree to just the recent Cambodia clades for analysis
+node2_sub <-MRCA(tree2, which(tree2@phylo$tip.label== "PP411228_2022-06-01" ),which(tree2@phylo$tip.label == "OL414746_2020-06-16"))
+
+#take the upper DENV-1 clade (there is also a lower clade)
+node1_sub <-MRCA(tree1, which(tree1@phylo$tip.label== "OL412703_2019-08-09"),which(tree1@phylo$tip.label == "GU131923_2005-07-31"))
+
+
+
+#get
+library(ape)
+library(treeio)
+library(ggplot2)
+library(ggtree)
+library(tidytree)
+
+tree1sub <- tree_subset(tree=tree1, node =  node1_sub, levels_back=0)
+tree2sub <- tree_subset(tree=tree2, node =  node2_sub, levels_back=0)
+
+
+p1 <- ggtree(tree1sub) %<+% tree1merge + geom_tiplab() + 
+  geom_tippoint(aes(color=country))
+
+#get mrca for these 
+nodedenv1 <- MRCA(tree1, which(tree1@phylo$tip.label== "OL412703_2019-08-09"),which(tree1@phylo$tip.label == "MW265679_2015-10-06"))
+node.dat.denv1 <- pB1$data #from above
+subset(node.dat.denv1, node==nodedenv1) #node height is 8.32  years
+mrsd.denv1 - (8.32  *365) # "2013-02-04"
+node.dat.denv1$height_0.95_HPD[[nodedenv1]] #7.754796 8.890605
+
+mrsd.denv1 - (node.dat.denv1$height_0.95_HPD[[node2cosmomrca]][1]*365) # "2016-02-26"
+mrsd.denv1 - (node.dat.denv1$height_0.95_HPD[[node2cosmomrca]][2]*365) # "2014-11-01"
+
+
+#and the cosmo 2 sequences
+
+#and mrca for cambodia with previously reported cambodian sequences
+node2cosmomrca <-MRCA(tree2, which(tree2@phylo$tip.label== "PP411228_2022-06-01" ),which(tree2@phylo$tip.label == "FJ639698_2002-07-31"))
+
+node.dat.denv2 <- pC$data #from above
+subset(node.dat.denv2, node==node2cosmomrca) #node height is 77.1  years
+mrsd.denv2 - (77.0  *365) # "1945-12-20"
+node.dat.denv2$height_0.95_HPD[[node2cosmomrca]] #73.51945 80.88328
+
+mrsd.denv2 - (node.dat.denv2$height_0.95_HPD[[node2cosmomrca]][1]*365) # "1949-06-12"
+mrsd.denv2 - (node.dat.denv2$height_0.95_HPD[[node2cosmomrca]][2]*365) # "1942-02-01"
+
+
+#and look at age distribution of cases 
+head(df.sum)
+
+#get the sum of cases per year
+#2019: 94 genotypes. 59.6% (56/94) are DENV-1 and 37.2% (35/94) are DENV-2. of those DENV-2, 74.3% (26/35) are Cosmo
+#2020: 32 genotypes. 18.8% (6/32) are DENV-1 and 78.1% (25/32) are DENV-2. of those DENV-2, 92% (23/25) are Cosmo
+#2021: 28 genotypes. 10.7% (3/28) are DENV-1 and 89.3% (25/28) are DENV-2. of those DENV-2, 100% are Cosmo
+#2022: 118 genotypes. 0.85% (1/118) are DENV-1 and 91.5% (108/118) are DENV-2. of those DENV-2, 99.1%% (107/108) are Cosmo
+
+

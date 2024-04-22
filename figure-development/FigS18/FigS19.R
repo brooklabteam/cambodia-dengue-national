@@ -9,13 +9,13 @@ library(ggnewscale)
 
 homewd= "/Users/carabrook/Developer/cambodia-dengue-national/"
 
-setwd(paste0(homewd, "/figure-development/FigS18"))
+setwd(paste0(homewd, "/figure-development/FigS19"))
 
 #load the DENV1 tree
-treeD1 <-  read.tree(file = paste0(homewd, "figure-development/FigS18/raxml-out/denv1ML/T3.raxml.supportFBP"))
+treeD1 <-  read.tree(file = paste0(homewd, "figure-development/FigS19/raxml-out/denv1ML/T3.raxml.supportFBP"))
 
 #and DENV2
-treeD2 <-  read.tree(file = paste0(homewd, "figure-development/FigS18/raxml-out/denv2ML/T3.raxml.supportFBP"))
+treeD2 <-  read.tree(file = paste0(homewd, "figure-development/FigS19/raxml-out/denv2ML/T3.raxml.supportFBP"))
 #root it
 
 
@@ -29,7 +29,7 @@ rooted.D2 <- root(treeD2, which(treeD2$tip.label == "NC_002640_DENV4"))
 plot(rooted.D2)
 
 #load tree data prepared from elsewhere
-dat <-read.csv(file = paste0(homewd, "figure-development/FigS18/ML-Sequences.csv"))
+dat <-read.csv(file = paste0(homewd, "figure-development/FigS19/ML-Sequences.csv"))
 head(dat)
 
 
@@ -255,7 +255,7 @@ pB2 <- pB  %<+% B.dat +
 FigS3 <- cowplot::plot_grid(pA2, pB2, ncol = 2, nrow = 1, labels = c("A", "B"),label_size = 18)
 
 
-ggsave(file = paste0(homewd, "/final-figures/FigS18.png"),
+ggsave(file = paste0(homewd, "/final-figures/FigS19.png"),
        plot=FigS3,
        units="mm",  
        width=100, 

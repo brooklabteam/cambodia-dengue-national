@@ -571,7 +571,7 @@ colzC=c("DENV-1: 1 mon" = "lightgreen" , "DENV-1: 3 mon" = "green2", "DENV-1: 6 
         "DENV-2: 1 mon"="lightblue1", "DENV-2: 3 mon"="cornflowerblue", "DENV-2: 6 mon"="blue", "DENV-2: 12 mon"="navy")
 
 
-pSX <- ggplot(data=out.prop) + theme_bw()+ #facet_wrap(~transchain_threshold) +
+pS20 <- ggplot(data=out.prop) + theme_bw()+ #facet_wrap(~transchain_threshold) +
   facet_grid(~DENV.serotype) +  
   #geom_line(aes(x=distance, y=prop, color=sex),show.legend = F) +
   geom_ribbon(aes(x=distance, ymin=prop_lci, ymax=prop_uci, fill=differentiate, group=differentiate), alpha=.3) +
@@ -594,8 +594,8 @@ pSX <- ggplot(data=out.prop) + theme_bw()+ #facet_wrap(~transchain_threshold) +
   xlab("Max distance between cases (km)") + guides(fill=guide_legend(ncol=2), color=guide_legend(ncol=2))
 
 
-ggsave(file = paste0(homewd, "/final-figures/FigS_transThresh.png"),
-       plot= pSX,
+ggsave(file = paste0(homewd, "/final-figures/FigS20.png"),
+       plot= pS20,
        units="mm",  
        width=80, 
        height=40, 
