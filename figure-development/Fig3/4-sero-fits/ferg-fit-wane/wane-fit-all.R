@@ -10,7 +10,7 @@ library(matrixcalc)
 
 
 #homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
-#setwd(paste0(homewd, "/figure-development/Fig3/wane-fit-all/"))
+#setwd(paste0(homewd, "/figure-development/Fig3/4-sero-fits/ferg-fit-wane/"))
 
 #compare N serotype hypothesis across all years to cumulative case data
 #functions
@@ -68,7 +68,7 @@ log.lik.wane.fit.all <- function(par, par.dat, dat){
   
   #par.dat$lambda does not change here
   #sigma gets added to the rest of the parameters
-  par.dat$sigma <- par
+  par.dat$sigma <- exp(par)
   
   
   age_vect=seq(0, max(dat$age), by=1)
@@ -99,13 +99,14 @@ log.lik.wane.fit.all <- function(par, par.dat, dat){
   out.merge <- arrange(out.merge, provname, year, age)
   
   
-  
+  #ggplot(data=out.merge) + geom_line(aes(x=age,y= cum_prop_cases, color=provname)) + facet_wrap(~year) + geom_line(aes(x=age,y= cum_prop_cases_data, color=provname), linetype=2)
   
   #how likely are the data, given the model as truth?
   ll=0
   for (i in 1:length(out.merge$age)){
     ll=ll+dbinom(out.merge$cum_cases[i],out.merge$n[i],prob=out.merge$cum_prop_cases[i],log=T)
-    #print(ll)
+    print(par)
+    print(ll)
   }
   
 
@@ -221,14 +222,18 @@ model.age.incidence.series.wane <- function(par.dat, age_vect, year.start){
       #Then, hazard of exposure to strain i only
       inte_B = (sum(dur*lambda))
       
-      #Then, cumulative waning immunity hazard for one strain
-      inte_C = sum(sigma*dur) 
+      # Then, probability of exposure to strain i and then strain k (where k does not equal i)
+      # Does not require avoiding exposure with any other strains
+      inte_C = (sum(dur*lambda*(2)))
       
-      #And cumulative waning hazard for all the others
+      
+      #Then, cumulative waning immunity hazard for one strain
+      inte_E = sum(sigma*dur) 
+      
+      #And cumulative waning hazard for all the other strains
       inte_D = (sum((N_sero-1)*sigma*dur))
       
-      #Then, probability of exposure to any other strains besides i
-      inte_E = (sum(dur*lambda*(N_sero-1)))
+      
       
       #could also write as sigma[1]*(a-1) (since a starts at class 2 we need to subtract 1 from a)
       
@@ -244,7 +249,8 @@ model.age.incidence.series.wane <- function(par.dat, age_vect, year.start){
       # here, this is expressed for just a single target strain 
       # (would need to multiply by the number of circulating strains if you wanted 
       # the probability of a primary infection with ANY strain)
-      pprim[[i]][[a]] <- exp(-inte_A)*(exp(inte_B)-1) + (exp(-inte_A)*(exp(inte_B)-1)*(1-exp(-inte_E))*(1-exp(-inte_C))*(exp(-inte_D)))
+      pprim[[i]][[a]] <- exp(-inte_A)*(exp(inte_B)-1) + (1-exp(-inte_C))*(exp(-inte_D))*(1-exp(-inte_E))
+      
       
       
       # if not primarily infected or naive, this should be a multitypic infection
@@ -329,11 +335,11 @@ fit.wane.LBFGSB.all <- function(dat,par.dat, sigma.guess, fit.CI){
   df.out <- data.table::rbindlist( year.dat.sum)
   
   
-  out.NS <- optim(par = sigma.guess, 
+  out.NS <- optim(par = log(sigma.guess), 
                   fn=log.lik.wane.fit.all, 
                   method = "L-BFGS-B",
-                  lower = 0.0000001, # slowest sigma
-                  upper=1, # fastest sigma - not allowing for waning more rapid than a single year
+                  lower = (-16.2), # slowest sigma
+                  upper=(-0.69), # fastest sigma - not allowing for waning more rapid than two years
                   par.dat=par.dat,
                   dat=df.out,
                   control = list(maxit=1000),
@@ -344,15 +350,15 @@ fit.wane.LBFGSB.all <- function(dat,par.dat, sigma.guess, fit.CI){
   
   #return sigma as its own data table
   
-  sigma.df <-cbind.data.frame(sigma=out.NS$par, dur_immunity = (1/out.NS$par), neg_llik=out.NS$value, convergence = out.NS$convergence)
+  sigma.df <-cbind.data.frame(sigma=exp(out.NS$par), dur_immunity = (1/exp(out.NS$par)), neg_llik=out.NS$value, convergence = out.NS$convergence)
   
   if(fit.CI==TRUE){
     
     if (is.positive.definite(out.NS$hessian)==TRUE){
       hess <- solve(out.NS$hessian)
       prop_sigma <-sqrt(diag(hess))
-      upper<-out.NS$par+1.96*prop_sigma
-      lower<-out.NS$par-1.96*prop_sigma
+      upper<-exp(out.NS$par+1.96*prop_sigma)
+      lower<-exp(out.NS$par-1.96*prop_sigma)
       CI <-data.frame(lower=lower, upper=upper)
       CI$lower[CI$lower<0] <- 0
       CI$upper[CI$upper<0] <- 0
@@ -416,7 +422,7 @@ load("prov-fits-FOI.Rdata")
 
 sigma.fit <- fit.wane.LBFGSB.all(dat=dat,
                           par.dat=fit.dat,
-                          sigma.guess = 1/50,
+                          sigma.guess = .00001,
                           fit.CI = TRUE)
 
 
