@@ -64,8 +64,9 @@ pSEA <- ggplot(data = SEA) +
 
 
 #and get submap of kampong speu witht the points of cambodia sequences
-cam = sf::st_read(paste0(homewd, "/data/shapefile/provinces.shp"))
-sub = subset(cam, name=="Kampong Speu")
+cam = sf::st_read(paste0(homewd, "/data/province-shape/khm_admbnda_adm1_gov_20181004.shp"))
+#cam = sf::st_read(paste0(homewd, "/data/shapefile/provinces.shp"))
+#sub = subset(cam, name=="Kampong Speu")
 
 
 dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = T, stringsAsFactors = F)

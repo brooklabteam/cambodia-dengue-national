@@ -206,10 +206,10 @@ save(comp.dat, file = "comp-dat-sim.Rdata")
 
 comp.dat.lci <- rbind(age.sub.H0.lci, age.sub.tert.lci, age.sub.2019.lci, age.sub.2007.lci)
 comp.dat.lci$hyp <- factor(comp.dat.lci$hyp, levels = c("H0: Normal Demographic\nSimulation", "H1: Increasing Tertiary\nCase Detection", "H2: Genotype Replacement\n+ Waning Immunity (2019)", "H2: Genotype Replacement\n+ Waning Immunity (2007)"))
-
+save(comp.dat.lci, file = "comp-dat-sim-lci.Rdata") 
 comp.dat.uci <- rbind(age.sub.H0.uci, age.sub.tert.uci, age.sub.2019.uci, age.sub.2007.uci)
 comp.dat.uci$hyp <- factor(comp.dat.uci$hyp, levels = c("H0: Normal Demographic\nSimulation", "H1: Increasing Tertiary\nCase Detection", "H2: Genotype Replacement\n+ Waning Immunity (2019)", "H2: Genotype Replacement\n+ Waning Immunity (2007)"))
-
+save(comp.dat.uci, file = "comp-dat-sim-lci.Rdata") 
 
 
 #then, feed into plotting

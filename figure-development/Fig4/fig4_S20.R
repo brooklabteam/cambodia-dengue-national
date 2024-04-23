@@ -39,7 +39,7 @@ setwd(homewd)
 #first panel, map of cambodia with all the sequences
 
 #and get submap of kampong speu witht the points of cambodia sequences
-cam = sf::st_read(paste0(homewd, "/data/shapefile/provinces.shp"))
+cam = sf::st_read(paste0(homewd, "/data/province-shape/khm_admbnda_adm1_gov_20181004.shp"))
 sub = subset(cam, name=="Kampong Speu")
 
 
