@@ -12,10 +12,16 @@ setwd(paste0(homewd, "/figure-development/Fig5/"))
 
 #load the output from the previous trials
 load(paste0(homewd,"/figure-development/Fig5/sim-new/cam-sim-geno-no-wane.Rdata"))
+load(paste0(homewd,"/figure-development/Fig5/sim-new/cam-sim-geno-no-wane-lci.Rdata"))
+load(paste0(homewd,"/figure-development/Fig5/sim-new/cam-sim-geno-no-wane-uci.Rdata"))
 load(paste0(homewd,"/figure-development/Fig5/sim-new/cam-sim-geno-rep-2007.Rdata"))
+load(paste0(homewd,"/figure-development/Fig5/sim-new/cam-sim-geno-rep-2007-lci.Rdata"))
+load(paste0(homewd,"/figure-development/Fig5/sim-new/cam-sim-geno-rep-2007-uci.Rdata"))
 load(paste0(homewd,"/figure-development/Fig5/sim-new/cam-sim-geno-rep-2019.Rdata"))
+load(paste0(homewd,"/figure-development/Fig5/sim-new/cam-sim-geno-rep-2019-lci.Rdata"))
+load(paste0(homewd,"/figure-development/Fig5/sim-new/cam-sim-geno-rep-2019-uci.Rdata"))
 
-#need to fix - where are these infections coming from?
+
 summarise.age.dist.wane <- function(dat, year.start){
   
   dat1 = subset(dat,year>=year.start)
@@ -77,8 +83,16 @@ summarise.age.dist.wane <- function(dat, year.start){
 }
 
 age.out.2007 = summarise.age.dist.wane(dat=out.cam.geno.rep.2007, year.start = min(out.cam.geno.rep.2007$year))
+age.out.2007.lci = summarise.age.dist.wane(dat=out.cam.geno.rep.2007.lci, year.start = min(out.cam.geno.rep.2007$year))
+age.out.2007.uci = summarise.age.dist.wane(dat=out.cam.geno.rep.2007.uci, year.start = min(out.cam.geno.rep.2007$year))
+
 age.out.2019 = summarise.age.dist.wane(dat=out.cam.geno.rep.2019, year.start = min(out.cam.geno.rep.2019$year))
+age.out.2019.lci = summarise.age.dist.wane(dat=out.cam.geno.rep.2019.lci, year.start = min(out.cam.geno.rep.2019$year))
+age.out.2019.uci = summarise.age.dist.wane(dat=out.cam.geno.rep.2019.uci, year.start = min(out.cam.geno.rep.2019$year))
+
 age.out.nointro = summarise.age.dist.wane(dat=out.cam.geno, year.start = min(out.cam.geno$year))
+age.out.nointro.lci = summarise.age.dist.wane(dat=out.cam.geno.lci, year.start = min(out.cam.geno$year))
+age.out.nointro.uci = summarise.age.dist.wane(dat=out.cam.geno.uci, year.start = min(out.cam.geno$year))
 
 
 #and select what gets counted as symptomatic
@@ -133,23 +147,70 @@ age.sub.2007 = select.symptom(df=age.out.2007,criteria = "Secondary-Extension")
 age.sub.2007$hyp = "H2: Genotype Replacement\n+ Waning Immunity (2007)"
 
 
+age.out.2007.lci = subset(age.out.2007.lci, year <2021)
+age.sub.2007.lci = select.symptom(df=age.out.2007.lci,criteria = "Secondary-Extension")
+age.sub.2007.lci$hyp = "H2: Genotype Replacement\n+ Waning Immunity (2007)"
+
+
+age.out.2007.uci = subset(age.out.2007.uci, year <2021)
+age.sub.2007.uci = select.symptom(df=age.out.2007.uci,criteria = "Secondary-Extension")
+age.sub.2007.uci$hyp = "H2: Genotype Replacement\n+ Waning Immunity (2007)"
+
+
 age.out.2019 = subset(age.out.2019, year <2021)
 age.sub.2019 = select.symptom(df=age.out.2019,criteria = "Secondary-Extension")
 age.sub.2019$hyp = "H2: Genotype Replacement\n+ Waning Immunity (2019)"
 
+age.out.2019.lci = subset(age.out.2019.lci, year <2021)
+age.sub.2019.lci = select.symptom(df=age.out.2019.lci,criteria = "Secondary-Extension")
+age.sub.2019.lci$hyp = "H2: Genotype Replacement\n+ Waning Immunity (2019)"
+
+age.out.2019.uci = subset(age.out.2019.uci, year <2021)
+age.sub.2019.uci = select.symptom(df=age.out.2019.uci,criteria = "Secondary-Extension")
+age.sub.2019.uci$hyp = "H2: Genotype Replacement\n+ Waning Immunity (2019)"
 
 age.out.nointro = subset(age.out.nointro, year<2021)
 age.sub.tert = select.symptom(df=age.out.nointro,criteria = "Increasing-Tertiary")
 age.sub.tert$hyp = "H1: Increasing Tertiary\nCase Detection"
+
+age.out.nointro.lci = subset(age.out.nointro.lci, year<2021)
+age.sub.tert.lci = select.symptom(df=age.out.nointro.lci,criteria = "Increasing-Tertiary")
+age.sub.tert.lci$hyp = "H1: Increasing Tertiary\nCase Detection"
+
+age.out.nointro.uci = subset(age.out.nointro.uci, year<2021)
+age.sub.tert.uci = select.symptom(df=age.out.nointro.uci,criteria = "Increasing-Tertiary")
+age.sub.tert.uci$hyp = "H1: Increasing Tertiary\nCase Detection"
+
 
 
 age.sub.H0 = select.symptom(df=age.out.nointro,criteria = "Secondary-Only")
 age.sub.H0$hyp = "H0: Normal Demographic\nSimulation"
 
 
+
+age.sub.H0.lci = select.symptom(df=age.out.nointro.lci,criteria = "Secondary-Only")
+age.sub.H0.lci$hyp = "H0: Normal Demographic\nSimulation"
+
+
+
+age.sub.H0.uci = select.symptom(df=age.out.nointro.uci,criteria = "Secondary-Only")
+age.sub.H0.uci$hyp = "H0: Normal Demographic\nSimulation"
+
+
 #put all the data together
 comp.dat <- rbind(age.sub.H0, age.sub.tert, age.sub.2019, age.sub.2007)
 comp.dat$hyp <- factor(comp.dat$hyp, levels = c("H0: Normal Demographic\nSimulation", "H1: Increasing Tertiary\nCase Detection", "H2: Genotype Replacement\n+ Waning Immunity (2019)", "H2: Genotype Replacement\n+ Waning Immunity (2007)"))
+
+#and save for fitting
+save(comp.dat, file = "comp-dat-sim.Rdata") 
+
+comp.dat.lci <- rbind(age.sub.H0.lci, age.sub.tert.lci, age.sub.2019.lci, age.sub.2007.lci)
+comp.dat.lci$hyp <- factor(comp.dat.lci$hyp, levels = c("H0: Normal Demographic\nSimulation", "H1: Increasing Tertiary\nCase Detection", "H2: Genotype Replacement\n+ Waning Immunity (2019)", "H2: Genotype Replacement\n+ Waning Immunity (2007)"))
+
+comp.dat.uci <- rbind(age.sub.H0.uci, age.sub.tert.uci, age.sub.2019.uci, age.sub.2007.uci)
+comp.dat.uci$hyp <- factor(comp.dat.uci$hyp, levels = c("H0: Normal Demographic\nSimulation", "H1: Increasing Tertiary\nCase Detection", "H2: Genotype Replacement\n+ Waning Immunity (2019)", "H2: Genotype Replacement\n+ Waning Immunity (2007)"))
+
+
 
 #then, feed into plotting
 
@@ -194,34 +255,38 @@ cum.sum.year <- function(df){
 
 column.1 <- function(dat, dat.lci, dat.uci, year.start){
   dat1 = subset(dat, year >= year.start) 
+  dat1.lci = subset(dat.lci, year >= year.start) 
+  dat1.uci = subset(dat.uci, year >= year.start) 
   
   denv.case = subset(dat1, case_type == "symptomatic")
+  denv.case.lci = subset(dat1.lci, case_type == "symptomatic")
+  denv.case.uci = subset(dat1.uci, case_type == "symptomatic")
   
   
   #dat.ts <- ddply(denv.case, .(year, time), summarise, count=sum(count))
   dat.ts <- ddply(denv.case, .(hyp, year), summarise, count=sum(count))
-  #dat.ts.lci <- ddply(denv.case.lci, .( year), summarise, count=sum(count))
-  #dat.ts.uci <- ddply(denv.case.uci, .(year), summarise, count=sum(count))
+  dat.ts.lci <- ddply(denv.case.lci, .(hyp,year), summarise, count=sum(count))
+  dat.ts.uci <- ddply(denv.case.uci, .(hyp, year), summarise, count=sum(count))
   #dat.ts$hyp <- factor(dat.ts$hyp)
   dat.ts$plot_type <- "total reported cases\nfrom deterministic simulation"
   # dat.ts.lci$hyp <- factor(dat.ts.lci$hyp)
-  # dat.ts.lci$plot_type <- "total reported cases\nfrom deterministic simulation"
+  dat.ts.lci$plot_type <- "total reported cases\nfrom deterministic simulation"
   # dat.ts.uci$hyp <- factor(dat.ts.uci$hyp)
-  # dat.ts.uci$plot_type <- "total reported cases\nfrom deterministic simulation"
+  dat.ts.uci$plot_type <- "total reported cases\nfrom deterministic simulation"
   # 
-  # dat.ts.lci.merge <- dplyr::select(dat.ts.lci, hyp, year, count)
-  # dat.ts.uci.merge <- dplyr::select(dat.ts.uci, hyp, year, count)
-  # names(dat.ts.lci.merge)[3] <- "lci"
-  # names(dat.ts.uci.merge)[3] <- "uci"
+  dat.ts.lci.merge <- dplyr::select(dat.ts.lci, hyp, year, count)
+  dat.ts.uci.merge <- dplyr::select(dat.ts.uci, hyp, year, count)
+  names(dat.ts.lci.merge)[3] <- "lci"
+  names(dat.ts.uci.merge)[3] <- "uci"
   # 
-  # dat.ts <- merge(dat.ts, dat.ts.lci.merge, by =c("hyp", "year"))
-  # dat.ts <- merge(dat.ts, dat.ts.uci.merge, by =c("hyp", "year"))
-  # dat.ts$lci_new <- NA
-  # dat.ts$uci_new <- NA
-  # dat.ts$lci_new[dat.ts$lci<dat.ts$uci] <- dat.ts$lci[dat.ts$lci<dat.ts$uci]
-  # dat.ts$lci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$uci[dat.ts$lci>dat.ts$uci]
-  # dat.ts$uci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$lci[dat.ts$lci>dat.ts$uci]
-  # dat.ts$uci_new[dat.ts$lci<dat.ts$uci] <- dat.ts$uci[dat.ts$lci<dat.ts$uci]
+  dat.ts <- merge(dat.ts, dat.ts.lci.merge, by =c("hyp", "year"))
+  dat.ts <- merge(dat.ts, dat.ts.uci.merge, by =c("hyp", "year"))
+  dat.ts$lci_new <- NA
+  dat.ts$uci_new <- NA
+  dat.ts$lci_new[dat.ts$lci<dat.ts$uci] <- dat.ts$lci[dat.ts$lci<dat.ts$uci]
+  dat.ts$lci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$uci[dat.ts$lci>dat.ts$uci]
+  dat.ts$uci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$lci[dat.ts$lci>dat.ts$uci]
+  dat.ts$uci_new[dat.ts$lci<dat.ts$uci] <- dat.ts$uci[dat.ts$lci<dat.ts$uci]
   # 
   
   #dat.ts$count_dss <- dat.ts$count*perc_dss
@@ -230,7 +295,7 @@ column.1 <- function(dat, dat.lci, dat.uci, year.start){
   p1 <- ggplot(dat.ts) + theme_bw() + facet_grid(hyp~plot_type, switch = "y") +
     #geom_vline(aes(xintercept=2012), linetype=2)+
     #geom_vline(aes(xintercept=2019), linetype=2) +
-    #geom_ribbon(aes(x=year, ymin=lci_new, ymax=uci_new),alpha=.3) +
+    geom_ribbon(aes(x=year, ymin=lci_new, ymax=uci_new),alpha=.3) +
     geom_line(aes(x=year, y=count), size=.3) + 
     #geom_line(aes(x=year, y=count_dss), size=.3, color="navy") + 
     #geom_line(aes(x=year, y=count_mort), size=.3, color="green") + 
@@ -254,7 +319,7 @@ column.1 <- function(dat, dat.lci, dat.uci, year.start){
           
   return(p1)
 }
-col1 <- column.1(dat =comp.dat, dat.lci = NA, dat.uci = NA, year.start = 2002)
+col1 <- column.1(dat =comp.dat, dat.lci = comp.dat.lci, dat.uci = comp.dat.uci, year.start = 2002)
 #column 2 age distribution of cases
 column.2 <- function (dat, year.start){
   
@@ -268,10 +333,10 @@ column.2 <- function (dat, year.start){
   #denv.case$round <- factor(denv.case$round, levels=c("secondary", "tertiary"))
   #subset(dat1,  class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
   
-  if(length(unique(denv.case$age))>1){
-    denv.case = subset(denv.case, age<max(denv.case$age))  
-  }
-  #denv.case$year <- trunc(denv.case$time)
+   if(length(unique(denv.case$age))>1){
+     denv.case = subset(denv.case, age<max(denv.case$age))  
+   }
+  # #denv.case$year <- trunc(denv.case$time)
   
   #first, split by year
   #then, make a "case" out of each
