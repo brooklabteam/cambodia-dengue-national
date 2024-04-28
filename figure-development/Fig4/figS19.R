@@ -488,9 +488,9 @@ pC <-pC2 %<+% tree2merge +
 #and put it all together
 
 
-pTop<- cowplot::plot_grid(pKPS.1, pB,  pC, labels=c("A", "B"), nrow=1, ncol=2, label_size = 22)
+pTop<- cowplot::plot_grid(pKPS.1, pB,  pC, labels=c("A", "C"), nrow=1, ncol=2, label_size = 22)
 
-pBottom <- cowplot::plot_grid(pKPS.2, pC,  pC, labels=c("C", "D"), nrow=1, ncol=2, label_size = 22)
+pBottom <- cowplot::plot_grid(pKPS.2, pC,  pC, labels=c("B", "D"), nrow=1, ncol=2, label_size = 22)
 
 
 

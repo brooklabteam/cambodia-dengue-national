@@ -1,273 +1,281 @@
-sample_name,sample_type,Serotype,Genotype,Top_BLAST_Hit,age,sex,date,site,commune,district,province,genbank_accession,sequence_completeness,lat,long,notes,study
-100-0752,Serum,DENV-1,DENV-1,,3,M,8/19/19,,,,Kampong Speu,OK159935,complete,11.4755,104.5454,lat-long is exact,PAGODAS
-100-0052,Serum,DENV-1,DENV-1,,6,F,7/23/19,,,,Kampong Speu,OK159936,complete,11.455,104.5076,lat-long is exact,PAGODAS
-100-0632,Serum,DENV-1,DENV-1,,4,F,8/26/19,,,,Kampong Speu,OK159937,complete,11.4678,104.5461,lat-long is exact,PAGODAS
-100-0702,Serum,DENV-1,DENV-1,,4.736986301,F,7/8/19,,,,Kampong Speu,OK159938,complete,11.4643,104.5432,lat-long is exact,PAGODAS
-100-0682,Serum,DENV-1,DENV-1,,7,M,7/20/19,,,,Kampong Speu,OK159939,complete,11.4678,104.5427,lat-long is exact,PAGODAS
-100-0658,Serum,DENV-1,DENV-1,,5,M,7/12/19,,,,Kampong Speu,OK159940,complete,11.4688,104.5458,lat-long is exact,PAGODAS
-100-0618,Serum,DENV-1,DENV-1,,7,M,6/24/19,,,,Kampong Speu,OK159941,complete,11.4674,104.5391,lat-long is exact,PAGODAS
-100-0608,Serum,DENV-1,DENV-1,,5,M,6/22/19,,,,Kampong Speu,OK159942,complete,11.4677,104.5376,lat-long is exact,PAGODAS
-100-0562,Serum,DENV-1,DENV-1,,9,M,6/14/19,,,,Kampong Speu,OK159943,complete,11.4695,104.536,lat-long is exact,PAGODAS
-100-0479,Serum,DENV-1,DENV-1,,3,M,4/2/19,,,,Kampong Speu,OK159944,complete,11.4712,104.5275,lat-long is exact,PAGODAS
-100-0418,Serum,DENV-1,DENV-1,,9,F,5/24/19,,,,Kampong Speu,OK159945,complete,11.4718,104.5275,lat-long is exact,PAGODAS
-109-0078,Serum,DENV-1,DENV-1,,5,F,8/15/19,,,,Kampong Speu,OK159946,complete,11.5853,104.5272,lat-long is exact,IDSeq
-109-0074,Serum,DENV-1,DENV-1,,5,M,8/14/19,Tbes,Voa Sar,Samraong Tong,Kampong Speu,OK159947,complete,11.4837231,104.5812778,lat-long is centroid of province,IDSeq
-109-0073,Serum,DENV-1,DENV-1,,7,M,8/11/19,,,,Kampong Speu,OK159948,complete,11.4012,104.5831,lat-long is exact,IDSeq
-109-0068,Serum,DENV-1,DENV-1,,8,F,8/9/19,,,,Kampong Speu,OK159949,complete,11.4582,104.5689,lat-long is exact,IDSeq
-109-0057,Serum,DENV-1,DENV-1,,6,M,8/8/19,,,,Kampong Speu,OK159950,complete,11.4673,104.5436,lat-long is exact,IDSeq
-109-0056,Serum,DENV-1,DENV-1,,4,M,8/8/19,,,,Kampong Speu,OK159951,complete,11.4657,104.5158,lat-long is exact,IDSeq
-109-0052,Serum,DENV-1,DENV-1,,7,F,8/7/19,,,,Kampong Speu,OK159952,complete,11.4655,104.5546,lat-long is exact,IDSeq
-109-0050,Serum,DENV-1,DENV-1,,23,M,8/7/19,,,,Kampong Speu,OK159953,complete,11.168,104.1927,lat-long is exact,IDSeq
-109-0048,Serum,DENV-1,DENV-1,,13,F,8/6/19,,,,Kampong Speu,OK159954,complete,11.4254,104.46,lat-long is exact,IDSeq
-109-0042,Serum,DENV-1,DENV-1,,3,M,8/1/19,,,,Kampong Speu,OK159955,complete,11.5436,104.546,lat-long is exact,IDSeq
-109-0032,Serum,DENV-1,DENV-1,,15,M,7/31/19,,,,Kampong Speu,OK159956,complete,11.4707,104.4758,lat-long is exact,IDSeq
-109-0030,Serum,DENV-1,DENV-1,,4,F,7/30/19,,,,Kampong Speu,OK159957,complete,11.4491,104.4989,lat-long is exact,IDSeq
-109-0007,Serum,DENV-1,DENV-1,,14,M,7/24/19,,,,Kampong Speu,OK159958,complete,11.4669,104.5434,lat-long is exact,IDSeq
-109-0002,Serum,DENV-1,DENV-1,,37,F,7/23/19,,,,Kampong Speu,OK159959,complete,11.4632,104.5843,lat-long is exact,IDSeq
-109-0236,Serum,DENV-1,DENV-1,,4,M,2/18/20,,,,Kampong Speu,OK159960,complete,11.4561,104.4661,lat-long is exact,IDSeq
-109-0230,Serum,DENV-1,DENV-1,,10,F,2/3/20,,,,Kampong Speu,OK159961,complete,11.4561,104.4661,lat-long is exact,IDSeq
-100-0623,Serum,DENV-1,DENV-1,,9.008219178,M,8/15/19,,,,Kampong Speu,OK159962,complete,11.4688,104.5452,lat-long is exact,PAGODAS
-100-0734,Serum,DENV-1,DENV-1,,6,M,7/21/19,,,,Kampong Speu,OK159963,complete,11.4747,104.5422,lat-long is exact,PAGODAS
-100-0692,Serum,DENV-1,DENV-1,,6,M,8/8/19,,,,Kampong Speu,OK159964,complete,11.4698,104.5412,lat-long is exact,PAGODAS
-100-0661,Serum,DENV-1,DENV-1,,8,F,6/13/19,,,,Kampong Speu,OK159965,complete,11.4724,104.5498,lat-long is exact,PAGODAS
-100-0599,Serum,DENV-1,DENV-1,,8,M,5/31/19,,,,Kampong Speu,OK159966,complete,11.4733,104.5477,lat-long is exact,PAGODAS
-100-0422,Serum,DENV-1,DENV-1,,4,F,7/4/19,,,,Kampong Speu,OK159967,complete,11.4685,104.5223,lat-long is exact,PAGODAS
-100-0222,Serum,DENV-1,DENV-1,,6.638356164,M,3/15/19,,,,Kampong Speu,OK159968,complete,11.4632,104.5298,lat-long is exact,PAGODAS
-100-0154,Serum,DENV-1,DENV-1,,3,M,7/26/19,,,,Kampong Speu,OK159969,complete,11.4653,104.5312,lat-long is exact,PAGODAS
-109-0085,Serum,DENV-1,DENV-1,,18,F,8/21/19,,,,Kampong Speu,OK159970,complete,11.4752,104.5919,lat-long is exact,IDSeq
-109-0081,Serum,DENV-1,DENV-1,,8,F,8/18/19,,,,Kampong Speu,OK159971,complete,11.4702,104.5337,lat-long is exact,IDSeq
-109-0080,Serum,DENV-1,DENV-1,,14,F,8/18/19,,,,Kampong Speu,OK159972,complete,11.4838,104.5803,lat-long is exact,IDSeq
-109-0055,Serum,DENV-1,DENV-1,,14,F,8/8/19,,,,Kampong Speu,OK159973,complete,11.5024,104.5577,lat-long is exact,IDSeq
-109-0034,Serum,DENV-1,DENV-1,,0.666666667,M,8/1/19,,,,Kampong Speu,OK159974,complete,11.4452,104.584,lat-long is exact,IDSeq
-109-0022,Serum,DENV-1,DENV-1,,14,M,7/26/19,,,,Kampong Speu,OK159975,complete,11.4837,104.5814,lat-long is exact,IDSeq
-109-0014,Serum,DENV-1,DENV-1,,10,M,7/25/19,,,,Kampong Speu,OK159976,complete,11.4176,104.5439,lat-long is exact,IDSeq
-109-0316,Serum,DENV-1,DENV-1,,34,M,7/13/20,,,,Kampong Speu,OL411495,complete,11.41697544,104.5180891,lat-long is exact,IDSeq
-100-0642,Serum,DENV-1,DENV-1,,8.62739726,F,7/2/19,,,,Kampong Speu,OL411496,complete,11.4688,104.5458,lat-long is exact,PAGODAS
-109-0245,Serum,DENV-1,DENV-1,,12,M,3/4/20,,,,Kampong Speu,OL411497,complete,11.5961,104.2483,lat-long is exact,IDSeq
-109-0067,Serum,DENV-1,DENV-1,,7,M,8/11/19,,,,Kampong Speu,OL411498,complete,11.4162,104.4593,lat-long is exact,IDSeq
-100-0610,Serum,DENV-1,DENV-1,,6,M,7/1/19,,,,Kampong Speu,OL411499,complete,11.4672,104.539,lat-long is exact,PAGODAS
-100-0622,Serum,DENV-1,DENV-1,,2.043835616,M,8/28/19,,,,Kampong Speu,OL412140,complete,11.4688,104.5452,lat-long is exact,PAGODAS
-109-0011,Serum,DENV-1,DENV-1,,6,F,7/25/19,,,,Kampong Speu,OL412678,complete,11.4043,104.4052,lat-long is exact,IDSeq
-109-0060,Serum,DENV-1,DENV-1,,2,F,8/9/19,,,,Kampong Speu,OL412703,complete,11.4079,104.4063,lat-long is exact,IDSeq
-109-0129,Serum,DENV-1,DENV-1,,12,F,9/12/19,,,,Kampong Speu,OM033409,complete,11.4511,104.489,lat-long is exact,IDSeq
-100-0652,Serum,DENV-1,DENV-1,,9,M,8/27/19,,,,Kampong Speu,OQ678009,complete,11.467967,104.545555,lat-long is exact,PAGODAS
-100-0245,Serum,DENV-1,DENV-1,,3,M,2/16/20,,,,Kampong Speu,OQ678018,complete,11.46559,104.529682,lat-long is exact,PAGODAS
-109-0169,Serum,DENV-1,DENV-1,,3,M,11/26/19,Snao Ti Pir,Sopoar Tep,Krong Chbar Mon,Kampong Speu,OQ678060,complete,11.46953936,104.5427272,lat-long is centroid of province,IDSeq
-109-0181,Serum,DENV-1,DENV-1,,8,M,12/17/19,,,,Kampong Speu,OQ678061,complete,11.46716497,104.5009879,lat-long is exact,IDSeq
-109-0195 ,Serum,DENV-1,DENV-1,,6,M,12/26/19,,,,Kampong Speu,OQ678099,complete,11.49254886,104.5165399,lat-long is exact,IDSeq
-100-0747,Serum,DENV-1,DENV-1,,6,M,8/30/19,,,,Kampong Speu,OQ678244,complete,11.475418,104.544227,lat-long is exact,PAGODAS
-109-0187,Serum,DENV-1,DENV-1,,8,F,12/20/19,,,,Kampong Speu,OQ678252,complete,11.49254886,104.5165399,lat-long is exact,IDSeq
-100-0587,Serum,DENV-1,DENV-1,,6,M,11/8/19,,,,Kampong Speu,OQ683856,complete,11.469082,104.53958,lat-long is exact,PAGODAS
-109-0340,Serum,DENV-1,DENV-1,,8,M,7/31/20,Snuol Chrum,Tuek L'ak,Kong Pisei,Kampong Speu,OQ683880,complete,11.33753845,104.6176264,lat-long is centroid of province,IDSeq
-DENS-OB-067,Serum,DENV-1,DENV-1,,2.5,F,5/29/21,Lorm Thmey,Ma Lik,An DoungMeas,Ratanakiri,PP470671,complete,13.83895257,107.3218065,lat-long is centroid of province,NDCP
-DENS-OB-068,Serum,DENV-1,DENV-1,,30,M,5/29/21,Dal,Nhang,An DoungMeas,Ratanakiri,PP470672,complete,13.96267335,107.3565621,lat-long is centroid of province,NDCP
-DENS-OB-070,Serum,DENV-1,DENV-1,,16,M,5/30/21,Dal,Nhang,An DoungMeas,Ratanakiri,PP470673,complete,13.96267335,107.3565621,lat-long is centroid of province,NDCP
-100-0670,Serum,DENV-2,Cosmopolitan,,5,F,7/30/19,,,,Kampong Speu,OL412740,complete,11.4696,104.5364,lat-long is exact,PAGODAS
-100-0430,Serum,DENV-2,Cosmopolitan,,3.169863014,F,7/2/19,,,,Kampong Speu,OL414717,complete,11.4703,104.5276,lat-long is exact,PAGODAS
-100-0160,Serum,DENV-2,Cosmopolitan,,7,M,7/29/19,,,,Kampong Speu,OL414718,complete,11.4645,104.5325,lat-long is exact,PAGODAS
-100-0156,Serum,DENV-2,Asian-1,,9,M,7/25/19,,,,Kampong Speu,OL414719,complete,11.4653,104.5311,lat-long is exact,PAGODAS
-100-0068,Serum,DENV-2,Asian-1,,8,M,7/25/19,,,,Kampong Speu,OL414720,complete,11.4538,104.5058,lat-long is exact,PAGODAS
-100-0067,Serum,DENV-2,Asian-1,,6,F,7/25/19,,,,Kampong Speu,OL414721,complete,11.4538,104.5058,lat-long is exact,PAGODAS
-109-0093,Serum,DENV-2,Cosmopolitan,,9,F,8/22/19,,,,Kampong Speu,OL414722,complete,11.3859,104.4419,lat-long is exact,IDSeq
-109-0087,Serum,DENV-2,Cosmopolitan,,7,M,8/21/19,,,,Kampong Speu,OL414723,complete,11.4537,104.5424,lat-long is exact,IDSeq
-109-0086,Serum,DENV-2,Cosmopolitan,,4,M,8/20/19,,,,Kampong Speu,OL414724,complete,11.4589,104.5498,lat-long is exact,IDSeq
-109-0059,Serum,DENV-2,Cosmopolitan,,13,M,8/9/19,,,,Kampong Speu,OL414725,complete,11.4513,104.4917,lat-long is exact,IDSeq
-109-0053,Serum,DENV-2,Cosmopolitan,,15,F,8/7/19,,,,Kampong Speu,OL414726,complete,11.4402,104.5609,lat-long is exact,IDSeq
-109-0049,Serum,DENV-2,Cosmopolitan,,5,F,8/6/19,,,,Kampong Speu,OL414727,complete,11.4407,104.5614,lat-long is exact,IDSeq
-109-0023,Serum,DENV-2,Asian-1,,12,F,7/29/19,,,,Kampong Speu,OL414728,complete,11.45585632,104.6322838,lat-long is exact,IDSeq
-109-0019,Serum,DENV-2,Asian-1,,2,F,7/25/19,,,,Kampong Speu,OL414729,complete,11.4452,104.5936,lat-long is exact,IDSeq
-109-0003,Serum,DENV-2,Cosmopolitan,,2,M,7/24/19,,,,Kampong Speu,OL414730,complete,11.5418,104.4445,lat-long is exact,IDSeq
-109-0376,Serum,DENV-2,Cosmopolitan,,3,M,8/28/20,,,,Kampong Speu,OL414732,complete,11.4471,104.5236,lat-long is exact,IDSeq
-109-0350,Serum,DENV-2,Cosmopolitan,,13,M,8/10/20,,,,Kampong Speu,OL414733,complete,11.3984,104.5224,lat-long is exact,IDSeq
-109-0298,Serum,DENV-2,Asian-1,,10,F,6/30/20,,,,Kampong Speu,OL414734,complete,11.2917,104.2381,lat-long is exact,IDSeq
-109-0295,Serum,DENV-2,Asian-1,,7,M,6/18/20,,,,Kampong Speu,OL414735,complete,11.2917,104.2381,lat-long is exact,IDSeq
-109-0294,Serum,DENV-2,Cosmopolitan,,8,F,6/17/20,,,,Kampong Speu,OL414736,complete,11.9091,104.1333,lat-long is exact,IDSeq
-100-0477,Serum,DENV-2,Cosmopolitan,,5,F,6/20/19,,,,Kampong Speu,OL414737,complete,11.4719,104.5267,lat-long is exact,PAGODAS
-100-0428,Serum,DENV-2,Cosmopolitan,,3,F,7/19/19,,,,Kampong Speu,OL414738,complete,11.4713,104.5278,lat-long is exact,PAGODAS
-100-0427,Serum,DENV-2,Cosmopolitan,,9,M,7/23/19,,,,Kampong Speu,OL414739,complete,11.4713,104.5278,lat-long is exact,PAGODAS
-100-0405,Serum,DENV-2,Cosmopolitan,,4,F,6/27/19,,,,Kampong Speu,OL414740,complete,11.4716,104.5277,lat-long is exact,PAGODAS
-100-0277,Serum,DENV-2,Cosmopolitan,,9,F,7/23/19,,,,Kampong Speu,OL414741,complete,11.4591,104.5354,lat-long is exact,PAGODAS
-100-0153,Serum,DENV-2,Cosmopolitan,,9,F,6/23/19,,,,Kampong Speu,OL414742,complete,11.4502,104.5154,lat-long is exact,PAGODAS
-100-0072,Serum,DENV-2,Asian-1,,4,M,4/4/19,,,,Kampong Speu,OL414743,complete,11.4559,104.5131,lat-long is exact,PAGODAS
-100-0039,Serum,DENV-2,Asian-1,,7,M,7/15/19,,,,Kampong Speu,OL414744,complete,11.4567,104.5132,lat-long is exact,PAGODAS
-109-0045,Serum,DENV-2,Cosmopolitan,,11,M,8/6/19,,,,Kampong Speu,OL414745,complete,11.4404,104.5616,lat-long is exact,IDSeq
-109-0292,Serum,DENV-2,Cosmopolitan,,11,F,6/16/20,,,,Kampong Speu,OL414746,complete,11.9091,104.1333,lat-long is exact,IDSeq
-100-0034,Serum,DENV-2,Cosmopolitan,,9,M,8/20/19,,,,Kampong Speu,OL414747,complete,11.4574,104.5267,lat-long is exact,PAGODAS
-109-0293,Serum,DENV-2,Cosmopolitan,,13,M,6/17/20,,,,Kampong Speu,OL414749,complete,11.6082,104.1466,lat-long is exact,IDSeq
-109-0304,Serum,DENV-2,Cosmopolitan,,10,M,7/5/20,,,,Kampong Speu,OL414750,complete,11.3984,104.5224,lat-long is exact,IDSeq
-109-0318,Serum,DENV-2,Cosmopolitan,,10,M,7/14/20,,,,Kampong Speu,OL414751,complete,11.3984,104.5224,lat-long is exact,IDSeq
-109-0334,Serum,DENV-2,Cosmopolitan,,32,F,7/29/20,,,,Kampong Speu,OL414752,complete,11.4611,104.5066,lat-long is exact,IDSeq
-109-0352,Serum,DENV-2,Cosmopolitan,,9,M,8/9/20,,,,Kampong Speu,OL414753,complete,11.4745,104.5915,lat-long is exact,IDSeq
-109-0353,Serum,DENV-2,Cosmopolitan,,17,F,8/10/20,,,,Kampong Speu,OL414754,complete,11.4571,104.5385,lat-long is exact,IDSeq
-109-0363,Serum,DENV-2,Cosmopolitan,,14,M,8/13/20,,,,Kampong Speu,OL414755,complete,11.4611,104.5066,lat-long is exact,IDSeq
-109-0377,Serum,DENV-2,Cosmopolitan,,8,F,8/29/20,,,,Kampong Speu,OL414756,complete,11.3984,104.5224,lat-long is exact,IDSeq
-109-0384,Serum,DENV-2,Cosmopolitan,,10,F,9/1/20,,,,Kampong Speu,OL414757,complete,11.3984,104.5224,lat-long is exact,IDSeq
-109-0408,Serum,DENV-2,Cosmopolitan,,13,M,9/23/20,,,,Kampong Speu,OL414758,complete,11.471,104.5527,lat-long is exact,IDSeq
-100-0432,Serum,DENV-2,Cosmopolitan,,9,M,6/28/19,,,,Kampong Speu,OL414759,complete,11.4703,104.5276,lat-long is exact,PAGODAS
-100-0215,Serum,DENV-2,Cosmopolitan,,3,F,8/16/19,,,,Kampong Speu,OL414760,complete,11.467,104.5316,lat-long is exact,PAGODAS
-109-0020,Serum,DENV-2,Asian-1,,12,M,7/26/19,,,,Kampong Speu,OL414761,complete,11.441,104.5621,lat-long is exact,IDSeq
-109-0001,Serum,DENV-2,Cosmopolitan,,5,M,7/23/19,,,,Kampong Speu,OL414762,complete,11.4533,104.5801,lat-long is exact,IDSeq
-109-0039,Serum,DENV-2,Cosmopolitan,,12,M,8/2/19,,,,Kampong Speu,OL414763,complete,11.4504,104.4921,lat-long is exact,IDSeq
-109-0372,Serum,DENV-2,Cosmopolitan,,6,F,8/27/20,,,,Kampong Speu,OL414764,complete,11.6877,104.1305,lat-long is exact,IDSeq
-109-0349,Serum,DENV-2,Cosmopolitan,,12,M,8/10/20,,,,Kampong Speu,OL414765,complete,11.4745,104.5915,lat-long is exact,IDSeq
-109-0008,Serum,DENV-2,Cosmopolitan,,7,M,7/25/19,,,,Kampong Speu,OL420733,complete,11.4406,104.5613,lat-long is exact,IDSeq
-109-0358,Serum,DENV-2,Cosmopolitan,,9,M,8/11/20,,,,Kampong Speu,OL435143,complete,11.4869,104.5435,lat-long is exact,IDSeq
-109-0389,Serum,DENV-2,Cosmopolitan,,NA,NA,9/15/20,,,,Kampong Speu,OP999336,complete,11.52783098,104.5188455,lat-long is exact,IDSeq
-100-0390,Serum,DENV-2,Cosmopolitan,,9,F,8/9/19,,,,Kampong Speu,OQ674509,complete,11.470843,104.529892,lat-long is exact,PAGODAS
-109-0128,Serum,DENV-2,Asian-1,,14,M,9/13/19,,,,Kampong Speu,OQ678012,complete,11.4573808,104.5343672,lat-long is exact,IDSeq
-109-0145,Serum,DENV-2,Cosmopolitan,,14,M,10/30/19,,,,Kampong Speu,OQ678017,complete,11.45607987,104.5184355,lat-long is exact,IDSeq
-109-0147,Serum,DENV-2,Cosmopolitan,,8,F,10/31/19,,,,Kampong Speu,OQ678059,complete,11.49293418,104.5660158,lat-long is exact,IDSeq
-109-0284,Serum,DENV-2,Cosmopolitan,,9,M,6/3/20,,,,Kampong Speu,OQ678101,complete,11.59579236,104.2305655,lat-long is exact,IDSeq
-109-0338,Serum,DENV-2,Cosmopolitan,,5,F,7/30/20,,,,Kampong Speu,OQ678102,complete,11.47270457,104.5788093,lat-long is exact,IDSeq
-109-0283,Serum,DENV-2,Cosmopolitan,,29,M,6/2/20,,,,Kampong Speu,OQ683881,complete,11.57884717,104.2344271,lat-long is exact,IDSeq
-109-1034,Serum,DENV-2,Cosmopolitan,,12,M,12/16/21,,,,Kampong Speu,PP396279,complete,11.49499158,104.562996,lat-long is exact,IDSeq
-109-0998,Serum,DENV-2,Cosmopolitan,,8,F,11/29/21,,,,Kampong Speu,PP396280,complete,11.50836343,104.5488908,lat-long is exact,IDSeq
-109-1123,Serum,DENV-2,Cosmopolitan,,14,F,1/18/22,,,,Kampong Speu,PP406368,complete,11.5153439,104.5600119,lat-long is exact,IDSeq
-109-1240,Serum,DENV-2,Cosmopolitan,,5,M,2/16/22,,,,Kampong Speu,PP406369,complete,11.51418879,104.5439757,lat-long is exact,IDSeq
-109-1272,Serum,DENV-2,Cosmopolitan,,12,F,2/22/22,,,,Kampong Speu,PP406370,complete,11.44455015,104.4920708,lat-long is exact,IDSeq
-109-1281,Serum,DENV-2,Cosmopolitan,,12,F,2/23/22,,,,Kampong Speu,PP406371,complete,11.44455015,104.4920708,lat-long is exact,IDSeq
-109-1458,Serum,DENV-2,Cosmopolitan,,12,M,4/6/22,,,,Kampong Speu,PP406372,complete,11.45832374,104.5358876,lat-long is exact,IDSeq
-109-1462,Serum,DENV-2,Cosmopolitan,,3,M,4/6/22,,,,Kampong Speu,PP406373,complete,11.54141507,104.8981563,lat-long is exact,IDSeq
-109-1546,Serum,DENV-2,Cosmopolitan,,13,M,4/20/22,,,,Kampong Speu,PP406374,complete,11.5211081,104.5623505,lat-long is exact,IDSeq
-109-1724,Serum,DENV-2,Cosmopolitan,,2,M,5/17/22,,,,Kampong Speu,PP406375,complete,11.5296487,104.4974665,lat-long is exact,IDSeq
-109-1733,Serum,DENV-2,Cosmopolitan,,1,M,5/18/22,,,,Kampong Speu,PP406376,complete,11.47341751,104.5904707,lat-long is exact,IDSeq
-109-1751,Serum,DENV-2,Cosmopolitan,,12,F,5/23/22,,,,Kampong Speu,PP406447,complete,11.5296487,104.4974665,lat-long is exact,IDSeq
-109-1752,Serum,DENV-2,Cosmopolitan,,9,F,5/23/22,,,,Kampong Speu,PP406448,complete,11.5296487,104.4974665,lat-long is exact,IDSeq
-109-1758,Serum,DENV-2,Cosmopolitan,,9,F,5/23/22,,,,Kampong Speu,PP406449,complete,11.5296487,104.4974665,lat-long is exact,IDSeq
-109-1759,Serum,DENV-2,Cosmopolitan,,13,F,5/23/22,,,,Kampong Speu,PP406450,complete,11.45832374,104.5358876,lat-long is exact,IDSeq
-109-1760,Serum,DENV-2,Cosmopolitan,,10,M,5/23/22,,,,Kampong Speu,PP406451,complete,11.5296487,104.4974665,lat-long is exact,IDSeq
-109-1787,Serum,DENV-2,Cosmopolitan,,12,F,5/26/22,,,,Kampong Speu,PP406452,complete,11.5211081,104.5623505,lat-long is exact,IDSeq
-109-1796,Serum,DENV-2,Cosmopolitan,,12,F,5/26/22,,,,Kampong Speu,PP406453,complete,11.43791785,104.5222523,lat-long is exact,IDSeq
-109-1806,Serum,DENV-2,Cosmopolitan,,4,M,5/30/22,,,,Kampong Speu,PP406454,complete,11.50815774,104.4952031,lat-long is exact,IDSeq
-109-1815,Serum,DENV-2,Cosmopolitan,,13,F,5/30/22,,,,Kampong Speu,PP406455,complete,11.45832374,104.5358876,lat-long is exact,IDSeq
-109-1833,Serum,DENV-2,Cosmopolitan,,10,M,6/1/22,,,,Kampong Speu,PP411227,complete,11.44649915,104.6570304,lat-long is exact,IDSeq
-109-1835,Serum,DENV-2,Cosmopolitan,,10,F,6/1/22,,,,Kampong Speu,PP411228,complete,11.46208075,104.5559138,lat-long is exact,IDSeq
-109-1837,Serum,DENV-2,Cosmopolitan,,10,F,6/1/22,,,,Kampong Speu,PP411229,complete,11.46208075,104.5559138,lat-long is exact,IDSeq
-109-1848,Serum,DENV-2,Cosmopolitan,,7,M,6/7/22,,,,Kampong Speu,PP411230,complete,11.48458186,104.556548,lat-long is exact,IDSeq
-109-1851,Serum,DENV-2,Cosmopolitan,,6,M,6/7/22,,,,Kampong Speu,PP411231,complete,11.50153813,104.505833,lat-long is exact,IDSeq
-109-1852,Serum,DENV-2,Cosmopolitan,,5,F,6/7/22,,,,Kampong Speu,PP411232,complete,11.44781566,104.6244282,lat-long is exact,IDSeq
-109-1855,Serum,DENV-2,Cosmopolitan,,5,M,6/7/22,,,,Kampong Speu,PP411233,complete,11.457138,104.5467536,lat-long is exact,IDSeq
-109-1863,Serum,DENV-2,Cosmopolitan,,11,M,6/7/22,,,,Kampong Speu,PP411234,complete,11.5296487,104.4974665,lat-long is exact,IDSeq
-109-1864,Serum,DENV-2,Cosmopolitan,,3,F,6/7/22,,,,Kampong Speu,PP411235,complete,11.47358812,104.5526594,lat-long is exact,IDSeq
-109-1880,Serum,DENV-2,Cosmopolitan,,13,F,6/10/22,,,,Kampong Speu,PP411249,complete,11.46208075,104.5559138,lat-long is exact,IDSeq
-109-1882,Serum,DENV-2,Cosmopolitan,,7,F,6/10/22,,,,Kampong Speu,PP411250,complete,11.54601634,104.4285742,lat-long is exact,IDSeq
-109-1911,Serum,DENV-2,Cosmopolitan,,31,F,6/16/22,,,,Kampong Speu,PP411251,complete,11.70471423,104.7706201,lat-long is exact,IDSeq
-109-1925,Serum,DENV-2,Cosmopolitan,,13,F,6/20/22,,,,Kampong Speu,PP411252,complete,11.3770738,104.5114747,lat-long is exact,IDSeq
-109-1954,Serum,DENV-2,Cosmopolitan,,6,M,6/23/22,,,,Kampong Speu,PP411253,complete,11.5111992,104.7277621,lat-long is exact,IDSeq
-109-1972,Serum,DENV-2,Cosmopolitan,,9,F,6/27/22,,,,Kampong Speu,PP411254,complete,11.5396597,104.5354884,lat-long is exact,IDSeq
-109-1990,Serum,DENV-2,Asian-1,,22,F,6/29/22,,,,Kampong Speu,PP411255,complete,11.48560474,104.7684424,lat-long is exact,IDSeq
-109-2002,Serum,DENV-2,Cosmopolitan,,9,F,7/1/22,,,,Kampong Speu,PP411256,complete,11.44932128,104.5003774,lat-long is exact,IDSeq
-109-2015,Serum,DENV-2,Cosmopolitan,,6,F,7/5/22,,,,Kampong Speu,PP411257,complete,11.12366485,105.0674737,lat-long is exact,IDSeq
-109-0773,Serum,DENV-2,Cosmopolitan,,1,F,8/31/21,,,,Kampong Speu,PP439574,complete,11.46953936,104.5427272,lat-long is exact,IDSeq
-109-0806,Serum,DENV-2,Cosmopolitan,,13,F,9/24/21,,,,Kampong Speu,PP439575,complete,11.52557443,104.5497621,lat-long is exact,IDSeq
-109-0678,Serum,DENV-2,Cosmopolitan,,13,M,5/19/21,,,,Kampong Speu,PP439576,complete,11.49837834,104.5599833,lat-long is exact,IDSeq
-109-0705,Serum,DENV-2,Cosmopolitan,,10,M,6/12/21,,,,Kampong Speu,PP439577,complete,11.46471982,104.5150653,lat-long is exact,IDSeq
-109-0723,Serum,DENV-2,Cosmopolitan,,7,M,6/24/21,,,,Kampong Speu,PP439578,complete,11.49837834,104.5599833,lat-long is exact,IDSeq
-109-0734,Serum,DENV-2,Cosmopolitan,,16,F,7/7/21,,,,Kampong Speu,PP439579,complete,11.4576208,104.5043234,lat-long is exact,IDSeq
-109-0836,Serum,DENV-2,Cosmopolitan,,13,F,10/12/21,,,,Kampong Speu,PP439580,complete,11.50052587,104.5568073,lat-long is exact,IDSeq
-109-2031,Serum,DENV-2,Cosmopolitan,,6,M,7/6/22,,,,Kampong Speu,PP439581,complete,11.5211081,104.5623505,lat-long is exact,IDSeq
-109-2032,Serum,DENV-2,Cosmopolitan,,6,M,7/7/22,,,,Kampong Speu,PP439582,complete,11.55284377,104.5461602,lat-long is exact,IDSeq
-109-2034,Serum,DENV-2,Cosmopolitan,,9,M,7/7/22,,,,Kampong Speu,PP446688,complete,11.47249592,104.5309135,lat-long is exact,IDSeq
-109-2071,Serum,DENV-2,Cosmopolitan,,9,M,7/15/22,,,,Kampong Speu,PP446689,complete,11.41856916,104.4474572,lat-long is exact,IDSeq
-109-2079,Serum,DENV-2,Cosmopolitan,,9,M,7/18/22,,,,Kampong Speu,PP446690,complete,11.49111897,104.555685,lat-long is exact,IDSeq
-109-2116,Serum,DENV-2,Cosmopolitan,,1,F,7/22/22,,,,Kampong Speu,PP446691,complete,12.20405193,104.6648283,lat-long is exact,IDSeq
-109-2325,Serum,DENV-2,Cosmopolitan,,11,F,9/5/22,,,,Kampong Speu,PP446692,complete,11.57334604,104.9200659,lat-long is exact,IDSeq
-109-2425,Serum,DENV-2,Cosmopolitan,,11,M,10/6/22,,,,Kampong Speu,PP446693,complete,11.48582265,104.57603,lat-long is exact,IDSeq
-109-2430,Serum,DENV-2,Cosmopolitan,,5,F,10/10/22,,,,Kampong Speu,PP446694,complete,11.53021494,104.802447,lat-long is exact,IDSeq
-109-1816,Serum,DENV-2,Cosmopolitan,,12,F,5/30/22,,,,Kampong Speu,PP469533,complete,11.46953936,104.5427272,lat-long is exact,IDSeq
-109-2279,Serum,DENV-2,Cosmopolitan,,15,F,8/24/22,,,,Kampong Speu,PP469534,complete,11.32805866,104.5763098,lat-long is exact,IDSeq
-DENS-093,Serum,DENV-2,Cosmopolitan,,3,F,6/10/22,Tang Tonle,Sopor Tep,Jba Mon,Kompong Speu,PP470598,complete,11.45854859,104.5350726,lat-long is centroid of province,NDCP
-DENS-124,Serum,DENV-2,Cosmopolitan,,18,M,6/2/22,Soun Tmey,Prey Chhlak,Svay Reang,Svay Reang,PP470599,complete,11.091973,105.7987226,lat-long is centroid of province,NDCP
-DENS-OB-145,Serum,DENV-2,Cosmopolitan,,17,M,7/1/22,Veal,Veal,Kandeang,Pursat,PP470600,complete,12.55986106,103.9317703,lat-long is centroid of province,NDCP
-DENS-167,Serum,DENV-2,Cosmopolitan,,16,M,7/23/22,ReuSsey Prey ,Kampong Chamlang,Svay Jrom,Svay Reang,PP470601,complete,11.07281558,105.7666621,lat-long is centroid of province,NDCP
-DENS-177,Serum,DENV-2,Cosmopolitan,,11,F,8/15/22,Ti 1,Treng Troyeng,Phnom Srouch,Kompong Speu,PP470602,complete,11.22702367,104.1448106,lat-long is centroid of province,NDCP
-DENS-187,Serum,DENV-2,Cosmopolitan,,16,M,8/4/22,Rong Bonler,Svay Reang,Svay Reang,Svay Reang,PP470603,complete,11.0878225,105.8008098,lat-long is centroid of province,NDCP
-100-0653,Serum,DENV-4,DENV-4,,9,F,7/7/19,NA,NA,NA,Kampong Speu,MZ976858,complete,NA,NA,lat-long is centroid of province,PAGODAS
-109-0051,Serum,DENV-4,DENV-4,,8,F,8/7/19,Krang Metrei,Skuh,Samraong Tong,Kampong Speu,MZ976859,complete,11.41793587,104.5418017,lat-long is centroid of province,IDSeq
-109-0342,Serum,DENV-4,DENV-4,,12,M,8/3/20,Phsar Kantuot,Sangkae Satob,Aoral,Kampong Speu,MZ976860,complete,11.68285704,104.1292756,lat-long is centroid of province,IDSeq
-109-0142,Serum,DENV-4,DENV-4,,14,M,10/21/19,Tras Sala,Svay Kravan,Krong Chbar Mon,Kampong Speu,OQ678015,complete,11.4573808,104.5343672,lat-long is centroid of province,IDSeq
-109-1230,Serum,DENV-4,DENV-4,,7,F,2/14/22,,,,Kampong Speu,PP396732,complete,11.58098994,104.8382381,lat-long is exact,IDSeq
-109-1707,Serum,DENV-4,DENV-4,,12,F,5/16/22,,,,Kampong Speu,PP447197,complete,11.31145499,104.4356505,lat-long is exact,IDSeq
-109-2001,Serum,DENV-4,DENV-4,,14,M,7/1/22,,,,Kampong Speu,PP447198,complete,11.4226616,104.6505231,lat-long is exact,IDSeq
-109-2038,Serum,DENV-4,DENV-4,,19,M,7/8/22,,,,Kampong Speu,PP447199,complete,11.48296276,104.6135533,lat-long is exact,IDSeq
-109-2396,Serum,DENV-4,DENV-4,,23,F,9/27/22,,,,Kampong Speu,PP447200,complete,11.58098994,104.8382381,lat-long is exact,IDSeq
-DENS-OB-146,Serum,DENV,Cosmopolitan,MN018344,6,F,7/1/22,Po,Sre Sdok,Kandeang,Pursat,not_submitted,partial,12.67376951,103.9432571,lat-long is centroid of province,NDCP
-109-0115,Serum,DENV-1,DENV-1,,4,M,9/2/19,Svay Kravan,Svay Kravan,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.45295483,104.5208611,lat-long is centroid of province,IDSeq
-109-0122,Serum,DENV-1,DENV-1,,6,F,9/11/19,Phsar Sameakki,Kandaol Dom,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.4510831,104.4889513,lat-long is centroid of province,IDSeq
-109-2055,Serum,DENV-1,DENV-1,,1,M,7/12/22,Trea,Stueng Mean Chey,Mean Chey,Phnom Penh,not_submitted,partial,11.54400729,104.8891311,lat-long is centroid of province,IDSeq
-109-0211,Serum,DENV-2,Cosmopolitan,PP470602,11,F,1/6/20,Khaob,Rokar Thum,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.49254886,104.5165399,lat-long is centroid of province,IDSeq
-109-0331,Serum,DENV-2,Cosmopolitan,PP564550,21,M,7/28/20,Kandal,Tang Samraong,Phnum Sruoch,Kampong Speu,not_submitted,partial,11.42461515,104.2901635,lat-long is centroid of province,IDSeq
-109-0717,Serum,DENV-2,Cosmopolitan,PP470603,9,F,6/16/21,Phnum Dei,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.45682341,104.4980998,lat-long is centroid of province,IDSeq
-109-0718,Serum,DENV-2,Cosmopolitan,PP439578,14,M,6/17/21,Ta Koam,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.49499158,104.562996,lat-long is centroid of province,IDSeq
-109-0742,Serum,DENV-2,Cosmopolitan,PP439576,7,M,7/19/21,Tuol Samnang,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.50052587,104.5568073,lat-long is centroid of province,IDSeq
-109-0744,Serum,DENV-2,Cosmopolitan,PP439576,2,M,7/24/21,Angkor Chea,Pneay,Samraong Tong,Kampong Speu,not_submitted,partial,11.52870025,104.5654842,lat-long is centroid of province,IDSeq
-109-0745,Serum,DENV-2,Cosmopolitan,PP439576,2,M,7/24/21,Dak Por,Svay Kravan,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.44548183,104.5244949,lat-long is centroid of province,IDSeq
-109-0760,Serum,DENV-2,Cosmopolitan,PP439576,4,M,8/19/21,Beng,Pneay,Samraong Tong,Kampong Speu,not_submitted,partial,11.52557443,104.5497621,lat-long is centroid of province,IDSeq
-109-0764,Serum,DENV-2,Cosmopolitan,PP470602,11,M,8/23/21,Rumlich Tnaot,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.50489008,104.5543339,lat-long is centroid of province,IDSeq
-109-0765,Serum,DENV-2,Cosmopolitan,PP439578,11,F,8/23/21,Snao Ti Muoy,Rokar Thum,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47710958,104.5490872,lat-long is centroid of province,IDSeq
-109-0779,Serum,DENV-2,Cosmopolitan,PP470602,13,F,9/6/21,Prey Tuol,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.50160259,104.5512581,lat-long is centroid of province,IDSeq
-109-0785,Serum,DENV-2,Cosmopolitan,PP439579,5,M,9/12/21,Chamkar Bos,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.51418879,104.5439757,lat-long is centroid of province,IDSeq
-109-0789,Serum,DENV-2,Cosmopolitan,PP439579,10,M,9/14/21,Chamkar Bos,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.51418879,104.5439757,lat-long is centroid of province,IDSeq
-109-0792,Serum,DENV-2,Cosmopolitan,PP439580,12,F,9/14/21,Tuol Samnang,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.50052587,104.5568073,lat-long is centroid of province,IDSeq
-109-0799,Serum,DENV-2,Cosmopolitan,PP446692,13,F,9/19/21,Chamkar Bos,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.51418879,104.5439757,lat-long is centroid of province,IDSeq
-109-0835,Serum,DENV-2,Cosmopolitan,PP439578,6,F,10/12/21,Kandal,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.50836343,104.5488908,lat-long is centroid of province,IDSeq
-109-1143,Serum,DENV-2,Cosmopolitan,PP411227,16,M,1/24/22,Ou Bek Kam,Tuek Thla,Saensokh,Phnom Penh,not_submitted,partial,11.55044592,104.8879455,lat-long is centroid of province,IDSeq
-109-1231,Serum,DENV-2,Cosmopolitan,PP439578,18,M,2/15/22,Sangkruoh Cheat,Trapeang Kong,Samraong Tong,Kampong Speu,not_submitted,partial,11.48649431,104.6310613,lat-long is centroid of province,IDSeq
-109-1709,Serum,DENV-2,Cosmopolitan,PP439582,9,F,5/16/22,Pech Sangvar,Khtum Krang,Samraong Tong,Kampong Speu,not_submitted,partial,11.51374539,104.5050598,lat-long is centroid of province,IDSeq
-109-1720,Serum,DENV-2,Cosmopolitan,PP439582,13,M,5/17/22,Srei Sampoung,Khtum Krang,Samraong Tong,Kampong Speu,not_submitted,partial,11.52206098,104.5025327,lat-long is centroid of province,IDSeq
-109-1721,Serum,DENV-2,Cosmopolitan,PP446693,8,M,5/17/22,Krang Phka,Sopoar Tep,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.46522603,104.5546987,lat-long is centroid of province,IDSeq
-109-1730,Serum,DENV-2,Cosmopolitan,PP406369,12,M,5/18/22,Krang Pongro,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.5153439,104.5600119,lat-long is centroid of province,IDSeq
-109-1746,Serum,DENV-2,Cosmopolitan,PP406376,12,M,5/20/22,Thlok Andas,Saen Dei,Samraong Tong,Kampong Speu,not_submitted,partial,11.40322503,104.6129648,lat-long is centroid of province,IDSeq
-109-1788,Serum,DENV-2,Cosmopolitan,PP439582,5,F,5/26/22,Snao Ti Muoy,Rokar Thum,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47710958,104.5490872,lat-long is centroid of province,IDSeq
-109-1790,Serum,DENV-2,Cosmopolitan,PP406454,8,F,5/26/22,Sangke Chrum,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.50815774,104.4952031,lat-long is centroid of province,IDSeq
-109-1792,Serum,DENV-2,Cosmopolitan, KX452018,5,M,5/26/22,Roluos,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.48670964,104.5074176,lat-long is centroid of province,IDSeq
-109-1793,Serum,DENV-2,Cosmopolitan,PP439582,10,F,5/26/22,Angk Serei,Rokar Thum,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47310072,104.5416029,lat-long is centroid of province,IDSeq
-109-1794,Serum,DENV-2,Cosmopolitan,PP446693,13,F,5/26/22,Chrolong Phlov,Roleang Chak,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.46208075,104.5559138,lat-long is centroid of province,IDSeq
-109-1807,Serum,DENV-2,Cosmopolitan,PP439582,8,F,5/30/22,Sangke Chrum,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.50815774,104.4952031,lat-long is centroid of province,IDSeq
-109-1808,Serum,DENV-2,Cosmopolitan,PP446688,12,M,5/30/22,Krang Phka,Sopoar Tep,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.46522603,104.5546987,lat-long is centroid of province,IDSeq
-109-1812,Serum,DENV-2,Cosmopolitan,PP446691,11,M,5/30/22,Tras,Svay Kravan,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.44932128,104.5003774,lat-long is centroid of province,IDSeq
-109-1842,Serum,DENV-2,Cosmopolitan,PP470603,10,M,6/2/22,Trapeang Kong,Trapeang Kong,Samraong Tong,Kampong Speu,not_submitted,partial,11.47812212,104.6327501,lat-long is centroid of province,IDSeq
-109-1844,Serum,DENV-2,Cosmopolitan,MN923109,11,M,6/2/22,Roleang Sangke,Sopoar Tep,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47358812,104.5526594,lat-long is centroid of province,IDSeq
-109-1847,Serum,DENV-2,Cosmopolitan,PP510625,26,M,6/7/22,Prey Sloek,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.4576208,104.5043234,lat-long is centroid of province,IDSeq
-109-1856,Serum,DENV-2,Cosmopolitan,PP446688,8,F,6/7/22,Snao Ti Muoy,Rokar Thum,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47710958,104.5490872,lat-long is centroid of province,IDSeq
-109-1860,Serum,DENV-2,Cosmopolitan,MN923109,23,M,6/7/22,Phnom Penh Thmei,Phnom Penh Thmei,Saensokh,Phnom Penh,not_submitted,partial,11.57487586,104.8733797,lat-long is centroid of province,IDSeq
-109-1870,Serum,DENV-2,Cosmopolitan,PP406452,13,F,6/10/22,Trapeang Russei,Sambour,Samraong Tong,Kampong Speu,not_submitted,partial,11.50787742,104.6490887,lat-long is centroid of province,IDSeq
-109-1871,Serum,DENV-2,Cosmopolitan,PP406374,13,F,6/10/22,Kandaol Dom,Kandaol Dom,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.44455015,104.4920708,lat-long is centroid of province,IDSeq
-109-1879,Serum,DENV-2,Cosmopolitan,PP446688,12,M,6/10/22,Chrolong Phlov,Roleang Chak,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.46208075,104.5559138,lat-long is centroid of province,IDSeq
-109-1881,Serum,DENV-2,Cosmopolitan,PP470602,7,M,6/10/22,Sangke Chrum,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.50815774,104.4952031,lat-long is centroid of province,IDSeq
-109-1889,Serum,DENV-2,Cosmopolitan,PP406372,13,M,6/13/22,Pel Hel,Sopoar Tep,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.49111897,104.555685,lat-long is centroid of province,IDSeq
-109-1907,Serum,DENV-2,Cosmopolitan,PP470602,12,M,6/16/22,Tras Sala,Svay Kravan,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.4573808,104.5343672,lat-long is centroid of province,IDSeq
-109-1932,Serum,DENV-2,Cosmopolitan,PP439582,8,M,6/20/22,Angk Ta Mau,Tang Krouch,Samraong Tong,Kampong Speu,not_submitted,partial,11.47704512,104.4483523,lat-long is centroid of province,IDSeq
-109-1941,Serum,DENV-2,Cosmopolitan,PP439582,NA,F,6/21/22,Roluos,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.48670964,104.5074176,lat-long is centroid of province,IDSeq
-109-1959,Serum,DENV-2,Cosmopolitan,PP411253,13,F,6/24/22,Thom,Krang Yov,S'ang,Kandal,not_submitted,partial,11.51824283,105.0348652,lat-long is centroid of province,IDSeq
-109-1974,Serum,DENV-2,Cosmopolitan,PP411232,13,F,6/27/22,Skuh,Svay Kravan,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.43791785,104.5222523,lat-long is centroid of province,IDSeq
-109-1975,Serum,DENV-2,Cosmopolitan,PP470602,7,F,6/27/22,Krang Chek,Krang Chek,Odongk,Kampong Speu,not_submitted,partial,11.58531254,104.5254614,lat-long is centroid of province,IDSeq
-109-1980,Serum,DENV-2,Cosmopolitan,PP446689,3,M,6/28/22,Krang Angkrang,Krang Thnong,Saensokh,Phnom Penh,not_submitted,partial,11.5820044,104.8410901,lat-long is centroid of province,IDSeq
-109-2017,Serum,DENV-2,Cosmopolitan,PP446694,5,M,7/5/22,Phum 11,Tuek L'ak Pir,Tuol Kouk,Phnom Penh,not_submitted,partial,11.34642938,104.6400402,lat-long is centroid of province,IDSeq
-109-2033,Serum,DENV-2,Cosmopolitan,PP446691,10,M,7/7/22,Kouk Pnov,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.49541826,104.5889902,lat-long is centroid of province,IDSeq
-109-2037,Serum,DENV-2,Cosmopolitan,PP564696,18,M,7/8/22,Thma Bang,Samraong Tong,Samraong Tong,Kampong Speu,not_submitted,partial,11.50747582,104.5844429,lat-long is centroid of province,IDSeq
-109-2057,Serum,DENV-2,Cosmopolitan,PP446693,18,M,7/13/22,Dak Por,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.49749894,104.5831005,lat-long is centroid of province,IDSeq
-109-2083,Serum,DENV-2,Cosmopolitan,PP406373,12,M,7/19/22,Bak Thmenh,Roleang Chak,Samraong Tong,Kampong Speu,not_submitted,partial,11.43236738,104.5348665,lat-long is centroid of province,IDSeq
-109-2139,Serum,DENV-2,Cosmopolitan,PP446693,13,F,7/27/22,Borei Kammeakkar,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47779146,104.5065987,lat-long is centroid of province,IDSeq
-109-2186,Serum,DENV-2,Cosmopolitan,PP469534,8,F,8/3/22,Thmei,Pou,Kampong Leaeng,Kampong Chhnang,not_submitted,partial,12.35900878,104.7160697,lat-long is centroid of province,IDSeq
-109-2312,Serum,DENV-2,Cosmopolitan,PP469534,11,M,8/31/22,Prek Ta Long,Chak Angrae Kraom,Mean Chey,Phnom Penh,not_submitted,partial,11.50112777,104.9385907,lat-long is centroid of province,IDSeq
-109-2340,Serum,DENV-2,Cosmopolitan,PP470602,20,M,9/9/22,Sampov,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47385842,104.4659526,lat-long is centroid of province,IDSeq
-109-2341,Serum,DENV-2,Cosmopolitan,PP406369,18,M,9/9/22,Sampov,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47385842,104.4659526,lat-long is centroid of province,IDSeq
-109-2355,Serum,DENV-2,Cosmopolitan,PP470602,50,M,9/13/22,Luengk,Angkor Reach,Preah Sdach,Prey Veng,not_submitted,partial,11.11168597,105.3929368,lat-long is centroid of province,IDSeq
-109-2397,Serum,DENV-2,Cosmopolitan,PP406371,12,F,9/28/22,Bak Thmenh,Roleang Chak,Samraong Tong,Kampong Speu,not_submitted,partial,11.43236738,104.5348665,lat-long is centroid of province,IDSeq
-109-2479,Serum,DENV-2,Cosmopolitan,PP411253,15,F,10/21/22,Chbar Mon,Komar Reachea,Bati,Takeo,not_submitted,partial,11.24688404,104.7041017,lat-long is centroid of province,IDSeq
-109-2480,Serum,DENV-2,Cosmopolitan,PP446691,14,M,10/21/22,Trach Toul,Baek Chan,Angk Snuol,Kandal,not_submitted,partial,11.52291812,104.7565822,lat-long is centroid of province,IDSeq
-DENS-003,Serum,DENV-2,Cosmopolitan,PP564696,12,M,11/12/21,Trach Chhroum,So por tep,Chhbar Mon,Kompong Speu,not_submitted,partial,11.47060193,104.5449421,lat-long is centroid of province,NDCP
-DENS-004,Serum,DENV-2,Cosmopolitan,PP564696,11,M,11/14/21,Kandal,Vor Sor,Somrong Tong,Kompong Speu,not_submitted,partial,11.50130058,104.5595999,lat-long is centroid of province,NDCP
-DENS-089,Serum,DENV-2,Cosmopolitan,PP564696,5,M,5/11/22,Roulous,Chba Mon,Chba Mon,Kompong Speu,not_submitted,partial,11.48344168,104.4911512,lat-long is centroid of province,NDCP
-DENS-100,Serum,DENV-2,Cosmopolitan,PP564696,14,F,6/11/22,Chhuk,Chhuk,krouch Chmar,Tbong Kmom,not_submitted,partial,12.14841913,105.741302,lat-long is centroid of province,NDCP
-DENS-132,Serum,DENV-2,Cosmopolitan,PP470603,12,F,6/27/22,Kandal,Jronok,Kompong Loung,Kompong Chhnang,not_submitted,partial,12.48372446,104.7339996,lat-long is centroid of province,NDCP
-DENS-143,Serum,DENV-2,Cosmopolitan,MN923109,12,M,7/19/22,Roleang Jork,Roleang Krel,Somrong Tong,Kompong Speu,not_submitted,partial,11.44483274,104.6304748,lat-long is centroid of province,NDCP
-DENS-144,Serum,DENV-2,Cosmopolitan,MG895163,9,M,7/19/22,Pel Hel,Sopor Tep,Somrong Tong,Kompong Speu,not_submitted,partial,11.48654225,104.5548865,lat-long is centroid of province,NDCP
-DENS-174,Serum,DENV-2,Cosmopolitan,MN018344,27,F,8/6/22,N/A,N/A,N/A,Kompong Speu,not_submitted,partial,NA,NA,lat-long is centroid of province,NDCP
-DENS-176,Serum,DENV-2,Cosmopolitan,MK564485,19,F,8/15/22,Jombok,Vor Sor,Somrong Tong,Kompong Speu,not_submitted,partial,11.47573234,104.5622035,lat-long is centroid of province,NDCP
-DENS-OB-125,Serum,DENV-2,Cosmopolitan,PP546320,7,M,5/13/22,Ear Lech,Jro Nok,Kompong Loung,Kompong Chhnang,not_submitted,partial,12.48372446,104.7339996,lat-long is centroid of province,NDCP
-109-1245,Serum,DENV-4,DENV-4,,16,M,2/17/22,Krang Chek,Krang Chek,Odongk,Kampong Speu,not_submitted,partial,11.58531254,104.5254614,lat-long is centroid of province,IDSeq
-109-1853,Serum,DENV-4,DENV-4,,26,M,6/7/22,Trapeang Prei,Saen Dei,Samraong Tong,Kampong Speu,not_submitted,partial,11.41243798,104.6250156,lat-long is centroid of province,IDSeq
-109-2239,Serum,DENV-4,DENV-4,,22,F,8/15/22,Tnaot Muoy Daeum,Preah Khae,Basedth,Kampong Speu,not_submitted,partial,11.17148243,104.5031392,lat-long is centroid of province,IDSeq
-DENS-148,Serum,DENV-4,DENV-4,PP396732,14,F,6/26/22,Krosang,Terk Chrov,Dom Bae,Tbong Kmom,not_submitted,partial,11.8949928,105.9858072,lat-long is centroid of province,NDCP
+sample_name,sample_type,Serotype,Genotype,Top_BLAST_Hit,age,sex,date,site,commune,district,province,genbank_accession,sequence_completeness,lat,long,notes,study,
+100-0752,Serum,DENV-1,DENV-1,,3,M,8/19/19,,,,Kampong Speu,OK159935,complete,11.4755,104.5454,lat-long is exact,PAGODAS,
+100-0052,Serum,DENV-1,DENV-1,,6,F,7/23/19,,,,Kampong Speu,OK159936,complete,11.455,104.5076,lat-long is exact,PAGODAS,
+100-0632,Serum,DENV-1,DENV-1,,4,F,8/26/19,,,,Kampong Speu,OK159937,complete,11.4678,104.5461,lat-long is exact,PAGODAS,
+100-0702,Serum,DENV-1,DENV-1,,4.736986301,F,7/8/19,,,,Kampong Speu,OK159938,complete,11.4643,104.5432,lat-long is exact,PAGODAS,
+100-0682,Serum,DENV-1,DENV-1,,7,M,7/20/19,,,,Kampong Speu,OK159939,complete,11.4678,104.5427,lat-long is exact,PAGODAS,
+100-0658,Serum,DENV-1,DENV-1,,5,M,7/12/19,,,,Kampong Speu,OK159940,complete,11.4688,104.5458,lat-long is exact,PAGODAS,
+100-0618,Serum,DENV-1,DENV-1,,7,M,6/24/19,,,,Kampong Speu,OK159941,complete,11.4674,104.5391,lat-long is exact,PAGODAS,
+100-0608,Serum,DENV-1,DENV-1,,5,M,6/22/19,,,,Kampong Speu,OK159942,complete,11.4677,104.5376,lat-long is exact,PAGODAS,
+100-0562,Serum,DENV-1,DENV-1,,9,M,6/14/19,,,,Kampong Speu,OK159943,complete,11.4695,104.536,lat-long is exact,PAGODAS,
+100-0479,Serum,DENV-1,DENV-1,,3,M,4/2/19,,,,Kampong Speu,OK159944,complete,11.4712,104.5275,lat-long is exact,PAGODAS,
+100-0418,Serum,DENV-1,DENV-1,,9,F,5/24/19,,,,Kampong Speu,OK159945,complete,11.4718,104.5275,lat-long is exact,PAGODAS,
+109-0078,Serum,DENV-1,DENV-1,,5,F,8/15/19,,,,Kampong Speu,OK159946,complete,11.5853,104.5272,lat-long is exact,IDSeq,
+109-0074,Serum,DENV-1,DENV-1,,5,M,8/14/19,Tbes,Voa Sar,Samraong Tong,Kampong Speu,OK159947,complete,11.4837231,104.5812778,lat-long is centroid of province,IDSeq,
+109-0073,Serum,DENV-1,DENV-1,,7,M,8/11/19,,,,Kampong Speu,OK159948,complete,11.4012,104.5831,lat-long is exact,IDSeq,
+109-0068,Serum,DENV-1,DENV-1,,8,F,8/9/19,,,,Kampong Speu,OK159949,complete,11.4582,104.5689,lat-long is exact,IDSeq,
+109-0057,Serum,DENV-1,DENV-1,,6,M,8/8/19,,,,Kampong Speu,OK159950,complete,11.4673,104.5436,lat-long is exact,IDSeq,
+109-0056,Serum,DENV-1,DENV-1,,4,M,8/8/19,,,,Kampong Speu,OK159951,complete,11.4657,104.5158,lat-long is exact,IDSeq,
+109-0052,Serum,DENV-1,DENV-1,,7,F,8/7/19,,,,Kampong Speu,OK159952,complete,11.4655,104.5546,lat-long is exact,IDSeq,
+109-0050,Serum,DENV-1,DENV-1,,23,M,8/7/19,,,,Kampong Speu,OK159953,complete,11.168,104.1927,lat-long is exact,IDSeq,
+109-0048,Serum,DENV-1,DENV-1,,13,F,8/6/19,,,,Kampong Speu,OK159954,complete,11.4254,104.46,lat-long is exact,IDSeq,
+109-0042,Serum,DENV-1,DENV-1,,3,M,8/1/19,,,,Kampong Speu,OK159955,complete,11.5436,104.546,lat-long is exact,IDSeq,
+109-0032,Serum,DENV-1,DENV-1,,15,M,7/31/19,,,,Kampong Speu,OK159956,complete,11.4707,104.4758,lat-long is exact,IDSeq,
+109-0030,Serum,DENV-1,DENV-1,,4,F,7/30/19,,,,Kampong Speu,OK159957,complete,11.4491,104.4989,lat-long is exact,IDSeq,
+109-0007,Serum,DENV-1,DENV-1,,14,M,7/24/19,,,,Kampong Speu,OK159958,complete,11.4669,104.5434,lat-long is exact,IDSeq,
+109-0002,Serum,DENV-1,DENV-1,,37,F,7/23/19,,,,Kampong Speu,OK159959,complete,11.4632,104.5843,lat-long is exact,IDSeq,
+109-0236,Serum,DENV-1,DENV-1,,4,M,2/18/20,,,,Kampong Speu,OK159960,complete,11.4561,104.4661,lat-long is exact,IDSeq,
+109-0230,Serum,DENV-1,DENV-1,,10,F,2/3/20,,,,Kampong Speu,OK159961,complete,11.4561,104.4661,lat-long is exact,IDSeq,
+100-0623,Serum,DENV-1,DENV-1,,9.008219178,M,8/15/19,,,,Kampong Speu,OK159962,complete,11.4688,104.5452,lat-long is exact,PAGODAS,
+100-0734,Serum,DENV-1,DENV-1,,6,M,7/21/19,,,,Kampong Speu,OK159963,complete,11.4747,104.5422,lat-long is exact,PAGODAS,
+100-0692,Serum,DENV-1,DENV-1,,6,M,8/8/19,,,,Kampong Speu,OK159964,complete,11.4698,104.5412,lat-long is exact,PAGODAS,
+100-0661,Serum,DENV-1,DENV-1,,8,F,6/13/19,,,,Kampong Speu,OK159965,complete,11.4724,104.5498,lat-long is exact,PAGODAS,
+100-0599,Serum,DENV-1,DENV-1,,8,M,5/31/19,,,,Kampong Speu,OK159966,complete,11.4733,104.5477,lat-long is exact,PAGODAS,
+100-0422,Serum,DENV-1,DENV-1,,4,F,7/4/19,,,,Kampong Speu,OK159967,complete,11.4685,104.5223,lat-long is exact,PAGODAS,
+100-0222,Serum,DENV-1,DENV-1,,6.638356164,M,3/15/19,,,,Kampong Speu,OK159968,complete,11.4632,104.5298,lat-long is exact,PAGODAS,
+100-0154,Serum,DENV-1,DENV-1,,3,M,7/26/19,,,,Kampong Speu,OK159969,complete,11.4653,104.5312,lat-long is exact,PAGODAS,
+109-0085,Serum,DENV-1,DENV-1,,18,F,8/21/19,,,,Kampong Speu,OK159970,complete,11.4752,104.5919,lat-long is exact,IDSeq,
+109-0081,Serum,DENV-1,DENV-1,,8,F,8/18/19,,,,Kampong Speu,OK159971,complete,11.4702,104.5337,lat-long is exact,IDSeq,
+109-0080,Serum,DENV-1,DENV-1,,14,F,8/18/19,,,,Kampong Speu,OK159972,complete,11.4838,104.5803,lat-long is exact,IDSeq,
+109-0055,Serum,DENV-1,DENV-1,,14,F,8/8/19,,,,Kampong Speu,OK159973,complete,11.5024,104.5577,lat-long is exact,IDSeq,
+109-0034,Serum,DENV-1,DENV-1,,0.666666667,M,8/1/19,,,,Kampong Speu,OK159974,complete,11.4452,104.584,lat-long is exact,IDSeq,
+109-0022,Serum,DENV-1,DENV-1,,14,M,7/26/19,,,,Kampong Speu,OK159975,complete,11.4837,104.5814,lat-long is exact,IDSeq,
+109-0014,Serum,DENV-1,DENV-1,,10,M,7/25/19,,,,Kampong Speu,OK159976,complete,11.4176,104.5439,lat-long is exact,IDSeq,
+109-0316,Serum,DENV-1,DENV-1,,34,M,7/13/20,,,,Kampong Speu,OL411495,complete,11.41697544,104.5180891,lat-long is exact,IDSeq,
+100-0642,Serum,DENV-1,DENV-1,,8.62739726,F,7/2/19,,,,Kampong Speu,OL411496,complete,11.4688,104.5458,lat-long is exact,PAGODAS,
+109-0245,Serum,DENV-1,DENV-1,,12,M,3/4/20,,,,Kampong Speu,OL411497,complete,11.5961,104.2483,lat-long is exact,IDSeq,
+109-0067,Serum,DENV-1,DENV-1,,7,M,8/11/19,,,,Kampong Speu,OL411498,complete,11.4162,104.4593,lat-long is exact,IDSeq,
+100-0610,Serum,DENV-1,DENV-1,,6,M,7/1/19,,,,Kampong Speu,OL411499,complete,11.4672,104.539,lat-long is exact,PAGODAS,
+100-0622,Serum,DENV-1,DENV-1,,2.043835616,M,8/28/19,,,,Kampong Speu,OL412140,complete,11.4688,104.5452,lat-long is exact,PAGODAS,
+109-0011,Serum,DENV-1,DENV-1,,6,F,7/25/19,,,,Kampong Speu,OL412678,complete,11.4043,104.4052,lat-long is exact,IDSeq,
+109-0060,Serum,DENV-1,DENV-1,,2,F,8/9/19,,,,Kampong Speu,OL412703,complete,11.4079,104.4063,lat-long is exact,IDSeq,
+109-0129,Serum,DENV-1,DENV-1,,12,F,9/12/19,,,,Kampong Speu,OM033409,complete,11.4511,104.489,lat-long is exact,IDSeq,
+100-0652,Serum,DENV-1,DENV-1,,9,M,8/27/19,,,,Kampong Speu,OQ678009,complete,11.467967,104.545555,lat-long is exact,PAGODAS,
+100-0245,Serum,DENV-1,DENV-1,,3,M,2/16/20,,,,Kampong Speu,OQ678018,complete,11.46559,104.529682,lat-long is exact,PAGODAS,
+109-0169,Serum,DENV-1,DENV-1,,3,M,11/26/19,Snao Ti Pir,Sopoar Tep,Krong Chbar Mon,Kampong Speu,OQ678060,complete,11.46953936,104.5427272,lat-long is centroid of province,IDSeq,
+109-0181,Serum,DENV-1,DENV-1,,8,M,12/17/19,,,,Kampong Speu,OQ678061,complete,11.46716497,104.5009879,lat-long is exact,IDSeq,
+109-0195 ,Serum,DENV-1,DENV-1,,6,M,12/26/19,,,,Kampong Speu,OQ678099,complete,11.49254886,104.5165399,lat-long is exact,IDSeq,
+100-0747,Serum,DENV-1,DENV-1,,6,M,8/30/19,,,,Kampong Speu,OQ678244,complete,11.475418,104.544227,lat-long is exact,PAGODAS,
+109-0187,Serum,DENV-1,DENV-1,,8,F,12/20/19,,,,Kampong Speu,OQ678252,complete,11.49254886,104.5165399,lat-long is exact,IDSeq,
+100-0587,Serum,DENV-1,DENV-1,,6,M,11/8/19,,,,Kampong Speu,OQ683856,complete,11.469082,104.53958,lat-long is exact,PAGODAS,
+109-0340,Serum,DENV-1,DENV-1,,8,M,7/31/20,Snuol Chrum,Tuek L'ak,Kong Pisei,Kampong Speu,OQ683880,complete,11.33753845,104.6176264,lat-long is centroid of province,IDSeq,
+DENS-OB-067,Serum,DENV-1,DENV-1,,2.5,F,5/29/21,Lorm Thmey,Ma Lik,An DoungMeas,Ratanakiri,PP470671,complete,13.83895257,107.3218065,lat-long is centroid of province,NDCP,
+DENS-OB-068,Serum,DENV-1,DENV-1,,30,M,5/29/21,Dal,Nhang,An DoungMeas,Ratanakiri,PP470672,complete,13.96267335,107.3565621,lat-long is centroid of province,NDCP,
+DENS-OB-070,Serum,DENV-1,DENV-1,,16,M,5/30/21,Dal,Nhang,An DoungMeas,Ratanakiri,PP470673,complete,13.96267335,107.3565621,lat-long is centroid of province,NDCP,
+100-0670,Serum,DENV-2,Cosmopolitan,,5,F,7/30/19,,,,Kampong Speu,OL412740,complete,11.4696,104.5364,lat-long is exact,PAGODAS,
+100-0430,Serum,DENV-2,Cosmopolitan,,3.169863014,F,7/2/19,,,,Kampong Speu,OL414717,complete,11.4703,104.5276,lat-long is exact,PAGODAS,
+100-0160,Serum,DENV-2,Cosmopolitan,,7,M,7/29/19,,,,Kampong Speu,OL414718,complete,11.4645,104.5325,lat-long is exact,PAGODAS,
+100-0156,Serum,DENV-2,Asian-1,,9,M,7/25/19,,,,Kampong Speu,OL414719,complete,11.4653,104.5311,lat-long is exact,PAGODAS,
+100-0068,Serum,DENV-2,Asian-1,,8,M,7/25/19,,,,Kampong Speu,OL414720,complete,11.4538,104.5058,lat-long is exact,PAGODAS,
+100-0067,Serum,DENV-2,Asian-1,,6,F,7/25/19,,,,Kampong Speu,OL414721,complete,11.4538,104.5058,lat-long is exact,PAGODAS,
+109-0093,Serum,DENV-2,Cosmopolitan,,9,F,8/22/19,,,,Kampong Speu,OL414722,complete,11.3859,104.4419,lat-long is exact,IDSeq,
+109-0087,Serum,DENV-2,Cosmopolitan,,7,M,8/21/19,,,,Kampong Speu,OL414723,complete,11.4537,104.5424,lat-long is exact,IDSeq,
+109-0086,Serum,DENV-2,Cosmopolitan,,4,M,8/20/19,,,,Kampong Speu,OL414724,complete,11.4589,104.5498,lat-long is exact,IDSeq,
+109-0059,Serum,DENV-2,Cosmopolitan,,13,M,8/9/19,,,,Kampong Speu,OL414725,complete,11.4513,104.4917,lat-long is exact,IDSeq,
+109-0053,Serum,DENV-2,Cosmopolitan,,15,F,8/7/19,,,,Kampong Speu,OL414726,complete,11.4402,104.5609,lat-long is exact,IDSeq,
+109-0049,Serum,DENV-2,Cosmopolitan,,5,F,8/6/19,,,,Kampong Speu,OL414727,complete,11.4407,104.5614,lat-long is exact,IDSeq,
+109-0023,Serum,DENV-2,Asian-1,,12,F,7/29/19,,,,Kampong Speu,OL414728,complete,11.45585632,104.6322838,lat-long is exact,IDSeq,
+109-0019,Serum,DENV-2,Asian-1,,2,F,7/25/19,,,,Kampong Speu,OL414729,complete,11.4452,104.5936,lat-long is exact,IDSeq,
+109-0003,Serum,DENV-2,Cosmopolitan,,2,M,7/24/19,,,,Kampong Speu,OL414730,complete,11.5418,104.4445,lat-long is exact,IDSeq,
+109-0376,Serum,DENV-2,Cosmopolitan,,3,M,8/28/20,,,,Kampong Speu,OL414732,complete,11.4471,104.5236,lat-long is exact,IDSeq,
+109-0350,Serum,DENV-2,Cosmopolitan,,13,M,8/10/20,,,,Kampong Speu,OL414733,complete,11.3984,104.5224,lat-long is exact,IDSeq,
+109-0298,Serum,DENV-2,Asian-1,,10,F,6/30/20,,,,Kampong Speu,OL414734,complete,11.2917,104.2381,lat-long is exact,IDSeq,
+109-0295,Serum,DENV-2,Asian-1,,7,M,6/18/20,,,,Kampong Speu,OL414735,complete,11.2917,104.2381,lat-long is exact,IDSeq,
+109-0294,Serum,DENV-2,Cosmopolitan,,8,F,6/17/20,,,,Kampong Speu,OL414736,complete,11.9091,104.1333,lat-long is exact,IDSeq,
+100-0477,Serum,DENV-2,Cosmopolitan,,5,F,6/20/19,,,,Kampong Speu,OL414737,complete,11.4719,104.5267,lat-long is exact,PAGODAS,
+100-0428,Serum,DENV-2,Cosmopolitan,,3,F,7/19/19,,,,Kampong Speu,OL414738,complete,11.4713,104.5278,lat-long is exact,PAGODAS,
+100-0427,Serum,DENV-2,Cosmopolitan,,9,M,7/23/19,,,,Kampong Speu,OL414739,complete,11.4713,104.5278,lat-long is exact,PAGODAS,
+100-0405,Serum,DENV-2,Cosmopolitan,,4,F,6/27/19,,,,Kampong Speu,OL414740,complete,11.4716,104.5277,lat-long is exact,PAGODAS,
+100-0277,Serum,DENV-2,Cosmopolitan,,9,F,7/23/19,,,,Kampong Speu,OL414741,complete,11.4591,104.5354,lat-long is exact,PAGODAS,
+100-0153,Serum,DENV-2,Cosmopolitan,,9,F,6/23/19,,,,Kampong Speu,OL414742,complete,11.4502,104.5154,lat-long is exact,PAGODAS,
+100-0072,Serum,DENV-2,Asian-1,,4,M,4/4/19,,,,Kampong Speu,OL414743,complete,11.4559,104.5131,lat-long is exact,PAGODAS,
+100-0039,Serum,DENV-2,Asian-1,,7,M,7/15/19,,,,Kampong Speu,OL414744,complete,11.4567,104.5132,lat-long is exact,PAGODAS,
+109-0045,Serum,DENV-2,Cosmopolitan,,11,M,8/6/19,,,,Kampong Speu,OL414745,complete,11.4404,104.5616,lat-long is exact,IDSeq,
+109-0292,Serum,DENV-2,Cosmopolitan,,11,F,6/16/20,,,,Kampong Speu,OL414746,complete,11.9091,104.1333,lat-long is exact,IDSeq,
+100-0034,Serum,DENV-2,Cosmopolitan,,9,M,8/20/19,,,,Kampong Speu,OL414747,complete,11.4574,104.5267,lat-long is exact,PAGODAS,
+109-0293,Serum,DENV-2,Cosmopolitan,,13,M,6/17/20,,,,Kampong Speu,OL414749,complete,11.6082,104.1466,lat-long is exact,IDSeq,
+109-0304,Serum,DENV-2,Cosmopolitan,,10,M,7/5/20,,,,Kampong Speu,OL414750,complete,11.3984,104.5224,lat-long is exact,IDSeq,
+109-0318,Serum,DENV-2,Cosmopolitan,,10,M,7/14/20,,,,Kampong Speu,OL414751,complete,11.3984,104.5224,lat-long is exact,IDSeq,
+109-0334,Serum,DENV-2,Cosmopolitan,,32,F,7/29/20,,,,Kampong Speu,OL414752,complete,11.4611,104.5066,lat-long is exact,IDSeq,
+109-0352,Serum,DENV-2,Cosmopolitan,,9,M,8/9/20,,,,Kampong Speu,OL414753,complete,11.4745,104.5915,lat-long is exact,IDSeq,
+109-0353,Serum,DENV-2,Cosmopolitan,,17,F,8/10/20,,,,Kampong Speu,OL414754,complete,11.4571,104.5385,lat-long is exact,IDSeq,
+109-0363,Serum,DENV-2,Cosmopolitan,,14,M,8/13/20,,,,Kampong Speu,OL414755,complete,11.4611,104.5066,lat-long is exact,IDSeq,
+109-0377,Serum,DENV-2,Cosmopolitan,,8,F,8/29/20,,,,Kampong Speu,OL414756,complete,11.3984,104.5224,lat-long is exact,IDSeq,
+109-0384,Serum,DENV-2,Cosmopolitan,,10,F,9/1/20,,,,Kampong Speu,OL414757,complete,11.3984,104.5224,lat-long is exact,IDSeq,
+109-0408,Serum,DENV-2,Cosmopolitan,,13,M,9/23/20,,,,Kampong Speu,OL414758,complete,11.471,104.5527,lat-long is exact,IDSeq,
+100-0432,Serum,DENV-2,Cosmopolitan,,9,M,6/28/19,,,,Kampong Speu,OL414759,complete,11.4703,104.5276,lat-long is exact,PAGODAS,
+100-0215,Serum,DENV-2,Cosmopolitan,,3,F,8/16/19,,,,Kampong Speu,OL414760,complete,11.467,104.5316,lat-long is exact,PAGODAS,
+109-0020,Serum,DENV-2,Asian-1,,12,M,7/26/19,,,,Kampong Speu,OL414761,complete,11.441,104.5621,lat-long is exact,IDSeq,
+109-0001,Serum,DENV-2,Cosmopolitan,,5,M,7/23/19,,,,Kampong Speu,OL414762,complete,11.4533,104.5801,lat-long is exact,IDSeq,
+109-0039,Serum,DENV-2,Cosmopolitan,,12,M,8/2/19,,,,Kampong Speu,OL414763,complete,11.4504,104.4921,lat-long is exact,IDSeq,
+109-0372,Serum,DENV-2,Cosmopolitan,,6,F,8/27/20,,,,Kampong Speu,OL414764,complete,11.6877,104.1305,lat-long is exact,IDSeq,
+109-0349,Serum,DENV-2,Cosmopolitan,,12,M,8/10/20,,,,Kampong Speu,OL414765,complete,11.4745,104.5915,lat-long is exact,IDSeq,
+109-0008,Serum,DENV-2,Cosmopolitan,,7,M,7/25/19,,,,Kampong Speu,OL420733,complete,11.4406,104.5613,lat-long is exact,IDSeq,
+109-0358,Serum,DENV-2,Cosmopolitan,,9,M,8/11/20,,,,Kampong Speu,OL435143,complete,11.4869,104.5435,lat-long is exact,IDSeq,
+109-0389,Serum,DENV-2,Cosmopolitan,,NA,NA,9/15/20,,,,Kampong Speu,OP999336,complete,11.52783098,104.5188455,lat-long is exact,IDSeq,
+100-0390,Serum,DENV-2,Cosmopolitan,,9,F,8/9/19,,,,Kampong Speu,OQ674509,complete,11.470843,104.529892,lat-long is exact,PAGODAS,
+109-0128,Serum,DENV-2,Asian-1,,14,M,9/13/19,,,,Kampong Speu,OQ678012,complete,11.4573808,104.5343672,lat-long is exact,IDSeq,
+109-0145,Serum,DENV-2,Cosmopolitan,,14,M,10/30/19,,,,Kampong Speu,OQ678017,complete,11.45607987,104.5184355,lat-long is exact,IDSeq,
+109-0147,Serum,DENV-2,Cosmopolitan,,8,F,10/31/19,,,,Kampong Speu,OQ678059,complete,11.49293418,104.5660158,lat-long is exact,IDSeq,
+109-0284,Serum,DENV-2,Cosmopolitan,,9,M,6/3/20,,,,Kampong Speu,OQ678101,complete,11.59579236,104.2305655,lat-long is exact,IDSeq,
+109-0338,Serum,DENV-2,Cosmopolitan,,5,F,7/30/20,,,,Kampong Speu,OQ678102,complete,11.47270457,104.5788093,lat-long is exact,IDSeq,
+109-0283,Serum,DENV-2,Cosmopolitan,,29,M,6/2/20,,,,Kampong Speu,OQ683881,complete,11.57884717,104.2344271,lat-long is exact,IDSeq,
+109-1034,Serum,DENV-2,Cosmopolitan,,12,M,12/16/21,,,,Kampong Speu,PP396279,complete,11.49499158,104.562996,lat-long is exact,IDSeq,
+109-0998,Serum,DENV-2,Cosmopolitan,,8,F,11/29/21,,,,Kampong Speu,PP396280,complete,11.50836343,104.5488908,lat-long is exact,IDSeq,
+109-1123,Serum,DENV-2,Cosmopolitan,,14,F,1/18/22,,,,Kampong Speu,PP406368,complete,11.5153439,104.5600119,lat-long is exact,IDSeq,
+109-1240,Serum,DENV-2,Cosmopolitan,,5,M,2/16/22,,,,Kampong Speu,PP406369,complete,11.51418879,104.5439757,lat-long is exact,IDSeq,
+109-1272,Serum,DENV-2,Cosmopolitan,,12,F,2/22/22,,,,Kampong Speu,PP406370,complete,11.44455015,104.4920708,lat-long is exact,IDSeq,
+109-1281,Serum,DENV-2,Cosmopolitan,,12,F,2/23/22,,,,Kampong Speu,PP406371,complete,11.44455015,104.4920708,lat-long is exact,IDSeq,
+109-1458,Serum,DENV-2,Cosmopolitan,,12,M,4/6/22,,,,Kampong Speu,PP406372,complete,11.45832374,104.5358876,lat-long is exact,IDSeq,
+109-1462,Serum,DENV-2,Cosmopolitan,,3,M,4/6/22,,,,Kampong Speu,PP406373,complete,11.54141507,104.8981563,lat-long is exact,IDSeq,
+109-1546,Serum,DENV-2,Cosmopolitan,,13,M,4/20/22,,,,Kampong Speu,PP406374,complete,11.5211081,104.5623505,lat-long is exact,IDSeq,
+109-1724,Serum,DENV-2,Cosmopolitan,,2,M,5/17/22,,,,Kampong Speu,PP406375,complete,11.5296487,104.4974665,lat-long is exact,IDSeq,
+109-1733,Serum,DENV-2,Cosmopolitan,,1,M,5/18/22,,,,Kampong Speu,PP406376,complete,11.47341751,104.5904707,lat-long is exact,IDSeq,
+109-1751,Serum,DENV-2,Cosmopolitan,,12,F,5/23/22,,,,Kampong Speu,PP406447,complete,11.5296487,104.4974665,lat-long is exact,IDSeq,
+109-1752,Serum,DENV-2,Cosmopolitan,,9,F,5/23/22,,,,Kampong Speu,PP406448,complete,11.5296487,104.4974665,lat-long is exact,IDSeq,
+109-1758,Serum,DENV-2,Cosmopolitan,,9,F,5/23/22,,,,Kampong Speu,PP406449,complete,11.5296487,104.4974665,lat-long is exact,IDSeq,
+109-1759,Serum,DENV-2,Cosmopolitan,,13,F,5/23/22,,,,Kampong Speu,PP406450,complete,11.45832374,104.5358876,lat-long is exact,IDSeq,
+109-1760,Serum,DENV-2,Cosmopolitan,,10,M,5/23/22,,,,Kampong Speu,PP406451,complete,11.5296487,104.4974665,lat-long is exact,IDSeq,
+109-1787,Serum,DENV-2,Cosmopolitan,,12,F,5/26/22,,,,Kampong Speu,PP406452,complete,11.5211081,104.5623505,lat-long is exact,IDSeq,
+109-1796,Serum,DENV-2,Cosmopolitan,,12,F,5/26/22,,,,Kampong Speu,PP406453,complete,11.43791785,104.5222523,lat-long is exact,IDSeq,
+109-1806,Serum,DENV-2,Cosmopolitan,,4,M,5/30/22,,,,Kampong Speu,PP406454,complete,11.50815774,104.4952031,lat-long is exact,IDSeq,
+109-1815,Serum,DENV-2,Cosmopolitan,,13,F,5/30/22,,,,Kampong Speu,PP406455,complete,11.45832374,104.5358876,lat-long is exact,IDSeq,
+109-1833,Serum,DENV-2,Cosmopolitan,,10,M,6/1/22,,,,Kampong Speu,PP411227,complete,11.44649915,104.6570304,lat-long is exact,IDSeq,
+109-1835,Serum,DENV-2,Cosmopolitan,,10,F,6/1/22,,,,Kampong Speu,PP411228,complete,11.46208075,104.5559138,lat-long is exact,IDSeq,
+109-1837,Serum,DENV-2,Cosmopolitan,,10,F,6/1/22,,,,Kampong Speu,PP411229,complete,11.46208075,104.5559138,lat-long is exact,IDSeq,
+109-1848,Serum,DENV-2,Cosmopolitan,,7,M,6/7/22,,,,Kampong Speu,PP411230,complete,11.48458186,104.556548,lat-long is exact,IDSeq,
+109-1851,Serum,DENV-2,Cosmopolitan,,6,M,6/7/22,,,,Kampong Speu,PP411231,complete,11.50153813,104.505833,lat-long is exact,IDSeq,
+109-1852,Serum,DENV-2,Cosmopolitan,,5,F,6/7/22,,,,Kampong Speu,PP411232,complete,11.44781566,104.6244282,lat-long is exact,IDSeq,
+109-1855,Serum,DENV-2,Cosmopolitan,,5,M,6/7/22,,,,Kampong Speu,PP411233,complete,11.457138,104.5467536,lat-long is exact,IDSeq,
+109-1863,Serum,DENV-2,Cosmopolitan,,11,M,6/7/22,,,,Kampong Speu,PP411234,complete,11.5296487,104.4974665,lat-long is exact,IDSeq,
+109-1864,Serum,DENV-2,Cosmopolitan,,3,F,6/7/22,,,,Kampong Speu,PP411235,complete,11.47358812,104.5526594,lat-long is exact,IDSeq,
+109-1880,Serum,DENV-2,Cosmopolitan,,13,F,6/10/22,,,,Kampong Speu,PP411249,complete,11.46208075,104.5559138,lat-long is exact,IDSeq,
+109-1882,Serum,DENV-2,Cosmopolitan,,7,F,6/10/22,,,,Kampong Speu,PP411250,complete,11.54601634,104.4285742,lat-long is exact,IDSeq,
+109-1911,Serum,DENV-2,Cosmopolitan,,31,F,6/16/22,,,,Kampong Speu,PP411251,complete,11.70471423,104.7706201,lat-long is exact,IDSeq,
+109-1925,Serum,DENV-2,Cosmopolitan,,13,F,6/20/22,,,,Kampong Speu,PP411252,complete,11.3770738,104.5114747,lat-long is exact,IDSeq,
+109-1954,Serum,DENV-2,Cosmopolitan,,6,M,6/23/22,,,,Kampong Speu,PP411253,complete,11.5111992,104.7277621,lat-long is exact,IDSeq,
+109-1972,Serum,DENV-2,Cosmopolitan,,9,F,6/27/22,,,,Kampong Speu,PP411254,complete,11.5396597,104.5354884,lat-long is exact,IDSeq,
+109-1990,Serum,DENV-2,Asian-1,,22,F,6/29/22,,,,Kampong Speu,PP411255,complete,11.48560474,104.7684424,lat-long is exact,IDSeq,
+109-2002,Serum,DENV-2,Cosmopolitan,,9,F,7/1/22,,,,Kampong Speu,PP411256,complete,11.44932128,104.5003774,lat-long is exact,IDSeq,
+109-2015,Serum,DENV-2,Cosmopolitan,,6,F,7/5/22,,,,Kampong Speu,PP411257,complete,11.12366485,105.0674737,lat-long is exact,IDSeq,
+109-0773,Serum,DENV-2,Cosmopolitan,,1,F,8/31/21,,,,Kampong Speu,PP439574,complete,11.46953936,104.5427272,lat-long is exact,IDSeq,
+109-0806,Serum,DENV-2,Cosmopolitan,,13,F,9/24/21,,,,Kampong Speu,PP439575,complete,11.52557443,104.5497621,lat-long is exact,IDSeq,
+109-0678,Serum,DENV-2,Cosmopolitan,,13,M,5/19/21,,,,Kampong Speu,PP439576,complete,11.49837834,104.5599833,lat-long is exact,IDSeq,
+109-0705,Serum,DENV-2,Cosmopolitan,,10,M,6/12/21,,,,Kampong Speu,PP439577,complete,11.46471982,104.5150653,lat-long is exact,IDSeq,
+109-0723,Serum,DENV-2,Cosmopolitan,,7,M,6/24/21,,,,Kampong Speu,PP439578,complete,11.49837834,104.5599833,lat-long is exact,IDSeq,
+109-0734,Serum,DENV-2,Cosmopolitan,,16,F,7/7/21,,,,Kampong Speu,PP439579,complete,11.4576208,104.5043234,lat-long is exact,IDSeq,
+109-0836,Serum,DENV-2,Cosmopolitan,,13,F,10/12/21,,,,Kampong Speu,PP439580,complete,11.50052587,104.5568073,lat-long is exact,IDSeq,
+109-2031,Serum,DENV-2,Cosmopolitan,,6,M,7/6/22,,,,Kampong Speu,PP439581,complete,11.5211081,104.5623505,lat-long is exact,IDSeq,
+109-2032,Serum,DENV-2,Cosmopolitan,,6,M,7/7/22,,,,Kampong Speu,PP439582,complete,11.55284377,104.5461602,lat-long is exact,IDSeq,
+109-2034,Serum,DENV-2,Cosmopolitan,,9,M,7/7/22,,,,Kampong Speu,PP446688,complete,11.47249592,104.5309135,lat-long is exact,IDSeq,
+109-2071,Serum,DENV-2,Cosmopolitan,,9,M,7/15/22,,,,Kampong Speu,PP446689,complete,11.41856916,104.4474572,lat-long is exact,IDSeq,
+109-2079,Serum,DENV-2,Cosmopolitan,,9,M,7/18/22,,,,Kampong Speu,PP446690,complete,11.49111897,104.555685,lat-long is exact,IDSeq,
+109-2116,Serum,DENV-2,Cosmopolitan,,1,F,7/22/22,,,,Kampong Speu,PP446691,complete,12.20405193,104.6648283,lat-long is exact,IDSeq,
+109-2325,Serum,DENV-2,Cosmopolitan,,11,F,9/5/22,,,,Kampong Speu,PP446692,complete,11.57334604,104.9200659,lat-long is exact,IDSeq,
+109-2425,Serum,DENV-2,Cosmopolitan,,11,M,10/6/22,,,,Kampong Speu,PP446693,complete,11.48582265,104.57603,lat-long is exact,IDSeq,
+109-2430,Serum,DENV-2,Cosmopolitan,,5,F,10/10/22,,,,Kampong Speu,PP446694,complete,11.53021494,104.802447,lat-long is exact,IDSeq,
+109-1816,Serum,DENV-2,Cosmopolitan,,12,F,5/30/22,,,,Kampong Speu,PP469533,complete,11.46953936,104.5427272,lat-long is exact,IDSeq,
+109-2279,Serum,DENV-2,Cosmopolitan,,15,F,8/24/22,,,,Kampong Speu,PP469534,complete,11.32805866,104.5763098,lat-long is exact,IDSeq,
+DENS-093,Serum,DENV-2,Cosmopolitan,,3,F,6/10/22,Tang Tonle,Sopor Tep,Jba Mon,Kompong Speu,PP470598,complete,11.45854859,104.5350726,lat-long is centroid of province,NDCP,
+DENS-124,Serum,DENV-2,Cosmopolitan,,18,M,6/2/22,Soun Tmey,Prey Chhlak,Svay Reang,Svay Reang,PP470599,complete,11.091973,105.7987226,lat-long is centroid of province,NDCP,
+DENS-OB-145,Serum,DENV-2,Cosmopolitan,,17,M,7/1/22,Veal,Veal,Kandeang,Pursat,PP470600,complete,12.55986106,103.9317703,lat-long is centroid of province,NDCP,
+DENS-167,Serum,DENV-2,Cosmopolitan,,16,M,7/23/22,ReuSsey Prey ,Kampong Chamlang,Svay Jrom,Svay Reang,PP470601,complete,11.07281558,105.7666621,lat-long is centroid of province,NDCP,
+DENS-177,Serum,DENV-2,Cosmopolitan,,11,F,8/15/22,Ti 1,Treng Troyeng,Phnom Srouch,Kompong Speu,PP470602,complete,11.22702367,104.1448106,lat-long is centroid of province,NDCP,
+DENS-187,Serum,DENV-2,Cosmopolitan,,16,M,8/4/22,Rong Bonler,Svay Reang,Svay Reang,Svay Reang,PP470603,complete,11.0878225,105.8008098,lat-long is centroid of province,NDCP,
+100-0653,Serum,DENV-4,DENV-4,,9,F,7/7/19,NA,NA,NA,Kampong Speu,MZ976858,complete,NA,NA,lat-long is centroid of province,PAGODAS,
+109-0051,Serum,DENV-4,DENV-4,,8,F,8/7/19,Krang Metrei,Skuh,Samraong Tong,Kampong Speu,MZ976859,complete,11.41793587,104.5418017,lat-long is centroid of province,IDSeq,
+109-0342,Serum,DENV-4,DENV-4,,12,M,8/3/20,Phsar Kantuot,Sangkae Satob,Aoral,Kampong Speu,MZ976860,complete,11.68285704,104.1292756,lat-long is centroid of province,IDSeq,
+109-0142,Serum,DENV-4,DENV-4,,14,M,10/21/19,Tras Sala,Svay Kravan,Krong Chbar Mon,Kampong Speu,OQ678015,complete,11.4573808,104.5343672,lat-long is centroid of province,IDSeq,
+109-1230,Serum,DENV-4,DENV-4,,7,F,2/14/22,,,,Kampong Speu,PP396732,complete,11.58098994,104.8382381,lat-long is exact,IDSeq,
+109-1707,Serum,DENV-4,DENV-4,,12,F,5/16/22,,,,Kampong Speu,PP447197,complete,11.31145499,104.4356505,lat-long is exact,IDSeq,
+109-2001,Serum,DENV-4,DENV-4,,14,M,7/1/22,,,,Kampong Speu,PP447198,complete,11.4226616,104.6505231,lat-long is exact,IDSeq,
+109-2038,Serum,DENV-4,DENV-4,,19,M,7/8/22,,,,Kampong Speu,PP447199,complete,11.48296276,104.6135533,lat-long is exact,IDSeq,
+109-2396,Serum,DENV-4,DENV-4,,23,F,9/27/22,,,,Kampong Speu,PP447200,complete,11.58098994,104.8382381,lat-long is exact,IDSeq,
+DENS-OB-146,Serum,DENV-2,Cosmopolitan,MN018344,6,F,7/1/22,Po,Sre Sdok,Kandeang,Pursat,not_submitted,partial,12.67376951,103.9432571,lat-long is centroid of province,NDCP,
+109-0115,Serum,DENV-1,DENV-1,MK905537,4,M,9/2/19,Svay Kravan,Svay Kravan,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.45295483,104.5208611,lat-long is centroid of province,IDSeq,
+109-0122,Serum,DENV-1,DENV-1,LC428062,6,F,9/11/19,Phsar Sameakki,Kandaol Dom,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.4510831,104.4889513,lat-long is centroid of province,IDSeq,
+109-2055,Serum,DENV-1,DENV-1,MN912109,1,M,7/12/22,Trea,Stueng Mean Chey,Mean Chey,Phnom Penh,not_submitted,partial,11.54400729,104.8891311,lat-long is centroid of province,IDSeq,
+109-0211,Serum,DENV-2,Cosmopolitan,PP470602,11,F,1/6/20,Khaob,Rokar Thum,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.49254886,104.5165399,lat-long is centroid of province,IDSeq,
+109-0331,Serum,DENV-2,Cosmopolitan,PP564550,21,M,7/28/20,Kandal,Tang Samraong,Phnum Sruoch,Kampong Speu,not_submitted,partial,11.42461515,104.2901635,lat-long is centroid of province,IDSeq,
+109-0717,Serum,DENV-2,Cosmopolitan,PP470603,9,F,6/16/21,Phnum Dei,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.45682341,104.4980998,lat-long is centroid of province,IDSeq,
+109-0718,Serum,DENV-2,Cosmopolitan,PP439578,14,M,6/17/21,Ta Koam,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.49499158,104.562996,lat-long is centroid of province,IDSeq,
+109-0742,Serum,DENV-2,Cosmopolitan,PP439576,7,M,7/19/21,Tuol Samnang,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.50052587,104.5568073,lat-long is centroid of province,IDSeq,
+109-0744,Serum,DENV-2,Cosmopolitan,PP439576,2,M,7/24/21,Angkor Chea,Pneay,Samraong Tong,Kampong Speu,not_submitted,partial,11.52870025,104.5654842,lat-long is centroid of province,IDSeq,
+109-0745,Serum,DENV-2,Cosmopolitan,PP439576,2,M,7/24/21,Dak Por,Svay Kravan,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.44548183,104.5244949,lat-long is centroid of province,IDSeq,
+109-0760,Serum,DENV-2,Cosmopolitan,PP439576,4,M,8/19/21,Beng,Pneay,Samraong Tong,Kampong Speu,not_submitted,partial,11.52557443,104.5497621,lat-long is centroid of province,IDSeq,
+109-0764,Serum,DENV-2,Cosmopolitan,PP470602,11,M,8/23/21,Rumlich Tnaot,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.50489008,104.5543339,lat-long is centroid of province,IDSeq,
+109-0765,Serum,DENV-2,Cosmopolitan,PP439578,11,F,8/23/21,Snao Ti Muoy,Rokar Thum,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47710958,104.5490872,lat-long is centroid of province,IDSeq,
+109-0779,Serum,DENV-2,Cosmopolitan,PP470602,13,F,9/6/21,Prey Tuol,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.50160259,104.5512581,lat-long is centroid of province,IDSeq,
+109-0785,Serum,DENV-2,Cosmopolitan,PP439579,5,M,9/12/21,Chamkar Bos,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.51418879,104.5439757,lat-long is centroid of province,IDSeq,
+109-0789,Serum,DENV-2,Cosmopolitan,PP439579,10,M,9/14/21,Chamkar Bos,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.51418879,104.5439757,lat-long is centroid of province,IDSeq,
+109-0792,Serum,DENV-2,Cosmopolitan,PP439580,12,F,9/14/21,Tuol Samnang,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.50052587,104.5568073,lat-long is centroid of province,IDSeq,
+109-0799,Serum,DENV-2,Cosmopolitan,PP446692,13,F,9/19/21,Chamkar Bos,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.51418879,104.5439757,lat-long is centroid of province,IDSeq,
+109-0835,Serum,DENV-2,Cosmopolitan,PP439578,6,F,10/12/21,Kandal,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.50836343,104.5488908,lat-long is centroid of province,IDSeq,
+109-1143,Serum,DENV-2,Cosmopolitan,PP411227,16,M,1/24/22,Ou Bek Kam,Tuek Thla,Saensokh,Phnom Penh,not_submitted,partial,11.55044592,104.8879455,lat-long is centroid of province,IDSeq,
+109-1231,Serum,DENV-2,Cosmopolitan,PP439578,18,M,2/15/22,Sangkruoh Cheat,Trapeang Kong,Samraong Tong,Kampong Speu,not_submitted,partial,11.48649431,104.6310613,lat-long is centroid of province,IDSeq,
+109-1709,Serum,DENV-2,Cosmopolitan,PP439582,9,F,5/16/22,Pech Sangvar,Khtum Krang,Samraong Tong,Kampong Speu,not_submitted,partial,11.51374539,104.5050598,lat-long is centroid of province,IDSeq,
+109-1720,Serum,DENV-2,Cosmopolitan,PP439582,13,M,5/17/22,Srei Sampoung,Khtum Krang,Samraong Tong,Kampong Speu,not_submitted,partial,11.52206098,104.5025327,lat-long is centroid of province,IDSeq,
+109-1721,Serum,DENV-2,Cosmopolitan,PP446693,8,M,5/17/22,Krang Phka,Sopoar Tep,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.46522603,104.5546987,lat-long is centroid of province,IDSeq,
+109-1730,Serum,DENV-2,Cosmopolitan,PP406369,12,M,5/18/22,Krang Pongro,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.5153439,104.5600119,lat-long is centroid of province,IDSeq,
+109-1746,Serum,DENV-2,Cosmopolitan,PP406376,12,M,5/20/22,Thlok Andas,Saen Dei,Samraong Tong,Kampong Speu,not_submitted,partial,11.40322503,104.6129648,lat-long is centroid of province,IDSeq,
+109-1788,Serum,DENV-2,Cosmopolitan,PP439582,5,F,5/26/22,Snao Ti Muoy,Rokar Thum,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47710958,104.5490872,lat-long is centroid of province,IDSeq,
+109-1790,Serum,DENV-2,Cosmopolitan,PP406454,8,F,5/26/22,Sangke Chrum,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.50815774,104.4952031,lat-long is centroid of province,IDSeq,
+109-1792,Serum,DENV-2,Cosmopolitan, KX452018,5,M,5/26/22,Roluos,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.48670964,104.5074176,lat-long is centroid of province,IDSeq,
+109-1793,Serum,DENV-2,Cosmopolitan,PP439582,10,F,5/26/22,Angk Serei,Rokar Thum,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47310072,104.5416029,lat-long is centroid of province,IDSeq,
+109-1794,Serum,DENV-2,Cosmopolitan,PP446693,13,F,5/26/22,Chrolong Phlov,Roleang Chak,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.46208075,104.5559138,lat-long is centroid of province,IDSeq,
+109-1807,Serum,DENV-2,Cosmopolitan,PP439582,8,F,5/30/22,Sangke Chrum,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.50815774,104.4952031,lat-long is centroid of province,IDSeq,
+109-1808,Serum,DENV-2,Cosmopolitan,PP446688,12,M,5/30/22,Krang Phka,Sopoar Tep,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.46522603,104.5546987,lat-long is centroid of province,IDSeq,
+109-1812,Serum,DENV-2,Cosmopolitan,PP446691,11,M,5/30/22,Tras,Svay Kravan,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.44932128,104.5003774,lat-long is centroid of province,IDSeq,
+109-1842,Serum,DENV-2,Cosmopolitan,PP470603,10,M,6/2/22,Trapeang Kong,Trapeang Kong,Samraong Tong,Kampong Speu,not_submitted,partial,11.47812212,104.6327501,lat-long is centroid of province,IDSeq,
+109-1844,Serum,DENV-2,Cosmopolitan,MN923109,11,M,6/2/22,Roleang Sangke,Sopoar Tep,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47358812,104.5526594,lat-long is centroid of province,IDSeq,
+109-1847,Serum,DENV-2,Cosmopolitan,PP510625,26,M,6/7/22,Prey Sloek,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.4576208,104.5043234,lat-long is centroid of province,IDSeq,
+109-1856,Serum,DENV-2,Cosmopolitan,PP446688,8,F,6/7/22,Snao Ti Muoy,Rokar Thum,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47710958,104.5490872,lat-long is centroid of province,IDSeq,
+109-1860,Serum,DENV-2,Cosmopolitan,MN923109,23,M,6/7/22,Phnom Penh Thmei,Phnom Penh Thmei,Saensokh,Phnom Penh,not_submitted,partial,11.57487586,104.8733797,lat-long is centroid of province,IDSeq,
+109-1870,Serum,DENV-2,Cosmopolitan,PP406452,13,F,6/10/22,Trapeang Russei,Sambour,Samraong Tong,Kampong Speu,not_submitted,partial,11.50787742,104.6490887,lat-long is centroid of province,IDSeq,
+109-1871,Serum,DENV-2,Cosmopolitan,PP406374,13,F,6/10/22,Kandaol Dom,Kandaol Dom,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.44455015,104.4920708,lat-long is centroid of province,IDSeq,
+109-1879,Serum,DENV-2,Cosmopolitan,PP446688,12,M,6/10/22,Chrolong Phlov,Roleang Chak,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.46208075,104.5559138,lat-long is centroid of province,IDSeq,
+109-1881,Serum,DENV-2,Cosmopolitan,PP470602,7,M,6/10/22,Sangke Chrum,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.50815774,104.4952031,lat-long is centroid of province,IDSeq,
+109-1889,Serum,DENV-2,Cosmopolitan,PP406372,13,M,6/13/22,Pel Hel,Sopoar Tep,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.49111897,104.555685,lat-long is centroid of province,IDSeq,
+109-1907,Serum,DENV-2,Cosmopolitan,PP470602,12,M,6/16/22,Tras Sala,Svay Kravan,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.4573808,104.5343672,lat-long is centroid of province,IDSeq,
+109-1932,Serum,DENV-2,Cosmopolitan,PP439582,8,M,6/20/22,Angk Ta Mau,Tang Krouch,Samraong Tong,Kampong Speu,not_submitted,partial,11.47704512,104.4483523,lat-long is centroid of province,IDSeq,
+109-1941,Serum,DENV-2,Cosmopolitan,PP439582,NA,F,6/21/22,Roluos,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.48670964,104.5074176,lat-long is centroid of province,IDSeq,
+109-1959,Serum,DENV-2,Cosmopolitan,PP411253,13,F,6/24/22,Thom,Krang Yov,S'ang,Kandal,not_submitted,partial,11.51824283,105.0348652,lat-long is centroid of province,IDSeq,
+109-1974,Serum,DENV-2,Cosmopolitan,PP411232,13,F,6/27/22,Skuh,Svay Kravan,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.43791785,104.5222523,lat-long is centroid of province,IDSeq,
+109-1975,Serum,DENV-2,Cosmopolitan,PP470602,7,F,6/27/22,Krang Chek,Krang Chek,Odongk,Kampong Speu,not_submitted,partial,11.58531254,104.5254614,lat-long is centroid of province,IDSeq,
+109-1980,Serum,DENV-2,Cosmopolitan,PP446689,3,M,6/28/22,Krang Angkrang,Krang Thnong,Saensokh,Phnom Penh,not_submitted,partial,11.5820044,104.8410901,lat-long is centroid of province,IDSeq,
+109-2017,Serum,DENV-2,Cosmopolitan,PP446694,5,M,7/5/22,Phum 11,Tuek L'ak Pir,Tuol Kouk,Phnom Penh,not_submitted,partial,11.34642938,104.6400402,lat-long is centroid of province,IDSeq,
+109-2033,Serum,DENV-2,Cosmopolitan,PP446691,10,M,7/7/22,Kouk Pnov,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.49541826,104.5889902,lat-long is centroid of province,IDSeq,
+109-2037,Serum,DENV-2,Cosmopolitan,PP564696,18,M,7/8/22,Thma Bang,Samraong Tong,Samraong Tong,Kampong Speu,not_submitted,partial,11.50747582,104.5844429,lat-long is centroid of province,IDSeq,
+109-2057,Serum,DENV-2,Cosmopolitan,PP446693,18,M,7/13/22,Dak Por,Voa Sar,Samraong Tong,Kampong Speu,not_submitted,partial,11.49749894,104.5831005,lat-long is centroid of province,IDSeq,
+109-2083,Serum,DENV-2,Cosmopolitan,PP406373,12,M,7/19/22,Bak Thmenh,Roleang Chak,Samraong Tong,Kampong Speu,not_submitted,partial,11.43236738,104.5348665,lat-long is centroid of province,IDSeq,
+109-2139,Serum,DENV-2,Cosmopolitan,PP446693,13,F,7/27/22,Borei Kammeakkar,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47779146,104.5065987,lat-long is centroid of province,IDSeq,
+109-2186,Serum,DENV-2,Cosmopolitan,PP469534,8,F,8/3/22,Thmei,Pou,Kampong Leaeng,Kampong Chhnang,not_submitted,partial,12.35900878,104.7160697,lat-long is centroid of province,IDSeq,
+109-2312,Serum,DENV-2,Cosmopolitan,PP469534,11,M,8/31/22,Prek Ta Long,Chak Angrae Kraom,Mean Chey,Phnom Penh,not_submitted,partial,11.50112777,104.9385907,lat-long is centroid of province,IDSeq,
+109-2340,Serum,DENV-2,Cosmopolitan,PP470602,20,M,9/9/22,Sampov,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47385842,104.4659526,lat-long is centroid of province,IDSeq,
+109-2341,Serum,DENV-2,Cosmopolitan,PP406369,18,M,9/9/22,Sampov,Chbar Mon,Krong Chbar Mon,Kampong Speu,not_submitted,partial,11.47385842,104.4659526,lat-long is centroid of province,IDSeq,
+109-2355,Serum,DENV-2,Cosmopolitan,PP470602,50,M,9/13/22,Luengk,Angkor Reach,Preah Sdach,Prey Veng,not_submitted,partial,11.11168597,105.3929368,lat-long is centroid of province,IDSeq,
+109-2397,Serum,DENV-2,Cosmopolitan,PP406371,12,F,9/28/22,Bak Thmenh,Roleang Chak,Samraong Tong,Kampong Speu,not_submitted,partial,11.43236738,104.5348665,lat-long is centroid of province,IDSeq,
+109-2479,Serum,DENV-2,Cosmopolitan,PP411253,15,F,10/21/22,Chbar Mon,Komar Reachea,Bati,Takeo,not_submitted,partial,11.24688404,104.7041017,lat-long is centroid of province,IDSeq,
+109-2480,Serum,DENV-2,Cosmopolitan,PP446691,14,M,10/21/22,Trach Toul,Baek Chan,Angk Snuol,Kandal,not_submitted,partial,11.52291812,104.7565822,lat-long is centroid of province,IDSeq,
+DENS-003,Serum,DENV-2,Cosmopolitan,PP564696,12,M,11/12/21,Trach Chhroum,So por tep,Chhbar Mon,Kompong Speu,not_submitted,partial,11.47060193,104.5449421,lat-long is centroid of province,NDCP,
+DENS-004,Serum,DENV-2,Cosmopolitan,PP564696,11,M,11/14/21,Kandal,Vor Sor,Somrong Tong,Kompong Speu,not_submitted,partial,11.50130058,104.5595999,lat-long is centroid of province,NDCP,
+DENS-089,Serum,DENV-2,Cosmopolitan,PP564696,5,M,5/11/22,Roulous,Chba Mon,Chba Mon,Kompong Speu,not_submitted,partial,11.48344168,104.4911512,lat-long is centroid of province,NDCP,
+DENS-100,Serum,DENV-2,Cosmopolitan,PP564696,14,F,6/11/22,Chhuk,Chhuk,krouch Chmar,Tbong Kmom,not_submitted,partial,12.14841913,105.741302,lat-long is centroid of province,NDCP,
+DENS-132,Serum,DENV-2,Cosmopolitan,PP470603,12,F,6/27/22,Kandal,Jronok,Kompong Loung,Kompong Chhnang,not_submitted,partial,12.48372446,104.7339996,lat-long is centroid of province,NDCP,
+DENS-143,Serum,DENV-2,Cosmopolitan,MN923109,12,M,7/19/22,Roleang Jork,Roleang Krel,Somrong Tong,Kompong Speu,not_submitted,partial,11.44483274,104.6304748,lat-long is centroid of province,NDCP,
+DENS-144,Serum,DENV-2,Cosmopolitan,MG895163,9,M,7/19/22,Pel Hel,Sopor Tep,Somrong Tong,Kompong Speu,not_submitted,partial,11.48654225,104.5548865,lat-long is centroid of province,NDCP,
+DENS-174,Serum,DENV-2,Cosmopolitan,MN018344,27,F,8/6/22,N/A,N/A,N/A,Kompong Speu,not_submitted,partial,NA,NA,lat-long is centroid of province,NDCP,
+DENS-176,Serum,DENV-2,Cosmopolitan,MK564485,19,F,8/15/22,Jombok,Vor Sor,Somrong Tong,Kompong Speu,not_submitted,partial,11.47573234,104.5622035,lat-long is centroid of province,NDCP,
+DENS-OB-125,Serum,DENV-2,Cosmopolitan,PP546320,7,M,5/13/22,Ear Lech,Jro Nok,Kompong Loung,Kompong Chhnang,not_submitted,partial,12.48372446,104.7339996,lat-long is centroid of province,NDCP,
+109-1245,Serum,DENV-4,DENV-4,KP792537,16,M,2/17/22,Krang Chek,Krang Chek,Odongk,Kampong Speu,not_submitted,partial,11.58531254,104.5254614,lat-long is centroid of province,IDSeq,
+109-1853,Serum,DENV-4,DENV-4,KP792537,26,M,6/7/22,Trapeang Prei,Saen Dei,Samraong Tong,Kampong Speu,not_submitted,partial,11.41243798,104.6250156,lat-long is centroid of province,IDSeq,
+109-2239,Serum,DENV-4,DENV-4,MK614090,22,F,8/15/22,Tnaot Muoy Daeum,Preah Khae,Basedth,Kampong Speu,not_submitted,partial,11.17148243,104.5031392,lat-long is centroid of province,IDSeq,
+DENS-148,Serum,DENV-4,DENV-4,PP396732,14,F,6/26/22,Krosang,Terk Chrov,Dom Bae,Tbong Kmom,not_submitted,partial,11.8949928,105.9858072,lat-long is centroid of province,NDCP,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,

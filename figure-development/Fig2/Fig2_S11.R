@@ -123,13 +123,52 @@ names(colz) <- centroid.prov$provname
 # Only colour strips in x-direction
 strip <- strip_themed(background_y = elem_list_rect(fill = colz))
 vert.df <- cbind.data.frame(xint = c(2007, 2008, 2012, 2013, 2019,2020))
+# 
+# Fig2Ab <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
+#   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
+#   geom_tile(aes(x=time,  y=provname, fill=scale_annual, color=scale_annual), show.legend = FALSE) + 
+#   scale_fill_gradientn(colors = jet.colors, name="Reconstructed\nannual cycles", trans="log10")+#limits=c(-100,280)) +
+#   scale_color_gradientn(colors = jet.colors, name="Reconstructed\nannual cycles", trans="log10")+# limits=c(-100,280)) +
+#   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+#                      plot.margin = unit(c(.1,.5,.1,1), "cm"),
+#                      strip.text = element_text(size=8), legend.position = "bottom",
+#                      panel.spacing = unit(c(0), "cm"),
+#                      legend.title = element_text(size=9),
+#                      strip.text.y.left = element_text(angle=0, size=6),
+#                      panel.border = element_rect(linewidth=0),
+#                      panel.grid = element_blank(), axis.title = element_blank(),
+#                      axis.text = element_text(size=14)) +
+#   geom_vline(data=vert.df, aes(xintercept=xint), color="black", size=1) 
+# 
+# 
+# 
 
 
+colorz<-c("#00007F","#0000F0", "#0062FF", "#00D4FF", "#FFF800", "#FFC200","#FF5600", "#FF2100","#C80000", "#7F0000")
 Fig2Ab <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
-  geom_tile(aes(x=time,  y=provname, fill=reconstructed_annual_period, color=reconstructed_annual_period), show.legend = FALSE) + 
-  scale_fill_gradientn(colors = jet.colors(7), name="Reconstructed\nannual cycles", limits=c(-100,280)) +
-  scale_color_gradientn(colors = jet.colors(7), name="Reconstructed\nannual cycles", limits=c(-100,280)) +
+  geom_tile(aes(x=time,  y=provname, fill=reconstructed_annual_period, color=reconstructed_annual_period)) + 
+  scale_fill_stepsn(colours = colorz, name="Reconstructed\nannual cycles", breaks=c(-80, -50, -1, 0,1,3,10,30,70,300), values=rescale(x=c(-80, -50, -1, 0,1,3,10,30,70,300), to=c(0,1)))+
+  scale_color_stepsn(colours = colorz, name="Reconstructed\nannual cycles", breaks=c(-80, -50, -1,0,1,3,10,30,70,300), values=rescale(x=c(-80, -50, -1, 0,1,3,10,30,70,300), to=c(0,1)))+
+  theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+                     plot.margin = unit(c(.1,.5,.1,1), "cm"),
+                     strip.text = element_text(size=8), legend.position = "bottom",
+                     panel.spacing = unit(c(0), "cm"),
+                     legend.title = element_text(size=9),
+                     legend.text  = element_text(size=7),
+                     strip.text.y.left = element_text(angle=0, size=6),
+                     panel.border = element_rect(linewidth=0),
+                     panel.grid = element_blank(), axis.title = element_blank(),
+                     axis.text = element_text(size=14)) +
+  geom_vline(data=vert.df, aes(xintercept=xint), color="black", size=1) 
+
+Fig2Ableg <- cowplot::get_legend(Fig2Ab)
+
+Fig2Abnoleg <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
+  facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
+  geom_tile(aes(x=time,  y=provname, fill=reconstructed_annual_period, color=reconstructed_annual_period), show.legend = F) + 
+  scale_fill_stepsn(colours = colorz, name="Reconstructed\nannual cycles", breaks=c(-80, -50, -1, 0,1,3,10,30,70,300), values=rescale(x=c(-80, -50, -1, 0,1,3,10,30,70,300), to=c(0,1)))+
+  scale_color_stepsn(colours = colorz, name="Reconstructed\nannual cycles", breaks=c(-80, -50, -1,0,1,3,10,30,70,300), values=rescale(x=c(-80, -50, -1, 0,1,3,10,30,70,300), to=c(0,1)))+
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
                      plot.margin = unit(c(.1,.5,.1,1), "cm"),
                      strip.text = element_text(size=8), legend.position = "bottom",
@@ -142,11 +181,37 @@ Fig2Ab <- ggplot(data=dat) +  coord_cartesian(xlim=c(2001.9, 2021.1), expand = F
   geom_vline(data=vert.df, aes(xintercept=xint), color="black", size=1) 
 
 
+colorz2<-c("#00007F","#0000F0", "#0062FF", "#7FFF7F", "#FFF800", "#FFC200","#FF5600", "#FF2100","#C80000", "#7F0000")
 Fig2Bb <- ggplot(data=dat) + coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
   facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
   geom_tile(aes(x=time,  y=provname, fill=reconstructed_multi_period, color=reconstructed_multi_period)) + 
-  scale_fill_gradientn(colors = jet.colors(7), name="Reconstructed cycles\n(top: annual; bottom: multi-annual)",limits=c(-100,280)) +
-  scale_color_gradientn(colors = jet.colors(7), name="Reconstructed cycles\n(top: annual; bottom: multi-annual)",limits=c(-100,280)) +
+  scale_fill_stepsn(colours = colorz2, name="Reconstructed\nmultiannual cycles", breaks=c(-85, -50,-5, 0,3,10,30,50,70,100), values=rescale(x=c(-85, -50,-5,0,3,10,30,50,70,100), to=c(0,1)))+
+  scale_color_stepsn(colours = colorz2, name="Reconstructed\nmultiannual cycles", breaks=c(-85, -50,-5,0,3,10,30,50,70,100), values=rescale(x=c(-85, -50,-5,0,3,10,30,50,70,100), to=c(0,1)))+
+  #scale_fill_gradientn(colors = jet.colors(7), name="Reconstructed cycles\n(top: annual; bottom: multi-annual)",limits=c(-100,280)) +
+  #scale_color_gradientn(colors = jet.colors(7), name="Reconstructed cycles\n(top: annual; bottom: multi-annual)",limits=c(-100,280)) +
+  theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+                     plot.margin = unit(c(.1,.5,.1,1), "cm"),
+                     strip.text = element_text(size=8),
+                     strip.text.y.left = element_text(angle=0, size=6),
+                     panel.spacing = unit(c(0), "cm"),
+                     legend.title = element_text(size=9),
+                     legend.text  = element_text(size=6.5),
+                     legend.position = "bottom",
+                     panel.border = element_rect(linewidth=0),
+                     panel.grid = element_blank(), axis.title = element_blank(),
+                     #panel.background = element_rect(fill="gray30"),
+                     axis.text = element_text(size=14)) +
+  geom_vline(data=vert.df, aes(xintercept=xint), color="black", size=1) 
+
+Fig2Bbleg <- cowplot::get_legend(Fig2Bb )
+
+Fig2Bbnoleg <- ggplot(data=dat) + coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)+
+  facet_nested(provname~., scales = "free_y", space="free_y", switch = "y", strip = strip, labeller = label_wrap_gen(width=6)) +
+  geom_tile(aes(x=time,  y=provname, fill=reconstructed_multi_period, color=reconstructed_multi_period), show.legend = F) + 
+  scale_fill_stepsn(colours = colorz2, name="Reconstructed\nmultiannual cycles", breaks=c(-85, -50,-5, 0,3,10,30,50,70,100), values=rescale(x=c(-85, -50,-5,0,3,10,30,50,70,100), to=c(0,1)))+
+  scale_color_stepsn(colours = colorz2, name="Reconstructed\nmultiannual cycles", breaks=c(-85, -50,-5,0,3,10,30,50,70,100), values=rescale(x=c(-85, -50,-5,0,3,10,30,50,70,100), to=c(0,1)))+
+  #scale_fill_gradientn(colors = jet.colors(7), name="Reconstructed cycles\n(top: annual; bottom: multi-annual)",limits=c(-100,280)) +
+  #scale_color_gradientn(colors = jet.colors(7), name="Reconstructed cycles\n(top: annual; bottom: multi-annual)",limits=c(-100,280)) +
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(),
                      plot.margin = unit(c(.1,.5,.1,1), "cm"),
                      strip.text = element_text(size=8),
@@ -159,6 +224,8 @@ Fig2Bb <- ggplot(data=dat) + coord_cartesian(xlim=c(2001.9, 2021.1), expand = F)
                      #panel.background = element_rect(fill="gray30"),
                      axis.text = element_text(size=14)) +
   geom_vline(data=vert.df, aes(xintercept=xint), color="black", size=1) 
+
+
 
 
 
@@ -195,12 +262,17 @@ Fig2Ba <- ggplot(data=dist.dat) +theme_bw() + coord_cartesian(xlim=c(2001.9, 202
 
 
 #and construct
-Fig2A <- cowplot::plot_grid(Fig2Aa, Fig2Ab, ncol=1, nrow=2, rel_heights = c(.25,1))
-Fig2B <- cowplot::plot_grid(Fig2Ba, Fig2Bb, ncol=1, nrow=2, rel_heights = c(.25,1))
+Fig2A <- cowplot::plot_grid(Fig2Aa, Fig2Abnoleg, ncol=1, nrow=2, rel_heights = c(.25,1))
+Fig2B <- cowplot::plot_grid(Fig2Ba, Fig2Bbnoleg, ncol=1, nrow=2, rel_heights = c(.25,1))
+
+
+#add legends
+Fig2ABlegends <- cowplot::plot_grid(Fig2Ableg, Fig2Bbleg, ncol=2, nrow=1) + theme(plot.margin = unit(c(0,0,0,0), "cm")) 
+
 
 
 #and plot as A/B next to coherence
-Fig2A2B <- cowplot::plot_grid(Fig2A, Fig2B, ncol=1, nrow=2, labels = c("A", "B"), label_size = 22, rel_heights = c(1,1.1), label_x = -0.01)
+Fig2A2B <- cowplot::plot_grid(Fig2A, Fig2B, Fig2ABlegends, ncol=1, nrow=3, labels = c("A", "B", ""), label_size = 22, rel_heights = c(1,1,.1), label_x = -0.01)
 
 
 # Now add proportion of provinces with significant annual correlation - by pearsons correlation
@@ -366,7 +438,7 @@ Fig2D <- cowplot::plot_grid(Fig2Da, Fig2Db, ncol=1, nrow=2, rel_heights = c(.25,
 Fig2C2D <- cowplot::plot_grid(Fig2C, Fig2D, ncol=1, nrow=2, labels = c("C", "D"), label_size = 22, rel_heights = c(1,1.1), label_x = -0.01)
 
 #and put them all together 
-Fig2 <- cowplot::plot_grid(Fig2A2B, Fig2C2D, ncol=2, nrow = 1)
+Fig2 <- cowplot::plot_grid(Fig2A2B, Fig2C2D, ncol=2, nrow = 1) + theme(panel.background = element_rect(fill="white"), plot.background = element_rect(fill="white"))
 
 
 ggsave(file = paste0(homewd, "/final-figures/Fig2.png"),

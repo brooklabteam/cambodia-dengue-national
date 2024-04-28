@@ -40,7 +40,7 @@ setwd(homewd)
 
 #and get submap of kampong speu witht the points of cambodia sequences
 cam = sf::st_read(paste0(homewd, "/data/province-shape/khm_admbnda_adm1_gov_20181004.shp"))
-sub = subset(cam, name=="Kampong Speu")
+#sub = subset(cam, name=="Kampong Speu")
 
 
 dat <- read.csv(file = paste0(homewd, "/data/beasttree_metadata.csv"), header = T, stringsAsFactors = F)
@@ -189,6 +189,7 @@ df1 = subset(df1, !is.na(long))
 
 #total
 ddply(df1,.(study, province), summarise, N_tot=length(sample_name))
+ddply(df1,.( province), summarise, N_tot=length(sample_name))
 #IDSeq or PAGODAs: 193+13+45 = 251 with 238 from KS
 #NDCP = 21 with 7 from KS
 
@@ -269,8 +270,8 @@ pBar <- ggplot(data=df.sum) + scale_fill_manual(values=sero.cols2) +
 
 #and ages
 head(df1)
-ggplot(data=df1) + geom_jitter(aes(x=DENV.serotype, y=age), width=.1, size=.1, alpha=.3) + 
-  geom_violin(aes(x=DENV.serotype, y=age,  color=DENV.serotype), draw_quantiles = c(0,.25,.5,.75), show.legend=F, fill=NA) #+ 
+#ggplot(data=df1) + geom_jitter(aes(x=DENV.serotype, y=age), width=.1, size=.1, alpha=.3) + 
+ # geom_violin(aes(x=DENV.serotype, y=age,  color=DENV.serotype), draw_quantiles = c(0,.25,.5,.75), show.legend=F, fill=NA) #+ 
 #facet_grid(~year)
 
 
@@ -744,6 +745,17 @@ pD <- ggplot(data=out.pt5) + theme_bw()+
 salje.dat <- read.csv(file=paste0(homewd, "/data/salje_chains.csv"), header = T, stringsAsFactors = F)
 head(salje.dat)
 
+#first, take just the KS data
+head(all.denv)
+dat2 <- read.csv(file=paste0(homewd, "/data/Cambodia-Serotype-Genotype.csv"), header = T, stringsAsFactors = F)
+head(dat2)
+dat2 = subset(dat2, sequence_completeness=="complete" & province=="Kampong Speu")
+dat2 <- dplyr::select(dat2, genbank_accession)
+dat2$flag <- 1
+names(dat2)[names(dat2)=="genbank_accession"] <- "accession_early"
+all.denv <- merge(all.denv, dat2, by="accession_early", all.x=T)
+all.denv = subset(all.denv, flag==1)
+all.denv <- dplyr::select(all.denv, -(flag))
 
 #and get mean chains
 denv.1 = subset(all.denv, DENV.serotype=="DENV-1")
@@ -771,11 +783,11 @@ all.denv.mean$DENV.subtype[all.denv.mean$DENV.subtype=="DENV-2"] <- "Cambodia DE
 #all.denv.mean$DENV.subtype[all.denv.mean$DENV.subtype=="DENV-2-Cosmopolitan"] <- "Cambodia\nDENV-2-Cosmopolitan"
 
 salje.dat$study <- "Salje et al. 2017"
-all.denv.mean$study <- "Kampong Speu 2019-2020"
+all.denv.mean$study <- "Kampong Speu 2019-2022"
 
 #colznew <- c('Bangkok' = "black", 'Rural Thailand' = "gray60", 'Cambodia DENV-1' = "forestgreen", 'Cambodia All-DENV-2' = "navy")
-shapeznew <- c('Salje et al. 2017' = 21, "Kampong Speu 2019-2020" = 24)
-colznew <- c('Bangkok' = "black", 'Rural Thailand' = "gray60", 'Cambodia DENV-1' = "forestgreen", 'Cambodia DENV-2' = "navy", 'Salje et al. 2017' = "black", "Kampong Speu 2019-2020" = "red")
+shapeznew <- c('Salje et al. 2017' = 21, "Kampong Speu 2019-2022" = 24)
+colznew <- c('Bangkok' = "black", 'Rural Thailand' = "gray60", 'Cambodia DENV-1' = "forestgreen", 'Cambodia DENV-2' = "navy", 'Salje et al. 2017' = "black", "Kampong Speu 2019-2022" = "red")
 
 #and plot
 pC <- ggplot(data=salje.dat) + 
@@ -803,7 +815,7 @@ pC <- ggplot(data=salje.dat) +
 #put C and D together
 
 
-pEF <-cowplot::plot_grid(pC,pD,nrow=2,ncol=1,labels=c("E", "F"),label_size=22)+
+pEF <-cowplot::plot_grid(pD,pC,nrow=2,ncol=1,labels=c("E", "F"),label_size=22)+
   theme(plot.margin = unit(c(0,0,0,0), "cm"))
 
 
@@ -814,6 +826,14 @@ Fig4 <- cowplot::plot_grid(pAB, pCD, pEF, nrow=1, ncol = 3) + theme(plot.backgro
                           axis.ticks=element_blank(), axis.title.x=element_blank(),axis.title.y=element_blank())
 
 ggsave(file = paste0(homewd, "/final-figures/Fig4.png"),
+       plot= Fig4,
+       units="mm",  
+       width=140, 
+       height=85, 
+       scale=3, 
+       dpi=300)
+
+ggsave(file = paste0(homewd, "/final-figures/Fig4.pdf"),
        plot= Fig4,
        units="mm",  
        width=140, 

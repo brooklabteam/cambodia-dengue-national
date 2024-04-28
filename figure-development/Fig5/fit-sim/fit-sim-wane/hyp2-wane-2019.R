@@ -787,7 +787,7 @@ log.lik.wane.fit.all <- function(par, par.dat, dat){
   par.dat$sigma <- NA
   par.dat$sigma[par.dat$year<min(dat$year)] <- 0
   
-  sigma.df = cbind.data.frame(year=min(dat$year):max(dat$year), sigma=exp(par))
+  sigma.df = cbind.data.frame(year=min(dat$year):max(dat$year), sigma=c(0,exp(par)))
   
   for(i in 1:nrow(sigma.df)){
     par.dat$sigma[par.dat$year==sigma.df$year[i]]<- sigma.df$sigma[i]
@@ -800,7 +800,7 @@ log.lik.wane.fit.all <- function(par, par.dat, dat){
   
   out.mod  <-model.age.incidence.series.wane(par.dat= par.dat, year.start=min(par.dat$year), age_vect=age_vect)
   
-  #ggplot(data=out.mod) + geom_line(aes(x=age,y= cum_prop_cases, color=provname)) + facet_wrap(~year)
+  #ggplot(data=out.mod) + geom_line(aes(x=age,y= cum_prop_cases)) + facet_wrap(~year)
   
   # now, select only the years for fitting for which there are data
   # (the model can produce data back further in time based on the first year FOI from the dataset)
@@ -1067,7 +1067,11 @@ fit.wane.LBFGSB.all.three <- function(dat.all,par.dat, burnin, sigma.guess, fit.
   df.out <- data.table::rbindlist( year.dat.sum)
   #ggplot(df.out) +geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
   
-  out.NS <- optim(par = log(rep(sigma.guess, length((min(df.out$year):max(df.out$year))))), 
+  #seed some values for 2019 and 2020
+  #par.guess = log(rep(sigma.guess, length((min(df.out$year):max(df.out$year)))))
+  #par.guess[(length(par.guess)-1):length(par.guess)] <- rep(log(1/3), 2)
+  
+  out.NS <- optim(par = log(sigma.guess), 
                   fn=log.lik.wane.fit.all, 
                   method = "L-BFGS-B",
                   lower = rep((-16.2), length((min(dat$year):max(dat$year)))), # slowest sigma
@@ -1082,7 +1086,7 @@ fit.wane.LBFGSB.all.three <- function(dat.all,par.dat, burnin, sigma.guess, fit.
   
   #return sigma as its own data table
   
-  sigma.df <-cbind.data.frame(year = ((min(df.out$year):max(df.out$year))), sigma=out.NS$par, dur_immunity = (1/out.NS$par))
+  sigma.df <-cbind.data.frame(year = (((min(df.out$year)+1):max(df.out$year))), sigma=exp(out.NS$par), dur_immunity = (1/exp(out.NS$par)))
   sigma.df$neg_llik=out.NS$value
   sigma.df$convergence = out.NS$convergence
   
@@ -1091,8 +1095,8 @@ fit.wane.LBFGSB.all.three <- function(dat.all,par.dat, burnin, sigma.guess, fit.
     if (is.positive.definite(out.NS$hessian)==TRUE){
       hess <- solve(out.NS$hessian)
       prop_sigma <-sqrt(diag(hess))
-      upper<-out.NS$par+1.96*prop_sigma
-      lower<-out.NS$par-1.96*prop_sigma
+      upper<-exp(out.NS$par+1.96*prop_sigma)
+      lower<-exp(out.NS$par-1.96*prop_sigma)
       CI <-data.frame(lower=lower, upper=upper)
       CI$lower[CI$lower<0] <- 0
       CI$upper[CI$upper<0] <- 0
@@ -1136,14 +1140,15 @@ fit.wane.LBFGSB.all.three <- function(dat.all,par.dat, burnin, sigma.guess, fit.
 
 load("hyp2-fit-lambda-2019.Rdata")
 load("comp-dat-sim.Rdata")
+load("sigma-fit.Rdata")
 
 cam.sim = subset(comp.dat, hyp=="H2: Genotype Replacement\n+ Waning Immunity (2019)")
 
 
 hyp2.fit.wane.2019 <- fit.wane.LBFGSB.all.three(dat.all = cam.sim,
                                            burnin=20,
-                                           par.dat=hyp2.fit.wane.2019,
-                                           sigma.guess = 1/100,
+                                           par.dat=hyp2.fit.lambda.2019,
+                                           sigma.guess = sigma,
                                            sim_type="hyp2_wane_2019", 
                                            fit.CI=T)
 

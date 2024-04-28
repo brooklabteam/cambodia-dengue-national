@@ -211,7 +211,7 @@ ggsave(file = paste0(homewd, "/final-figures/Fig1.png"),
        width=110, 
        height=100, 
        scale=3, 
-       dpi=300)
+       dpi=500)
 
 
 ggsave(file = paste0(homewd, "/final-figures/Fig1.pdf"),
@@ -220,7 +220,7 @@ ggsave(file = paste0(homewd, "/final-figures/Fig1.pdf"),
        width=110, 
        height=100, 
        scale=3, 
-       dpi=300)
+       dpi=500)
 
 #and save
 

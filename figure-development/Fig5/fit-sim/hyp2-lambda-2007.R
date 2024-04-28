@@ -1068,11 +1068,15 @@ fit.wane.LBFGSB.all.three <- function(dat.all,par.dat, burnin, sigma.guess, fit.
   df.out <- data.table::rbindlist( year.dat.sum)
   #ggplot(df.out) +geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
   
-  out.NS <- optim(par = rep(sigma.guess, length((min(df.out$year):max(df.out$year)))), 
+  #seed some values for 2019 and 2020
+  #par.guess = log(rep(sigma.guess, length((min(df.out$year):max(df.out$year)))))
+  #par.guess[(length(par.guess)-1):length(par.guess)] <- rep(log(1/3), 2)
+  
+  out.NS <- optim(par = log(sigma.guess), 
                   fn=log.lik.wane.fit.all, 
                   method = "L-BFGS-B",
-                  lower = 0.0000001, # slowest sigma
-                  upper=1, # fastest sigma - not allowing for waning more rapid than a single year
+                  lower = rep((-16.2), length((min(dat$year):max(dat$year)))), # slowest sigma
+                  upper=rep((-0.69), length((min(dat$year):max(dat$year)))),
                   par.dat=par.dat,
                   dat=df.out,
                   control = list(maxit=1000),
@@ -1083,7 +1087,7 @@ fit.wane.LBFGSB.all.three <- function(dat.all,par.dat, burnin, sigma.guess, fit.
   
   #return sigma as its own data table
   
-  sigma.df <-cbind.data.frame(year = ((min(df.out$year):max(df.out$year))), sigma=out.NS$par, dur_immunity = (1/out.NS$par))
+  sigma.df <-cbind.data.frame(year = (((min(df.out$year)+1):max(df.out$year))), sigma=c(0,exp(out.NS$par)), dur_immunity = (1/exp(out.NS$par)))
   sigma.df$neg_llik=out.NS$value
   sigma.df$convergence = out.NS$convergence
   
@@ -1092,8 +1096,8 @@ fit.wane.LBFGSB.all.three <- function(dat.all,par.dat, burnin, sigma.guess, fit.
     if (is.positive.definite(out.NS$hessian)==TRUE){
       hess <- solve(out.NS$hessian)
       prop_sigma <-sqrt(diag(hess))
-      upper<-out.NS$par+1.96*prop_sigma
-      lower<-out.NS$par-1.96*prop_sigma
+      upper<-exp(out.NS$par+1.96*prop_sigma)
+      lower<-exp(out.NS$par-1.96*prop_sigma)
       CI <-data.frame(lower=lower, upper=upper)
       CI$lower[CI$lower<0] <- 0
       CI$upper[CI$upper<0] <- 0
@@ -1122,6 +1126,7 @@ fit.wane.LBFGSB.all.three <- function(dat.all,par.dat, burnin, sigma.guess, fit.
   return(sigma.df)
   
 }
+
 
 
 #load the foi fits for cambodia

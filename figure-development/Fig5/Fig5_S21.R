@@ -56,7 +56,34 @@ cum.sum.year <- function(df){
   return(df.sum)
 }
 
-#first, make the first colum
+
+#now, choose those that will go in the supplement vs. the main text
+#supplement first
+comp.dat$hyp <- as.character(comp.dat$hyp)
+comp.dat.lci$hyp <- as.character(comp.dat.lci$hyp)
+comp.dat.uci$hyp <- as.character(comp.dat.uci$hyp)
+
+dat.supp = subset(comp.dat, hyp == "H2: Genotype Intro\n+ Normal Immunity (2019)" | hyp == "H3: Genotype Intro + Increasing\nTertiary Case Detection")
+dat.supp.lci = subset(comp.dat.lci, hyp == "H2: Genotype Intro\n+ Normal Immunity (2019)" | hyp == "H3: Genotype Intro + Increasing\nTertiary Case Detection")
+dat.supp.uci = subset(comp.dat.uci, hyp == "H2: Genotype Intro\n+ Normal Immunity (2019)" | hyp == "H3: Genotype Intro + Increasing\nTertiary Case Detection")
+
+comp.dat = subset(comp.dat, hyp != "H2: Genotype Intro\n+ Normal Immunity (2019)" & hyp != "H3: Genotype Intro + Increasing\nTertiary Case Detection")
+comp.dat.lci = subset(comp.dat.lci, hyp != "H2: Genotype Intro\n+ Normal Immunity (2019)" & hyp != "H3: Genotype Intro + Increasing\nTertiary Case Detection")
+comp.dat.uci = subset(comp.dat.uci, hyp != "H2: Genotype Intro\n+ Normal Immunity (2019)" & hyp != "H3: Genotype Intro + Increasing\nTertiary Case Detection")
+
+comp.dat$hyp[comp.dat$hyp=="H4: Genotype Replacement\n+ Waning Immunity (2019)"] <- "H2: Genotype Replacement\n+ Waning Immunity (2019)"
+comp.dat$hyp[comp.dat$hyp=="H4: Genotype Replacement\n+ Waning Immunity (2007)"] <- "H2: Genotype Replacement\n+ Waning Immunity (2007)"
+
+comp.dat.lci$hyp[comp.dat.lci$hyp=="H4: Genotype Replacement\n+ Waning Immunity (2019)"] <- "H2: Genotype Replacement\n+ Waning Immunity (2019)"
+comp.dat.lci$hyp[comp.dat.lci$hyp=="H4: Genotype Replacement\n+ Waning Immunity (2007)"] <- "H2: Genotype Replacement\n+ Waning Immunity (2007)"
+
+comp.dat.uci$hyp[comp.dat.uci$hyp=="H4: Genotype Replacement\n+ Waning Immunity (2019)"] <- "H2: Genotype Replacement\n+ Waning Immunity (2019)"
+comp.dat.uci$hyp[comp.dat.uci$hyp=="H4: Genotype Replacement\n+ Waning Immunity (2007)"] <- "H2: Genotype Replacement\n+ Waning Immunity (2007)"
+
+comp.dat$hyp <- factor(comp.dat$hyp, levels = c("H0: Normal Demographic\nSimulation", "H1: Increasing Tertiary\nCase Detection", "H2: Genotype Replacement\n+ Waning Immunity (2019)", "H2: Genotype Replacement\n+ Waning Immunity (2007)"))
+comp.dat.lci$hyp <- factor(comp.dat.lci$hyp, levels = c("H0: Normal Demographic\nSimulation", "H1: Increasing Tertiary\nCase Detection", "H2: Genotype Replacement\n+ Waning Immunity (2019)", "H2: Genotype Replacement\n+ Waning Immunity (2007)"))
+comp.dat.uci$hyp <- factor(comp.dat.uci$hyp, levels = c("H0: Normal Demographic\nSimulation", "H1: Increasing Tertiary\nCase Detection", "H2: Genotype Replacement\n+ Waning Immunity (2019)", "H2: Genotype Replacement\n+ Waning Immunity (2007)"))
+#first, make the first column
 
 column.1 <- function(dat, dat.lci, dat.uci, year.start){
   dat1 = subset(dat, year >= year.start) 
@@ -89,9 +116,10 @@ column.1 <- function(dat, dat.lci, dat.uci, year.start){
   dat.ts$lci_new <- NA
   dat.ts$uci_new <- NA
   dat.ts$lci_new[dat.ts$lci<dat.ts$uci] <- dat.ts$lci[dat.ts$lci<dat.ts$uci]
+  
   dat.ts$lci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$uci[dat.ts$lci>dat.ts$uci]
   dat.ts$uci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$lci[dat.ts$lci>dat.ts$uci]
-  dat.ts$uci_new[dat.ts$lci<dat.ts$uci] <- dat.ts$uci[dat.ts$lci<dat.ts$uci]
+  #dat.ts$uci_new[dat.ts$lci<dat.ts$uci] <- dat.ts$uci[dat.ts$lci<dat.ts$uci]
   # 
   
   #dat.ts$count_dss <- dat.ts$count*perc_dss
@@ -156,6 +184,8 @@ column.2 <- function (dat, year.start){
   #df.sum$count<-round(df.sum$count,0)
   
   df.sum$count<- round(df.sum$count,0)
+  #df.sum$count<- ceiling(df.sum$count)
+  
   
   
   
@@ -170,6 +200,7 @@ column.2 <- function (dat, year.start){
   
   #split by age and year and state
   df.age.list <- dlply(df.sum,.(hyp, year, age, state))
+  
   
   
   
@@ -269,170 +300,52 @@ ggsave(filename = paste0(homewd, "/final-figures/Fig5.png"),
        scale=3, 
        dpi=300)
 
-#and the supplementary figure (S21)
-##this is for the 2007 simulations - same plot as above
-#just redo the first column to edit the hypothesis names
-#column 1- distribution of serotypes
-column.1.2007 <- function(dat, year.start,perc.obs){
-  #and get total by time
+ggsave(filename = paste0(homewd, "/final-figures/Fig5.pdf"),
+       plot = Fig5,
+       units="mm",  
+       width=110, 
+       height=80, 
+       scale=3, 
+       dpi=300)
+
+# and the supplementary figure (S21) just includes those simulations that did not make the main text cut
+# same as plot above
+dat.supp$hyp[dat.supp$hyp=="H2: Genotype Intro\n+ Normal Immunity (2019)"] <- "H3: Genotype Intro (2019)\n+ Normal Immunity"
+dat.supp$hyp[dat.supp$hyp=="H3: Genotype Intro + Increasing\nTertiary Case Detection"] <- "H4: Genotype Intro (2019)\n+ Increasing Tertiary Case Detection"
+
+dat.supp.lci$hyp[dat.supp.lci$hyp=="H2: Genotype Intro\n+ Normal Immunity (2019)"] <- "H3: Genotype Intro (2019)\n+ Normal Immunity"
+dat.supp.lci$hyp[dat.supp.lci$hyp=="H3: Genotype Intro + Increasing\nTertiary Case Detection"] <- "H4: Genotype Intro (2019)\n+ Increasing Tertiary Case Detection"
+
+dat.supp.uci$hyp[dat.supp.uci$hyp=="H2: Genotype Intro\n+ Normal Immunity (2019)"] <- "H3: Genotype Intro (2019)\n+ Normal Immunity"
+dat.supp.uci$hyp[dat.supp.uci$hyp=="H3: Genotype Intro + Increasing\nTertiary Case Detection"] <- "H4: Genotype Intro (2019)\n+ Increasing Tertiary Case Detection"
+
+
+column.1.supp <- function(dat, dat.lci, dat.uci, year.start){
   dat1 = subset(dat, year >= year.start) 
-  denv.case = subset(dat1, class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
-  
-  denv.case.tert = subset(dat1, hyp==2|hyp==3)
-  denv.case.tert.4 =subset(dat1,hyp==4)
-  
-  denv.case.tert = subset(denv.case.tert, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-  #and take 10% of these
-  denv.case.tert$count <- denv.case.tert$count*perc.obs
-  
-  denv.case.tert.4 = subset(denv.case.tert.4, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-  #and take increasing proportion of those through time
-  df.perc <- cbind.data.frame(year=unique(denv.case.tert.4$year), perc_obs=seq(0,1, length.out = length(unique(denv.case.tert.4$year))))
-  denv.case.tert.4 <- merge(denv.case.tert.4, df.perc, by="year")
-  denv.case.tert.4$count <- denv.case.tert.4$count*denv.case.tert.4$perc_obs
-  denv.case.tert.4 <- dplyr::select(denv.case.tert.4, -(perc_obs))
-  
-  denv.case <- rbind(denv.case, denv.case.tert, denv.case.tert.4)
-  
-  denv.case$serotype <- NA
-  denv.case$serotype[denv.case$class=="I12" | denv.case$class=="I32"| denv.case$class=="I132" | denv.case$class=="I312"] <- "I2"
-  denv.case$serotype[denv.case$class=="I13" | denv.case$class=="I23" | denv.case$class=="I123" | denv.case$class=="I213"] <- "I3"
-  denv.case$serotype[denv.case$class=="I31" | denv.case$class=="I21"| denv.case$class=="I231" | denv.case$class=="I321"] <- "I1"
-  
-  denv.case$keep <- 1
-  denv.case$keep[denv.case$hyp==0 & denv.case$serotype=="I3" | denv.case$hyp==1 & denv.case$serotype=="I3" ] <- 0
-  denv.case = subset(denv.case, keep==1)
-  
-  #dat.ts <- ddply(denv.case, .(time, class), summarise, count=sum(count))
-  dat.ser <- ddply(denv.case, .(hyp, time, serotype), summarise, count=sum(count))
-  
-  
-  dat.N  <- ddply(denv.case, .(hyp, time), summarise, Ntot=sum(count))
-  
-  #dat.ts <- merge(dat.ts, dat.N, by="time")
-  dat.ser <- merge(dat.ser, dat.N, by=c("hyp", "time"))
-  
-  #dat.ts$proportion <- dat.ts$count/dat.ts$Ntot
-  dat.ser$proportion <- dat.ser$count/dat.ser$Ntot
-  #dat.ts$proportion[is.na(dat.ts$proportion)] <- 0
-  dat.ser$proportion[is.na(dat.ser$proportion)] <- 0
-  dat.ser$label <- NA
-  #dat.ser$label[dat.ser$hyp==0] <- "H0: normal\ndemographic\nsimulation"
-  dat.ser$label[dat.ser$hyp==1] <- "H1: high\n2007 FOI"
-  dat.ser$label[dat.ser$hyp==2] <- "H2: 2007 strain\nintro + replacement\n+immune waning"
-  dat.ser$label[dat.ser$hyp==3] <- "H3: 2007 serotype\nintro + maintenance +\ntertiary case detection"
-  #dat.ser$label[dat.ser$hyp==4] <- "H4: 3 endemic serotypes\n+increasing tertiary case\ndetection with time"
-  
-  
-  dat.ser$serotype_label <- NA
-  dat.ser$serotype_label[dat.ser$serotype=="I1"] <- "serotype-1/strain-type 1"
-  dat.ser$serotype_label[dat.ser$serotype=="I2"] <- "serotype-2"
-  dat.ser$serotype_label[dat.ser$serotype=="I3" & dat.ser$hyp==2] <- "serotype-1/strain-type 2"
-  dat.ser$serotype_label[dat.ser$serotype=="I3" & dat.ser$hyp==3 |dat.ser$serotype=="I3" & dat.ser$hyp==4] <- "serotype-3"
-  dat.ser$label <- factor(dat.ser$label, levels = c(unique(dat.ser$label)))
-  
-  #and plot
-  dat.ser$plot_type <- "proportion of cases\nby serotype/strain-type"
-  
-  p1 <- ggplot(dat.ser) + theme_bw() +
-    geom_line(aes(x=time, y=proportion, color=serotype_label),  size=1, position = position_jitter(height = .03)) +
-    facet_grid(label~plot_type, switch = "y") + 
-    theme(panel.grid = element_blank(), axis.title = element_blank(), 
-          legend.position = c(.35,.93), legend.title = element_blank(),
-          legend.key.height =  unit(c(.2), "cm"), strip.placement = "outside",#axis.title.y = element_text(size=12), 
-          axis.text = element_text(size=12),
-          plot.margin = unit(c(.2,.1,.2,.1), "cm"), 
-          strip.background = element_rect(fill="white"), strip.text =element_text(size=12)) +
-    #coord_cartesian(ylim=c(0,1), xlim=c(2015,2020)) + scale_y_continuous(breaks = c(0,.5,1)) +
-    #scale_x_continuous(breaks=c(2016,2018, 2020)) 
-    coord_cartesian(ylim=c(0,1), xlim=c(year.start,2020)) + scale_y_continuous(breaks = c(0,.5,1)) +
-    scale_x_continuous(breaks=c(2000,2005,2010,2015, 2020)) 
-  
-  
-  return(p1)
-}
-column.2.2007 <- function(dat, dat.lci, dat.uci, year.start, perc.obs){
-  dat1 = subset(dat, year >= year.start) 
-  denv.case = subset(dat1, class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
-  
-  denv.case.tert = subset(dat1, hyp==2|hyp==3)
-  #denv.case.tert.4 =subset(dat1,hyp==4)
-  
-  denv.case.tert = subset(denv.case.tert, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-  #and take 10% of these
-  denv.case.tert$count <- denv.case.tert$count*perc.obs
-  
-  # denv.case.tert.4 = subset(denv.case.tert.4, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-  # #and take increasing proportion of those through time
-  # df.perc <- cbind.data.frame(year=unique(denv.case.tert.4$year), perc_obs=seq(0,1, length.out = length(unique(denv.case.tert.4$year))))
-  # denv.case.tert.4 <- merge(denv.case.tert.4, df.perc, by="year")
-  # denv.case.tert.4$count <- denv.case.tert.4$count*denv.case.tert.4$perc_obs
-  # denv.case.tert.4 <- dplyr::select(denv.case.tert.4, -(perc_obs))
-  # 
-  denv.case <- rbind(denv.case, denv.case.tert)#, denv.case.tert.4)
-  
-  
-  
-  #and lci
   dat1.lci = subset(dat.lci, year >= year.start) 
-  denv.case.lci = subset(dat1.lci, class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
-  
-  denv.case.tert.lci = subset(dat1.lci, hyp==2|hyp==3)
-  #denv.case.tert.4.lci =subset(dat1.lci,hyp==4)
-  
-  denv.case.tert.lci = subset(denv.case.tert.lci, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-  #and take 10% of these
-  denv.case.tert.lci$count <- denv.case.tert.lci$count*perc.obs
-  
-  #denv.case.tert.4.lci = subset(denv.case.tert.4.lci, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-  #and take increasing proportion of those through time
-  #df.perc.lci <- cbind.data.frame(year=unique(denv.case.tert.4.lci$year), perc_obs=seq(0,1, length.out = length(unique(denv.case.tert.4$year))))
-  #denv.case.tert.4.lci <- merge(denv.case.tert.4.lci, df.perc.lci, by="year")
- # denv.case.tert.4.lci$count <- denv.case.tert.4.lci$count*denv.case.tert.4.lci$perc_obs
- # denv.case.tert.4.lci <- dplyr::select(denv.case.tert.4.lci, -(perc_obs))
-  
-  denv.case.lci <- rbind(denv.case.lci, denv.case.tert.lci)#, denv.case.tert.4.lci)
-  
-  
-  
-  
-  #and uci
   dat1.uci = subset(dat.uci, year >= year.start) 
-  denv.case.uci = subset(dat1.uci, class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
   
-  denv.case.tert.uci = subset(dat1.uci, hyp==2|hyp==3)
-  #denv.case.tert.4.uci =subset(dat1.uci,hyp==4)
-  
-  denv.case.tert.uci = subset(denv.case.tert.uci, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-  #and take 10% of these
-  denv.case.tert.uci$count <- denv.case.tert.uci$count*perc.obs
-  
-  #denv.case.tert.4.uci = subset(denv.case.tert.4.uci, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-  #and take increasing proportion of those through time
-  # df.perc.uci <- cbind.data.frame(year=unique(denv.case.tert.4.uci$year), perc_obs=seq(0,1, length.out = length(unique(denv.case.tert.4$year))))
-  # denv.case.tert.4.uci <- merge(denv.case.tert.4.uci, df.perc.uci, by="year")
-  # denv.case.tert.4.uci$count <- denv.case.tert.4.uci$count*denv.case.tert.4.uci$perc_obs
-  # denv.case.tert.4.uci <- dplyr::select(denv.case.tert.4.uci, -(perc_obs))
-  # 
-  denv.case.uci <- rbind(denv.case.uci, denv.case.tert.uci)#, denv.case.tert.4.uci)
+  denv.case = subset(dat1, case_type == "symptomatic")
+  denv.case.lci = subset(dat1.lci, case_type == "symptomatic")
+  denv.case.uci = subset(dat1.uci, case_type == "symptomatic")
   
   
   #dat.ts <- ddply(denv.case, .(year, time), summarise, count=sum(count))
   dat.ts <- ddply(denv.case, .(hyp, year), summarise, count=sum(count))
-  dat.ts.lci <- ddply(denv.case.lci, .(hyp, year), summarise, count=sum(count))
+  dat.ts.lci <- ddply(denv.case.lci, .(hyp,year), summarise, count=sum(count))
   dat.ts.uci <- ddply(denv.case.uci, .(hyp, year), summarise, count=sum(count))
-  dat.ts$hyp <- factor(dat.ts$hyp)
+  #dat.ts$hyp <- factor(dat.ts$hyp)
   dat.ts$plot_type <- "total reported cases\nfrom deterministic simulation"
-  dat.ts.lci$hyp <- factor(dat.ts.lci$hyp)
+  # dat.ts.lci$hyp <- factor(dat.ts.lci$hyp)
   dat.ts.lci$plot_type <- "total reported cases\nfrom deterministic simulation"
-  dat.ts.uci$hyp <- factor(dat.ts.uci$hyp)
+  # dat.ts.uci$hyp <- factor(dat.ts.uci$hyp)
   dat.ts.uci$plot_type <- "total reported cases\nfrom deterministic simulation"
-  
+  # 
   dat.ts.lci.merge <- dplyr::select(dat.ts.lci, hyp, year, count)
   dat.ts.uci.merge <- dplyr::select(dat.ts.uci, hyp, year, count)
   names(dat.ts.lci.merge)[3] <- "lci"
   names(dat.ts.uci.merge)[3] <- "uci"
-  
+  # 
   dat.ts <- merge(dat.ts, dat.ts.lci.merge, by =c("hyp", "year"))
   dat.ts <- merge(dat.ts, dat.ts.uci.merge, by =c("hyp", "year"))
   dat.ts$lci_new <- NA
@@ -441,103 +354,103 @@ column.2.2007 <- function(dat, dat.lci, dat.uci, year.start, perc.obs){
   dat.ts$lci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$uci[dat.ts$lci>dat.ts$uci]
   dat.ts$uci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$lci[dat.ts$lci>dat.ts$uci]
   dat.ts$uci_new[dat.ts$lci<dat.ts$uci] <- dat.ts$uci[dat.ts$lci<dat.ts$uci]
+  # 
   
+  #dat.ts$count_dss <- dat.ts$count*perc_dss
+  #dat.ts$count_mort <- dat.ts$count_dss*perc_mort #some fraction of dss cases is the total mortality
   
-  
-  p1 <- ggplot(dat.ts) + theme_bw() + facet_grid(hyp~plot_type) +
+  p1 <- ggplot(dat.ts) + theme_bw() + facet_grid(hyp~plot_type, switch = "y") +
     #geom_vline(aes(xintercept=2012), linetype=2)+
     #geom_vline(aes(xintercept=2019), linetype=2) +
     geom_ribbon(aes(x=year, ymin=lci_new, ymax=uci_new),alpha=.3) +
     geom_line(aes(x=year, y=count), size=.3) + 
+    #geom_line(aes(x=year, y=count_dss), size=.3, color="navy") + 
+    #geom_line(aes(x=year, y=count_mort), size=.3, color="green") + 
     theme(panel.grid = element_blank(), 
-          strip.background.y  = element_blank(),
+          strip.background.y  = element_rect(fill="white"),
           strip.background.x  = element_rect(fill="white"),
           axis.title = element_blank(), 
           plot.margin = unit(c(.2,.1,.2,.1), "cm"), 
           axis.text = element_text(size=12),
+          strip.placement = "outside",
           strip.text.x.top  = element_text(size=12),
-          strip.text.y = element_blank()) +
-    #      coord_cartesian(xlim=c(2015,2020), ylim=c(0,13000)) + #scale_y_log10() +
-    scale_y_continuous(breaks=c(2500,7500,12500)) +
-    scale_x_continuous(breaks=c(2000,2005,2010,2015, 2020)) 
+          strip.text.y.left  = element_text(size=12)) +
+          coord_cartesian( ylim=c(0,100000)) + #scale_y_log10() +
+    #scale_y_continuous(breaks=c(2500,7500,12500)) +
+    scale_x_continuous(breaks=c(2000,2005,2010,2015, 2020)) +
+    geom_vline(aes(xintercept=2007), linetype=2, color="red") +
+    geom_vline(aes(xintercept=2012), linetype=2, color="red") +
+    geom_vline(aes(xintercept=2019), linetype=2, color="red")
+  
   #scale_x_continuous(breaks=c(2016,2018, 2020)) 
   
   return(p1)
 }
-column.3.2007 <- function (dat, year.start,perc.obs){
+column.2.supp <- function (dat, year.start){
   
   dat1 = subset(dat, year >= year.start) 
-  denv.case = subset(dat1, class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
   
-  denv.case.tert = subset(dat1, hyp==2|hyp==3)
-  #denv.case.tert.4 =subset(dat1,hyp==4)
-  
-  denv.case.tert = subset(denv.case.tert, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-  #and take 10% of these
-  denv.case.tert$count <- denv.case.tert$count*perc.obs
-  
-  # denv.case.tert.4 = subset(denv.case.tert.4, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-  # #and take increasing proportion of those through time
-  # df.perc <- cbind.data.frame(year=unique(denv.case.tert.4$year), perc_obs=seq(0,1, length.out = length(unique(denv.case.tert.4$year))))
-  # denv.case.tert.4 <- merge(denv.case.tert.4, df.perc, by="year")
-  # denv.case.tert.4$count <- denv.case.tert.4$count*denv.case.tert.4$perc_obs
-  # denv.case.tert.4 <- dplyr::select(denv.case.tert.4, -(perc_obs))
-  # 
-  # 
-  denv.case$round <- "secondary"
-  denv.case.tert$round <- "tertiary"
-  #denv.case.tert.4$round <- "tertiary"
+  denv.case = subset(dat1, case_type == "symptomatic")
   
   
-  denv.case <- rbind(denv.case, denv.case.tert)#, denv.case.tert.4)
   
-  denv.case$round <- factor(denv.case$round, levels=c("secondary", "tertiary"))
+  
+  #denv.case$round <- factor(denv.case$round, levels=c("secondary", "tertiary"))
   #subset(dat1,  class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
   
   if(length(unique(denv.case$age))>1){
     denv.case = subset(denv.case, age<max(denv.case$age))  
   }
-  #denv.case$year <- trunc(denv.case$time)
+  # #denv.case$year <- trunc(denv.case$time)
   
   #first, split by year
   #then, make a "case" out of each
   #dat.split <- dlply(denv.case,.(year))
   
-  df.sum = ddply(denv.case,.(hyp,round, year,age),summarise, count=sum(count))
+  df.sum = ddply(denv.case,.(hyp, year,age, state),summarise, count=sum(count))  
+  
+  
   
   
   #and build out
   #df.sum$count<-round(df.sum$count,0)
   
   df.sum$count<- round(df.sum$count,0)
+  #df.sum$count<- ceiling(df.sum$count)
   
   
   
   
-  #split by a year
-  df.year <- dlply(df.sum,.(hyp, year))
+  
+  
+  df.year.only <- dlply(df.sum,.(hyp, year))
   
   #get mean age
-  mean.df <- data.table::rbindlist(lapply(df.year, mean.age))
+  mean.df <- data.table::rbindlist(lapply(df.year.only, mean.age))
   mean.df$mean_age[is.na(mean.df$mean_age)] <- 0
   
   
-  #split by age and year
-  df.age <- dlply(df.sum,.(hyp,round, year, age))
+  #split by age and year and state
+  df.age.list <- dlply(df.sum,.(hyp, year, age, state))
   
   
   
   
-  dat.age <- data.table::rbindlist(lapply(df.age, replicate.data, slim.quant=1))
   
+  dat.age <- data.table::rbindlist(lapply(df.age.list, replicate.data.type, slim.quant=1))
+  dat.age$state[dat.age$state!="Secondary-Infection"] <- "alternative"
+  dat.age$state[dat.age$state=="Secondary-Infection"] <- "secondary"
   dat.age$plot_type <- "age distribution of\nreported cases by year"
+  #dat.age$hyp = unique(dat.age$hyp)
+  
   #then, evenly slim the dataset to 10% of its current values, evenly by age and year
   
-  colz = c('secondary'="black", "tertiary"="royalblue3")
+  
+  colz = c('secondary'="black", "alternative"="royalblue3")
   #and plot
-  p1 <- ggplot(dat.age) + facet_grid(hyp~plot_type, scales = "free_y") + theme_bw()+
-    geom_jitter(aes(x=year, y=age, color=round), width=.09, height=.09, size=.09, alpha=.5, show.legend = F) +
-    scale_color_manual(values=colz) +
+  p1 <- ggplot(dat.age) + facet_grid(hyp~plot_type) + theme_bw()+
+    geom_jitter(aes(x=year, y=age, color=state), width=.09, height=.09, size=.09, alpha=.5, show.legend = F) +
+    scale_color_manual(values=colz) + coord_cartesian(ylim=c(0,100)) +
     geom_violin(aes(x=year,y=age, group=year),  color="gray55", draw_quantiles = c(0,.25,.5,.75), show.legend=F, fill=NA)+
     geom_line(data=mean.df, aes(x=year, y=mean_age), color="tomato", size=.8) +
     theme(panel.grid = element_blank(), 
@@ -554,26 +467,14 @@ column.3.2007 <- function (dat, year.start,perc.obs){
   return(p1)
   
 }
-column.4.2007 <- function(dat, year.start,perc.obs){
+column.3.supp <- function(dat, year.start){
   
   dat1 = subset(dat, year >= year.start) 
-  denv.case = subset(dat1, class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
   
-  denv.case.tert = subset(dat1, hyp==2|hyp==3)
-  #denv.case.tert.4 =subset(dat1,hyp==4)
+  denv.case = subset(dat1, case_type == "symptomatic")
   
-  denv.case.tert = subset(denv.case.tert, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-  #and take 10% of these
-  denv.case.tert$count <- denv.case.tert$count*perc.obs
   
-  # denv.case.tert.4 = subset(denv.case.tert.4, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-  # #and take increasing proportion of those through time
-  # df.perc <- cbind.data.frame(year=unique(denv.case.tert.4$year), perc_obs=seq(0,1, length.out = length(unique(denv.case.tert.4$year))))
-  # denv.case.tert.4 <- merge(denv.case.tert.4, df.perc, by="year")
-  # denv.case.tert.4$count <- denv.case.tert.4$count*denv.case.tert.4$perc_obs
-  # denv.case.tert.4 <- dplyr::select(denv.case.tert.4, -(perc_obs))
-  # 
-  denv.case <- rbind(denv.case, denv.case.tert)#, denv.case.tert.4)
+  
   
   
   if(length(unique(denv.case$age))>1){
@@ -603,7 +504,7 @@ column.4.2007 <- function(dat, year.start,perc.obs){
           legend.title = element_blank(),
           axis.title = element_blank(), 
           legend.key.size = unit(c(.4), "cm"), 
-          legend.position = c(.6,.82),
+          legend.position = c(.6,.8),
           legend.text = element_text(size=10),
           #axis.title.y = element_text(size=12), 
           axis.text = element_text(size=10),
@@ -615,349 +516,22 @@ column.4.2007 <- function(dat, year.start,perc.obs){
   
 }
 
-
-col1Supp <- column.1.2007(dat=cam.2007, year.start = 2000, perc.obs=.1)
-col2Supp <- column.2.2007(dat=cam.2007, dat.lci=cam.lci.2007, dat.uci=cam.uci.2007, year.start = 2000, perc.obs = .1)
-col3Supp <- column.3.2007(dat=cam.2007, year.start = 2000, perc.obs = .1)
-col4Supp <- column.4.2007(dat=cam.2007, year.start = 2000, perc.obs = .1)
+col1Supp <- column.1.supp(dat=dat.supp, dat.lci = dat.supp.lci, dat.uci = dat.supp.uci, year.start = 2002)
+col2Supp <- column.2.supp(dat=dat.supp,  year.start = 2002)
+col3Supp <- column.3.supp(dat=dat.supp, year.start = 2002)
 
 
 
 
-FigS21 <- cowplot::plot_grid(col1Supp, col2Supp, col3Supp, col4Supp, nrow = 1, ncol=4, labels=c("A", "B", "C", "D"),rel_widths = c(1.15,1.05,1,1),  label_size = 22, align = "hv", label_x = c(0,0,-.03,0))
+FigS21 <- cowplot::plot_grid(col1Supp, col2Supp, col3Supp,  nrow = 1, ncol=3, labels=c("A", "B", "C"),rel_widths = c(1.15,1.05,1),  label_size = 22, align = "hv", label_x = c(0,0,-.03))
 
 ggsave(filename = paste0(homewd, "/final-figures/FigS21.png"),
        plot = FigS21,
        units="mm",  
-       width=125, 
-       height=50, 
+       width=110, 
+       height=55, 
        scale=3, 
        dpi=300)
 
 
 
-plot.age.dist(df = age.out, criteria = "Secondary+Reinfection", slim.quant = 0.05, view.plot = T, save.plot = F, filename = F)
-plot.age.dist(df = age.out, criteria = "Secondary+Reinfection+ReSecondary", slim.quant = 0.05, view.plot = T, save.plot = F, filename = F)
-plot.age.dist(df = age.out, criteria = "Secondary+Secondary-Reinfection", slim.quant = 0.05, view.plot = T, save.plot = F, filename = F)
-plot.age.dist(df = age.out, criteria = "Secondary-Only", slim.quant = 0.05, view.plot = T, save.plot = F, filename = F)
-
-plot.age.dist(df = age.out.2019, criteria = "Secondary+Reinfection", slim.quant = 0.05, view.plot = T, save.plot = F, filename = F)
-plot.age.dist(df = age.out.2019, criteria = "Secondary+Reinfection+ReSecondary", slim.quant = 0.05, view.plot = T, save.plot = F, filename = F)
-plot.age.dist(df = age.out.2019, criteria = "Secondary+Secondary-Reinfection", slim.quant = 0.05, view.plot = T, save.plot = F, filename = F)
-plot.age.dist(df = age.out.2019, criteria = "Secondary-Only", slim.quant = 0.05, view.plot = T, save.plot = F, filename = F)
-
-
-#Secondary + Secondary Reinfection the best
-
-#and what if mortality is less in repeats within a serotype?
-plot.mort.age <- function(df, criteria, cfr_secondary, cfr_repeat, slim.quant, view.plot, save.plot, filename){
-  
-  #first, select what you want.
-  if(criteria=="Secondary+Reinfection"){
-    df1 = subset(df, state =="Secondary-Infection" | state=="Primary-Re-Infection" | state=="Secondary-Re-Infection" | state=="Tertiary-Re-Infection")
-    df1$state[df1$state!="Secondary-Infection"] <- "Repeat-Infection"
-  }else if(criteria=="Secondary+Reinfection+ReSecondary"){
-    df1 = subset(df, state =="Secondary-Infection" | state=="Primary-Re-Infection" | state=="Secondary-Re-Infection" | state=="Tertiary-Re-Infection" | state == "Secondary-Infection-After-Reinfection")
-    df1$state[df1$state!="Secondary-Infection"] <- "Repeat-Infection"
-  }else if(criteria == "Secondary-Only"){
-    df1 = subset(df, state =="Secondary-Infection")
-    df1$state[df1$state!="Secondary-Infection"] <- "Repeat-Infection"
-  }else if (criteria=="Secondary+Secondary-Reinfection"){
-    df1 = subset(df, state =="Secondary-Infection" | state=="Secondary-Re-Infection")
-    df1$state[df1$state!="Secondary-Infection"] <- "Repeat-Infection"
-    
-  }
-  
-  
-  #then, sum by year
-  df1 <- ddply(df1,.(year, age, state), summarise, count = sum(count))
-  df1$cfr <- NA
-  df1$cfr[df1$state=="Secondary-Infection"] <- cfr_secondary
-  df1$cfr[df1$state=="Repeat-Infection"] <- cfr_repeat
-  
-  #and just get annual total mortality by age
-  
-  df1$mort <- ceiling(df1$count*df1$cfr)
-  
-  df.sum <- ddply(df1,.(year, age), summarise, mort = sum(mort))
-  df.sum$state <- "deaths"
-  
-  #split by a year
-  df.year <- dlply(df.sum,.(year, state))
-  
-  # #get mean age
-  # mean.df <- data.table::rbindlist(lapply(df.year, mean.age))
-  # mean.df$mean_age[is.na(mean.df$mean_age)] <- 0
-  # 
-  
-  #split by age and year and type
-  df.age <- dlply(df.sum,.(state, year, age))
-  
-  
-  
-  
-  dat.age <- data.table::rbindlist(lapply(df.age, replicate.data.type.mort, slim.quant=slim.quant))
-  
-  #dat.age$state <- factor(dat.age$state, levels = c("Primary-Infection", "Secondary-Infection", "Tertiary-Infection", "Quaternary-Infection"))
-  #mean.df$state <- factor(mean.df$state, levels = c("Primary-Infection", "Secondary-Infection", "Tertiary-Infection", "Quaternary-Infection"))
-  #then, evenly slim the dataset to 10% of its current values, evenly by age and year
-  #colz = c("secondary"="black", "tertiary"="royalblue3")
-  
-  p1 <- ggplot(dat.age) + facet_grid(~state) +
-    geom_jitter(aes(x=year, y=age, color=state), width=.09, height=.09, size=.09, alpha=.5, show.legend = F) +
-    geom_violin(aes(x=year,y=age, group=year), color="gray60",  draw_quantiles = c(0,.25,.5,.75), show.legend=F, fill=NA)+
-    #geom_line(data=mean.df, aes(x=year, y=mean_age), color="tomato") + #scale_color_manual(values=colz) +
-    coord_cartesian(ylim=c(0,80))#,xlim=c(2015,2020))
-  
-  
-  if(save.plot==TRUE){
-    ggsave(file = filename,
-           plot= p1,
-           units="mm",  
-           width=100, 
-           height=55, 
-           scale=3, 
-           dpi=300)
-    
-  }
-  if(view.plot==TRUE){
-    print(p1)
-  }
-  
-  
-  
-  #return(mean.df)
-}
-plot.mort.total <- function(df, criteria, cfr_secondary, cfr_repeat, slim.quant, view.plot, save.plot, filename){
-  
-  #first, select what you want.
-  if(criteria=="Secondary+Reinfection"){
-    df1 = subset(df, state =="Secondary-Infection" | state=="Primary-Re-Infection" | state=="Secondary-Re-Infection" | state=="Tertiary-Re-Infection")
-    df1$state[df1$state!="Secondary-Infection"] <- "Repeat-Infection"
-  }else if(criteria=="Secondary+Reinfection+ReSecondary"){
-    df1 = subset(df, state =="Secondary-Infection" | state=="Primary-Re-Infection" | state=="Secondary-Re-Infection" | state=="Tertiary-Re-Infection" | state == "Secondary-Infection-After-Reinfection")
-    df1$state[df1$state!="Secondary-Infection"] <- "Repeat-Infection"
-  }else if(criteria == "Secondary-Only"){
-    df1 = subset(df, state =="Secondary-Infection")
-    df1$state[df1$state!="Secondary-Infection"] <- "Repeat-Infection"
-  }else if (criteria=="Secondary+Secondary-Reinfection"){
-    df1 = subset(df, state =="Secondary-Infection" | state=="Secondary-Re-Infection")
-    df1$state[df1$state!="Secondary-Infection"] <- "Repeat-Infection"
-    
-  }
-  
-  
-  #then, sum by year
-  df1 <- ddply(df1,.(year, age, state), summarise, count = sum(count))
-  df1$cfr <- NA
-  df1$cfr[df1$state=="Secondary-Infection"] <- cfr_secondary
-  df1$cfr[df1$state=="Repeat-Infection"] <- cfr_repeat
-  
-  #and just get annual total mortality by age
-  
-  df1$mort <- ceiling(df1$count*df1$cfr)
-  
-  df.sum <- ddply(df1,.(year), summarise, mort = sum(mort))
-  df.sum$state <- "deaths"
-  # 
-  # #split by a year
-  # df.year <- dlply(df.sum,.(year, state))
-  # 
-  # # #get mean age
-  # # mean.df <- data.table::rbindlist(lapply(df.year, mean.age))
-  # # mean.df$mean_age[is.na(mean.df$mean_age)] <- 0
-  # # 
-  # 
-  # #split by age and year and type
-  # df.age <- dlply(df.sum,.(state, year, age))
-  # 
-  # 
-  # 
-  # 
-  # dat.age <- data.table::rbindlist(lapply(df.age, replicate.data.type.mort, slim.quant=slim.quant))
-  # 
-  #dat.age$state <- factor(dat.age$state, levels = c("Primary-Infection", "Secondary-Infection", "Tertiary-Infection", "Quaternary-Infection"))
-  #mean.df$state <- factor(mean.df$state, levels = c("Primary-Infection", "Secondary-Infection", "Tertiary-Infection", "Quaternary-Infection"))
-  #then, evenly slim the dataset to 10% of its current values, evenly by age and year
-  #colz = c("secondary"="black", "tertiary"="royalblue3")
-  
-  p1 <- ggplot(df.sum) + facet_grid(~state) +
-    geom_line(aes(x=year, y=mort)) #+
-  #geom_violin(aes(x=year,y=age, group=year), color="gray60",  draw_quantiles = c(0,.25,.5,.75), show.legend=F, fill=NA)+
-  #geom_line(data=mean.df, aes(x=year, y=mean_age), color="tomato") + #scale_color_manual(values=colz) +
-  #coord_cartesian(ylim=c(0,80))#,xlim=c(2015,2020))
-  
-  
-  if(save.plot==TRUE){
-    ggsave(file = filename,
-           plot= p1,
-           units="mm",  
-           width=100, 
-           height=55, 
-           scale=3, 
-           dpi=300)
-    
-  }
-  if(view.plot==TRUE){
-    print(p1)
-  }
-  
-  
-  
-  #return(mean.df)
-}
-
-plot.mort.age(df = age.out.2019, criteria = "Secondary+Reinfection", cfr_secondary = 0.05,cfr_repeat = 0.01, slim.quant = 0.05, view.plot = T, save.plot = F, filename = F)
-plot.mort.age(df = age.out, criteria = "Secondary+Reinfection", cfr_secondary = 0.05,cfr_repeat = 0.00001, slim.quant = 0.05, view.plot = T, save.plot = F, filename = F)
-plot.mort.total(df = age.out.2019, criteria = "Secondary+Reinfection", cfr_secondary = 0.05,cfr_repeat = 0.00001, slim.quant = 0.05, view.plot = T, save.plot = F, filename = F)
-plot.mort.total(df = age.out, criteria = "Secondary+Secondary-Reinfection", cfr_secondary = 0.1,cfr_repeat = 0, slim.quant = 0.05, view.plot = T, save.plot = F, filename = F)
-
-#and plot cases
-plot.age.dist <- function(df, criteria, slim.quant, view.plot, save.plot, filename){
-  
-  #first, select what you want.
-  if(criteria=="Secondary+Reinfection"){
-    df1 = subset(df, state =="Secondary-Infection" | state=="Primary-Re-Infection" | state=="Secondary-Re-Infection" | state=="Tertiary-Re-Infection")
-    
-  }else if(criteria=="Secondary+Reinfection+ReSecondary"){
-    df1 = subset(df, state =="Secondary-Infection" | state=="Primary-Re-Infection" | state=="Secondary-Re-Infection" | state=="Tertiary-Re-Infection" | state == "Secondary-Infection-After-Reinfection")
-    
-  }else if(criteria == "Secondary-Only"){
-    df1 = subset(df, state =="Secondary-Infection")
-  }else if (criteria=="Secondary+Secondary-Reinfection"){
-    df1 = subset(df, state =="Secondary-Infection" | state=="Secondary-Re-Infection")
-    
-  }
-  
-  #then, sum by year
-  df1 <- ddply(df1,.(year, age), summarise, count = sum(count))
-  df1$state = "Apparent-Infection"
-  
-  #split by a year
-  df.year <- dlply(df1,.(year, state))
-  
-  #get mean age
-  mean.df <- data.table::rbindlist(lapply(df.year, mean.age))
-  mean.df$mean_age[is.na(mean.df$mean_age)] <- 0
-  
-  
-  #split by age and year and type
-  df.age <- dlply(df1,.(state, year, age))
-  
-  
-  
-  
-  dat.age <- data.table::rbindlist(lapply(df.age, replicate.data.type, slim.quant=slim.quant))
-  
-  #dat.age$state <- factor(dat.age$state, levels = c("Primary-Infection", "Secondary-Infection", "Tertiary-Infection", "Quaternary-Infection"))
-  #mean.df$state <- factor(mean.df$state, levels = c("Primary-Infection", "Secondary-Infection", "Tertiary-Infection", "Quaternary-Infection"))
-  #then, evenly slim the dataset to 10% of its current values, evenly by age and year
-  #colz = c("secondary"="black", "tertiary"="royalblue3")
-  
-  p1 <- ggplot(dat.age) + facet_grid(~state) +
-    geom_jitter(aes(x=year, y=age, color=state), width=.09, height=.09, size=.09, alpha=.5, show.legend = F) +
-    geom_violin(aes(x=year,y=age, group=year), color="gray60",  draw_quantiles = c(0,.25,.5,.75), show.legend=F, fill=NA)+
-    geom_line(data=mean.df, aes(x=year, y=mean_age), color="tomato") + #scale_color_manual(values=colz) +
-    geom_hline(aes(yintercept=1), color="red") + coord_cartesian(ylim=c(0,80))#,xlim=c(2015,2020))
-  
-  
-  if(save.plot==TRUE){
-    ggsave(file = filename,
-           plot= p1,
-           units="mm",  
-           width=100, 
-           height=55, 
-           scale=3, 
-           dpi=300)
-    
-  }
-  if(view.plot==TRUE){
-    print(p1)
-  }
-  
-  
-  
-  return(mean.df)
-}
-
-#this is the mortality one: we are going to leave it out and just discuss in the discussion
-column.2 <- function(dat, dat.lci, dat.uci, year.start, perc_dss, perc_mort){
-  dat1 = subset(dat, year >= year.start) 
-  
-  denv.case = subset(dat1, case_type == "symptomatic")
-  
-  
-  #dat.ts <- ddply(denv.case, .(year, time), summarise, count=sum(count))
-  dat.ts <- ddply(denv.case, .(hyp, year, state), summarise, count=sum(count))
-  #dat.ts.lci <- ddply(denv.case.lci, .( year), summarise, count=sum(count))
-  #dat.ts.uci <- ddply(denv.case.uci, .(year), summarise, count=sum(count))
-  #dat.ts$hyp <- factor(dat.ts$hyp)
-  dat.ts$plot_type <- "total dss cases and deaths\nfrom deterministic simulation"
-  # dat.ts.lci$hyp <- factor(dat.ts.lci$hyp)
-  # dat.ts.lci$plot_type <- "total reported cases\nfrom deterministic simulation"
-  # dat.ts.uci$hyp <- factor(dat.ts.uci$hyp)
-  # dat.ts.uci$plot_type <- "total reported cases\nfrom deterministic simulation"
-  # 
-  # dat.ts.lci.merge <- dplyr::select(dat.ts.lci, hyp, year, count)
-  # dat.ts.uci.merge <- dplyr::select(dat.ts.uci, hyp, year, count)
-  # names(dat.ts.lci.merge)[3] <- "lci"
-  # names(dat.ts.uci.merge)[3] <- "uci"
-  # 
-  # dat.ts <- merge(dat.ts, dat.ts.lci.merge, by =c("hyp", "year"))
-  # dat.ts <- merge(dat.ts, dat.ts.uci.merge, by =c("hyp", "year"))
-  # dat.ts$lci_new <- NA
-  # dat.ts$uci_new <- NA
-  # dat.ts$lci_new[dat.ts$lci<dat.ts$uci] <- dat.ts$lci[dat.ts$lci<dat.ts$uci]
-  # dat.ts$lci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$uci[dat.ts$lci>dat.ts$uci]
-  # dat.ts$uci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$lci[dat.ts$lci>dat.ts$uci]
-  # dat.ts$uci_new[dat.ts$lci<dat.ts$uci] <- dat.ts$uci[dat.ts$lci<dat.ts$uci]
-  
-  
-  #dss cases should primarily be in the cases of secondary infection
-  #or in cases of tertiary if we are assuming they are easier to detect due 
-  #to heightened pathology in older patients
-  dat.ts$count_dss <- 0
-  dat.ts$count_dss[dat.ts$state=="Secondary-Infection"] <- dat.ts$count[dat.ts$state=="Secondary-Infection"]*perc_dss
-  dat.ts$count_dss[dat.ts$state=="Tertiary-Infection"] <- dat.ts$count[dat.ts$state=="Tertiary-Infection"]*perc_dss_tert
-  dat.ts$count_mort <- dat.ts$count_dss*perc_mort #some fraction of dss cases is the total mortality
-  dat.dss <- ddply(dat.ts, .(plot_type, hyp, year), summarise, count = sum(count_dss))
-  dat.mort <- ddply(dat.ts, .(plot_type, hyp, year), summarise, count = sum(count_mort))
-  
-  dat.dss$count_type <- "dss"
-  dat.mort$count_type <- "deaths"
-  
-  dat.plot = rbind(dat.dss, dat.mort)
-  dat.plot$count_type <- factor(dat.plot$count_type, levels = c("dss", "deaths"))
-  
-  colz = c("dss"="navy", "deaths"="darkred")
-  
-  p1 <- ggplot(dat.plot) + theme_bw() + facet_grid(hyp~plot_type) +
-    #geom_vline(aes(xintercept=2012), linetype=2)+
-    #geom_vline(aes(xintercept=2019), linetype=2) +
-    #geom_ribbon(aes(x=year, ymin=lci_new, ymax=uci_new),alpha=.3) +
-    #geom_line(aes(x=year, y=count), size=.3) + 
-    geom_line(aes(x=year, y=count, color=count_type, group=count_type), size=.3) + 
-    scale_color_manual(values=colz) +
-    theme(panel.grid = element_blank(), 
-          strip.background.y  =  element_blank(), #element_rect(fill="white"),
-          strip.background.x  = element_rect(fill="white"),
-          axis.title = element_blank(), 
-          legend.position = c(.15,.9),
-          legend.text = element_text(size=10),
-          legend.title = element_blank(),
-          plot.margin = unit(c(.2,.1,.2,.1), "cm"), 
-          axis.text = element_text(size=12),
-          strip.placement = "outside",
-          strip.text.x.top  = element_text(size=12),
-          strip.text.y  = element_blank()) +# element_text(size=12)) +
-    #      coord_cartesian(xlim=c(2015,2020), ylim=c(0,13000)) + #scale_y_log10() +
-    #scale_y_continuous(breaks=c(2500,7500,12500)) +
-    scale_x_continuous(breaks=c(2000,2005,2010,2015, 2020)) +
-    geom_vline(aes(xintercept=2007), linetype=2, color="red") +
-    geom_vline(aes(xintercept=2012), linetype=2, color="red") +
-    geom_vline(aes(xintercept=2019), linetype=2, color="red")
-  
-  #scale_x_continuous(breaks=c(2016,2018, 2020)) 
-  
-  return(p1)
-}
