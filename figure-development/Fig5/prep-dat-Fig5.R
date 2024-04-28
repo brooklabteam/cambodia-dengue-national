@@ -51,6 +51,7 @@ summarise.age.dist.wane <- function(dat, year.start){
   
   #and the rest of the cases
   dat1$state[dat1$case_type=="I" & dat1$case_sum==3 & is.na(dat1$state)] <- "Secondary-Infection"
+  dat1$state[dat1$class=="I41"] <- "Not-Possible"
   dat1$state[dat1$case_type=="I" & dat1$case_sum==4 & is.na(dat1$state)] <- "Tertiary-Infection"
   dat1$state[dat1$case_type=="I" & dat1$case_sum==5 & is.na(dat1$state) & dat1$serotype!=1] <- "Tertiary-Infection-After-Reinfection"
   
@@ -122,7 +123,7 @@ select.symptom <- function(df, criteria){
   }else if (criteria=="Increasing-Tertiary"){
     df1.sec = subset(df, state =="Secondary-Infection" )
     df1.tert = subset(df, state=="Tertiary-Infection" )
-    df.perc <- cbind.data.frame(year=unique(df1.tert$year), perc_obs=seq(0,.3, length.out = length(unique(df1.tert$year))))
+    df.perc <- cbind.data.frame(year=unique(df1.tert$year), perc_obs=seq(0,.15, length.out = length(unique(df1.tert$year))))
     df1.tert <- merge(df1.tert, df.perc, by="year", all.x=T)
     df1.tert$count <- df1.tert$count*df1.tert$perc_obs
     df1.tert <- dplyr::select(df1.tert, -(perc_obs))
@@ -144,30 +145,51 @@ select.symptom <- function(df, criteria){
 
 age.out.2007 = subset(age.out.2007, year <2021)
 age.sub.2007 = select.symptom(df=age.out.2007,criteria = "Secondary-Extension")
-age.sub.2007$hyp = "H2: Genotype Replacement\n+ Waning Immunity (2007)"
+age.sub.2007$hyp = "H4: Genotype Replacement\n+ Waning Immunity (2007)"
 
 
 age.out.2007.lci = subset(age.out.2007.lci, year <2021)
 age.sub.2007.lci = select.symptom(df=age.out.2007.lci,criteria = "Secondary-Extension")
-age.sub.2007.lci$hyp = "H2: Genotype Replacement\n+ Waning Immunity (2007)"
+age.sub.2007.lci$hyp = "H4: Genotype Replacement\n+ Waning Immunity (2007)"
 
 
 age.out.2007.uci = subset(age.out.2007.uci, year <2021)
 age.sub.2007.uci = select.symptom(df=age.out.2007.uci,criteria = "Secondary-Extension")
-age.sub.2007.uci$hyp = "H2: Genotype Replacement\n+ Waning Immunity (2007)"
+age.sub.2007.uci$hyp = "H4: Genotype Replacement\n+ Waning Immunity (2007)"
 
 
 age.out.2019 = subset(age.out.2019, year <2021)
 age.sub.2019 = select.symptom(df=age.out.2019,criteria = "Secondary-Extension")
-age.sub.2019$hyp = "H2: Genotype Replacement\n+ Waning Immunity (2019)"
+age.sub.2019$hyp = "H4: Genotype Replacement\n+ Waning Immunity (2019)"
 
 age.out.2019.lci = subset(age.out.2019.lci, year <2021)
 age.sub.2019.lci = select.symptom(df=age.out.2019.lci,criteria = "Secondary-Extension")
-age.sub.2019.lci$hyp = "H2: Genotype Replacement\n+ Waning Immunity (2019)"
+age.sub.2019.lci$hyp = "H4: Genotype Replacement\n+ Waning Immunity (2019)"
 
 age.out.2019.uci = subset(age.out.2019.uci, year <2021)
 age.sub.2019.uci = select.symptom(df=age.out.2019.uci,criteria = "Secondary-Extension")
-age.sub.2019.uci$hyp = "H2: Genotype Replacement\n+ Waning Immunity (2019)"
+age.sub.2019.uci$hyp = "H4: Genotype Replacement\n+ Waning Immunity (2019)"
+
+
+age.sub.2019.b = select.symptom(df=age.out.2019,criteria = "Secondary-Only")
+age.sub.2019.b$hyp = "H2: Genotype Intro\n+ Normal Immunity (2019)"
+
+age.sub.2019.lci.b = select.symptom(df=age.out.2019.lci,criteria = "Secondary-Only")
+age.sub.2019.lci.b$hyp = "H2: Genotype Intro\n+ Normal Immunity (2019)"
+
+age.sub.2019.uci.b = select.symptom(df=age.out.2019.uci,criteria = "Secondary-Only")
+age.sub.2019.uci.b$hyp = "H2: Genotype Intro\n+ Normal Immunity (2019)"
+
+
+age.sub.2019.c = select.symptom(df=age.out.2019,criteria = "Increasing-Tertiary")
+age.sub.2019.c$hyp = "H3: Genotype Intro + Increasing\nTertiary Case Detection"
+
+age.sub.2019.lci.c = select.symptom(df=age.out.2019.lci,criteria = "Increasing-Tertiary")
+age.sub.2019.lci.c$hyp = "H3: Genotype Intro + Increasing\nTertiary Case Detection"
+
+age.sub.2019.uci.c = select.symptom(df=age.out.2019.uci,criteria = "Increasing-Tertiary")
+age.sub.2019.uci.c$hyp = "H3: Genotype Intro + Increasing\nTertiary Case Detection"
+
 
 age.out.nointro = subset(age.out.nointro, year<2021)
 age.sub.tert = select.symptom(df=age.out.nointro,criteria = "Increasing-Tertiary")
@@ -198,15 +220,39 @@ age.sub.H0.uci$hyp = "H0: Normal Demographic\nSimulation"
 
 
 #put all the data together
-comp.dat <- rbind(age.sub.H0, age.sub.tert, age.sub.2019, age.sub.2007)
-comp.dat$hyp <- factor(comp.dat$hyp, levels = c("H0: Normal Demographic\nSimulation", "H1: Increasing Tertiary\nCase Detection", "H2: Genotype Replacement\n+ Waning Immunity (2019)", "H2: Genotype Replacement\n+ Waning Immunity (2007)"))
+comp.dat <- rbind(age.sub.H0, age.sub.tert, age.sub.2019.b, age.sub.2019.c, age.sub.2019, age.sub.2007)
+#comp.dat$hyp <- factor(comp.dat$hyp, levels = c("H0: Normal Demographic\nSimulation", "H1: Increasing Tertiary\nCase Detection", "H2: Genotype Replacement\n+ Waning Immunity (2019)", "H2: Genotype Replacement\n+ Waning Immunity (2007)"))
+comp.dat$hyp <- factor(comp.dat$hyp, levels = c("H0: Normal Demographic\nSimulation", 
+                                                "H1: Increasing Tertiary\nCase Detection",
+                                                "H2: Genotype Intro\n+ Normal Immunity (2019)",
+                                                "H3: Genotype Intro + Increasing\nTertiary Case Detection",
+                                                "H4: Genotype Replacement\n+ Waning Immunity (2019)", 
+                                                "H4: Genotype Replacement\n+ Waning Immunity (2007)"))
 
 #and save for fitting
 save(comp.dat, file = "comp-dat-sim.Rdata") 
 
-comp.dat.lci <- rbind(age.sub.H0.lci, age.sub.tert.lci, age.sub.2019.lci, age.sub.2007.lci)
-comp.dat.lci$hyp <- factor(comp.dat.lci$hyp, levels = c("H0: Normal Demographic\nSimulation", "H1: Increasing Tertiary\nCase Detection", "H2: Genotype Replacement\n+ Waning Immunity (2019)", "H2: Genotype Replacement\n+ Waning Immunity (2007)"))
+comp.dat.lci <- rbind(age.sub.H0.lci, age.sub.tert.lci, age.sub.2019.lci.b, age.sub.2019.lci.c, age.sub.2019.lci, age.sub.2007.lci)
+comp.dat.lci$hyp <- factor(comp.dat.lci$hyp, levels = c("H0: Normal Demographic\nSimulation", 
+                                                        "H1: Increasing Tertiary\nCase Detection",
+                                                        "H2: Genotype Intro\n+ Normal Immunity (2019)",
+                                                        "H3: Genotype Intro + Increasing\nTertiary Case Detection",
+                                                        "H4: Genotype Replacement\n+ Waning Immunity (2019)", 
+                                                        "H4: Genotype Replacement\n+ Waning Immunity (2007)"))
+
 save(comp.dat.lci, file = "comp-dat-sim-lci.Rdata") 
-comp.dat.uci <- rbind(age.sub.H0.uci, age.sub.tert.uci, age.sub.2019.uci, age.sub.2007.uci)
-comp.dat.uci$hyp <- factor(comp.dat.uci$hyp, levels = c("H0: Normal Demographic\nSimulation", "H1: Increasing Tertiary\nCase Detection", "H2: Genotype Replacement\n+ Waning Immunity (2019)", "H2: Genotype Replacement\n+ Waning Immunity (2007)"))
+comp.dat.uci <- rbind(age.sub.H0.uci, age.sub.tert.uci, age.sub.2019.uci.b, age.sub.2019.uci.c, age.sub.2019.uci,  age.sub.2007.uci)
+comp.dat.uci$hyp <- factor(comp.dat.uci$hyp, levels = c("H0: Normal Demographic\nSimulation", 
+                                                        "H1: Increasing Tertiary\nCase Detection",
+                                                        "H2: Genotype Intro\n+ Normal Immunity (2019)",
+                                                        "H3: Genotype Intro + Increasing\nTertiary Case Detection",
+                                                        "H4: Genotype Replacement\n+ Waning Immunity (2019)", 
+                                                        "H4: Genotype Replacement\n+ Waning Immunity (2007)"))
+
 save(comp.dat.uci, file = "comp-dat-sim-uci.Rdata") 
+
+
+
+
+
+

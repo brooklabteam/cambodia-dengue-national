@@ -972,14 +972,18 @@ model.age.incidence.series.wane <- function(par.dat, age_vect, year.start){
       #Then, hazard of exposure to strain i only
       inte_B = (sum(dur*lambda))
       
-      #Then, cumulative waning immunity hazard for one strain
-      inte_C = sum(sigma*dur) 
+      # Then, probability of exposure to strain i and then strain k (where k does not equal i)
+      # Does not require avoiding exposure with any other strains
+      inte_C = (sum(dur*lambda*(2)))
       
-      #And cumulative waning hazard for all the others
+      
+      #Then, cumulative waning immunity hazard for one strain
+      inte_E = sum(sigma*dur) 
+      
+      #And cumulative waning hazard for all the other strains
       inte_D = (sum((N_sero-1)*sigma*dur))
       
-      #Then, probability of exposure to any other strains besides i
-      inte_E = (sum(dur*lambda*(N_sero-1)))
+      
       
       #could also write as sigma[1]*(a-1) (since a starts at class 2 we need to subtract 1 from a)
       
@@ -995,7 +999,7 @@ model.age.incidence.series.wane <- function(par.dat, age_vect, year.start){
       # here, this is expressed for just a single target strain 
       # (would need to multiply by the number of circulating strains if you wanted 
       # the probability of a primary infection with ANY strain)
-      pprim[[i]][[a]] <- exp(-inte_A)*(exp(inte_B)-1) + (exp(-inte_A)*(exp(inte_B)-1)*(1-exp(-inte_E))*(1-exp(-inte_C))*(exp(-inte_D)))
+      pprim[[i]][[a]] <- exp(-inte_A)*(exp(inte_B)-1) + (1-exp(-inte_C))*(exp(-inte_D))*(1-exp(-inte_E))
       
       
       # if not primarily infected or naive, this should be a multitypic infection
@@ -1070,7 +1074,7 @@ model.age.incidence.series.wane <- function(par.dat, age_vect, year.start){
   return(p.sum) #returns prevalence by age for each year for fitting to the years for which we have data
 }
 get.wane.profile <- function(num1, par.dat, dat1){
-  wane.guess = seq(0.0000001, 5, length=1000)
+  wane.guess = seq(0.0000001, 2, length=1000)
   
   llik <- list()
   for(i in 1:length(wane.guess)){
@@ -1082,7 +1086,7 @@ get.wane.profile <- function(num1, par.dat, dat1){
   out.lik <- subset(out.lik, llik<Inf)
   with(out.lik, plot(par, llik, type="b"))
   tmp2=smooth.spline(out.lik$par,out.lik$llik)
-  new=seq(0.0000001, 5, length=1000)
+  new=seq(0.0000001, 3, length=1000)
   interp= predict(tmp2, new)$y
   mle1=new[which.min(interp)]
   tmp3=(predict(tmp2, new)$y-min(predict(tmp2, new)$y))-qchisq(0.95,1)
@@ -1096,49 +1100,15 @@ get.wane.profile <- function(num1, par.dat, dat1){
   
   return(wane.sub)
 }
-profile.waning <- function(dat.all,par.dat, burnin, sigma.fit, perc.obs, sim_type){
+profile.waning <- function(dat.all,par.dat, burnin, sigma.fit, sim_type){
   
-  
-  
-  if(unique(dat.all$hyp)=="2" |unique(dat.all$hyp)=="3"){
-    # print(unique(dat.all$hyp))
-    dat2 = subset(dat.all, class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
-    
-    
-    denv.case.tert = subset(dat.all, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-    
-    #and take 10% of these
-    denv.case.tert$count <- denv.case.tert$count*perc.obs
-    dat3 <- rbind(dat2, denv.case.tert)
-    
-  }else if(unique(dat.all$hyp)=="4"){
-    #print(unique(dat.all$hyp))
-    dat2 = subset(dat.all, class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
-    
-    denv.case.tert = subset(dat.all, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
-    #and take increasing proportion of those through time
-    df.perc <- cbind.data.frame(year=unique(denv.case.tert$year), perc_obs=seq(0,1, length.out = length(unique(denv.case.tert$year))))
-    denv.case.tert <- merge(denv.case.tert, df.perc, by="year")
-    denv.case.tert$count <- denv.case.tert$count*denv.case.tert$perc_obs
-    denv.case.tert <- dplyr::select(denv.case.tert, -(perc_obs))
-    
-    dat3 <- rbind(dat2, denv.case.tert)
-    
-    
-  }else{
-    #print(unique(dat.all$hyp))
-    
-    dat3 = subset(dat.all, class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
-  }
-  
-  
-  dat3 <- subset(dat3, year>(min(dat.all$year)))
-  dat3$count_new <- round(dat3$count*1000,0)
   
   #and only take those with values
-  dat3 = subset(dat3, count_new>0 & age < max(dat.all$age))
+  dat3 = subset(dat.all, count>0 & age < max(dat.all$age))
   
   dat = subset(dat3,  year >= (min(dat.all$year)+ burnin))
+  
+  
   
   #first, prep the data
   year.dat <- dlply(dat, .(year))
@@ -1158,7 +1128,7 @@ profile.waning <- function(dat.all,par.dat, burnin, sigma.fit, perc.obs, sim_typ
   
   #now, profile sigma across its range of values (2000:2020)
   
-  sigma.profile <- lapply(as.list(2000:2020), get.wane.profile,  par.dat=par.dat, dat1=df.out)
+  sigma.profile <- lapply(as.list(2002:2020), get.wane.profile,  par.dat=par.dat, dat1=df.out)
   
   sigma.df <- data.table::rbindlist(sigma.profile)
   
@@ -1182,20 +1152,29 @@ profile.waning <- function(dat.all,par.dat, burnin, sigma.fit, perc.obs, sim_typ
 # par.dat = subset(par.dat, year>=2000)
 
 
-load(paste0(homewd,"/figure-development/Fig5/test-sim-final/hyp3-fit-lambda.Rdata"))
-load(paste0(homewd,"/figure-development/Fig5/test-sim-final/hyp3-fit-wane.Rdata"))
-load(paste0(homewd,"/figure-development/Fig5/test-sim-final/cam-sim-infecteds.Rdata"))
+load(paste0(homewd,"/figure-development/Fig5/fit-sim/hyp2-fit-lambda-2019.Rdata"))
+load(paste0(homewd,"/figure-development/Fig5/fit-sim/fit-sim-wane/out-wane/hyp2-fit-wane-2019.Rdata"))
+load(paste0(homewd,"/figure-development/Fig5/fit-sim/comp-dat-sim.Rdata"))
 
-cam.sim = subset(cam.sim.infecteds, hyp=="3")
+cam.sim = subset(comp.dat, hyp=="H2: Genotype Replacement\n+ Waning Immunity (2019)")
 
 
-hyp3.fit.wane <- profile.waning(dat.all = cam.sim,
-                               burnin=60,
-                               par.dat=hyp3.fit.lambda,
-                               sigma.fit = hyp3.fit.wane,
-                               sim_type="hyp3_wane", 
-                               perc.obs = 0.1)
+hyp2.fit.wane.2019 <- profile.waning(dat.all = cam.sim,
+                               burnin=20,
+                               par.dat=hyp2.fit.lambda.2019,
+                               sigma.fit = hyp2.fit.wane.2019,
+                               sim_type="hyp2_wane_2019")
 
-save(hyp3.fit.wane, file = paste0(homewd,"/figure-development/Fig5/test-sim-final/hyp3-fit-wane-profile.Rdata"))
-ggplot(hyp3.fit.wane) +geom_ribbon(aes(x=year, ymin=lci_sigma, ymax=uci_sigma), alpha=.3) +
-    geom_line(aes(x=year, y=sigma))
+# hyp2.fit.wane.2019$uci_sigma[hyp2.fit.wane.2019$uci_sigma==0.00000010] <- 0
+# hyp2.fit.wane.2019$lci_sigma[hyp2.fit.wane.2019$lci_sigma==0.00000010] <- 0
+# hyp2.fit.wane.2019$lci_sigma[hyp2.fit.wane.2019$lci_sigma ==hyp2.fit.wane.2019$uci_sigma] <- 0
+# hyp2.fit.wane.2019$lci_sigma[hyp2.fit.wane.2019$year==2019] <- 0
+save(hyp2.fit.wane.2019, file = paste0(homewd,"/figure-development/Fig5/fit-sim/fit-sim-wane/out-wane/hyp2-fit-wane-2019-profile.Rdata"))
+
+ggplot(hyp2.fit.wane.2019) + scale_y_log10() +
+    geom_linerange(aes(x=year, ymin=lci_sigma, ymax=uci_sigma), color="red") +
+    geom_point(aes(x=year, y=sigma), size=5)
+
+ggplot(hyp2.fit.wane.2019) + scale_y_log10() +
+  geom_ribbon(aes(x=year, ymin=lci_sigma, ymax=uci_sigma), fill="red") +
+  geom_line(aes(x=year, y=sigma), size=1)
