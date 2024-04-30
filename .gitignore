@@ -10,4 +10,4 @@ DENV2.log
 cam-sim-final-10-10-lci.Rdata
 cam-sim-final-10-10-uci.Rdata
 cam-sim-final-10-10.Rdata
-.fastq
+new-seq/partial-seq/*.fastq
