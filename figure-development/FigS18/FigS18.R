@@ -111,9 +111,9 @@ pA <- ggtree(rooted.D1) %<+% dat.all.denv1 + geom_tippoint(aes(fill=Subclade), s
   geom_tiplab(size=1, hjust=-.1) + #geom_nodelab(size=1, hjust=2) +
   scale_fill_manual(values=colz1, name=NULL) + theme(legend.position = c(.3,.83), 
                                           legend.background = element_rect(color="black")) +
-  geom_cladelabel(node=gen2, label="Genotype II", color="royalblue", offset = .0335) +
-  geom_cladelabel(node=gen3, label="Genotype III", color="darkgoldenrod1",  offset = .082, extend = c(0,5)) +
-  geom_cladelabel(node=gen1, label="Genotype I", color="mediumseagreen",  offset = .018) +
+  geom_cladelabel(node=gen2, label="Genotype-II", color="royalblue", offset = .0335) +
+  geom_cladelabel(node=gen3, label="Genotype-III", color="darkgoldenrod1",  offset = .082, extend = c(0,5)) +
+  geom_cladelabel(node=gen1, label="Genotype-I", color="mediumseagreen",  offset = .018) +
   xlim(c(0,.17)) +geom_treescale(fontsize=4, x=.005,y=110, linesize = .5) 
 
 pA
@@ -163,28 +163,34 @@ rooted.D2$edge.length[rooted.D2$edge.length==max(rooted.D2$edge.length)] <- .14
 
 
 
+dat.all.denv2$Subclade[dat.all.denv2$Subclade=="American"] <- "Genotype-I"
+dat.all.denv2$Subclade[dat.all.denv2$Subclade=="Asian-American"] <- "Genotype-III"
+dat.all.denv2$Subclade[dat.all.denv2$Subclade=="Asian-I"] <- "Genotype-V"
+dat.all.denv2$Subclade[dat.all.denv2$Subclade=="Asian-II"] <- "Genotype-IV"
+
+
 dat.all.denv2$Subclade[dat.all.denv2$Subclade=="Cosmopolitan-I-C-1B" |dat.all.denv2$Subclade=="Cosmopolitan-I-C-1A"] <- "Cosmopolitan-I"
 
 dat.all.denv2$Subclade <- factor(dat.all.denv2$Subclade, 
-                                 levels=c("American", 
-                                          "Asian-American", 
-                                          "Asian-I", 
-                                          "Asian-II", 
+                                 levels=c("Genotype-I", 
                                           "Cosmopolitan-I",
                                           "Cosmopolitan-II", 
                                           "Cosmopolitan-III",
+                                          "Genotype-III", 
+                                          "Genotype-IV", 
+                                          "Genotype-V", 
                                           "Old-Cambodia",
                                           "New-Cambodia",
                                           "Outgroup")) 
 
 
-colz2 = c('American'= "cornflowerblue", 
-          'Asian-American' = "darkorange1", 
-          'Asian-I' = "forestgreen", 
-          'Asian-II' = "darkgoldenrod1", 
+colz2 = c('Genotype-I'= "cornflowerblue", 
           'Cosmopolitan-I' = "tomato",
           'Cosmopolitan-II' = "mediumseagreen", 
           'Cosmopolitan-III' = "royalblue",
+          'Genotype-III' = "darkorange1", 
+          'Genotype-IV' = "darkgoldenrod1", 
+          'Genotype-V' = "forestgreen", 
           'Old-Cambodia'="palevioletred",
           'New-Cambodia'="mediumpurple4",
           'Outgroup' = "black")
@@ -223,14 +229,14 @@ pB <- ggtree(rooted.D2) %<+% dat.all.denv2 + geom_tippoint(aes(fill=Subclade), s
   scale_fill_manual(values=colz2, name=NULL) + theme(legend.position = c(.13,.76), 
                                           legend.background = element_rect(color="black"),
                                           legend.title = element_blank()) +
-  geom_cladelabel(node=cosmoIII, label="Cosmopolitan III", color="royalblue", offset = .039, extend = c(0,8), fontsize = 3.5) +
-  geom_cladelabel(node=cosmoII, label="Cosmopolitan II", color="mediumseagreen",  offset = .0795, extend = c(1,1), fontsize = 3.5) +
-  geom_cladelabel(node=cosmoI, label="Cosmopolitan I", color="tomato",  offset = .0465, fontsize = 3.5) +
-  geom_cladelabel(node=American, label="American", color="cornflowerblue",  offset = .013, fontsize = 3.5) +
-  geom_cladelabel(node=AsAm , label="Asian-American", color="darkorange1",  offset = .057, fontsize = 3.5) +
-  geom_cladelabel(node=Asian1 , label="Asian-I", color="forestgreen",  offset = .0565, fontsize = 3.5) +
-  geom_cladelabel(node=Asian2 , label="Asian-II", color="darkgoldenrod1",  offset = .129, extend = c(1,1), fontsize = 3.5) +
-  xlim(c(0,.16)) +geom_treescale( x=.002,y=74, linesize = .5, fontsize = 3.5) 
+  geom_cladelabel(node=cosmoIII, label="Cosmopolitan-III", color="royalblue", offset = .038, extend = c(0,8), fontsize = 3.5) +
+  geom_cladelabel(node=cosmoII, label="Cosmopolitan-II", color="mediumseagreen",  offset = .081, extend = c(1,1), fontsize = 3.5) +
+  geom_cladelabel(node=cosmoI, label="Cosmopolitan-I", color="tomato",  offset = .0475, fontsize = 3.5) +
+  geom_cladelabel(node=American, label="Genotype-I", color="cornflowerblue",  offset = .014, fontsize = 3.5) +
+  geom_cladelabel(node=AsAm , label="Genotype-III", color="darkorange1",  offset = .058, fontsize = 3.5) +
+  geom_cladelabel(node=Asian1 , label="Genotype-V", color="forestgreen",  offset = .056, fontsize = 3.5) +
+  geom_cladelabel(node=Asian2 , label="Genotype-IV", color="darkgoldenrod1",  offset = .13, extend = c(1,1), fontsize = 3.5) +
+  xlim(c(0,.16)) +geom_treescale( x=.002,y=110, linesize = .5, fontsize = 3.5) 
 
 pB
 
@@ -279,18 +285,18 @@ tot$Subclade <- as.character(tot$Subclade)
 unique(tot$Subclade)
 tot$Subclade[tot$Serotype=="DENV-1"] <- "Genotype-I"
 tot$Subclade[tot$Serotype=="DENV-2"] <- "Cosmopolitan-III"
-tot$Subclade[tot$Accession=="OL414721"] <- "Asian-I"
-tot$Subclade[tot$Accession=="OL414720"] <- "Asian-I"
-tot$Subclade[tot$Accession=="OL414744"] <- "Asian-I"
-tot$Subclade[tot$Accession=="OL414719"] <- "Asian-I"
-tot$Subclade[tot$Accession=="OL414743"] <- "Asian-I"
-tot$Subclade[tot$Accession=="OL414735"] <- "Asian-I"
-tot$Subclade[tot$Accession=="OL414734"] <- "Asian-I"
-tot$Subclade[tot$Accession=="109-1990S_L1"] <- "Asian-I"
-tot$Subclade[tot$Accession=="OQ678012"] <- "Asian-I"
-tot$Subclade[tot$Accession=="OL414761"] <- "Asian-I"
-tot$Subclade[tot$Accession=="OL414729"] <- "Asian-I"
-tot$Subclade[tot$Accession=="OL414728"] <- "Asian-I"
+tot$Subclade[tot$Accession=="OL414721"] <- "Genotype-V"
+tot$Subclade[tot$Accession=="OL414720"] <- "Genotype-V"
+tot$Subclade[tot$Accession=="OL414744"] <- "Genotype-V"
+tot$Subclade[tot$Accession=="OL414719"] <- "Genotype-V"
+tot$Subclade[tot$Accession=="OL414743"] <- "Genotype-V"
+tot$Subclade[tot$Accession=="OL414735"] <- "Genotype-V"
+tot$Subclade[tot$Accession=="OL414734"] <- "Genotype-V"
+tot$Subclade[tot$Accession=="109-1990S_L1"] <- "Genotype-V"
+tot$Subclade[tot$Accession=="OQ678012"] <- "Genotype-V"
+tot$Subclade[tot$Accession=="OL414761"] <- "Genotype-V"
+tot$Subclade[tot$Accession=="OL414729"] <- "Genotype-V"
+tot$Subclade[tot$Accession=="OL414728"] <- "Genotype-V"
 
 # and summarize
 
@@ -303,10 +309,10 @@ dat.sum <- ddply(tot,.(year, Serotype, Subclade), summarise, N=length(Subclade))
 # 2022 : 0 DENV-1 (0%) and 54 DENV-2 (100%)
 
 # Cosmopolitan vs. Asian 1
-# 2019 : 9 Asian-1 (25.7%) and 26 Cosmo (74.3%)
-# 2020 : 2 Asian-1 (8.7%) and 21 Cosmo (91.3%)
-# 2021 : 0 Asian-1 (0%) and 9 Cosmo (100%)
-# 2022 : 1 Asian-1 (1.9%) and 53 Cosmo (98.1%)
+# 2019 : 9 Genotype-V (25.7%) and 26 Cosmo (74.3%)
+# 2020 : 2 Genotype-V (8.7%) and 21 Cosmo (91.3%)
+# 2021 : 0 Genotype-V (0%) and 9 Cosmo (100%)
+# 2022 : 1 Genotype-V (1.9%) and 53 Cosmo (98.1%)
 
 
 #load beast data with ages

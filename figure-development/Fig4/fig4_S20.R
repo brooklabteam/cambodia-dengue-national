@@ -181,7 +181,7 @@ df1$date <- as.Date(df1$date, format = "%m/%d/%y")
 df1$year <- year(df1$date)
 names(df1)[names(df1)=="Genotype"] <- "DENV.serotype"
 df1$DENV.serotype[df1$DENV.serotype=="Cosmopolitan"] <- "DENV-2-Cosmopolitan"
-df1$DENV.serotype[df1$DENV.serotype=="Asian-1"] <- "DENV-2-Asian-1"
+df1$DENV.serotype[df1$DENV.serotype=="Asian-1"] <- "DENV-2-Genotype-V"
 #df1.hold = df1
 df1 = subset(df1, !is.na(lat))
 df1 = subset(df1, !is.na(long))
@@ -205,7 +205,7 @@ dat.plot.cluster.partial <- dplyr::select(dat.plot.cluster.partial,sample_name, 
 
 
 #and plot
-sero.cols = c("DENV-1"="forestgreen", "DENV-2-Asian-1"="dodgerblue", "DENV-2-Cosmopolitan" = "navy", "DENV-4"="tomato")
+sero.cols = c("DENV-1"="forestgreen", "DENV-2-Genotype-V"="dodgerblue", "DENV-2-Cosmopolitan" = "navy", "DENV-4"="tomato")
 
 pCamSummary <- ggplot(cam) + 
   geom_sf(fill="#9590FF", color="black", alpha=.8, size =.4) + #"#9590FF"
@@ -243,11 +243,11 @@ df.sum <- merge(df.sum, df.sum.year, by="year", all.x=T)
 head(df.sum)
 df.sum$proportion <- df.sum$N/df.sum$Ntot
 df.sum$DENV.serotype <- factor(df.sum$DENV.serotype, levels=c("DENV-1", "DENV-4",
-                                                              "DENV-2-Asian-1",
+                                                              "DENV-2-Genotype-V",
                                                               "DENV-2-Cosmopolitan"))
 
 
-sero.cols2 = c("DENV-1"="forestgreen", "DENV-2-Asian-1"="dodgerblue", "DENV-2-Cosmopolitan" = "navy", "DENV-4"="tomato")
+sero.cols2 = c("DENV-1"="forestgreen", "DENV-2-Genotype-V"="dodgerblue", "DENV-2-Cosmopolitan" = "navy", "DENV-4"="tomato")
 
 pBar <- ggplot(data=df.sum) + scale_fill_manual(values=sero.cols2) +
   geom_bar(aes(x=year, y=N, fill=DENV.serotype), 
@@ -292,11 +292,14 @@ library(sjPlot)
 plot_model(m1, type="est") #denv cosmopolitand and DENV-4 are both older in age than DENV-1
 summary(m1)
 
-df1$DENV.serotype[df1$DENV.serotype=="DENV-2-Asian-1"] <- "DENV-2\n(Asian-1)"
+df1$DENV.serotype[df1$DENV.serotype=="DENV-2-Genotype-V"] <- "DENV-2\n(Geno-V)"
 df1$DENV.serotype[df1$DENV.serotype=="DENV-2-Cosmopolitan"] <- "DENV-2\n(Cosmo)"
-label.dat = cbind.data.frame(DENV.serotype=sort(unique(df1$DENV.serotype)), text = c("", "", "***", "***"))
+df1$DENV.serotype <- factor(df1$DENV.serotype, levels=c("DENV-1", "DENV-2\n(Geno-V)","DENV-2\n(Cosmo)", "DENV-4" ))
 
-sero.cols = c("DENV-1"="forestgreen", "DENV-2\n(Asian-1)"="dodgerblue", "DENV-2\n(Cosmo)" = "navy", "DENV-4"="tomato")
+label.dat = cbind.data.frame(DENV.serotype=c("DENV-1", "DENV-2\n(Geno-V)","DENV-2\n(Cosmo)", "DENV-4" ), text = c("", "", "***", "***"))
+label.dat$DENV.serotype <- factor(label.dat$DENV.serotype, levels=c("DENV-1", "DENV-2\n(Geno-V)","DENV-2\n(Cosmo)", "DENV-4" ))
+
+sero.cols = c("DENV-1"="forestgreen", "DENV-2\n(Geno-V)"="dodgerblue", "DENV-2\n(Cosmo)" = "navy", "DENV-4"="tomato")
 
 ##nicer plot
 pViolin <- ggplot(data=df1) + ylab("age of genotyped cases") + 
@@ -420,7 +423,7 @@ node.tree1 <- MRCA(tree1, which(tree1@phylo$tip.label== "OL412678_2019-07-25" ),
 
 
 pA1 <- ggtree(tree1, mrsd=mrsd.denv1, color="forestgreen")  + 
-  geom_cladelab(node=node.tree1, label="Genotype I", textcolor="seagreen", barcolor="seagreen", fontsize=6,
+  geom_cladelab(node=node.tree1, label="Genotype-I", textcolor="seagreen", barcolor="seagreen", fontsize=6,
                 offset =-37, angle=270, offset.text = -12, vjust=2, hjust=.5)  +
   theme_tree2() + coord_cartesian(xlim=c(1930,2030), ylim=c(0,400)) + 
   #geom_range(range='length_0.95_HPD', color='red', alpha=.6, size=2) +
@@ -443,9 +446,9 @@ node.tree2.1 <- MRCA(tree2, which(tree2@phylo$tip.label== "OQ426897_2019-03-06" 
 
 pB2 <- ggtree(tree2, mrsd=mrsd.denv2, color="navy")  + theme_tree2() + 
   coord_cartesian(xlim=c(1930,2030),  ylim=c(0,400))+
-  geom_cladelab(node=node.tree2, label="Cosmopolitan III", textcolor="tomato",barcolor="tomato",
+  geom_cladelab(node=node.tree2, label="Cosmopolitan-III", textcolor="tomato",barcolor="tomato",
               offset =-37, angle=270, offset.text = -12, fontsize=6, vjust=2, hjust=.5)  +
-  geom_cladelab(node=node.tree2.1, label="Asian I", textcolor="navy", barcolor="navy", fontsize=6,vjust=2, hjust=.5,
+  geom_cladelab(node=node.tree2.1, label="Genotype-V", textcolor="navy", barcolor="navy", fontsize=6,vjust=2, hjust=.5,
                offset =-37, angle=270, offset.text = -12)  +
   #geom_tiplab(size=1)+
   geom_nodepoint(aes(fill=posterior), shape=21, color="black", size=1, stroke=.1) +
