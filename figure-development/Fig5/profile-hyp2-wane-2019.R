@@ -1074,7 +1074,7 @@ model.age.incidence.series.wane <- function(par.dat, age_vect, year.start){
   return(p.sum) #returns prevalence by age for each year for fitting to the years for which we have data
 }
 get.wane.profile <- function(num1, par.dat, dat1){
-  wane.guess = seq(0.0000001, 2, length=1000)
+  wane.guess = seq(0.0000000001, .005, length=1000)
   
   llik <- list()
   for(i in 1:length(wane.guess)){
@@ -1085,8 +1085,9 @@ get.wane.profile <- function(num1, par.dat, dat1){
   out.lik <- out.lik[complete.cases(out.lik),]
   out.lik <- subset(out.lik, llik<Inf)
   with(out.lik, plot(par, llik, type="b"))
+  
   tmp2=smooth.spline(out.lik$par,out.lik$llik)
-  new=seq(0.0000001, 3, length=1000)
+  new=seq(0.0000000001, .005, length=1000)
   interp= predict(tmp2, new)$y
   mle1=new[which.min(interp)]
   tmp3=(predict(tmp2, new)$y-min(predict(tmp2, new)$y))-qchisq(0.95,1)
@@ -1153,10 +1154,10 @@ profile.waning <- function(dat.all,par.dat, burnin, sigma.fit, sim_type){
 
 
 load(paste0(homewd,"/figure-development/Fig5/fit-sim/hyp2-fit-lambda-2019.Rdata"))
-load(paste0(homewd,"/figure-development/Fig5/fit-sim/fit-sim-wane/out-wane/hyp2-fit-wane-2019.Rdata"))
+load(paste0(homewd,"/figure-development/Fig5/fit-sim/hyp2-fit-wane-2019.Rdata"))
 load(paste0(homewd,"/figure-development/Fig5/fit-sim/comp-dat-sim.Rdata"))
 
-cam.sim = subset(comp.dat, hyp=="H2: Genotype Replacement\n+ Waning Immunity (2019)")
+cam.sim = subset(comp.dat, hyp=="H4: Genotype Replacement\n+ Waning Immunity (2019)")
 
 
 hyp2.fit.wane.2019 <- profile.waning(dat.all = cam.sim,
@@ -1164,12 +1165,12 @@ hyp2.fit.wane.2019 <- profile.waning(dat.all = cam.sim,
                                par.dat=hyp2.fit.lambda.2019,
                                sigma.fit = hyp2.fit.wane.2019,
                                sim_type="hyp2_wane_2019")
-
-# hyp2.fit.wane.2019$uci_sigma[hyp2.fit.wane.2019$uci_sigma==0.00000010] <- 0
-# hyp2.fit.wane.2019$lci_sigma[hyp2.fit.wane.2019$lci_sigma==0.00000010] <- 0
+# 
+# hyp2.fit.wane.2019$uci_sigma[hyp2.fit.wane.2019$uci_sigma==3] <- 0
+# hyp2.fit.wane.2019$lci_sigma[hyp2.fit.wane.2019$lci_sigma==3] <- 0
 # hyp2.fit.wane.2019$lci_sigma[hyp2.fit.wane.2019$lci_sigma ==hyp2.fit.wane.2019$uci_sigma] <- 0
-# hyp2.fit.wane.2019$lci_sigma[hyp2.fit.wane.2019$year==2019] <- 0
-save(hyp2.fit.wane.2019, file = paste0(homewd,"/figure-development/Fig5/fit-sim/fit-sim-wane/out-wane/hyp2-fit-wane-2019-profile.Rdata"))
+# # hyp2.fit.wane.2019$lci_sigma[hyp2.fit.wane.2019$year==2019] <- 0
+save(hyp2.fit.wane.2019, file = paste0(homewd,"/figure-development/Fig5/fit-sim/hyp2-fit-wane-2019-profile.Rdata"))
 
 ggplot(hyp2.fit.wane.2019) + scale_y_log10() +
     geom_linerange(aes(x=year, ymin=lci_sigma, ymax=uci_sigma), color="red") +

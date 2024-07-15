@@ -117,9 +117,9 @@ column.1 <- function(dat, dat.lci, dat.uci, year.start){
   dat.ts$uci_new <- NA
   dat.ts$lci_new[dat.ts$lci<dat.ts$uci] <- dat.ts$lci[dat.ts$lci<dat.ts$uci]
   
-  dat.ts$lci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$uci[dat.ts$lci>dat.ts$uci]
-  dat.ts$uci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$lci[dat.ts$lci>dat.ts$uci]
-  #dat.ts$uci_new[dat.ts$lci<dat.ts$uci] <- dat.ts$uci[dat.ts$lci<dat.ts$uci]
+  #dat.ts$lci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$uci[dat.ts$lci>dat.ts$uci]
+  #dat.ts$uci_new[dat.ts$lci>dat.ts$uci] <- dat.ts$lci[dat.ts$lci>dat.ts$uci]
+  dat.ts$uci_new[dat.ts$lci<dat.ts$uci] <- dat.ts$uci[dat.ts$lci<dat.ts$uci]
   # 
   
   #dat.ts$count_dss <- dat.ts$count*perc_dss
@@ -128,7 +128,8 @@ column.1 <- function(dat, dat.lci, dat.uci, year.start){
   p1 <- ggplot(dat.ts) + theme_bw() + facet_grid(hyp~plot_type, switch = "y") +
     #geom_vline(aes(xintercept=2012), linetype=2)+
     #geom_vline(aes(xintercept=2019), linetype=2) +
-    geom_ribbon(aes(x=year, ymin=lci_new, ymax=uci_new),alpha=.3) +
+    #geom_ribbon(aes(x=year, ymin=lci_new, ymax=uci_new),alpha=.3) +
+    geom_ribbon(aes(x=year, ymin=lci, ymax=uci),alpha=.3) +
     geom_line(aes(x=year, y=count), size=.3) + 
     #geom_line(aes(x=year, y=count_dss), size=.3, color="navy") + 
     #geom_line(aes(x=year, y=count_mort), size=.3, color="green") + 
@@ -290,13 +291,13 @@ col3 <- column.3(dat =comp.dat,  year.start = 2002)
 
 #and put them together
 
-Fig5 <- cowplot::plot_grid(col1, col2, col3, nrow = 1, ncol=3, labels=c("A", "B", "C"),rel_widths = c(1.15,1,1),  label_size = 22, align = "hv", label_x = c(0,-.03,0))
+Fig5 <- cowplot::plot_grid(col1, col2, col3, nrow = 1, ncol=3, labels=c("A", "B", "C"),rel_widths = c(1.15,1,1),  label_size = 22, align = "v", label_x = c(0,-.03,0))
 
 ggsave(filename = paste0(homewd, "/final-figures/Fig5.png"),
        plot = Fig5,
        units="mm",  
        width=110, 
-       height=80, 
+       height=85, 
        scale=3, 
        dpi=300)
 
@@ -304,7 +305,7 @@ ggsave(filename = paste0(homewd, "/final-figures/Fig5.pdf"),
        plot = Fig5,
        units="mm",  
        width=110, 
-       height=80, 
+       height=85, 
        scale=3, 
        dpi=300)
 
@@ -362,7 +363,8 @@ column.1.supp <- function(dat, dat.lci, dat.uci, year.start){
   p1 <- ggplot(dat.ts) + theme_bw() + facet_grid(hyp~plot_type, switch = "y") +
     #geom_vline(aes(xintercept=2012), linetype=2)+
     #geom_vline(aes(xintercept=2019), linetype=2) +
-    geom_ribbon(aes(x=year, ymin=lci_new, ymax=uci_new),alpha=.3) +
+    #geom_ribbon(aes(x=year, ymin=lci_new, ymax=uci_new),alpha=.3) +
+    geom_ribbon(aes(x=year, ymin=lci, ymax=uci),alpha=.3) +
     geom_line(aes(x=year, y=count), size=.3) + 
     #geom_line(aes(x=year, y=count_dss), size=.3, color="navy") + 
     #geom_line(aes(x=year, y=count_mort), size=.3, color="green") + 
@@ -523,13 +525,13 @@ col3Supp <- column.3.supp(dat=dat.supp, year.start = 2002)
 
 
 
-FigS21 <- cowplot::plot_grid(col1Supp, col2Supp, col3Supp,  nrow = 1, ncol=3, labels=c("A", "B", "C"),rel_widths = c(1.15,1.05,1),  label_size = 22, align = "hv", label_x = c(0,0,-.03))
+FigS21 <- cowplot::plot_grid(col1Supp, col2Supp, col3Supp,  nrow = 1, ncol=3, labels=c("A", "B", "C"),rel_widths = c(1.15,1.05,1),  label_size = 22, align = "v", label_x = c(0,0,-.03))
 
 ggsave(filename = paste0(homewd, "/final-figures/FigS21.png"),
        plot = FigS21,
        units="mm",  
        width=110, 
-       height=55, 
+       height=60, 
        scale=3, 
        dpi=300)
 
