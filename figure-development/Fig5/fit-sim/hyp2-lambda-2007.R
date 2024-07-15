@@ -1142,7 +1142,7 @@ fit.wane.LBFGSB.all.three <- function(dat.all,par.dat, burnin, sigma.guess, fit.
 load("comp-dat-sim.Rdata")
 
 
-cam.sim = subset(comp.dat, hyp=="H2: Genotype Replacement\n+ Waning Immunity (2007)")
+cam.sim = subset(comp.dat, hyp=="H4: Genotype Replacement\n+ Waning Immunity (2007)")
 
 
 hyp2.fit.lambda.2007 <- fit.all.LBFGSB.three(dat.all = cam.sim,
