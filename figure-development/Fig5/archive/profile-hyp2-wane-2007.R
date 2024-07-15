@@ -3,7 +3,7 @@
 rm(list=ls())
 
 homewd= "/Users/carabrook/Developer/cambodia-dengue-national"
-setwd(paste0(homewd, "/figure-development/Fig5/fit-sim"))
+setwd(paste0(homewd, "/figure-development/Fig5/"))
 #set wdset wd
 #.libPaths("~/R/x86_64-pc-linux-gnu-library/3.4")
 
@@ -280,60 +280,6 @@ log.lik.fit.all <- function(par, par.dat, dat, year.start){
   
   return(-ll)
 }
-log.lik.fit.all.NM <- function(par, par.dat, dat, year.start){
-  
-  par.dat$lambda <- exp(par)
-  
-  
-  age_vect=seq(0, max(dat$age), by=1)
-  
-  out.mod <- model.age.incidence.series(par.dat = par.dat, year.start = year.start, age_vect=age_vect)  
-  
-  #ggplot(data=out.mod) + geom_point(aes(x=age,y= cum_prop_cases)) + facet_wrap(~year)
-  
-  # now, select only the years for fitting for which there are data
-  # (the model can produce data back further in time based on the first year FOI from the dataset)
-  out.mod = subset(out.mod, year >=min(dat$year))
-  
-  
-  # merge model with data
-  out.mod <- arrange(out.mod, year, age)
-  dat <- arrange(dat, year, age)
-  dat.merge <- dplyr::select(dat, age, year, Nage, cum_cases, n)
-  out.merge <- merge(out.mod, dat.merge, by= c("year", "age"))
-  out.merge$cum_prop_cases_data <- out.merge$cum_cases/out.merge$n
-  
-  out.merge <- arrange(out.merge, year, age)
-  
-  # #plot model with data
-  # ggplot(data=out.merge) + facet_wrap(~year) +  geom_point(aes(x=age, y=cum_prop_cases_data)) + geom_line(aes(x=age, y=cum_prop_cases_data)) + geom_line(aes(x=age,y= cum_prop_cases), color="tomato") 
-  # #   
-  
-  #how likely are the data, given the model as truth?
-  ll=0
-  for (i in 1:length(out.merge$age)){
-    ll=ll+dbinom(out.merge$cum_cases[i],out.merge$n[i],prob=out.merge$cum_prop_cases[i],log=T)
-    #print(ll)
-  }
-  
-  # 
-  
-  par.dat$lambda_high <- 0 
-  par.dat$lambda_high[par.dat$lambda>1] <- 1 #penalty if lambda is >1
-  tot_over = sum(par.dat$lambda_high)
-  
-  if(tot_over>0){
-    
-    ll <- ll-(tot_over*1000000)
-    
-  }
-  
-  if(ll==-Inf){
-    ll <- -1000000
-  }
-  
-  return(-ll)
-}
 model.age.incidence.series.age <- function(par.dat, age_vect, year.start, age_mult){
   
   # you will have one lambda for each year in the time series
@@ -434,16 +380,19 @@ model.age.incidence.series.age <- function(par.dat, age_vect, year.start, age_mu
       #1-2,3-4,5-6,7-9,10-12,13-15,16-19,20-29,30-39,40+
       
       if(year.now <=2010){
-        age.mult.df <- cbind.data.frame(mult=age_mult[1:8], 
-                                        age_min=c(1,3,5,7,10,13,16,20),
-                                        age_max=c(2,4,6,9,12,15,19,90))  
-      }else if (year.now >2010){
-        age.mult.df <- cbind.data.frame(mult=age_mult[9:19], 
-                                        age_min=c(1,3,5,7,10,13,16,20,30,40,50),
-                                        age_max=c(2,4,6,9,12,15,19,29,39,49,90))  
+        age.mult.df <- cbind.data.frame(mult=age_mult[1:10], 
+                                        age_min=c(1,3,5,7,10,13,16,20,30,40),
+                                        age_max=c(2,4,6,9,12,15,19,29,39,90))  
+      }else if (year.now >2010 & year.now <=2018){
+        age.mult.df <- cbind.data.frame(mult=age_mult[11:20], 
+                                        age_min=c(1,3,5,7,10,13,16,20,30,40),
+                                        age_max=c(2,4,6,9,12,15,19,29,39,90))  
+      }else if (year.now >2018){
+        age.mult.df <- cbind.data.frame(mult=age_mult[21:30], 
+                                        age_min=c(1,3,5,7,10,13,16,20,30,40),
+                                        age_max=c(2,4,6,9,12,15,19,29,39,90)) 
+        
       }
-      
-      
       
       age.mult.df$dur = (age.mult.df$age_max-age.mult.df$age_min)+1
       
@@ -616,157 +565,46 @@ log.lik.age <- function(par, par.dat, dat){
   
   return(-ll)
 }
-fit.all.LBFGSB.three.NM <- function(dat.all,  burnin, lambda.guess, N.sero.fix, sim_type, fit.CI){
+fit.all.LBFGSB.three <- function(dat.all,  burnin, perc.obs, lambda.guess, N.sero.fix, sim_type, fit.CI){
   
   
-  #and only take those with values
-  dat3 = subset(dat.all, count>0 & age < max(dat.all$age))
-  
-  dat = subset(dat3,  year >= (min(dat.all$year)+ burnin))
-  
-  
-  
-  #sum by age an
-  
-  
-  #for the first year in the dataset, 
-  #estimate foi just from the cross-sectional data
-  
-  
-  #first, prep the data
-  year.dat <- dlply(dat, .(year))
-  
-  
-  year.dat.sum <- lapply(year.dat, sum.yr.all.sim)
-  df.out <- data.table::rbindlist( year.dat.sum)
-  
-  #head(df.out)
-  #ggplot(df.out) + geom_line(aes(x=age,y=cum_prop_cases)) + facet_wrap(~year)
-  
-  #get dist back here for the oldest individual in the first year of the dataset
-  dist.back =   max(df.out$age[df.out$year==min(df.out$year) & df.out$Nage>0]) 
-  
-  
-  # # # # # # # # #head(df.out)
-  #              ggplot(data=df.out) + geom_point(aes(x=age, y=cum_prop_cases)) +
-  #                 geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
-  # # # # # # # # # # # # # # # 
-  # # # # #make your guess parameters
-  # #lambda is takes data from the previous year and creates infections in this year
-  
-  #now, make the appropriate number of serotypes and lambdas
-  
-  if(length(N.sero.fix)==1 & length(lambda.guess)==1){ #here, number of serotypes is fixed across the time series
-    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
-                                lambda = rep(lambda.guess, length((min(dat$year)-dist.back +1):max(dat$year))),
-                                N_sero = rep(N.sero.fix, length((min(dat$year)-dist.back +1):max(dat$year))))
-    
-  }else if (length(N.sero.fix)>1 & length(lambda.guess)==1){ #here you can vary the sero-strains by providing your own vector
-    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
-                                lambda = rep(lambda.guess, length((min(dat$year)-dist.back +1):max(dat$year))),
-                                N_sero = N.sero.fix)
-    
-  }else if (length(N.sero.fix)>1 & length(lambda.guess)>1){ #here you have pre-prepped both the lambda vector and the serotype vector
-    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
-                                lambda = lambda.guess,
-                                N_sero = N.sero.fix)
+  if(unique(dat.all$hyp)=="2" |unique(dat.all$hyp)=="3"){
+    # print(unique(dat.all$hyp))
+    dat2 = subset(dat.all, class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
     
     
-  }else if (length(N.sero.fix)==1 & length(lambda.guess)>1){ # here you have pre-prepped only the lambda but are going to fix serotypes across the dataset
-    par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
-                                lambda = lambda.guess,
-                                N_sero =rep(N.sero.fix, length((min(dat$year)-dist.back +1):max(dat$year))))
+    denv.case.tert = subset(dat.all, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
     
+    #and take 10% of these
+    denv.case.tert$count <- denv.case.tert$count*perc.obs
+    dat3 <- rbind(dat2, denv.case.tert)
+    
+  }else if(unique(dat.all$hyp)=="4"){
+    #print(unique(dat.all$hyp))
+    dat2 = subset(dat.all, class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
+    
+    denv.case.tert = subset(dat.all, class=="I123" | class=="I132" | class=="I213" | class == "I231" | class=="I312" | class =="I321")
+    #and take increasing proportion of those through time
+    df.perc <- cbind.data.frame(year=unique(denv.case.tert$year), perc_obs=seq(0,1, length.out = length(unique(denv.case.tert$year))))
+    denv.case.tert <- merge(denv.case.tert, df.perc, by="year")
+    denv.case.tert$count <- denv.case.tert$count*denv.case.tert$perc_obs
+    denv.case.tert <- dplyr::select(denv.case.tert, -(perc_obs))
+    
+    dat3 <- rbind(dat2, denv.case.tert)
+    
+    
+  }else{
+    #print(unique(dat.all$hyp))
+    
+    dat3 = subset(dat.all, class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
   }
   
-  #now, for all lambda prior to 1970, assume a very, very, very low FOI
-  #par.dat$lambda[par.dat$year<1970] <- 0.0000001
-  #and fit it cumulatively across the entire time series
   
-  
-  #if this is the first year, you need
-  #log.lambda.guess <- log(par.dat$lambda)
-  lambda.guess <- log(par.dat$lambda)
-  # 
-  # 
-  # out.NS <- optim(par = lambda.guess, 
-  #                 fn=log.lik.fit.all, 
-  #                 method = "L-BFGS-B",
-  #                 lower = 0.0000001,
-  #                 upper=1,
-  #                 par.dat=par.dat, 
-  #                 year.start = min(par.dat$year),#this is the year the model will start iterating with the first birth cohort
-  #                 dat=df.out, 
-  #                 control = list(maxit=1000),
-  #                 hessian = T)
-  
-  
-  
-  out.NS <- optim(par = lambda.guess, 
-                  fn=log.lik.fit.all.NM, 
-                  method = "Nelder-Mead",
-                  #lower = 0.0000001,
-                  #upper=1,
-                  par.dat=par.dat, 
-                  year.start = min(par.dat$year),#this is the year the model will start iterating with the first birth cohort
-                  dat=df.out, 
-                  control = list(maxit=1000),
-                  hessian = T)
-  
-  
-  # 
-  # out.NS <- nlm(f=log.lik.fit.all, 
-  #               p = log.lambda.guess, 
-  #               par.dat=par.dat, 
-  #               year.start = min(par.dat$year),#this is the year the model will start iterating with the first birth cohort
-  #               dat=df.out, 
-  #               iterlim=1000,
-  #               hessian = T)
-  
-  
-  # par.dat$lambda <- exp(out.NS$estimate)
-  # par.dat$llik <- out.NS$minimum
-  # par.dat$convergence <- out.NS$code
-  
-  
-  
-  par.dat$lambda <- exp(out.NS$par)
-  par.dat$llik <- out.NS$value
-  par.dat$convergence <- out.NS$convergence
-  
-  if(fit.CI==TRUE){
-    
-    if (is.positive.definite(out.NS$hessian)==TRUE){
-      hess <- solve(out.NS$hessian)
-      prop_sigma <-sqrt(diag(hess))
-      upper<-exp(out.NS$par+1.96*prop_sigma)
-      lower<-exp(out.NS$par-1.96*prop_sigma)
-      CI <-data.frame(lower=lower, upper=upper)
-      CI$lower[CI$lower<0] <- 0
-      CI$upper[CI$upper<0] <- 0
-      
-      par.dat$lci <- CI$lower
-      par.dat$uci <- CI$upper
-      
-    }else{
-      par.dat$lci <- "not yet"
-      par.dat$uci <- "not yet"
-      
-    }
-    
-  }
-  
-  #and return
-  par.dat$sim_type <- sim_type
-  
-  return(par.dat)
-  
-}
-fit.all.LBFGSB.three <- function(dat.all,  burnin, lambda.guess, N.sero.fix, sim_type, fit.CI){
-  
+  dat3 <- subset(dat3, year>(min(dat.all$year)))
+  dat3$count_new <- round(dat3$count*1000,0)
   
   #and only take those with values
-  dat3 = subset(dat.all, count>0 & age < max(dat.all$age))
+  dat3 = subset(dat3, count_new>0 & age < max(dat.all$age))
   
   dat = subset(dat3,  year >= (min(dat.all$year)+ burnin))
   
@@ -833,24 +671,11 @@ fit.all.LBFGSB.three <- function(dat.all,  burnin, lambda.guess, N.sero.fix, sim
   #if this is the first year, you need
   #log.lambda.guess <- log(par.dat$lambda)
   lambda.guess <- par.dat$lambda
-  # 
-  # 
-  # out.NS <- optim(par = lambda.guess, 
-  #                 fn=log.lik.fit.all, 
-  #                 method = "L-BFGS-B",
-  #                 lower = 0.0000001,
-  #                 upper=1,
-  #                 par.dat=par.dat, 
-  #                 year.start = min(par.dat$year),#this is the year the model will start iterating with the first birth cohort
-  #                 dat=df.out, 
-  #                 control = list(maxit=1000),
-  #                 hessian = T)
-  
   
   
   out.NS <- optim(par = lambda.guess, 
                   fn=log.lik.fit.all, 
-                  method = "L-BFGS-B",,
+                  method = "L-BFGS-B",
                   lower = 0.0000001,
                   upper=1,
                   par.dat=par.dat, 
@@ -885,8 +710,8 @@ fit.all.LBFGSB.three <- function(dat.all,  burnin, lambda.guess, N.sero.fix, sim
     if (is.positive.definite(out.NS$hessian)==TRUE){
       hess <- solve(out.NS$hessian)
       prop_sigma <-sqrt(diag(hess))
-      upper<- out.NS$par+1.96*prop_sigma
-      lower<- out.NS$par-1.96*prop_sigma
+      upper<-out.NS$par+1.96*prop_sigma
+      lower<-out.NS$par-1.96*prop_sigma
       CI <-data.frame(lower=lower, upper=upper)
       CI$lower[CI$lower<0] <- 0
       CI$upper[CI$upper<0] <- 0
@@ -910,13 +735,16 @@ fit.all.LBFGSB.three <- function(dat.all,  burnin, lambda.guess, N.sero.fix, sim
 }
 fit.age.LBFGSB.all.three <- function(dat.all,par.dat, burnin, fit.CI, sim_type){
   
+  dat2 = subset(dat.all, class == "I12" | class=="I13" | class=="I21"  | class=="I23"  | class=="I31"  | class=="I32")
+  dat1 = subset(dat2, year>(min(dat2$year) + burnin))
+  
+  
   #and only take those with values
-  dat3 = subset(dat.all, count>0 & age < max(dat.all$age))
+  dat = subset(dat1, count>0 & age < max(dat.all$age))
   
-  dat = subset(dat3,  year >= (min(dat.all$year)+ burnin))
+  #sum by age an
   
   
-
   #for the first year in the dataset, 
   #estimate foi just from the cross-sectional data
   
@@ -930,7 +758,7 @@ fit.age.LBFGSB.all.three <- function(dat.all,par.dat, burnin, fit.CI, sim_type){
   
   #head(df.out)
   #now take a guess at 10 age-specific multiplicative factors for 3 different eras:
-  age.guess <- rep(1,19)
+  age.guess <- rep(1,30)
   
   
   out.NS <- optim(par = age.guess, 
@@ -948,12 +776,10 @@ fit.age.LBFGSB.all.three <- function(dat.all,par.dat, burnin, fit.CI, sim_type){
   
   #return sigma as its own data table
   
-  
   age.mult.df <- cbind.data.frame(age_mult=c(out.NS$par), 
-                                  age_min=c(1,3,5,7,10,13,16,20, 1,3,5,7,10,13,16,20,30,40,50),
-                                  age_max=c(2,4,6,9,12,15,19,90, 2,4,6,9,12,15,19,29,39,49,90),
-                                  year_range = c(rep("2002-2010",8), rep("2011-2020", 11)))
-  
+                                  age_min=rep(c(1,3,5,7,10,13,16,20,30,40),3),
+                                  age_max=rep(c(2,4,6,9,12,15,19,29,39,90),3),
+                                  year_range = c(rep("<=2010",10), rep("2011-2018", 10), rep("2019-2020", 10)))
   
   
   age.mult.df$llik <- out.NS$value
@@ -993,18 +819,14 @@ fit.age.LBFGSB.all.three <- function(dat.all,par.dat, burnin, fit.CI, sim_type){
   return(age.mult.df)
   
 }
-log.lik.wane.fit.all <- function(par, par.dat, dat){
+log.lik.wane.fit.profile <- function(num1, sigma.alt, par.dat, dat){
   
   #par.dat$lambda does not change here
   #sigma gets added to the rest of the parameters
-  par.dat$sigma <- NA
+  par.dat$sigma[par.dat$year==num1] <- sigma.alt
   par.dat$sigma[par.dat$year<min(dat$year)] <- 0
   
-  sigma.df = cbind.data.frame(year=min(dat$year):max(dat$year), sigma=par)
-  
-  for(i in 1:nrow(sigma.df)){
-    par.dat$sigma[par.dat$year==sigma.df$year[i]]<- sigma.df$sigma[i]
-  }
+
   
   
   age_vect=seq(0, max(dat$age), by=1)
@@ -1041,9 +863,7 @@ log.lik.wane.fit.all <- function(par, par.dat, dat){
   
   
   
-  if(ll==-Inf){
-    ll <- -1000000
-  }
+  
   
   return(-ll)
 }
@@ -1253,7 +1073,34 @@ model.age.incidence.series.wane <- function(par.dat, age_vect, year.start){
   
   return(p.sum) #returns prevalence by age for each year for fitting to the years for which we have data
 }
-fit.wane.LBFGSB.all.three <- function(dat.all,par.dat, burnin, sigma.guess, fit.CI, sim_type){
+get.wane.profile <- function(num1, par.dat, dat1){
+  wane.guess = seq(0.0000001, 2, length=1000)
+  
+  llik <- list()
+  for(i in 1:length(wane.guess)){
+    llik[[i]] <- log.lik.wane.fit.profile(sigma.alt = wane.guess[i], num = num1, par.dat = par.dat, dat=dat1)  
+  }
+  
+  out.lik <- cbind.data.frame(par = wane.guess, llik=c(unlist(llik)))
+  out.lik <- out.lik[complete.cases(out.lik),]
+  out.lik <- subset(out.lik, llik<Inf)
+  with(out.lik, plot(par, llik, type="b"))
+  tmp2=smooth.spline(out.lik$par,out.lik$llik)
+  new=seq(0.0000001, 3, length=1000)
+  interp= predict(tmp2, new)$y
+  mle1=new[which.min(interp)]
+  tmp3=(predict(tmp2, new)$y-min(predict(tmp2, new)$y))-qchisq(0.95,1)
+  conf.int = range(new[tmp3<0])
+  
+  par.dat$lci_sigma <- par.dat$uci_sigma <- NA
+  par.dat$lci_sigma[par.dat$year==num1] <- conf.int[1]
+  par.dat$uci_sigma[par.dat$year==num1] <- conf.int[2]
+  
+  wane.sub = subset(par.dat, lci_sigma==conf.int[1])
+  
+  return(wane.sub)
+}
+profile.waning <- function(dat.all,par.dat, burnin, sigma.fit, sim_type){
   
   
   #and only take those with values
@@ -1261,16 +1108,6 @@ fit.wane.LBFGSB.all.three <- function(dat.all,par.dat, burnin, sigma.guess, fit.
   
   dat = subset(dat3,  year >= (min(dat.all$year)+ burnin))
   
-  
-  
-  #
-  
-  # par.dat <- cbind.data.frame(year= ((min(dat$year)-dist.back +1):max(dat$year)),
-  #                             lambda = rep(lambda.fix, length((min(dat$year)-dist.back +1):max(dat$year))),
-  #                             N_sero = rep(N.sero.fix, length((min(dat$year)-dist.back +1):max(dat$year))))
-  # 
-  #for the first year in the dataset, 
-  #estimate foi just from the cross-sectional data
   
   
   #first, prep the data
@@ -1281,54 +1118,22 @@ fit.wane.LBFGSB.all.three <- function(dat.all,par.dat, burnin, sigma.guess, fit.
   df.out <- data.table::rbindlist( year.dat.sum)
   #ggplot(df.out) +geom_line(aes(x=age, y=cum_prop_cases)) + facet_wrap(~year)
   
-  out.NS <- optim(par = rep(sigma.guess, length((min(df.out$year):max(df.out$year)))), 
-                  fn=log.lik.wane.fit.all, 
-                  method = "L-BFGS-B",
-                  lower = 0.0000001, # slowest sigma
-                  upper=1, # fastest sigma - not allowing for waning more rapid than a single year
-                  par.dat=par.dat,
-                  dat=df.out,
-                  control = list(maxit=1000),
-                  hessian = T)
+  #and now, profile the waning parameter across all the years
+  
+  sigma.merge <- dplyr::select(sigma.fit, year, sigma)
+  
+  par.dat <- merge(par.dat, sigma.merge, by = "year", all.x = T)
+  par.dat$sigma[is.na(par.dat$sigma)] <- 0
   
   
-  #lambda is already fixed
+  #now, profile sigma across its range of values (2000:2020)
   
-  #return sigma as its own data table
+  sigma.profile <- lapply(as.list(2002:2020), get.wane.profile,  par.dat=par.dat, dat1=df.out)
   
-  sigma.df <-cbind.data.frame(year = ((min(df.out$year):max(df.out$year))), sigma=out.NS$par, dur_immunity = (1/out.NS$par))
-  sigma.df$neg_llik=out.NS$value
-  sigma.df$convergence = out.NS$convergence
+  sigma.df <- data.table::rbindlist(sigma.profile)
   
-  if(fit.CI==TRUE){
-    
-    if (is.positive.definite(out.NS$hessian)==TRUE){
-      hess <- solve(out.NS$hessian)
-      prop_sigma <-sqrt(diag(hess))
-      upper<-out.NS$par+1.96*prop_sigma
-      lower<-out.NS$par-1.96*prop_sigma
-      CI <-data.frame(lower=lower, upper=upper)
-      CI$lower[CI$lower<0] <- 0
-      CI$upper[CI$upper<0] <- 0
-      
-      
-      sigma.df$lci_sigma <- CI$lower
-      sigma.df$uci_sigma <- CI$upper
-      
-      sigma.df$uci_dur_imm <- 1/sigma.df$lci_sigma 
-      sigma.df$lci_dur_imm <- 1/sigma.df$uci_sigma 
-      
-      
-    }else{
-      sigma.df$lci_sigma <- NA
-      sigma.df$uci_sigma <- NA
-      
-      sigma.df$lci_dur_imm <- NA
-      sigma.df$uci_dur_imm <- NA
-      
-    }
-    
-  }
+  
+  
   
   #and return
   sigma.df$sim_type <- sim_type
@@ -1347,19 +1152,29 @@ fit.wane.LBFGSB.all.three <- function(dat.all,par.dat, burnin, sigma.guess, fit.
 # par.dat = subset(par.dat, year>=2000)
 
 
-load("comp-dat-sim.Rdata")
+load(paste0(homewd,"/figure-development/Fig5/fit-sim/hyp2-fit-lambda-2007.Rdata"))
+load(paste0(homewd,"/figure-development/Fig5/fit-sim/fit-sim-wane/out-wane/hyp2-fit-wane-2007.Rdata"))
+load(paste0(homewd,"/figure-development/Fig5/fit-sim/comp-dat-sim.Rdata"))
+
+cam.sim = subset(comp.dat, hyp=="H2: Genotype Replacement\n+ Waning Immunity (2007)")
 
 
-cam.sim = subset(comp.dat, hyp=="H1: Increasing Tertiary\nCase Detection")
-fit.dat <- read.csv(file = "prov-fits-FOI.csv", stringsAsFactors = F, header = T)
-fit.dat$lambda[fit.dat$provname=="National" &fit.dat$year<1999] <- .9
-load("hyp1-refit-lambda.Rdata")
+hyp2.fit.wane.2007 <- profile.waning(dat.all = cam.sim,
+                               burnin=20,
+                               par.dat=hyp2.fit.lambda.2007,
+                               sigma.fit = hyp2.fit.wane.2007,
+                               sim_type="hyp2_wane_2007")
 
-hyp1.fit.lambda <- fit.all.LBFGSB.three(dat.all = cam.sim,
-                                        burnin=21,
-                                        lambda.guess = hyp1.fit.lambda$lambda,
-                                        N.sero.fix = 4,
-                                        sim_type="hyp1", 
-                                        fit.CI=T)
+# hyp2.fit.wane.2019$uci_sigma[hyp2.fit.wane.2019$uci_sigma==0.00000010] <- 0
+# hyp2.fit.wane.2019$lci_sigma[hyp2.fit.wane.2019$lci_sigma==0.00000010] <- 0
+# hyp2.fit.wane.2019$lci_sigma[hyp2.fit.wane.2019$lci_sigma ==hyp2.fit.wane.2019$uci_sigma] <- 0
+# hyp2.fit.wane.2019$lci_sigma[hyp2.fit.wane.2019$year==2019] <- 0
+save(hyp2.fit.wane.2007 , file = paste0(homewd,"/figure-development/Fig5/fit-sim/fit-sim-wane/out-wane/hyp2-fit-wane-2007-profile.Rdata"))
 
-save(hyp1.fit.lambda, file = "hyp1-fit-lambda.Rdata")
+ggplot(hyp2.fit.wane.2007) + scale_y_log10() +
+    geom_linerange(aes(x=year, ymin=lci_sigma, ymax=uci_sigma), color="red") +
+    geom_point(aes(x=year, y=sigma), size=5)
+
+ggplot(hyp2.fit.wane.2007) + scale_y_log10() +
+  geom_ribbon(aes(x=year, ymin=lci_sigma, ymax=uci_sigma), fill="red") +
+  geom_line(aes(x=year, y=sigma), size=1)
