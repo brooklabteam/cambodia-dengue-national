@@ -4450,9 +4450,10 @@ age.fit$year_min <-   0 #for simulation
 age.fit$year_max <-   100 #for simulation
 #age.fit$year_max[age.fit$year_range=="<=2010"] <- 2010
 age.fit$year_min[age.fit$year_range=="2002-2010"] <- 0
-age.fit$year_max[age.fit$year_range=="2002-2010"] <- 2010.999999
-age.fit$year_min[age.fit$year_range=="2011-2020"] <- 2011
-age.fit$year_max[age.fit$year_range=="2011-2020"] <- 2025
+age.fit$year_max[age.fit$year_range=="2002-2010"] <- 2025
+age.fit = subset(age.fit, year_range=="2002-2010")
+#age.fit$year_min[age.fit$year_range=="2011-2020"] <- 2025
+#age.fit$year_max[age.fit$year_range=="2011-2020"] <- 2025
 
 #first, just sim normal
 #sim here, using foi at the National level, but replacing the too-low values

@@ -4450,9 +4450,10 @@ age.fit$year_min <-   0 #for simulation
 age.fit$year_max <-   100 #for simulation
 #age.fit$year_max[age.fit$year_range=="<=2010"] <- 2010
 age.fit$year_min[age.fit$year_range=="2002-2010"] <- 0
-age.fit$year_max[age.fit$year_range=="2002-2010"] <- 2010.999999
-age.fit$year_min[age.fit$year_range=="2011-2020"] <- 2011
-age.fit$year_max[age.fit$year_range=="2011-2020"] <- 2025
+age.fit$year_max[age.fit$year_range=="2002-2010"] <- 2025
+age.fit = subset(age.fit, year_range=="2002-2010")
+#age.fit$year_min[age.fit$year_range=="2011-2020"] <- 2025
+#age.fit$year_max[age.fit$year_range=="2011-2020"] <- 2025
 
 #first, just sim normal
 #sim here, using foi at the National level, but replacing the too-low values
@@ -4484,100 +4485,100 @@ save(out.cam.geno, file = "cam-sim-geno-no-wane.Rdata")
 
 # 
 # #and plot
-
-
-library(stringr)
-
-
-#need to fix - where are these infections coming from?
-summarise.age.dist <- function(dat, year.start){
-  
-  dat1 = subset(dat,year>=year.start)
-  
-  #summarise into primary, secondary, tertiary, quaternary cases
-  
-  dat1$case_type <- (str_extract(dat1$class, "[aA-zZ]+"))
-  dat1$case_sum <- nchar(dat1$class)
-  dat1$state <- NA  
-  dat1$state[dat1$case_type=="S"] <- "S"
-  dat1$state[dat1$case_type=="P" | dat1$case_type=="Pms"] <- "Temporary-Heterotypic-Immunity"
-  dat1$state[dat1$case_type=="Pm" ] <- "Pm"
-  dat1$state[dat1$case_type=="I" & dat1$case_sum==2] <- "Primary-Infection"
-  dat1$state[dat1$case_type=="I" & dat1$case_sum==3] <- "Secondary-Infection"
-  dat1$state[dat1$case_type=="I" & dat1$case_sum==4] <- "Tertiary-Infection"
-  dat1$state[dat1$case_type=="I" & dat1$case_sum==5] <- "Quaternary-Infection"
-  dat1$state[dat1$case_type=="I" & dat1$case_sum==6] <- "Fifth-Infection"
-  
-  #tracking reinfections with serotype 2
-  
-  #and sum by year
-  df.sum <- ddply(dat1,.(year, age, state), summarise, count = sum(count))
-  
-  
-  
-  df.sum$count<- round(df.sum$count,0)
-  
-  
-  df.sum <- df.sum[complete.cases(df.sum),]
-  
-  #and just focus on infections
-  #df.sum.1 <- df.sum
-  
-  #and return these
-  df.sum.I = subset(df.sum, state!="Pm" & state!="Temporary-Heterotypic-Immunity" & state!="S")
-  return(df.sum.I)
-}
-
-out.age <- summarise.age.dist(dat = out.cam.geno, year.start = min(out.cam.geno$year))
-
-  
-#and plot cases
-plot.age.dist <- function(df, slim.quant, view.plot, save.plot, filename){
-  #split by a year
-  df.year <- dlply(df,.(year, state))
-  
-  #get mean age
-  mean.df <- data.table::rbindlist(lapply(df.year, mean.age))
-  mean.df$mean_age[is.na(mean.df$mean_age)] <- 0
-  
-  
-  #split by age and year and type
-  df.age <- dlply(df,.(state, year, age))
-  
-  
-  
-  
-  dat.age <- data.table::rbindlist(lapply(df.age, replicate.data.type, slim.quant=slim.quant))
-  
-  dat.age$state <- factor(dat.age$state, levels = c("Primary-Infection", "Secondary-Infection", "Tertiary-Infection", "Quaternary-Infection"))
-  mean.df$state <- factor(mean.df$state, levels = c("Primary-Infection", "Secondary-Infection", "Tertiary-Infection", "Quaternary-Infection"))
-  #then, evenly slim the dataset to 10% of its current values, evenly by age and year
-  #colz = c("secondary"="black", "tertiary"="royalblue3")
-  
-  p1 <- ggplot(dat.age) + facet_grid(~state) +
-    geom_jitter(aes(x=year, y=age, color=state), width=.09, height=.09, size=.09, alpha=.5, show.legend = F) +
-    geom_violin(aes(x=year,y=age, group=year), color="gray60",  draw_quantiles = c(0,.25,.5,.75), show.legend=F, fill=NA)+
-    geom_line(data=mean.df, aes(x=year, y=mean_age), color="tomato") + #scale_color_manual(values=colz) +
-    geom_hline(aes(yintercept=1), color="red") + coord_cartesian(ylim=c(0,80))#,xlim=c(2015,2020))
-  
-  
-  if(save.plot==TRUE){
-    ggsave(file = filename,
-           plot= p1,
-           units="mm",  
-           width=100, 
-           height=55, 
-           scale=3, 
-           dpi=300)
-    
-  }
-  if(view.plot==TRUE){
-    print(p1)
-  }
-  
-  
-  
-  return(mean.df)
-}
-
-plot.age.dist(df=out.age,slim.quant = 0.05, view.plot = T, save.plot=T, filename = "sim_geno_nowane.png")
+# 
+# 
+# library(stringr)
+# 
+# 
+# #need to fix - where are these infections coming from?
+# summarise.age.dist <- function(dat, year.start){
+#   
+#   dat1 = subset(dat,year>=year.start)
+#   
+#   #summarise into primary, secondary, tertiary, quaternary cases
+#   
+#   dat1$case_type <- (str_extract(dat1$class, "[aA-zZ]+"))
+#   dat1$case_sum <- nchar(dat1$class)
+#   dat1$state <- NA  
+#   dat1$state[dat1$case_type=="S"] <- "S"
+#   dat1$state[dat1$case_type=="P" | dat1$case_type=="Pms"] <- "Temporary-Heterotypic-Immunity"
+#   dat1$state[dat1$case_type=="Pm" ] <- "Pm"
+#   dat1$state[dat1$case_type=="I" & dat1$case_sum==2] <- "Primary-Infection"
+#   dat1$state[dat1$case_type=="I" & dat1$case_sum==3] <- "Secondary-Infection"
+#   dat1$state[dat1$case_type=="I" & dat1$case_sum==4] <- "Tertiary-Infection"
+#   dat1$state[dat1$case_type=="I" & dat1$case_sum==5] <- "Quaternary-Infection"
+#   dat1$state[dat1$case_type=="I" & dat1$case_sum==6] <- "Fifth-Infection"
+#   
+#   #tracking reinfections with serotype 2
+#   
+#   #and sum by year
+#   df.sum <- ddply(dat1,.(year, age, state), summarise, count = sum(count))
+#   
+#   
+#   
+#   df.sum$count<- round(df.sum$count,0)
+#   
+#   
+#   df.sum <- df.sum[complete.cases(df.sum),]
+#   
+#   #and just focus on infections
+#   #df.sum.1 <- df.sum
+#   
+#   #and return these
+#   df.sum.I = subset(df.sum, state!="Pm" & state!="Temporary-Heterotypic-Immunity" & state!="S")
+#   return(df.sum.I)
+# }
+# 
+# out.age <- summarise.age.dist(dat = out.cam.geno, year.start = min(out.cam.geno$year))
+# 
+#   
+# #and plot cases
+# plot.age.dist <- function(df, slim.quant, view.plot, save.plot, filename){
+#   #split by a year
+#   df.year <- dlply(df,.(year, state))
+#   
+#   #get mean age
+#   mean.df <- data.table::rbindlist(lapply(df.year, mean.age))
+#   mean.df$mean_age[is.na(mean.df$mean_age)] <- 0
+#   
+#   
+#   #split by age and year and type
+#   df.age <- dlply(df,.(state, year, age))
+#   
+#   
+#   
+#   
+#   dat.age <- data.table::rbindlist(lapply(df.age, replicate.data.type, slim.quant=slim.quant))
+#   
+#   dat.age$state <- factor(dat.age$state, levels = c("Primary-Infection", "Secondary-Infection", "Tertiary-Infection", "Quaternary-Infection"))
+#   mean.df$state <- factor(mean.df$state, levels = c("Primary-Infection", "Secondary-Infection", "Tertiary-Infection", "Quaternary-Infection"))
+#   #then, evenly slim the dataset to 10% of its current values, evenly by age and year
+#   #colz = c("secondary"="black", "tertiary"="royalblue3")
+#   
+#   p1 <- ggplot(dat.age) + facet_grid(~state) +
+#     geom_jitter(aes(x=year, y=age, color=state), width=.09, height=.09, size=.09, alpha=.5, show.legend = F) +
+#     geom_violin(aes(x=year,y=age, group=year), color="gray60",  draw_quantiles = c(0,.25,.5,.75), show.legend=F, fill=NA)+
+#     geom_line(data=mean.df, aes(x=year, y=mean_age), color="tomato") + #scale_color_manual(values=colz) +
+#     geom_hline(aes(yintercept=1), color="red") + coord_cartesian(ylim=c(0,80))#,xlim=c(2015,2020))
+#   
+#   
+#   if(save.plot==TRUE){
+#     ggsave(file = filename,
+#            plot= p1,
+#            units="mm",  
+#            width=100, 
+#            height=55, 
+#            scale=3, 
+#            dpi=300)
+#     
+#   }
+#   if(view.plot==TRUE){
+#     print(p1)
+#   }
+#   
+#   
+#   
+#   return(mean.df)
+# }
+# 
+# plot.age.dist(df=out.age,slim.quant = 0.05, view.plot = T, save.plot=T, filename = "sim_geno_nowane.png")

@@ -4450,11 +4450,35 @@ age.fit$year_min <-   0 #for simulation
 age.fit$year_max <-   100 #for simulation
 #age.fit$year_max[age.fit$year_range=="<=2010"] <- 2010
 age.fit$year_min[age.fit$year_range=="2002-2010"] <- 0
-age.fit$year_max[age.fit$year_range=="2002-2010"] <- 2010.999999
-age.fit$year_min[age.fit$year_range=="2011-2020"] <- 2011
-age.fit$year_max[age.fit$year_range=="2011-2020"] <- 2025
+age.fit$year_max[age.fit$year_range=="2002-2010"] <- 2025
+age.fit = subset(age.fit, year_range=="2002-2010")
+#age.fit$year_min[age.fit$year_range=="2011-2020"] <- 2025
+#age.fit$year_max[age.fit$year_range=="2011-2020"] <- 2025
 
 #first, just sim normal
 #sim here, using foi at the National level, but replacing the too-low values
 fit.dat$lci[fit.dat$provname=="National" &fit.dat$year<1999] <- .9
+
+#age.fit = subset(age.fit, age_max<=6)
+#mort.melt = subset(mort.melt, age<=5)
+#pop.melt = subset(pop.melt, age<=5)
+
+# H0
+out.cam.geno.rep.2019.lci = sim.SIR.age.three.clim.wane.intro(yrs=40,
+                                                              ntyr=26,
+                                                              s=101, 
+                                                              foi=c(fit.dat$lci[fit.dat$provname=="National"]), 
+                                                              births =  birth.dat$value[22:61], # these are per 1000
+                                                              pop_vector =(pop.melt$count[pop.melt$year==1981]), 
+                                                              recov=1,
+                                                              age.mult.df=age.fit, 
+                                                              clim.vect = beta.med$clim_vect, #26 entries, one per biwk, scaled from 0.5-1.5
+                                                              age.brk=NA,#this is a placeholder for additional age structure
+                                                              mort=mort.melt, 
+                                                              rate_hetero = 1/2,#duration of heterotypic immunity (in years)
+                                                              yr.intro = 2019,
+                                                              biwk.intro = 1,
+                                                              year.end = 2021)
+
+save(out.cam.geno.rep.2019.lci, file = "cam-sim-geno-rep-2019-lci.Rdata")
  
